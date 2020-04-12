@@ -10,7 +10,7 @@ import com.era.utilities.models.ConfigFileModel;
 import com.era.repositories.models.HibernateConfigModel;
 import com.era.httpclient.GetComputerStatusHttpClient;
 import com.era.views.LoginLicenseJFrame;
-import com.era.repositories.RepositoryManager;
+import com.era.repositories.RepositoryFactory;
 import com.era.datamodels.ComputerLicenseDataModel;
 import com.era.easyretail.constants.Constants;
 import com.era.easyretail.controllers.views.DBFileConnectionConfigurationController;
@@ -22,9 +22,9 @@ import com.era.models.License;
 import com.era.models.ServerSession;
 import com.era.repositories.utils.HibernateUtil;
 import com.era.repositories.utils.MysqlScriptsUtil;
-import com.era.utilities.UtilityManager;
+import com.era.utilities.UtilitiesFactory;
 import com.era.utilities.WinRegistry;
-import com.era.views.RenderViewManager;
+import com.era.views.ViewsFactory;
 
 //Initialization of the system
 public class Start {
@@ -87,10 +87,10 @@ public class Start {
         //Check if the main database exists
         boolean result = MysqlScriptsUtil.getInstance().existsDBEmpresasDatabase(HibernateConfigModel.getUser(), HibernateConfigModel.getPassword(), HibernateConfigModel.getInstance(), HibernateConfigModel.getPort());                
         
-        UtilityManager.getSingleton().getImagesUtility().init(System.getProperty("user.dir"));
+        UtilitiesFactory.getSingleton().getImagesUtility().init(System.getProperty("user.dir"));
                 
         //Init the UtilityManager with the current app path
-        UtilityManager.getSingleton().getImagesUtility().init(System.getProperty("user.dir"));
+        UtilitiesFactory.getSingleton().getImagesUtility().init(System.getProperty("user.dir"));
         
         if(!result) {//Else database not exists                
             dbempresasNotExists();
@@ -125,7 +125,7 @@ public class Start {
                     LoggerUtility.getSingleton().logError(Start.class, ex1);
                 }
                 
-                RenderViewManager.getSingleton().getDialogJFrame(ex.getMessage()).setVisible();
+                ViewsFactory.getSingleton().getDialogJFrame(ex.getMessage()).setVisible();
                 
                 System.exit(-1);
             }
@@ -137,11 +137,11 @@ public class Start {
                 
         LoggerUtility.getSingleton().logInfo(Start.class, "Licenciamiento: Obteniendo información de licenciamiento");
 
-        RepositoryManager.getInstance().getUsersRepository().setUser("INICIAL");
-        RepositoryManager.getInstance().getUsersRepository().setSucursal("INICIAL");
-        RepositoryManager.getInstance().getUsersRepository().setStation("INICIAL");
+        RepositoryFactory.getInstance().getUsersRepository().setUser("INICIAL");
+        RepositoryFactory.getInstance().getUsersRepository().setSucursal("INICIAL");
+        RepositoryFactory.getInstance().getUsersRepository().setStation("INICIAL");
         
-        License License = RepositoryManager.getInstance().getLicenseRepository().getLicense();
+        License License = RepositoryFactory.getInstance().getLicenseRepository().getLicense();
 
         if(License==null){
 
@@ -197,13 +197,13 @@ public class Start {
                 PremiumFunctionsManager.getSingleton().setPremiumFuntionsDataModel(ComputerLicenseDataModel.getPremiumFuntionsDataModel());
 
                 LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Updating channel " + ComputerLicenseDataModel.getChannel());
-                License License1 = RepositoryManager.getInstance().getLicenseRepository().getLicense();
+                License License1 = RepositoryFactory.getInstance().getLicenseRepository().getLicense();
                 License1.setChannel(ComputerLicenseDataModel.getChannel());
                 License1.setRemainingDays(ComputerLicenseDataModel.getRemainingDays());
-                RepositoryManager.getInstance().getLicenseRepository().addLicense(License1);
+                RepositoryFactory.getInstance().getLicenseRepository().addLicense(License1);
                 final ServerSession ServerSession = new ServerSession();
                 ServerSession.setGenericSerial(ComputerLicenseDataModel.getGenericSerial());
-                RepositoryManager.getInstance().getServerSessionRepository().addServerSession(ServerSession);
+                RepositoryFactory.getInstance().getServerSessionRepository().addServerSession(ServerSession);
                 LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Channel updated " + ComputerLicenseDataModel.getChannel());
 
                 LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Is premium: " + ComputerLicenseDataModel.getPremiumFuntionsDataModel().isPremium());
@@ -213,6 +213,10 @@ public class Start {
                 LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: disableInvoiceTicketsWindow: " + ComputerLicenseDataModel.getPremiumFuntionsDataModel().isDisableInvoiceTicketsWindow());
                 LoggerUtility.getSingleton().logInfo(Start.class, "Licenciamiento: Mostrando la pantalla de presentación del sistema");
 
+                //Init the working direcory
+                final String currentWorkingDir = System.getProperty("user.dir");
+                UtilitiesFactory.getSingleton().getPathsUtility().initPaths(currentWorkingDir, "");
+                
                 //Continue with the presentation screen
                 final PresentationController PresentationController = new PresentationController();
                 PresentationController.setVisible();

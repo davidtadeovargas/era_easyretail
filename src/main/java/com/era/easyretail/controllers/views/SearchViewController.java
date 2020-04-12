@@ -5,90 +5,27 @@
  */
 package com.era.easyretail.controllers.views;
 
+import com.era.datamodels.enums.SearchCommonTypeEnum;
 import com.era.logger.LoggerUtility;
-import com.era.models.Almas;
-import com.era.models.Anaqs;
-import com.era.models.Banco;
-import com.era.models.BasDats;
-import com.era.models.CCodigopostal;
-import com.era.models.Clasificacion;
-import com.era.models.Clasprov;
-import com.era.models.Coin;
-import com.era.models.Colos;
-import com.era.models.Company;
-import com.era.models.Conceppag;
-import com.era.models.Conceps;
-import com.era.models.Country;
-import com.era.models.Fabs;
-import com.era.models.Giro;
-import com.era.models.Kits;
-import com.era.models.Line;
-import com.era.models.Lugs;
-import com.era.models.Marcs;
-import com.era.models.Measure;
-import com.era.models.Payment;
-import com.era.models.Pes;
-import com.era.models.Product;
-import com.era.models.Responsable;
-import com.era.models.Rubr;
-import com.era.models.Sales;
-import com.era.models.Sectores;
-import com.era.models.Serie;
-import com.era.models.Sucursal;
-import com.era.models.Supplier;
-import com.era.models.Tall;
-import com.era.models.Tax;
-import com.era.models.Tips;
-import com.era.models.Ubiad;
-import com.era.models.Unid;
-import com.era.models.User;
-import com.era.models.Zona;
-import com.era.repositories.RepositoryManager;
+import com.era.repositories.RepositoryFactory;
+import com.era.utilities.UtilitiesFactory;
 import com.era.views.SearchJFrame;
-import com.era.views.abstracttablesmodel.AditionalUbiqsAbstractTableModel;
-import com.era.views.abstracttablesmodel.AnaqsAbstractTableModel;
-import com.era.views.abstracttablesmodel.BanksAbstractTableModel;
-import com.era.views.abstracttablesmodel.BasDatsAbstractTableModel;
-import com.era.views.abstracttablesmodel.BrandsAbstractTableModel;
-import com.era.views.abstracttablesmodel.CPSAbstractTableModel;
-import com.era.views.abstracttablesmodel.ClasificationsAbstractTableModel;
-import com.era.views.abstracttablesmodel.CoinsAbstractTableModel;
-import com.era.views.abstracttablesmodel.ColorsAbstractTableModel;
-import com.era.views.abstracttablesmodel.ConceptPaymentsAbstractTableModel;
-import com.era.views.abstracttablesmodel.ConceptsAbstractTableModel;
-import com.era.views.abstracttablesmodel.CountriesAbstractTableModel;
-import com.era.views.abstracttablesmodel.CustomersAbstractTableModel;
-import com.era.views.abstracttablesmodel.FabricsAbstractTableModel;
-import com.era.views.abstracttablesmodel.GirosAbstractTableModel;
-import com.era.views.abstracttablesmodel.KitsAbstractTableModel;
-import com.era.views.abstracttablesmodel.LinesAbstractTableModel;
-import com.era.views.abstracttablesmodel.MeasuresAbstractTableModel;
-import com.era.views.abstracttablesmodel.PaymentTypesAbstractTableModel;
-import com.era.views.abstracttablesmodel.PlacesAbstractTableModel;
-import com.era.views.abstracttablesmodel.ProductsAbstractTableModel;
-import com.era.views.abstracttablesmodel.ResponsablesAbstractTableModel;
-import com.era.views.abstracttablesmodel.RubrosAbstractTableModel;
-import com.era.views.abstracttablesmodel.SalesAbstractTableModel;
-import com.era.views.abstracttablesmodel.SectorsAbstractTableModel;
-import com.era.views.abstracttablesmodel.SeriesAbstractTableModel;
-import com.era.views.abstracttablesmodel.SucursalsAbstractTableModel;
-import com.era.views.abstracttablesmodel.SuppliersAbstractTableModel;
-import com.era.views.abstracttablesmodel.SuppliersClasifcAbstractTableModel;
-import com.era.views.abstracttablesmodel.TallasAbstractTableModel;
-import com.era.views.abstracttablesmodel.TaxesAbstractTableModel;
-import com.era.views.abstracttablesmodel.TypesAbstractTableModel;
-import com.era.views.abstracttablesmodel.UnidsAbstractTableModel;
-import com.era.views.abstracttablesmodel.UsersAbstractTableModel;
-import com.era.views.abstracttablesmodel.WarehousesAbstractTableModel;
-import com.era.views.abstracttablesmodel.WeightsAbstractTableModel;
-import com.era.views.abstracttablesmodel.ZonesAbstractTableModel;
+import com.era.views.dialogs.DialogsFactory;
+import com.era.views.dialogs.ErrorOKDialog;
+import com.era.views.dialogs.OKDialog;
+import com.era.views.tables.SearchCommonJTable;
+import java.awt.Dimension;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.table.AbstractTableModel;
+import javax.swing.SwingUtilities;
 
 /**
  *
@@ -102,62 +39,24 @@ public class SearchViewController extends SearchJFrame {
     private String descrip;
     private String others;
     
-    private JTable jTab;
+    private ButtonAceptClicked ButtonAceptClicked;        
+    
+    
+    public void setButtonAceptClicked(ButtonAceptClicked ButtonAceptClicked) {
+        this.ButtonAceptClicked = ButtonAceptClicked;
+    }
+    
+    private final SearchCommonJTable jTab;
     
     private boolean canceled;
     
-    public static enum SEARCH_TYPE {
-        CUSTOMERS,
-        BASDATS,
-        PRODUCTS,
-        SUPPLIERS,
-        USERS,        
-        KITS,
-        CONCEPTS,
-        PAYMENT_TYPES,
-        COINS,
-        WAREHOUSES,
-        CLASSIFICATIONS,
-        SUPPLIERS_CLASIFICATION,
-        ANAQS,
-        GENERAL_PLACES,
-        BRANDS,
-        LINES,
-        TAXES,
-        UNIDS,
-        PESOS,
-        COLORS,
-        ADITIONAL_UBIQS,
-        MEASURES,
-        FABRICANTES,
-        SALES_MAN,
-        MODELS,
-        ALL_COMPUESTS_PRODUCTS, // AND prods.COMPUE = 0
-        TYPES,
-        ZONES,
-        GIROS,
-        PRODDS_SERIE,
-        PRODS_NOT_SERIE,
-        RUBROS,
-        CREDIT_NOTES,
-        TALLAS,
-        PAYMENT_CONCEPTS,
-        BANKS,
-        SUCURSALS,
-        RESPONSABLES,
-        CUSTOMERS_SERIE,
-        CPS,
-        COUNTRIES,
-        SECTORS
-    }
-    
-    private SEARCH_TYPE SEARCH_TYPE;
+    private SearchCommonTypeEnum SearchCommonTypeEnum;
     
     
     
-    public SearchViewController(){
+    protected SearchViewController() throws Exception{
         
-        this.setTitle("Busqueda general");
+        this.setPropertyTitle("general_search_title");
         
         alwaysOnTop();
                 
@@ -175,9 +74,42 @@ public class SearchViewController extends SearchJFrame {
                 
         jBCarg.addActionListener((ActionEvent e) -> {
             aceptButtonClicked(e);
-        });                
+        });
+        
+        java.net.URL imgURL = getClass().getResource("/imgs/loading.gif");
+        if (imgURL != null) {
+            ImageIcon imageIcon = new ImageIcon(imgURL, "");
+            imageIcon = scaleImage(imageIcon,100,100);            
+            labelLoading.setIcon(imageIcon);
+        } else {
+            System.err.println("Couldn't find file: ");            
+        }
+        labelLoading.setPreferredSize(new Dimension(70,50));
+        labelLoading.setVisible(false);
+        
+        jTab = new SearchCommonJTable();
     }
     
+     private ImageIcon scaleImage(ImageIcon icon, int w, int h){
+         
+        int nw = icon.getIconWidth();
+        int nh = icon.getIconHeight();
+
+        if(icon.getIconWidth() > w)
+        {
+          nw = w;
+          nh = (nw * icon.getIconHeight()) / icon.getIconWidth();
+        }
+
+        if(nh > h)
+        {
+          nh = h;
+          nw = (icon.getIconWidth() * nh) / icon.getIconHeight();
+        }
+
+        return new ImageIcon(icon.getImage().getScaledInstance(nw, nh, Image.SCALE_DEFAULT));
+    }
+     
     private void buttonExitClicked(ActionEvent ActionEvent){
         this.canceled = true;
         dispose();
@@ -195,229 +127,200 @@ public class SearchViewController extends SearchJFrame {
         super.setVisible();                 
     }
     
-    public void search(){
-        
+    public void search(){                
+                
         try{
-            
-            final String[] columns = new String[]{"Cod.","Descripción/Valor","Otros"};
-            final RepositoryManager RepositoryManager_ = RepositoryManager.getInstance();
-            AbstractTableModel AbstractTableModel = null;
-
-            switch(SEARCH_TYPE){
+                        
+            final RepositoryFactory RepositoryManager_ = RepositoryFactory.getInstance();            
+            long count;
+                    
+            switch(SearchCommonTypeEnum){
 
                 case CUSTOMERS:
-                    list = RepositoryManager_.getCompanyRepository().getAll();
-                    AbstractTableModel = new CustomersAbstractTableModel((List<Company>) list,columns);
+                    list = RepositoryManager_.getCompanyRepository().getAll();                    
                     break;
                     
                 case BASDATS:
                     list = RepositoryManager_.getBasDatsRepository().getAll();
-                    AbstractTableModel = new BasDatsAbstractTableModel((List<BasDats>) list,columns);
                     break;
 
                 case PRODUCTS:
                     list = RepositoryManager_.getProductRepository().getAll();
-                    AbstractTableModel = new ProductsAbstractTableModel((List<Product>) list,columns);
                     break;
 
                 case SUPPLIERS:
                     list = RepositoryManager_.getSuppliersRepository().getAll();
-                    AbstractTableModel = new SuppliersAbstractTableModel((List<Supplier>) list,columns);
                     break;
 
                case USERS:
                     list = RepositoryManager_.getUsersRepository().getAll();
-                    AbstractTableModel = new UsersAbstractTableModel((List<User>) list,columns);
                     break;
 
                case KITS:
                     list = RepositoryManager_.getKitsRepository().getAll();
-                    AbstractTableModel = new KitsAbstractTableModel((List<Kits>) list,columns);
                     break;
 
                case CONCEPTS:
                     list = RepositoryManager_.getConcepnotRepository().getAll();
-                    AbstractTableModel = new ConceptsAbstractTableModel((List<Conceps>) list,columns);
                     break;
 
                case PAYMENT_TYPES:
                     list = RepositoryManager_.getPaymentFormsRepository().getAll();
-                    AbstractTableModel = new PaymentTypesAbstractTableModel((List<Payment>) list,columns);
                     break;
 
                case COINS:
                     list = RepositoryManager_.getCoinsRepository().getAll();
-                    AbstractTableModel = new CoinsAbstractTableModel((List<Coin>) list,columns);
                     break;
 
                case WAREHOUSES:
                     list = RepositoryManager_.getWarehouseRepository().getAll();
-                    AbstractTableModel = new WarehousesAbstractTableModel((List<Almas>) list,columns);
                     break;
 
                case CLASSIFICATIONS:
                     list = RepositoryManager_.getClasificacionRepository().getAll();
-                    AbstractTableModel = new ClasificationsAbstractTableModel((List<Clasificacion>) list,columns);
                     break;
 
                case SUPPLIERS_CLASIFICATION:
                     list = RepositoryManager_.getSuppliersRepository().getAll();
-                    AbstractTableModel = new SuppliersClasifcAbstractTableModel((List<Clasprov>) list,columns);
                     break;
 
                 case ANAQS:
                     list = RepositoryManager_.getAnaqsRepository().getAll();
-                    AbstractTableModel = new AnaqsAbstractTableModel((List<Anaqs>) list,columns);
                     break;
 
                 case GENERAL_PLACES:
                     list = RepositoryManager_.getLugsRepository().getAll();
-                    AbstractTableModel = new PlacesAbstractTableModel((List<Lugs>) list,columns);
                     break;
 
                 case BRANDS:
                     list = RepositoryManager_.getMarcsRepository().getAll();
-                    AbstractTableModel = new BrandsAbstractTableModel((List<Marcs>) list,columns);
                     break;
 
                 case LINES:
                     list = RepositoryManager_.getLinesRepository().getAll();
-                    AbstractTableModel = new LinesAbstractTableModel((List<Line>) list,columns);
                     break;
 
                 case TAXES:
                     list = RepositoryManager_.getTaxesRepository().getAll();
-                    AbstractTableModel = new TaxesAbstractTableModel((List<Tax>) list,columns);
                     break;
 
                 case UNIDS:
                     list = RepositoryManager_.getUnidsRepository().getAll();
-                    AbstractTableModel = new UnidsAbstractTableModel((List<Unid>) list,columns);
                     break;
 
                 case PESOS:
                     list = RepositoryManager_.getPesRepository().getAll();
-                    AbstractTableModel = new WeightsAbstractTableModel((List<Pes>) list,columns);
                     break;
 
                 case COLORS:
                     list = RepositoryManager_.getColosRepository().getAll();
-                    AbstractTableModel = new ColorsAbstractTableModel((List<Colos>) list,columns);
                     break;
 
                 case ADITIONAL_UBIQS:
                     list = RepositoryManager_.getUbiadRepository().getAll();
-                    AbstractTableModel = new AditionalUbiqsAbstractTableModel((List<Ubiad>) list,columns);
                     break;
 
                 case MEASURES:
                     list = RepositoryManager_.getMedsRepository().getAll();
-                    AbstractTableModel = new MeasuresAbstractTableModel((List<Measure>) list,columns);
                     break;
 
                 case FABRICANTES:
                     list = RepositoryManager_.getFabsRepository().getAll();
-                    AbstractTableModel = new FabricsAbstractTableModel((List<Fabs>) list,columns);
                     break;
 
                 case SALES_MAN:
                     list = RepositoryManager_.getUsersRepository().getAllVends();
-                    AbstractTableModel = new UsersAbstractTableModel((List<User>) list,columns);
                     break;
 
                 case MODELS:
                     list = RepositoryManager_.getModelRepository().getAll();
-                    AbstractTableModel = new UsersAbstractTableModel((List<User>) list,columns);
                     break;
 
                 case ALL_COMPUESTS_PRODUCTS: // AND prods.COMPUE = 0
                     list = RepositoryManager_.getProductRepository().getAllCompuests();
-                    AbstractTableModel = new ProductsAbstractTableModel((List<Product>) list,columns);
                     break;
 
                 case TYPES:
                     list = RepositoryManager_.getTipsRepository().getAll();
-                    AbstractTableModel = new TypesAbstractTableModel((List<Tips>) list,columns);
                     break;
 
                 case ZONES:
                     list = RepositoryManager_.getZonaRepository().getAll();
-                    AbstractTableModel = new ZonesAbstractTableModel((List<Zona>) list,columns);
                     break;
 
                 case GIROS:
                     list = RepositoryManager_.getGiroRepository().getAll();
-                    AbstractTableModel = new GirosAbstractTableModel((List<Giro>) list,columns);
                     break;
 
                 case PRODDS_SERIE:
                     list = RepositoryManager_.getProductRepository().getAllProdsWithSerie();
-                    AbstractTableModel = new ProductsAbstractTableModel((List<Product>) list,columns);
                     break;
 
                 case PRODS_NOT_SERIE:
                     list = RepositoryManager_.getProductRepository().getAllProdsNotSerie();
-                    AbstractTableModel = new ProductsAbstractTableModel((List<Product>) list,columns);
                     break;
 
                 case RUBROS:
                     list = RepositoryManager_.getRubrRepository().getAll();
-                    AbstractTableModel = new RubrosAbstractTableModel((List<Rubr>) list,columns);
                     break;
 
                 case CREDIT_NOTES:
                     list = RepositoryManager_.getSalesRepository().getAllNotsCred();
-                    AbstractTableModel = new SalesAbstractTableModel((List<Sales>) list,columns);
                     break;
 
                 case TALLAS:
                     list = RepositoryManager_.getTallRepository().getAll();
-                    AbstractTableModel = new TallasAbstractTableModel((List<Tall>) list,columns);
                     break;
 
                 case PAYMENT_CONCEPTS:
                     list = RepositoryManager_.getConceppagRepository().getAll();
-                    AbstractTableModel = new ConceptPaymentsAbstractTableModel((List<Conceppag>) list,columns);
                     break;
 
                 case BANKS:
                     list = RepositoryManager_.getBancoRepository().getAll();
-                    AbstractTableModel = new BanksAbstractTableModel((List<Banco>) list,columns);
                     break;
 
                 case SUCURSALS:
                     list = RepositoryManager_.getSucursalRepository().getAll();
-                    AbstractTableModel = new SucursalsAbstractTableModel((List<Sucursal>) list,columns);
                     break;
 
                 case RESPONSABLES:
                     list = RepositoryManager_.getSucursalRepository().getAll();
-                    AbstractTableModel = new ResponsablesAbstractTableModel((List<Responsable>) list,columns);
                     break;
 
                 case CUSTOMERS_SERIE:
                     list = RepositoryManager_.getSerieRepository().getAllSerieEMP();
-                    AbstractTableModel = new SeriesAbstractTableModel((List<Serie>) list,columns);
                     break;
 
                 case CPS:
-                    list = RepositoryManager_.getCCodigoPostalRepository().getAll();
-                    AbstractTableModel = new CPSAbstractTableModel((List<CCodigopostal>) list,columns);
+                    
+                    list = RepositoryManager_.getCCodigoPostalRepository().getAllByPage(0);
+                    count = RepositoryManager_.getCCodigoPostalRepository().getCount();
+                    jTab.setCount(count);
+                    jTab.setPagination(list.size());
+                    
+                    showPaginationLabel();
+                    
                     break;
 
                 case COUNTRIES:
-                    list = RepositoryManager_.getCountriesRepository().getAll();
-                    AbstractTableModel = new CountriesAbstractTableModel((List<Country>) list,columns);
-                    break;
-
+                    
+                    list = RepositoryManager_.getCCountriesRepository().getAllByPage(0);
+                    count = RepositoryManager_.getCCountriesRepository().getCount();
+                    jTab.setCount(count);
+                    jTab.setPagination(list.size());
+                    
+                    showPaginationLabel();
+                    
+                    break;                   
+                    
                case SECTORS:
                    list = RepositoryManager_.getSectoresRepository().getAll();
-                   AbstractTableModel = new SectorsAbstractTableModel((List<Sectores>) list,columns);
                    break;
             }
             
-            if(AbstractTableModel!=null){
-                initTable(AbstractTableModel);                
+            if(list!=null){
+                initTable(list);
             }                
             
         }catch(Exception e){
@@ -425,68 +328,150 @@ public class SearchViewController extends SearchJFrame {
             JOptionPane.showMessageDialog(null, e.getMessage(), "Empresa", JOptionPane.ERROR_MESSAGE, null);
         }
     }
+
+    private void showPaginationLabel() throws Exception {
+        labelPaginacion.setVisible(true);
+        final Properties Properties = UtilitiesFactory.getSingleton().getDialogPropertiesUitlity().getProperties();
+        labelPaginacion.setText(Properties.getProperty("visible_records") + " " + jTab.getLastRowIndex() + " " + Properties.getProperty("visible_records_visibles") + " " + jTab.getPagination() + " " + Properties.getProperty("visible_records_of") + " " + jTab.getCount());
+    }
     
-    private void initTable(AbstractTableModel AbstractTableModel){
+    private void loadDataByPage(final int initialIndex) throws Exception {
         
-        jTab = new JTable(AbstractTableModel);
-        
-        /*jTab.setAutoResizeMode(0);
-        
-        jTab.getTableHeader().setReorderingAllowed(false);
-        
-        TableRowSorter trs = new TableRowSorter<>((AbstractTableModel)jTab.getModel());
-        jTab.setRowSorter(trs);
-        trs.setSortsOnUpdates(true);
-        
-        jTab.grabFocus();
-        
-        jTab.getColumnModel().getColumn(1).setPreferredWidth(250);
-        jTab.getColumnModel().getColumn(2).setPreferredWidth(250);
-        
-        jTab.setFocusTraversalKeys(java.awt.KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, null);
-        jTab.setFocusTraversalKeys(java.awt.KeyboardFocusManager.BACKWARD_TRAVERSAL_KEYS, null);
-        
-        JComponentUtils.addComponentToKeyPress(jTab);
-        
-        jTab.addMouseListener(new MouseListener() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                tableMouseClicked(e);
-            }
+        //Review if is paginable
+        switch(SearchCommonTypeEnum){
 
-            @Override
-            public void mousePressed(MouseEvent e) {
-            }
+            case CPS:
+            case COUNTRIES:
+                
+                jTab.setPrevRowIndex(initialIndex);
+                
+                List<?> rows = new ArrayList<>();
+                
+                //Get the specific list type
+                switch(SearchCommonTypeEnum){
+                    case CPS:
+                        rows = RepositoryFactory.getInstance().getCCodigoPostalRepository().getAllByPage(jTab.getPrevRowIndex());
+                    break;
+                    
+                    case COUNTRIES:
+                        rows = RepositoryFactory.getInstance().getCCountriesRepository().getAllByPage(jTab.getPrevRowIndex());
+                    break;
+                }
+                          
+                jTab.setLastRowIndex(jTab.getPrevRowIndex() + rows.size());
+                
+                showPaginationLabel();
+                
+                if(jTab!=null){
+                    jTab.clearRows();
+                }
+                
+                jTab.addRows(rows);
 
-            @Override
-            public void mouseReleased(MouseEvent e) {
-            }
+                break;
+                
+            default:
+                break;
+        }
+    }
+    
+    private void initTable(final List<?> items){
+                
+        jTab.setSearchCommonTypeEnum(SearchCommonTypeEnum);
+        jTab.initTable(items);
+        jTab.setJTableDoubleClic((int selectedRow) -> {
+            jBCarg.doClick();
+        });
+        jTab.loadScrollpane();
+        jTab.getJScrollPane().setPreferredSize(new Dimension(70,150));
+        jPanelTable.add(jTab.getJScrollPane());        
+        jTab.setScrollAtStartWhenEnd(true);
+        jTab.setOnScrollMinimum(() -> {
+            try{
+                
+                SwingUtilities.invokeLater(() -> {
+                    labelLoading.setVisible(true);
+                });
 
-            @Override
-            public void mouseEntered(MouseEvent e) {
-            }
+                loadDataByPage(jTab.getLastRowIndex());
+                
+                SwingUtilities.invokeLater(() -> {
+                    labelLoading.setVisible(false);
+                });
+                
+            }catch(Exception e){
+            
+                LoggerUtility.getSingleton().logError(SearchViewController.class, e);
 
-            @Override
-            public void mouseExited(MouseEvent e) {
+                try {
+                    final ErrorOKDialog ErrorOKDialog = DialogsFactory.getSingleton().getErrorOKDialog(baseJFrame);
+                    ErrorOKDialog.show();
+                } catch (Exception ex) {
+                    Logger.getLogger(SearchViewController.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
-        });*/
-        
-        final JScrollPane tableContainer = new JScrollPane(jTab);
-        
-        jPanelTable.add(tableContainer);  
+        });
+        jTab.setOnScrollBottom(() -> {
+            try{
+                
+                SwingUtilities.invokeLater(() -> {
+                    labelLoading.setVisible(true);
+                });
+                
+                loadDataByPage(jTab.getPrevRowIndex() - jTab.getPagination());
+                
+                SwingUtilities.invokeLater(() -> {
+                    labelLoading.setVisible(false);
+                });
+                
+            }catch(Exception e){
+            
+                LoggerUtility.getSingleton().logError(SearchViewController.class, e);
+
+                try {
+                    final ErrorOKDialog ErrorOKDialog = DialogsFactory.getSingleton().getErrorOKDialog(baseJFrame);
+                    ErrorOKDialog.show();
+                } catch (Exception ex) {
+                    Logger.getLogger(SearchViewController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }            
+        });
         
         this.pack();
     }
     
     private void aceptButtonClicked(ActionEvent ActionEvent){
     
-        if(jTab.getSelectedRow()==-1){
-            return;
-        }
-        
-        cod = jTab.getValueAt(jTab.getSelectedRow(), 0).toString();
-        descrip = jTab.getValueAt(jTab.getSelectedRow(), 1).toString();
-        others = jTab.getValueAt(jTab.getSelectedRow(), 1).toString();
+        try{
+            
+            if(jTab.getSelectedRow()==-1){
+
+                final OKDialog OKDialog = DialogsFactory.getSingleton().getOKDialog(baseJFrame);
+                OKDialog.setPropertyText("selection_first");
+                OKDialog.show();
+                return;
+            }
+
+            cod = jTab.getValueAt(jTab.getSelectedRow(), 0).toString();
+            descrip = jTab.getValueAt(jTab.getSelectedRow(), 1).toString();
+            others = jTab.getValueAt(jTab.getSelectedRow(), 1).toString();
+            dispose();
+            
+            if(ButtonAceptClicked!=null){
+                ButtonAceptClicked.onAceptClicked();
+            }
+            
+        }catch(Exception e){
+            
+            LoggerUtility.getSingleton().logError(SearchViewController.class, e);
+            
+            try {
+                final ErrorOKDialog ErrorOKDialog = DialogsFactory.getSingleton().getErrorOKDialog(baseJFrame);
+                ErrorOKDialog.show();
+            } catch (Exception ex) {
+                Logger.getLogger(SearchViewController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }                    
     }
 
     public String getCod() {
@@ -505,9 +490,12 @@ public class SearchViewController extends SearchJFrame {
         return canceled;
     }
 
-    public void setSEARCH_TYPE(SEARCH_TYPE SEARCH_TYPE) {
-        this.SEARCH_TYPE = SEARCH_TYPE;
+    public void setSEARCH_TYPE(SearchCommonTypeEnum SearchCommonTypeEnum) {
+        this.SearchCommonTypeEnum = SearchCommonTypeEnum;
     }
     
-    
+
+    public interface ButtonAceptClicked{
+        public void onAceptClicked();
+    }
 }

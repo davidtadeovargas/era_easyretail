@@ -7,14 +7,13 @@ package com.era.easyretail.controllers.views;
 
 import com.era.easyretail.constants.Constants;
 import com.era.logger.LoggerUtility;
-import com.era.repositories.RepositoryManager;
+import com.era.repositories.RepositoryFactory;
 import com.era.repositories.utils.MysqlScriptsUtil;
 import com.era.utilities.ConfigFileUtil;
 import com.era.utilities.SecurityUtil;
-import com.era.utilities.UtilityManager;
+import com.era.utilities.UtilitiesFactory;
 import com.era.utilities.models.ConfigFileModel;
 import com.era.views.DBFileConnectionConfiguration;
-import com.era.views.utils.JComponentUtils.F4Event;
 import java.awt.event.ActionEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
@@ -72,11 +71,8 @@ public class DBFileConnectionConfigurationController extends DBFileConnectionCon
                 
         JComponentUtils.onlyNumbers(jTPort);
         
-        JComponentUtils.setF4Event(new F4Event(){
-            @Override
-            public void onEvent() {
-                onF4Pressed();
-            }
+        JComponentUtils.setF4Event(() -> {
+            showOrHidePassword();
         });        
         
         setDefaultButton(jBGua);
@@ -133,17 +129,21 @@ public class DBFileConnectionConfigurationController extends DBFileConnectionCon
         }
     }
     
-    private void onF4Pressed(){
+    private void showOrHidePassword(){
         
         //Check or uncheck the show password
         if(jCMosC.isSelected())
-        {            
-            jCMosC.setSelected(false);
+        {
+            if(JComponentUtils.F4EventFired()){
+                jCMosC.setSelected(false);
+            }            
             jPCont.setEchoChar('*');         
         }
         else
-        {            
-            jCMosC.setSelected(true);
+        {
+            if(JComponentUtils.F4EventFired()){
+                jCMosC.setSelected(true);
+            }            
             jPCont.setEchoChar((char)0);
         }
     }
@@ -390,7 +390,7 @@ public class DBFileConnectionConfigurationController extends DBFileConnectionCon
                 JOptionPane.showMessageDialog(null, "La aplicación se va a cerrar.", "Aplicación", JOptionPane.INFORMATION_MESSAGE);
 
                 //Reigster the user logut                
-                RepositoryManager.getInstance().getLogRepository().userLoggedOutToSystem();
+                RepositoryFactory.getInstance().getLogRepository().userLoggedOutToSystem();
                                 
                 System.exit(0);
             }
@@ -415,7 +415,7 @@ public class DBFileConnectionConfigurationController extends DBFileConnectionCon
             ConfigFileModel = (ConfigFileModel)in.readObject();
          }
 
-        final SecurityUtil SecurityUtil = UtilityManager.getSingleton().getSecurityUtil();
+        final SecurityUtil SecurityUtil = UtilitiesFactory.getSingleton().getSecurityUtil();
         
         //Decryp all data
         ConfigFileModel.setInstance(SecurityUtil.decryptString(ConfigFileModel.getInstance()));

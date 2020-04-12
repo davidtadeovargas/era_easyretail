@@ -18,23 +18,24 @@ import com.era.models.BasDats;
 import com.era.models.Company;
 import com.era.models.Product;
 import com.era.models.Supplier;
-import com.era.repositories.RepositoryManager;
+import com.era.repositories.RepositoryFactory;
 import com.era.repositories.models.HibernateConfigModel;
 import com.era.repositories.utils.HibernateUtil;
 import com.era.repositories.utils.MysqlScriptsUtil;
-import com.era.utilities.UtilityManager;
+import com.era.utilities.UtilitiesFactory;
 import com.era.utilities.WinRegistry;
 import com.era.views.LoginLicenseJFrame;
-import com.era.views.dialogs.especifics.EmptyFieldsDialog;
-import com.era.views.dialogs.especifics.ExceptionDialog;
-import com.era.views.dialogs.especifics.InvalidCredentialsDialog;
-import com.era.views.dialogs.especifics.InvalidEmailSintaxDialog;
+import com.era.views.dialogs.DialogsFactory;
+import com.era.views.dialogs.ExceptionDialog;
+import com.era.views.dialogs.OKDialog;
 import com.era.views.exceptions.EmptyFieldsException;
 import com.era.views.exceptions.InvalidEmailSintaxException;
 import com.era.views.validators.LoginLicenseValidator;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
@@ -70,22 +71,35 @@ public class LoginLocalViewController extends LoginLicenseJFrame {
             LoginLicenseValidator.validate();
 
         }catch(InvalidEmailSintaxException InvalidEmailSintaxException){
-
-            final InvalidEmailSintaxDialog InvalidEmailSintaxDialog = new InvalidEmailSintaxDialog(this);
-            InvalidEmailSintaxDialog.show();
+            
+            try {
+                final OKDialog OKDialog = DialogsFactory.getSingleton().getOKDialog(baseJFrame);
+                OKDialog.setPropertyText("invalid_email_sintax");
+                OKDialog.show();
+            } catch (Exception ex) {
+                Logger.getLogger(LoginLocalViewController.class.getName()).log(Level.SEVERE, null, ex);
+            }
             return;
         }
         catch(EmptyFieldsException EmptyFieldsException){
-
-            final EmptyFieldsDialog EmptyFieldsDialog = new EmptyFieldsDialog(this);
-            EmptyFieldsDialog.show();
+            
+            try {
+                final OKDialog OKDialog = DialogsFactory.getSingleton().getOKDialog(baseJFrame);
+                OKDialog.setPropertyText("empty_fields");
+                OKDialog.show();
+            } catch (Exception ex) {
+                Logger.getLogger(LoginLocalViewController.class.getName()).log(Level.SEVERE, null, ex);
+            }
             return;
 
         } catch (Exception ex) {
 
-            final ExceptionDialog ExceptionDialog = new ExceptionDialog(this,ex);
-            ExceptionDialog.show();
-            return;
+            try {
+                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+                return;
+            } catch (Exception ex1) {
+                Logger.getLogger(LoginLocalViewController.class.getName()).log(Level.SEVERE, null, ex1);
+            }
         }
 
         getInformationFromServer();
@@ -94,7 +108,7 @@ public class LoginLocalViewController extends LoginLicenseJFrame {
     private void getInformationFromServer(){
         
         //Show loading screen while database creation
-        RenderControlersViewManager.getSingleton().getCreatingDatabaseWaitViewController().setVisible(true);
+        ViewControlersFactory.getSingleton().getCreatingDatabaseWaitViewController().setVisible(true);
 
         jPasswordFieldPassword.setEditable(false);
         jTextFieldUser.setEditable(false);
@@ -115,7 +129,7 @@ public class LoginLocalViewController extends LoginLicenseJFrame {
             }finally{
 
                 //Close the loading screen database
-                RenderControlersViewManager.getSingleton().getCreatingDatabaseWaitViewController().dispose();
+                ViewControlersFactory.getSingleton().getCreatingDatabaseWaitViewController().dispose();
 
                 jPasswordFieldPassword.setEditable(true);
                 jTextFieldUser.setEditable(true);
@@ -148,15 +162,34 @@ public class LoginLocalViewController extends LoginLicenseJFrame {
                 }catch(Exception e){
 
                     LoggerUtility.getSingleton().logError(LoginLicenseJFrame.class, e);
-
-                    final ExceptionDialog ExceptionDialog = new ExceptionDialog(baseJFrame,e);
-                    ExceptionDialog.show();
+                                        
+                    try {
+                        final ExceptionDialog ExceptionDialog = DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, e);
+                        ExceptionDialog.show();
+                    } catch (Exception ex) {
+                        Logger.getLogger(LoginLocalViewController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }                
             }
 
             @Override
             public void OnInvalidLogin() {
-                onInvalidLoginServer();
+                
+                try {
+                    onInvalidLoginServer();
+                } catch (Exception ex) {
+                    
+                    try {
+                        
+                        LoggerUtility.getSingleton().logError(LoginLocalViewController.class, ex);
+                        
+                        final ExceptionDialog ExceptionDialog = DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex);                    
+                        ExceptionDialog.show();
+                        
+                    } catch (Exception ex1) {
+                        Logger.getLogger(LoginLocalViewController.class.getName()).log(Level.SEVERE, null, ex1);
+                    }
+                }
             }
 
             @Override
@@ -210,7 +243,7 @@ public class LoginLocalViewController extends LoginLicenseJFrame {
         BasDats.setNom(CompanyTest.getNom());
                 
         //Save the basdats record
-        RepositoryManager.getInstance().getBasDatsRepository().save(BasDats);                  
+        RepositoryFactory.getInstance().getBasDatsRepository().save(BasDats);                  
 
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Finished");
         
@@ -224,7 +257,7 @@ public class LoginLocalViewController extends LoginLicenseJFrame {
         License.setRemainingDays(ComputerLicenseDataModel.getRemainingDays());
         License.setServerDate(ComputerLicenseDataModel.getCreated_at());
         License.setChannel(ComputerLicenseDataModel.getChannel());
-        RepositoryManager.getInstance().getLicenseRepository().addLicense(License);
+        RepositoryFactory.getInstance().getLicenseRepository().addLicense(License);
 
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Licence information saved in database");
         
@@ -232,7 +265,7 @@ public class LoginLocalViewController extends LoginLicenseJFrame {
         
         final ServerSession ServerSession = new ServerSession();
         ServerSession.setGenericSerial(ComputerLicenseDataModel.getGenericSerial());                                
-        RepositoryManager.getInstance().getServerSessionRepository().addServerSession(ServerSession);
+        RepositoryFactory.getInstance().getServerSessionRepository().addServerSession(ServerSession);
         
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Finished");                
         
@@ -255,6 +288,9 @@ public class LoginLocalViewController extends LoginLicenseJFrame {
 
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Hibernate: Connecting to hibernate local");
         
+        //Load the base catalogs for dbempresas
+        MysqlScriptsUtil.getInstance().loadDBEmpresasCatalogFileIntoDatabase(HibernateConfigModel.getDatabase(), HibernateConfigModel.getUser(), HibernateConfigModel.getPassword(), HibernateConfigModel.getInstance(), HibernateConfigModel.getPort());
+        
         //Connect to local
         HibernateUtil.getSingleton().connectToDbLocal();
         
@@ -270,113 +306,113 @@ public class LoginLocalViewController extends LoginLicenseJFrame {
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Hibernate: Adding test company");
         
         //Save the company in database
-        RepositoryManager.getInstance().getCompanyRepository().save(CompanyTest);       
+        RepositoryFactory.getInstance().getCompanyRepository().save(CompanyTest);       
 
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Hibernate: Test company added");
 
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Saving test product 1 into database");
         final Product Product1 = ComputerLicenseDataModel.getTestCompanyDataModel().getProduct1();
-        RepositoryManager.getInstance().getProductRepository().addOrUpdateProduct(Product1);
+        RepositoryFactory.getInstance().getProductRepository().addOrUpdateProduct(Product1);
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Test product 1 saved in the database");
 
         final String pathImgProduc1 = ComputerLicenseDataModel.getTestCompanyDataModel().getProduct1().getPathIMG();
         final String productCode1 = ComputerLicenseDataModel.getTestCompanyDataModel().getProduct1().getCodeProduct();                                
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Product 1 saving image " + pathImgProduc1 + " to local folder");
-        UtilityManager.getSingleton().getImagesUtility().saveImageFromUrl(productCode1, pathImgProduc1);
+        UtilitiesFactory.getSingleton().getImagesUtility().saveImageFromUrl(productCode1, pathImgProduc1);
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Saved");
 
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Saving test product 2 into database");
         final Product Product2 = ComputerLicenseDataModel.getTestCompanyDataModel().getProduct2();                                
-        RepositoryManager.getInstance().getProductRepository().addOrUpdateProduct(Product2);
+        RepositoryFactory.getInstance().getProductRepository().addOrUpdateProduct(Product2);
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Test product 2 saved in the database");
 
         final String pathImgProduc2 = ComputerLicenseDataModel.getTestCompanyDataModel().getProduct2().getPathIMG();
         final String productCode2 = ComputerLicenseDataModel.getTestCompanyDataModel().getProduct2().getCodeProduct();                                
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Product 2 saving image " + pathImgProduc2 + " to local folder");
-        UtilityManager.getSingleton().getImagesUtility().saveImageFromUrl(productCode2, pathImgProduc2);
+        UtilitiesFactory.getSingleton().getImagesUtility().saveImageFromUrl(productCode2, pathImgProduc2);
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Saved");
 
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Saving test product 3 into database");
         final Product Product3 = ComputerLicenseDataModel.getTestCompanyDataModel().getProduct3();                                
-        RepositoryManager.getInstance().getProductRepository().addOrUpdateProduct(Product3);
+        RepositoryFactory.getInstance().getProductRepository().addOrUpdateProduct(Product3);
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Test product 3 saved in the database");
 
         final String pathImgProduc3 = ComputerLicenseDataModel.getTestCompanyDataModel().getProduct3().getPathIMG();
         final String productCode3 = ComputerLicenseDataModel.getTestCompanyDataModel().getProduct3().getCodeProduct();                                
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Product 3 saving image " + pathImgProduc3 + " to local folder");
-        UtilityManager.getSingleton().getImagesUtility().saveImageFromUrl(productCode3, pathImgProduc3);
+        UtilitiesFactory.getSingleton().getImagesUtility().saveImageFromUrl(productCode3, pathImgProduc3);
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Saved");
 
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Saving test product 4 into database");
         final Product Product4 = ComputerLicenseDataModel.getTestCompanyDataModel().getProduct4();                                
-        RepositoryManager.getInstance().getProductRepository().addOrUpdateProduct(Product4);
+        RepositoryFactory.getInstance().getProductRepository().addOrUpdateProduct(Product4);
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Test product 4 saved in the database");
 
         final String pathImgProduc4 = ComputerLicenseDataModel.getTestCompanyDataModel().getProduct4().getPathIMG();
         final String productCode4 = ComputerLicenseDataModel.getTestCompanyDataModel().getProduct4().getCodeProduct();                                
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Product 4 saving image " + pathImgProduc4 + " to local folder");
-        UtilityManager.getSingleton().getImagesUtility().saveImageFromUrl(productCode4, pathImgProduc4);
+        UtilitiesFactory.getSingleton().getImagesUtility().saveImageFromUrl(productCode4, pathImgProduc4);
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Saved");
 
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Saving test product 5 into database");
         final Product Product5 = ComputerLicenseDataModel.getTestCompanyDataModel().getProduct5();                                
-        RepositoryManager.getInstance().getProductRepository().addOrUpdateProduct(Product5);
+        RepositoryFactory.getInstance().getProductRepository().addOrUpdateProduct(Product5);
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Test product 5 saved in the database");
 
         final String pathImgProduc5 = ComputerLicenseDataModel.getTestCompanyDataModel().getProduct5().getPathIMG();
         final String productCode5 = ComputerLicenseDataModel.getTestCompanyDataModel().getProduct5().getCodeProduct();                                
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Product 5 saving image " + pathImgProduc5 + " to local folder");
-        UtilityManager.getSingleton().getImagesUtility().saveImageFromUrl(productCode5, pathImgProduc5);
+        UtilitiesFactory.getSingleton().getImagesUtility().saveImageFromUrl(productCode5, pathImgProduc5);
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Saved");
 
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Saving test customer 1 into database");
         final Company Customer1 = ComputerLicenseDataModel.getTestCompanyDataModel().getCustomer1();
-        RepositoryManager.getInstance().getCompanyRepository().saveOrUpdateCustomer(Customer1);
+        RepositoryFactory.getInstance().getCompanyRepository().saveOrUpdateCustomer(Customer1);
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Test customer 1 saved in the database");
 
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Saving test customer 2 into database");
         final Company Customer2 = ComputerLicenseDataModel.getTestCompanyDataModel().getCustomer2();
-        RepositoryManager.getInstance().getCompanyRepository().saveOrUpdateCustomer(Customer2);
+        RepositoryFactory.getInstance().getCompanyRepository().saveOrUpdateCustomer(Customer2);
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Test customer 2 saved in the database");
 
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Saving test customer 3 into database");
         final Company Customer3 = ComputerLicenseDataModel.getTestCompanyDataModel().getCustomer3();
-        RepositoryManager.getInstance().getCompanyRepository().saveOrUpdateCustomer(Customer3);
+        RepositoryFactory.getInstance().getCompanyRepository().saveOrUpdateCustomer(Customer3);
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Test customer 3 saved in the database");
 
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Saving test customer 4 into database");
         final Company Customer4 = ComputerLicenseDataModel.getTestCompanyDataModel().getCustomer4();
-        RepositoryManager.getInstance().getCompanyRepository().saveOrUpdateCustomer(Customer4);
+        RepositoryFactory.getInstance().getCompanyRepository().saveOrUpdateCustomer(Customer4);
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Test customer 4 saved in the database");
 
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Saving test customer 5 into database");
         final Company Customer5 = ComputerLicenseDataModel.getTestCompanyDataModel().getCustomer5();
-        RepositoryManager.getInstance().getCompanyRepository().saveOrUpdateCustomer(Customer5);
+        RepositoryFactory.getInstance().getCompanyRepository().saveOrUpdateCustomer(Customer5);
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Test customer 5 saved in the database");
 
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Saving test supplier 1 into database");
         final Supplier Supplier1 = ComputerLicenseDataModel.getTestCompanyDataModel().getSupplier1();
-        RepositoryManager.getInstance().getSuppliersRepository().save(Supplier1);
+        RepositoryFactory.getInstance().getSuppliersRepository().save(Supplier1);
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Test supplier 1 saved in the database");
 
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Saving test supplier 2 into database");
         final Supplier Supplier2 = ComputerLicenseDataModel.getTestCompanyDataModel().getSupplier2();
-        RepositoryManager.getInstance().getSuppliersRepository().save(Supplier2);
+        RepositoryFactory.getInstance().getSuppliersRepository().save(Supplier2);
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Test supplier 2 saved in the database");
 
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Saving test supplier 3 into database");
         final Supplier Supplier3 = ComputerLicenseDataModel.getTestCompanyDataModel().getSupplier3();
-        RepositoryManager.getInstance().getSuppliersRepository().save(Supplier3);
+        RepositoryFactory.getInstance().getSuppliersRepository().save(Supplier3);
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Test supplier 3 saved in the database");
 
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Saving test supplier 4 into database");
         final Supplier Supplier4 = ComputerLicenseDataModel.getTestCompanyDataModel().getSupplier4();
-        RepositoryManager.getInstance().getSuppliersRepository().save(Supplier4);
+        RepositoryFactory.getInstance().getSuppliersRepository().save(Supplier4);
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Test supplier 4 saved in the database");
 
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Saving test supplier 5 into database");
         final Supplier Supplier5 = ComputerLicenseDataModel.getTestCompanyDataModel().getSupplier5();
-        RepositoryManager.getInstance().getSuppliersRepository().save(Supplier5);
+        RepositoryFactory.getInstance().getSuppliersRepository().save(Supplier5);
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Test supplier 5 saved in the database");                      
         
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Is premium: " + ComputerLicenseDataModel.getPremiumFuntionsDataModel().isPremium());
@@ -424,28 +460,35 @@ public class LoginLocalViewController extends LoginLicenseJFrame {
                 saveServerInformation(ComputerLicenseDataModel);
             }catch(Exception Exception){
 
-                LoggerUtility.getSingleton().logError(LoginLicenseJFrame.class, Exception);
-
-                final ExceptionDialog ExceptionDialog = new ExceptionDialog(baseJFrame,Exception);
-                ExceptionDialog.show();                                                                       
+                try {
+                    
+                    LoggerUtility.getSingleton().logError(LoginLicenseJFrame.class, Exception);
+                    
+                    final ExceptionDialog ExceptionDialog = DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, Exception);
+                    ExceptionDialog.show();
+                    
+                } catch (Exception ex) {
+                    Logger.getLogger(LoginLocalViewController.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
         GetComputerStatusHttpClient.execute();
     }
     
-    private void onInvalidLoginServer(){
+    private void onInvalidLoginServer() throws Exception{
         
-        RenderControlersViewManager.getSingleton().getCreatingDatabaseWaitViewController().dispose();
+        ViewControlersFactory.getSingleton().getCreatingDatabaseWaitViewController().dispose();
                     
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Las credenciales no son correctas");
 
-        final InvalidCredentialsDialog InvalidCredentialsDialog = new InvalidCredentialsDialog(this);
-        InvalidCredentialsDialog.show();
+        final OKDialog OKDialog = DialogsFactory.getSingleton().getOKDialog(baseJFrame);
+        OKDialog.setPropertyText("users_invalid_login");
+        OKDialog.show();
     }
     
     private void onUserNotExistsServer(){
         
-        RenderControlersViewManager.getSingleton().getCreatingDatabaseWaitViewController().dispose();
+        ViewControlersFactory.getSingleton().getCreatingDatabaseWaitViewController().dispose();
                     
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: No existe el usuario");
 

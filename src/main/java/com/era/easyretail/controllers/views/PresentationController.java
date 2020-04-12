@@ -42,7 +42,7 @@ public class PresentationController extends Presentation {
                 dispose();
                 
                 //Show login screen
-                LoginController LoginController = new LoginController();
+                LoginViewController LoginController = new LoginViewController();
                 LoginController.setVisible();
             }
             
