@@ -15,6 +15,7 @@ import com.era.repositories.models.HibernateConfigModel;
 import com.era.repositories.utils.HibernateConfigUtil;
 import com.era.repositories.utils.MysqlScriptsUtil;
 import com.era.utilities.FileChooserUtility;
+import com.era.utilities.PathsUtility;
 import com.era.utilities.UtilitiesFactory;
 import com.era.views.CreatingDatabaseWaitJFrame;
 import com.era.views.EmpresasJFrame;
@@ -42,13 +43,12 @@ public class EmpresasViewController extends EmpresasJFrame {
     private String certificateKeyPath;
     private String templatePath;
     private String appPath;
-    private String logoPath;
-    private String backupDBPath;
+    private String logoPath;    
     
     
     public EmpresasViewController() throws Exception{
         
-        this.setPropertyTitle("companies_title");
+        this.setPropertyTitle("companies_title");                
         
         //Validate the premium functionality for the button color
         final BasePremiumImpl BasePremiumImpl_ = BasePremiumImpl.getSingleton();
@@ -92,6 +92,9 @@ public class EmpresasViewController extends EmpresasJFrame {
         BTNRespalda.addActionListener((ActionEvent e) -> {
             buttonBackupDBPathClicked(e);
         });
+        BTNRestaura.addActionListener((ActionEvent e) -> {
+            buttonImportBackupClicked(e);
+        });        
         BTNBorraPorId.addActionListener((ActionEvent e) -> {
             buttonDeleteCompanyClicked(e);
         });
@@ -150,9 +153,6 @@ public class EmpresasViewController extends EmpresasJFrame {
                     }
                     
                     logoPath = absolutePath + "\\" + fileName;
-                    
-                    String logoLocalPath = UtilitiesFactory.getSingleton().getPathsUtility().getLogoPath();
-                    logoLocalPath += UtilitiesFactory.getSingleton().getPathsUtility().getLogoFileName();
                     
                     jLImg.setIcon(new ImageIcon(logoPath));
                     jLImg.setVisible(true);
@@ -260,11 +260,26 @@ public class EmpresasViewController extends EmpresasJFrame {
             } catch (Exception ex1) {
                 Logger.getLogger(EmpresasViewController.class.getName()).log(Level.SEVERE, null, ex1);
             }
-        }            
+        }
     }
     
     private void buttonClearFieldsClicked(ActionEvent e){
-        this.clearFields();
+        
+        try{
+            this.clearFields();
+        }
+        catch(Exception ex){
+            
+            try {
+
+                LoggerUtility.getSingleton().logError(EmpresasViewController.class, ex);
+
+                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+
+            } catch (Exception ex1) {
+                Logger.getLogger(EmpresasViewController.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+        }
     }
     
     private void buttonNewCompanyClicked(ActionEvent e){
@@ -368,6 +383,15 @@ public class EmpresasViewController extends EmpresasJFrame {
             }
         } 
         
+        //If logo to update so
+        if(logoPath!=null){
+            final PathsUtility PathsUtility = UtilitiesFactory.getSingleton().getPathsUtility();
+            String companyLogoPath = PathsUtility.getCompanyLogoPath();
+            final String logoFileName = UtilitiesFactory.getSingleton().getPathsUtility().getLogoFileName();
+            companyLogoPath += "\\" + logoFileName;
+            UtilitiesFactory.getSingleton().getFilesUtility().copyFile(logoPath, companyLogoPath);
+        }
+        
         Company.setNom(JTEmpresa.getText().trim());
         Company.setCodemp(JTCodigoEmpresa.getText());
         Company.setBd(JTBaseDeDatos.getText());
@@ -413,6 +437,14 @@ public class EmpresasViewController extends EmpresasJFrame {
         
         try{
             
+            //No row selection
+            if(jTabEmpresas.getSelectedRow()==-1){
+                final OKDialog OKDialog = DialogsFactory.getSingleton().getOKDialog(baseJFrame);
+                OKDialog.setPropertyText("basdats_frame_msg20");
+                OKDialog.show();
+                return;
+            }
+            
             final QuestionDialog QuestionDialog = DialogsFactory.getSingleton().getQuestionDialog(baseJFrame);
             QuestionDialog.setPropertyText("question_continue");
             QuestionDialog.setOKDialogInterface((JFrame jFrame) -> {
@@ -421,6 +453,8 @@ public class EmpresasViewController extends EmpresasJFrame {
                     
                     //Updte the company in the database
                     updateCompany(true);
+                             
+                    jTabEmpresas.clearRows();
                     
                     //Reload table
                     this.loadCompanies();
@@ -443,6 +477,7 @@ public class EmpresasViewController extends EmpresasJFrame {
                     }
                 }
             });
+            QuestionDialog.show();
             
         }catch(Exception ex){
             
@@ -461,16 +496,28 @@ public class EmpresasViewController extends EmpresasJFrame {
     private void buttonDeleteCompanyClicked(ActionEvent e){
                 
         try{
+            
+            //No row selection
+            if(jTabEmpresas.getSelectedRow()==-1){
+                final OKDialog OKDialog = DialogsFactory.getSingleton().getOKDialog(baseJFrame);
+                OKDialog.setPropertyText("basdats_frame_msg19");
+                OKDialog.show();
+                return;
+            }
+            
+            //Continue ?
             final QuestionDialog QuestionDialog = DialogsFactory.getSingleton().getQuestionDialog(baseJFrame);
             QuestionDialog.setPropertyText("question_continue");
             QuestionDialog.setOKDialogInterface((JFrame jFrame) -> {                
                 
                 try{
                     
+                    final BasDats BasDats = (BasDats) jTabEmpresas.getRowSelected();
+                    
                     //Delete company database and record from basdats
                     final HibernateConfigModel HibernateConfigModel = HibernateConfigUtil.getInstance().getHibernateConfigFile();
-                    MysqlScriptsUtil.getInstance().deleteDatabase(HibernateConfigModel.getUser(), HibernateConfigModel.getPassword(), HibernateConfigModel.getInstance(), HibernateConfigModel.getPort(), HibernateConfigModel.getDatabase());
-                    RepositoryFactory.getInstance().getBasDatsRepository().deleteBasDats(Company.getCodemp());
+                    MysqlScriptsUtil.getInstance().deleteDatabase(HibernateConfigModel.getUser(), HibernateConfigModel.getPassword(), HibernateConfigModel.getInstance(), HibernateConfigModel.getPort(), BasDats.getBd());
+                    RepositoryFactory.getInstance().getBasDatsRepository().deleteBasDats(BasDats.getCodemp());
                     
                     //Clear all fields
                     clearFields();
@@ -490,7 +537,8 @@ public class EmpresasViewController extends EmpresasJFrame {
                         Logger.getLogger(EmpresasViewController.class.getName()).log(Level.SEVERE, null, ex1);
                     }
                 }
-            });                        
+            });
+            QuestionDialog.show();
             
         }catch(Exception ex){
             
@@ -507,8 +555,16 @@ public class EmpresasViewController extends EmpresasJFrame {
     }
     
     private void buttonBackupDBPathClicked(ActionEvent e){
-        
+            
         try{
+            
+            //No row selecion
+            if(jTabEmpresas.getSelectedRow()==-1){
+                final OKDialog OKDialog = DialogsFactory.getSingleton().getOKDialog(baseJFrame);
+                OKDialog.setPropertyText("basdats_frame_msg21");
+                OKDialog.show();
+                return;
+            }
             
             final FileChooserUtility FileChooserUtility = UtilitiesFactory.getSingleton().getFileChooserUtility();
             FileChooserUtility.setPropertyTitle("basdats_frame_msg10");
@@ -516,20 +572,87 @@ public class EmpresasViewController extends EmpresasJFrame {
                 
                 try{
                     
-                    backupDBPath = absolutePath + "\\" + fileName;
+                    final String backupDBPath = absolutePath + "\\" + fileName;
 
                     final HibernateConfigModel HibernateConfigModel = HibernateConfigUtil.getInstance().getHibernateConfigFile();
 
+                    final BasDats BasDats = (BasDats) jTabEmpresas.getRowSelected();
+                    
                     //Backup database
-                    final boolean success = MysqlScriptsUtil.getInstance().backupDatabase(HibernateConfigModel.getUser(), HibernateConfigModel.getPassword(), HibernateConfigModel.getInstance(), HibernateConfigModel.getPort(), HibernateConfigModel.getDatabase(), backupDBPath);                
-                    if(success){
-                        final OKDialog OKDialog = DialogsFactory.getSingleton().getOKDialog(baseJFrame);
+                    final boolean success = MysqlScriptsUtil.getInstance().backupDatabase(HibernateConfigModel.getUser(), HibernateConfigModel.getPassword(), HibernateConfigModel.getInstance(), HibernateConfigModel.getPort(), BasDats.getBd(), backupDBPath);
+                    final OKDialog OKDialog = DialogsFactory.getSingleton().getOKDialog(baseJFrame);
+                    if(success){                        
                         OKDialog.setPropertyText("basdats_frame_msg11");                        
                     }
-                    else{
-                        final OKDialog OKDialog = DialogsFactory.getSingleton().getOKDialog(baseJFrame);
+                    else{                        
                         OKDialog.setPropertyText("basdats_frame_msg12");                        
                     }
+                    OKDialog.show();
+                    
+                }catch(Exception ex){
+            
+                    try {
+
+                        LoggerUtility.getSingleton().logError(EmpresasViewController.class, ex);
+
+                        DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+
+                    } catch (Exception ex1) {
+                        Logger.getLogger(EmpresasViewController.class.getName()).log(Level.SEVERE, null, ex1);
+                    }
+                }
+            });
+            FileChooserUtility.showSaveDialog(baseJFrame);
+            
+        }catch(Exception ex){
+            
+            try {
+                
+                LoggerUtility.getSingleton().logError(EmpresasViewController.class, ex);
+                
+                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+                
+            } catch (Exception ex1) {
+                Logger.getLogger(EmpresasViewController.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+        }
+    }
+    
+    
+    private void buttonImportBackupClicked(ActionEvent e){
+            
+        try{
+            
+            //No row selecion
+            if(jTabEmpresas.getSelectedRow()==-1){
+                final OKDialog OKDialog = DialogsFactory.getSingleton().getOKDialog(baseJFrame);
+                OKDialog.setPropertyText("basdats_frame_msg22");
+                OKDialog.show();
+                return;
+            }
+            
+            final FileChooserUtility FileChooserUtility = UtilitiesFactory.getSingleton().getFileChooserUtility();
+            FileChooserUtility.setPropertyTitle("question_continue");
+            FileChooserUtility.setIApproveOpption((String absolutePath, String fileName) -> {
+                
+                try{
+                    
+                    final String backupRestoreDBPath = absolutePath + "\\" + fileName;
+
+                    final HibernateConfigModel HibernateConfigModel = HibernateConfigUtil.getInstance().getHibernateConfigFile();
+
+                    final BasDats BasDats = (BasDats) jTabEmpresas.getRowSelected();
+                    
+                    //Backup database
+                    final boolean success = MysqlScriptsUtil.getInstance().importBackupDatabase(HibernateConfigModel.getUser(), HibernateConfigModel.getPassword(), HibernateConfigModel.getInstance(), HibernateConfigModel.getPort(), BasDats.getBd(), backupRestoreDBPath);
+                    final OKDialog OKDialog = DialogsFactory.getSingleton().getOKDialog(baseJFrame);
+                    if(success){                        
+                        OKDialog.setPropertyText("basdats_frame_msg23");                        
+                    }
+                    else{                        
+                        OKDialog.setPropertyText("basdats_frame_msg24");                        
+                    }
+                    OKDialog.show();
                     
                 }catch(Exception ex){
             
@@ -856,7 +979,7 @@ public class EmpresasViewController extends EmpresasJFrame {
         return val;
     }
     
-    public void clearFields(){
+    public void clearFields() throws Exception {
         
         JTIdEmpresa.setText("");
         JTCodigoEmpresa.setText(UtilitiesFactory.getSingleton().getGeneralsUtility().getUniqueDayCode());
@@ -884,7 +1007,11 @@ public class EmpresasViewController extends EmpresasJFrame {
         JTRutaKey.setText("");
         JTPasswordCertificado.setText("");
         JTRutaAplicacion.setText("");
-        JTPlantilla.setText("");
+        JTPlantilla.setText("");                
+        
+        if(jTabEmpresas.isTableInitialized()){
+            jTabEmpresas.clearRows();
+        }
         
         /*Selecciona el método de costeo que sea de la empresa*/
         bgMetodoCosteo.setSelected(JRBPEPS.getModel(), true);
@@ -894,11 +1021,17 @@ public class EmpresasViewController extends EmpresasJFrame {
         
         bgTipoContribuyente.setSelected(JRBMoral.getModel(), true);
         bgTipoContribuyente.setSelected(JRBFisica.getModel(), false);
+        
+        jLImg.setIcon(null);
+        jLImg.setVisible(false);
+        
+        //Reload table
+        this.loadCompanies();
     }
     
     public final void loadCompanies() throws Exception {
         
-        final List<BasDats> companies = (List<BasDats>) RepositoryFactory.getInstance().getBasDatsRepository().getAll();
+        final List<BasDats> companies = (List<BasDats>) RepositoryFactory.getInstance().getBasDatsRepository().getAll();        
         jTabEmpresas.initTable(companies);        
     }
     
@@ -932,15 +1065,31 @@ public class EmpresasViewController extends EmpresasJFrame {
         JTRutaAplicacion.setText(Company.getRutap());
         JTPlantilla.setText("");
         
+        UtilitiesFactory.getSingleton().getPathsUtility().initPaths(null, Company.getCodemp());
+                
+        //Load icon
+        String companyLogoPath = UtilitiesFactory.getSingleton().getPathsUtility().getCompanyLogoPath();
+        companyLogoPath += "\\" + UtilitiesFactory.getSingleton().getPathsUtility().getLogoFileName();
+        if(UtilitiesFactory.getSingleton().getFilesUtility().fileExists(companyLogoPath)){
+            jLImg.setIcon(new ImageIcon(companyLogoPath));
+            jLImg.setVisible(true);
+        }        
+        
         /*Selecciona el método de costeo que sea de la empresa*/
-        if(Company.getMetcost().equals("metcost"))
-            bgMetodoCosteo.setSelected(JRBPEPS.getModel(), true);
-        else if(Company.getMetcost().equals("ueps"))
-            bgMetodoCosteo.setSelected(JRBUEPS.getModel(), true);
-        else if(Company.getMetcost().equals("ultcost"))
-            bgMetodoCosteo.setSelected(JRBUltCost.getModel(), true);
-        else if(Company.getMetcost().equals("prom"))
-            bgMetodoCosteo.setSelected(JRBPromedio.getModel(), true);
+        switch (Company.getMetcost()) {
+            case "metcost":
+                bgMetodoCosteo.setSelected(JRBPEPS.getModel(), true);
+                break;
+            case "ueps":
+                bgMetodoCosteo.setSelected(JRBUEPS.getModel(), true);
+                break;
+            case "ultcost":
+                bgMetodoCosteo.setSelected(JRBUltCost.getModel(), true);
+                break;
+            case "prom":
+                bgMetodoCosteo.setSelected(JRBPromedio.getModel(), true);
+                break;
+        }
         
         final String regimenFiscal = Company.getRegfisc()==null?"F":Company.getRegfisc();
         switch (regimenFiscal) {

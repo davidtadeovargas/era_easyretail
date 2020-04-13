@@ -44,9 +44,7 @@ public class ViewControlersFactory {
     }
     
     public EmpresasViewController getEmpresasViewController() throws Exception{
-        if(EmpresasViewController==null){
-            EmpresasViewController = new EmpresasViewController();
-        }
+        EmpresasViewController = new EmpresasViewController();        
         return EmpresasViewController;
     }
     
