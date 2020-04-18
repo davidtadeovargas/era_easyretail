@@ -78,7 +78,15 @@ public class LoginViewController extends LoginJFrame {
             JComponentUtils.interceptWindowClosingToButton(jbuttonExit);
                         
         }catch(Exception e){
+            
             LoggerUtility.getSingleton().logError(LoginViewController.class, e);
+                                        
+            try {
+                final ExceptionDialog ExceptionDialog = DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, e);
+                ExceptionDialog.show();
+            } catch (Exception ex) {
+                Logger.getLogger(LoginViewController.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
     
