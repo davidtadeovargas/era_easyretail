@@ -302,7 +302,18 @@ public class SearchViewController extends SearchJFrame {
                     showPaginationLabel();
                     
                     break;
-
+                
+                case EXPEDITION_PLACE:
+                    
+                    list = RepositoryManager_.getCCodigoPostalRepository().getAllByPageExpeditionPlace(0);
+                    count = RepositoryManager_.getCCodigoPostalRepository().getCount();
+                    jTab.setCount(count);
+                    jTab.setPagination(list.size());
+                    
+                    showPaginationLabel();
+                    
+                    break;
+                    
                 case COUNTRIES:
                     
                     list = RepositoryManager_.getCCountriesRepository().getAllByPage(0);
@@ -314,8 +325,12 @@ public class SearchViewController extends SearchJFrame {
                     
                     break;                   
                     
-               case SECTORS:
+                case SECTORS:
                    list = RepositoryManager_.getSectoresRepository().getAll();
+                   break;
+                   
+                case FISCAL_REGIMEN:
+                   list = RepositoryManager_.getCRegimenFiscalRepository().getAll();
                    break;
             }
             
@@ -342,6 +357,7 @@ public class SearchViewController extends SearchJFrame {
 
             case CPS:
             case COUNTRIES:
+            case EXPEDITION_PLACE:
                 
                 jTab.setPrevRowIndex(initialIndex);
                 
@@ -351,11 +367,15 @@ public class SearchViewController extends SearchJFrame {
                 switch(SearchCommonTypeEnum){
                     case CPS:
                         rows = RepositoryFactory.getInstance().getCCodigoPostalRepository().getAllByPage(jTab.getPrevRowIndex());
-                    break;
+                        break;
                     
                     case COUNTRIES:
                         rows = RepositoryFactory.getInstance().getCCountriesRepository().getAllByPage(jTab.getPrevRowIndex());
-                    break;
+                        break;
+                        
+                    case EXPEDITION_PLACE:
+                        rows = RepositoryFactory.getInstance().getCCodigoPostalRepository().getAllByPageExpeditionPlace(jTab.getPrevRowIndex());
+                        break;
                 }
                           
                 jTab.setLastRowIndex(jTab.getPrevRowIndex() + rows.size());
@@ -435,6 +455,9 @@ public class SearchViewController extends SearchJFrame {
                     Logger.getLogger(SearchViewController.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }            
+        });
+        jTab.setJTableEnterKeyPressed((int selectedRow) -> {
+            jBCarg.doClick();
         });
         
         this.pack();

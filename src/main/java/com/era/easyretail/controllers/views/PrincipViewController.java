@@ -35,8 +35,16 @@ public class PrincipViewController extends PrincipJFrame {
         try{
             
             final Confgral Confgral = RepositoryFactory.getInstance().getConfgralRepository().getSistemClasifByConf("reporteCaja");
-            jBReporteCaja.setEnabled(Confgral.getVal()==1);
-
+            if(Confgral==null){
+                jBReporteCaja.setEnabled(false);
+            }
+            else{
+                jBReporteCaja.setEnabled(Confgral.getVal()==1);
+            }
+            
+            //Override default functionality
+            JComponentUtils.setDisposeInEscapeEvent(false);            
+            
             final ImageIcon ImageIcon = UtilitiesFactory.getSingleton().getIconsUtility().getImageIconFromImage("ban.png");                
             jLImg.setIcon(ImageIcon);
 
@@ -478,7 +486,9 @@ public class PrincipViewController extends PrincipJFrame {
             jMenuItem6.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jMenuItem6ActionPerformed(evt);
             });
-                                
+            
+            onCloseWindowDoNothing();
+            
         }catch (Exception ex) {
             LoggerUtility.getSingleton().logError(PrincipViewController.class, ex);
             try {
@@ -540,7 +550,9 @@ public class PrincipViewController extends PrincipJFrame {
     private void jMenItSalActionPerformed(java.awt.event.ActionEvent evt) {                                          
         
         try{
+            
             vExiAp();
+            
         }
         catch (Exception ex) {
             LoggerUtility.getSingleton().logError(PrincipViewController.class, ex);
@@ -1260,9 +1272,18 @@ public class PrincipViewController extends PrincipJFrame {
     
     private void formWindowClosing(java.awt.event.WindowEvent evt) {                                   
         
-        /*Función para cuando se tiene que salir de la aplicación*/
-        //vExiAp();
-        
+        try{
+            
+            vExiAp();
+        }
+        catch (Exception ex) {
+            LoggerUtility.getSingleton().logError(PrincipViewController.class, ex);
+            try {
+                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+            } catch (Exception ex1) {
+                Logger.getLogger(PrincipViewController.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+        }        
     }
     
     private void jMKardActionPerformed(java.awt.event.ActionEvent evt) {                                       

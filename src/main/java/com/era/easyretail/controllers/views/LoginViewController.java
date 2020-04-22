@@ -7,9 +7,12 @@ package com.era.easyretail.controllers.views;
 
 import com.era.datamodels.enums.SearchCommonTypeEnum;
 import com.era.logger.LoggerUtility;
+import com.era.models.BasDats;
+import com.era.models.User;
 import com.era.repositories.RepositoryFactory;
 import com.era.repositories.models.HibernateConfigModel;
 import com.era.repositories.utils.HibernateUtil;
+import com.era.utilities.UtilitiesFactory;
 import com.era.views.LoginJFrame;
 import com.era.views.dialogs.DialogsFactory;
 import com.era.views.dialogs.ExceptionDialog;
@@ -24,9 +27,9 @@ import javax.swing.JOptionPane;
  */
 public class LoginViewController extends LoginJFrame {
     
-    private String companyCode;
-    private String database;
+    private String companyCode;    
     private boolean onlyExitWindow;
+    private boolean alreadyDBConfig;
     
     //Contiene el contador de intentos de ingreso al sistema
     int iContEnt = 0;
@@ -194,24 +197,18 @@ public class LoginViewController extends LoginJFrame {
                 jTEsta.grabFocus();
                 return;
             }
+            
+            if(!alreadyDBConfig){
+                
+                //Save the local connections param
+                HibernateUtil.getSingleton().createLocalHibernateConfigModel(companyCode,true);
 
-            //Save the local connections param
-            HibernateConfigModel HibernateConfigModel = HibernateUtil.getSingleton().getHibernateConfigModel();
-            HibernateConfigModel HibernateConfigModel_ = new HibernateConfigModel();
-            HibernateConfigModel_.setInstance(HibernateConfigModel.getInstance());
-            HibernateConfigModel_.setPassword(HibernateConfigModel.getPassword());
-            HibernateConfigModel_.setPort(HibernateConfigModel.getPort());
-            HibernateConfigModel_.setUrl(HibernateConfigModel.getUrl());
-            HibernateConfigModel_.setUser(HibernateConfigModel.getUser());
-            HibernateConfigModel_.setDatabase(database);
-            HibernateUtil.getSingleton().setHibernateConfigModelLocal(HibernateConfigModel_);
-
-            //Connect to local
-            HibernateUtil.getSingleton().connectToDbLocal();
-
+                alreadyDBConfig = true;
+            }
+            
             final String user = jTEsta.getText();
             final String password = new String(jPContra.getPassword());
-            
+                        
             //Valid password
             if(password.compareTo("")==0){
 
@@ -263,12 +260,23 @@ public class LoginViewController extends LoginJFrame {
                 jPContra.grabFocus();
                 return;
             }
+            
+            final User User = RepositoryFactory.getInstance().getUsersRepository().getUsrByCode(user);
 
+            //Save session data for the system
+            final BasDats BasDats = RepositoryFactory.getInstance().getBasDatsRepository().getByDBName(companyCode);
+            UtilitiesFactory.getSingleton().getSessionUtility().setBasDats(BasDats);
+            UtilitiesFactory.getSingleton().getSessionUtility().setUser(User);            
+            final String currentTimeAndDate = UtilitiesFactory.getSingleton().getDateTimeUtility().getQuickCurrentTimeAndDate();            
+            UtilitiesFactory.getSingleton().getSessionUtility().setUserLoggedTime(currentTimeAndDate);
+            
             //Log the loggin of the user
             RepositoryFactory.getInstance().getUsersRepository().userLoggedToSystem(user);
                         
-            //Open the main window
+            dispose();
             
+            //Open the main window
+            ViewControlersFactory.getSingleton().getPrincipViewController().show();
             
         }catch(Exception ex){
                                     

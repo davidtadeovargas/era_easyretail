@@ -6,15 +6,15 @@
 package com.era.easyretail.controllers.views;
 
 import com.era.utilities.JFrameUtils;
-import com.era.views.CreatingDatabaseWaitJFrame;
+import com.era.views.LoadingWaitJFrame;
 
 /**
  *
  * @author PC
  */
-public class CreatingDatabaseWaitViewController extends CreatingDatabaseWaitJFrame {
+public class LoadingViewController extends LoadingWaitJFrame {
     
-    public CreatingDatabaseWaitViewController(){
+    public LoadingViewController(){
         super();
         
         JFrameUtils.getInstance().setIconToWindow(this);

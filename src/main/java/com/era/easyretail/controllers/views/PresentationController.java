@@ -5,13 +5,13 @@
  */
 package com.era.easyretail.controllers.views;
 
-import com.era.views.Presentation;
+import com.era.views.PresentationJFrame;
 
 /**
  *
  * @author PC
  */
-public class PresentationController extends Presentation {
+public class PresentationController extends PresentationJFrame {
     
     public PresentationController(){
         

@@ -13,7 +13,7 @@ import com.era.utilities.ConfigFileUtil;
 import com.era.utilities.SecurityUtil;
 import com.era.utilities.UtilitiesFactory;
 import com.era.utilities.models.ConfigFileModel;
-import com.era.views.DBFileConnectionConfiguration;
+import com.era.views.DBFileConnectionConfigurationJFrame;
 import java.awt.event.ActionEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
@@ -28,7 +28,7 @@ import javax.swing.JOptionPane;
  *
  * @author PC
  */
-public class DBFileConnectionConfigurationController extends DBFileConnectionConfiguration {
+public class DBFileConnectionConfigurationController extends DBFileConnectionConfigurationJFrame {
     
     private ConfigFileModel ConfigFileModel;
     private boolean closeSystem;
@@ -382,7 +382,7 @@ public class DBFileConnectionConfigurationController extends DBFileConnectionCon
 
             ConfigFileUtil.getSingleton(Constants.CONFIG_FILE).createConfigFile(ConfigFileModel_);
                         
-            JOptionPane.showMessageDialog(null, "Exito en el archivo de configuración.", "Archivo de Configuración", JOptionPane.INFORMATION_MESSAGE);
+            LoggerUtility.getSingleton().logInfo(DBFileConnectionConfigurationController.class, "Exito en el archivo de configuración.");            
         
             //Should close system to reload config file?
             if(onSaveExistApp){

@@ -8,24 +8,29 @@ package com.era.easyretail.controllers.views;
 import com.era.datamodels.CertificatesDataModel;
 import com.era.datamodels.enums.SearchCommonTypeEnum;
 import com.era.easyretail.premium.BasePremiumImpl;
+import com.era.easyretail.swingworkers.BaseSwingWorker;
+import com.era.easyretail.swingworkers.ISwingWorkerActions;
 import com.era.logger.LoggerUtility;
 import com.era.models.BasDats;
+import com.era.models.CCodigopostal;
+import com.era.models.CCountry;
+import com.era.models.CRegimenfiscal;
 import com.era.repositories.RepositoryFactory;
 import com.era.repositories.models.HibernateConfigModel;
 import com.era.repositories.utils.HibernateConfigUtil;
+import com.era.repositories.utils.HibernateUtil;
 import com.era.repositories.utils.MysqlScriptsUtil;
 import com.era.utilities.FileChooserUtility;
 import com.era.utilities.PathsUtility;
 import com.era.utilities.UtilitiesFactory;
-import com.era.views.CreatingDatabaseWaitJFrame;
 import com.era.views.EmpresasJFrame;
-import com.era.views.ViewsFactory;
 import com.era.views.dialogs.DialogsFactory;
+import com.era.views.dialogs.ErrorOKDialog;
 import com.era.views.dialogs.OKDialog;
 import com.era.views.dialogs.QuestionDialog;
 import java.awt.event.ActionEvent;
+import java.awt.event.FocusEvent;
 import java.util.List;
-import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
@@ -39,11 +44,11 @@ import javax.swing.event.ListSelectionEvent;
 public class EmpresasViewController extends EmpresasJFrame {
     
     private BasDats Company;
-    private String certificatePath;
-    private String certificateKeyPath;
-    private String templatePath;
-    private String appPath;
-    private String logoPath;    
+    private String templatePath;    
+    private String logoPath;
+    private boolean certificateCer;
+    private boolean certificateKey;
+    
     
     
     public EmpresasViewController() throws Exception{
@@ -60,18 +65,50 @@ public class EmpresasViewController extends EmpresasJFrame {
         JTCodigoEmpresa.setText(UtilitiesFactory.getSingleton().getGeneralsUtility().getUniqueDayCode());
         
         loadCompanies();
-                
+        
+        JTCodigoEmpresa.setEditable(false);
+        
+        JComponentUtils.addFocusLost(JTBaseDeDatos, (FocusEvent e) -> {
+            final String newString = JTBaseDeDatos.getText().trim().replace(" ", "");
+            JTBaseDeDatos.setText(newString);
+        });
+        
+        BTNActualiza.setEnabled(false);
+        
         jTabEmpresas.setITableRowSelected((ListSelectionEvent lse) -> {
             
-            if(jTabEmpresas.getRowCount() > 0){
-                if (jTabEmpresas.getSelectedRow() == -1){
-                    jTabEmpresas.setRowSelectionInterval(0, 0);
+            try{
+             
+                if(jTabEmpresas.getRowCount() > 0){
+                    
+                    if (jTabEmpresas.getSelectedRow() == -1){
+                        jTabEmpresas.setRowSelectionInterval(0, 0);
+                    }
+                    
+                    clearFields();
+                    
+                    Company = (BasDats) jTabEmpresas.getRowSelected();
+
+                    vCargaComponentes(Company);
+                    
+                    BTNActualiza.setEnabled(true);
+                    BTNNuevaEmpresa.setEnabled(false);
+                    
+                    JTBaseDeDatos.setEditable(false);
                 }
-                
-                Company = (BasDats) jTabEmpresas.getRowSelected();
-                
-                vCargaComponentes(Company);
             }
+            catch(Exception ex){
+
+                try {
+
+                    LoggerUtility.getSingleton().logError(EmpresasViewController.class, ex);
+
+                    DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+
+                } catch (Exception ex1) {
+                    Logger.getLogger(EmpresasViewController.class.getName()).log(Level.SEVERE, null, ex1);
+                }
+            }                            
         });  
         
         //To mayus when typed
@@ -121,9 +158,72 @@ public class EmpresasViewController extends EmpresasJFrame {
         });
         jBDelImg.addActionListener((ActionEvent e) -> {
             buttonDeleteImageClicked(e);
-        });        
+        });
+        BTNCargaRegimenFiscal.addActionListener((ActionEvent e) -> {
+            buttonSearchFiscalRegimenClicked(e);
+        });
+        BTNCargaLugarExpedicion.addActionListener((ActionEvent e) -> {
+            buttonSearchExpeditionPlaceClicked(e);
+        });
+        
+        String workingDir = UtilitiesFactory.getSingleton().getFilesUtility().getCurrentWorkingDir();        
+        
+        JTRutaAplicacion.setText(workingDir);
+        
     }
         
+    private void buttonSearchExpeditionPlaceClicked(ActionEvent e){
+     
+        try{
+            
+            final SearchViewController SearchViewController = new SearchViewController();
+            SearchViewController.setSEARCH_TYPE(SearchCommonTypeEnum.EXPEDITION_PLACE);
+            SearchViewController.setButtonAceptClicked(() -> {
+                final String fiscalRegimen = SearchViewController.getCod();                
+                JTLugarDeExpedicion.setText(fiscalRegimen);
+            });
+            SearchViewController.setVisible();
+        }
+        catch(Exception ex){
+            
+            try {
+
+                LoggerUtility.getSingleton().logError(EmpresasViewController.class, ex);
+
+                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+
+            } catch (Exception ex1) {
+                Logger.getLogger(EmpresasViewController.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+        }
+    }
+    
+    private void buttonSearchFiscalRegimenClicked(ActionEvent e){
+     
+        try{
+            
+            final SearchViewController SearchViewController = new SearchViewController();
+            SearchViewController.setSEARCH_TYPE(SearchCommonTypeEnum.FISCAL_REGIMEN);
+            SearchViewController.setButtonAceptClicked(() -> {
+                final String fiscalRegimen = SearchViewController.getCod();                
+                JTRegimenFiscal.setText(fiscalRegimen);
+            });
+            SearchViewController.setVisible();
+        }
+        catch(Exception ex){
+            
+            try {
+
+                LoggerUtility.getSingleton().logError(EmpresasViewController.class, ex);
+
+                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+
+            } catch (Exception ex1) {
+                Logger.getLogger(EmpresasViewController.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+        }
+    }
+    
     private void buttonDeleteImageClicked(ActionEvent e){
      
         jLImg.setIcon(null);
@@ -235,7 +335,7 @@ public class EmpresasViewController extends EmpresasJFrame {
             } catch (Exception ex1) {
                 Logger.getLogger(EmpresasViewController.class.getName()).log(Level.SEVERE, null, ex1);
             }
-        }        
+        }
     }
     
     private void buttonTestCertificateClicked(ActionEvent e){
@@ -244,9 +344,10 @@ public class EmpresasViewController extends EmpresasJFrame {
             
             //Test that the certificate is valid        
             if(validateCertificate()){
-                final QuestionDialog QuestionDialog = DialogsFactory.getSingleton().getQuestionDialog(baseJFrame);
-                QuestionDialog.setPropertyText("basdats_frame_msg15");
-                QuestionDialog.show();
+                
+                final OKDialog OKDialog = DialogsFactory.getSingleton().getOKDialog(baseJFrame);
+                OKDialog.setPropertyText("basdats_frame_msg15");
+                OKDialog.show();
             }
         }
         catch(Exception ex){
@@ -267,6 +368,10 @@ public class EmpresasViewController extends EmpresasJFrame {
         
         try{
             this.clearFields();
+            
+            clearTable();
+            
+            this.loadCompanies();
         }
         catch(Exception ex){
             
@@ -280,56 +385,154 @@ public class EmpresasViewController extends EmpresasJFrame {
                 Logger.getLogger(EmpresasViewController.class.getName()).log(Level.SEVERE, null, ex1);
             }
         }
-    }
+    }        
     
     private void buttonNewCompanyClicked(ActionEvent e){
         
-        try{
+        try{                        
             
-             //Validate the premium functionality
-            final BasePremiumImpl BasePremiumImpl_ = BasePremiumImpl.getSingleton();
-            BasePremiumImpl_.setINotPremium(() -> {
-                ViewControlersFactory.getSingleton().getPremiumViewController().setVisible();
-            });
-            BasePremiumImpl_.validate();
-            if(!BasePremiumImpl_.isPremium()){            
-                return;
-            }
-            
-            //Valida que los campos requeridos no tengan cadenas vacias            
-            final boolean fieldsFilled = validateRequiredFields();
-            if(!fieldsFilled){
-                final OKDialog OKDialog = DialogsFactory.getSingleton().getOKDialog(baseJFrame);
-                OKDialog.setPropertyText("basdats_frame_msg9");
-                OKDialog.show();
-            }                        
-            else{
+            final QuestionDialog QuestionDialog = DialogsFactory.getSingleton().getQuestionDialog(baseJFrame);
+            QuestionDialog.setPropertyText("question_continue");
+            QuestionDialog.setOKDialogInterface((JFrame jFrame) -> {
                 
-                //Show the loading dialog
-                final CreatingDatabaseWaitJFrame CreatingDatabaseWaitJFrame = ViewsFactory.getSingleton().getCreatingDatabaseWaitJFrame();
-                CreatingDatabaseWaitJFrame.setVisible(true);
-                
-                //Save the new company
-                this.updateCompany(false);
+                try{
+                    
+                    //Validate the premium functionality
+                    final BasePremiumImpl BasePremiumImpl_ = BasePremiumImpl.getSingleton();
+                    BasePremiumImpl_.setINotPremium(() -> {
+                        ViewControlersFactory.getSingleton().getPremiumViewController().setVisible();
+                    });
+                    BasePremiumImpl_.validate();
+                    if(!BasePremiumImpl_.isPremium()){            
+                        return;
+                    }
 
-                //Create the new database structure
-                final HibernateConfigModel HibernateConfigModel = HibernateConfigUtil.getInstance().getHibernateConfigFile();
-                MysqlScriptsUtil.getInstance().creaDB(this.Company.getBd(), HibernateConfigModel.getUser(), HibernateConfigModel.getPassword(), HibernateConfigModel.getInstance(), HibernateConfigModel.getPort());
-                                
-                //Hide the loading database window
-                CreatingDatabaseWaitJFrame.setVisible(false);                                
-                                
-                //Reload table
-                this.loadCompanies();
+                    //Valida que los campos requeridos no tengan cadenas vacias            
+                    final boolean fieldsFilled = validateRequiredFields();
+                    if(!fieldsFilled){
+                        final OKDialog OKDialog = DialogsFactory.getSingleton().getOKDialog(baseJFrame);
+                        OKDialog.setPropertyText("basdats_frame_msg9");
+                        OKDialog.show();
+                        return;
+                    }                        
+
+                    //Vaidate that the database does not exists
+                    final String database = JTBaseDeDatos.getText().trim();
+                    final HibernateConfigModel HibernateConfigModel = HibernateUtil.getSingleton().getHibernateConfigModel();
+                    final boolean exists = MysqlScriptsUtil.getInstance().testDatabaseConnection(database, HibernateConfigModel.getUser(), HibernateConfigModel.getPassword(), HibernateConfigModel.getInstance(), HibernateConfigModel.getPort());
+                    if(exists){
+                        final ErrorOKDialog ErrorOKDialog = DialogsFactory.getSingleton().getErrorOKDialog(baseJFrame);
+                        ErrorOKDialog.setPropertyText("errors_db_exists");
+                        ErrorOKDialog.show();
+                        return;
+                    }
+                    
+                    //Save the new company
+                    if(!this.addOrUpdateCompany()){                    
+                        return;
+                    }
+
+                    //Create database and catalogs for the new company
+                    final BaseSwingWorker BaseSwingWorker = new BaseSwingWorker();
+                    BaseSwingWorker.setShowLoading(baseJFrame);
+                    BaseSwingWorker.setISwingWorkerActions(new ISwingWorkerActions(){
+
+                        @Override
+                        public void before() {
+                        }
+
+                        @Override
+                        public Object doinbackground(){
+
+                            try{
+
+                                final HibernateConfigModel HibernateConfigModel_ = HibernateUtil.getSingleton().createLocalHibernateConfigModel(Company.getBd(),true);
+
+                                //Create the new database structure
+                                MysqlScriptsUtil.getInstance().creaDB(HibernateConfigModel_.getDatabase(), HibernateConfigModel_.getUser(), HibernateConfigModel_.getPassword(), HibernateConfigModel_.getInstance(), HibernateConfigModel_.getPort());
+
+                                HibernateUtil.getSingleton().connectToDbEmpresas();
+
+                                return null;
+
+                            }catch(Exception ex){
+
+                                try {
+
+                                    LoggerUtility.getSingleton().logError(EmpresasViewController.class, ex);
+
+                                } catch (Exception ex1) {
+                                    Logger.getLogger(EmpresasViewController.class.getName()).log(Level.SEVERE, null, ex1);
+                                }
+
+                                return ex;
+                            }
+                        }
+
+                        @Override
+                        public void after(Object Object) {
+
+                            try{
+
+                                //No error
+                                if(Object==null){
+
+                                    //Reload table
+                                    loadCompanies();
+
+                                    //Show success dialog
+                                    final OKDialog OKDialog = DialogsFactory.getSingleton().getOKDialog(baseJFrame);
+                                    OKDialog.setPropertyText("basdats_frame_msg14");
+                                    OKDialog.show();
+
+                                }
+                                else{
+
+                                    final Exception Exception = (Exception) Object;
+                                    try {
+
+                                        LoggerUtility.getSingleton().logError(EmpresasViewController.class, Exception);
+
+                                        DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, Exception).show();
+
+                                    } catch (Exception ex1) {
+                                        Logger.getLogger(EmpresasViewController.class.getName()).log(Level.SEVERE, null, ex1);
+                                    }
+                                }
+
+                            }catch(Exception ex){
+
+                                    try {
+
+                                        LoggerUtility.getSingleton().logError(EmpresasViewController.class, ex);
+
+                                    } catch (Exception ex1) {
+                                        Logger.getLogger(EmpresasViewController.class.getName()).log(Level.SEVERE, null, ex1);
+                                    }
+                                }
+                            }
+                        });
+                    BaseSwingWorker.execute();
+                    
+                }catch(Exception ex){
+            
+                    try {
+
+                        LoggerUtility.getSingleton().logError(EmpresasViewController.class, ex);
+
+                        DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+
+                    } catch (Exception ex1) {
+                        Logger.getLogger(EmpresasViewController.class.getName()).log(Level.SEVERE, null, ex1);
+                    }
+                }
                 
-                //Show success dialog
-                final QuestionDialog QuestionDialog = DialogsFactory.getSingleton().getQuestionDialog(baseJFrame);
-                QuestionDialog.setPropertyText("basdats_frame_msg14");
-                QuestionDialog.show();
-            }
+            });
+            QuestionDialog.show();
+                                
         }
         catch(Exception ex){
-            
+
             try {
 
                 LoggerUtility.getSingleton().logError(EmpresasViewController.class, ex);
@@ -342,11 +545,10 @@ public class EmpresasViewController extends EmpresasJFrame {
         }
     }
     
-    private void updateCompany(final boolean update) throws Exception {
+    private boolean addOrUpdateCompany() throws Exception {
                 
         String MetodoCosteo      = "";
-        String TipoContribuyente = "";
-        String RegimenFiscal     = "";
+        String TipoContribuyente = "";        
 
          /*Determina el método de costeo seleccionado*/
         if(JRBPEPS.isSelected())
@@ -364,40 +566,104 @@ public class EmpresasViewController extends EmpresasJFrame {
         else 
             TipoContribuyente = "M";
 
-        StringTokenizer tokens = new StringTokenizer(JTRegimenFiscal.getText().trim(), "-");
-
-        if (tokens.hasMoreTokens()) {
-            RegimenFiscal = tokens.nextToken().trim();
+        //Validate that the cp exists
+        final String cp = JTCP.getText().trim();
+        CCodigopostal CCodigopostal = (CCodigopostal) RepositoryFactory.getInstance().getCCodigoPostalRepository().getByPostalCode(cp);
+        if(CCodigopostal==null){
+                        
+            final ErrorOKDialog ErrorOKDialog = DialogsFactory.getSingleton().getErrorOKDialog(baseJFrame);
+            ErrorOKDialog.setPropertyText("errors_cp_not_exists");
+            ErrorOKDialog.show();
+            return false;
         }
-
+        
+        //Validate that the country exists
+        final String country = JTPais.getText().trim();
+        CCountry CCountry = RepositoryFactory.getInstance().getCCountriesRepository().getCountryByCode(country);
+        if(CCountry==null){
+                        
+            final ErrorOKDialog ErrorOKDialog = DialogsFactory.getSingleton().getErrorOKDialog(baseJFrame);
+            ErrorOKDialog.setPropertyText("errors_country_not_exists");
+            ErrorOKDialog.show();
+            return false;
+        }
+        
+        //Validate that the expedition place exists
+        final String expeditionPlace = JTLugarDeExpedicion.getText().trim();
+        if(!expeditionPlace.isEmpty()){
+            
+            final boolean exists = RepositoryFactory.getInstance().getCCodigoPostalRepository().existsExpeditionPlace(expeditionPlace);
+            if(!exists){
+                final ErrorOKDialog ErrorOKDialog = DialogsFactory.getSingleton().getErrorOKDialog(baseJFrame);
+                ErrorOKDialog.setPropertyText("errors_expedition_place_not_exists");
+                ErrorOKDialog.show();
+                return false;
+            }
+        }
+        
+        //Validate that the fiscal regimen exists
+        final String fiscalRegimen = JTRegimenFiscal.getText().trim();
+        CRegimenfiscal CRegimenfiscal;
+        if(!fiscalRegimen.isEmpty()){
+            
+            CRegimenfiscal = RepositoryFactory.getInstance().getCRegimenFiscalRepository().getRegimenByCode(fiscalRegimen);
+            if(CRegimenfiscal==null){
+                final ErrorOKDialog ErrorOKDialog = DialogsFactory.getSingleton().getErrorOKDialog(baseJFrame);
+                ErrorOKDialog.setPropertyText("errors_fiscal_regimen_not_exists");
+                ErrorOKDialog.show();
+                return false;
+            }
+        }
+        
         /*Si hay archivo en el certificado entonces*/
-        if(JTRutaCertificado.getText().trim().compareTo("")!=0)
+        CertificatesDataModel CertificatesDataModel = null;
+        if(certificateCer)
         {            
+            if(!certificateKey){
+                final ErrorOKDialog ErrorOKDialog = DialogsFactory.getSingleton().getErrorOKDialog(baseJFrame);
+                ErrorOKDialog.setPropertyText("errors_keypath_missing");
+                ErrorOKDialog.show();
+                return false;
+            }
+            
             /*Si el certificado es valido entonces mueve el archivo de certificado y llave a la carpeta de la empresa*/
-            if(!validateCertificate())
+            if(validateCertificate())
             {
-                final CertificatesDataModel CertificatesDataModel = UtilitiesFactory.getSingleton().getCertificatesUtility().copyCertificatesToFoler(Company.getCodemp(), Company.getRutap(), certificatePath, certificateKeyPath);
-
-                Company.setRutcer(CertificatesDataModel.getCertificatePath());
-                Company.setRutkey(CertificatesDataModel.getCertificateKeyPath());
+                String certificatePath = JTRutaCertificado.getText().trim();                
+                String certificateKeyPath = JTRutaKey.getText().trim();                
+                String appPath = JTRutaAplicacion.getText().trim();
+                String companyCode = JTCodigoEmpresa.getText().trim();                
+                        
+                CertificatesDataModel = UtilitiesFactory.getSingleton().getCertificatesUtility().copyCertificatesToFoler(companyCode, appPath, certificatePath, certificateKeyPath);                
             }
         } 
         
+        final String companyCode = JTCodigoEmpresa.getText().trim();
+        
         //If logo to update so
         if(logoPath!=null){
+            
             final PathsUtility PathsUtility = UtilitiesFactory.getSingleton().getPathsUtility();
+            
+            PathsUtility.initPaths(null, companyCode);           
+            
             String companyLogoPath = PathsUtility.getCompanyLogoPath();
-            final String logoFileName = UtilitiesFactory.getSingleton().getPathsUtility().getLogoFileName();
+            final String logoFileName = PathsUtility.getLogoFileName();
             companyLogoPath += "\\" + logoFileName;
             UtilitiesFactory.getSingleton().getFilesUtility().copyFile(logoPath, companyLogoPath);
         }
         
+        boolean update = true;
+        if(Company==null){
+            Company = new BasDats();
+            update = false;
+        }        
         Company.setNom(JTEmpresa.getText().trim());
         Company.setCodemp(JTCodigoEmpresa.getText());
         Company.setBd(JTBaseDeDatos.getText());
         Company.setMetcost(MetodoCosteo);
         Company.setTel(JTTelefono.getText());
-        //Company.setExtension(JTExtTel.getText());
+        Company.setNoexten(JTExtTel.getText());
         Company.setCalle(JTCalle.getText());
         Company.setNoext(JTNoExt.getText());
         Company.setNoint(JTNoInt.getText());
@@ -407,20 +673,22 @@ public class EmpresasViewController extends EmpresasJFrame {
         Company.setPai(JTPais.getText());
         Company.setRFC(JTRFC.getText());
         Company.setCorr(JTCorreoElectronico.getText());
-        Company.setSucu(JTSucursal.getText());
-        Company.setNocaj(JTCaja.getText());
         Company.setPagweb(JTSitioWeb.getText());
-        //Company.setRegfisc(TipoContribuyente);
-        Company.setEstac(JTEstacion.getText());
+        Company.setContribuyentType(TipoContribuyente);        
         Company.setLugexp(JTLugarDeExpedicion.getText());
-        Company.setRegfisc(RegimenFiscal);
-        Company.setRutcer(JTRutaCertificado.getText());
-        Company.setRutkey(JTRutaKey.getText());
+        Company.setRegfisc(fiscalRegimen);
+        Company.setRutcer(JTRutaCertificado.getText().replace("\\", "\\\\"));
+        Company.setRutkey(JTRutaKey.getText().replace("\\", "\\\\"));
         Company.setPasscer(JTPasswordCertificado.getText());
         Company.setCP(JTCP.getText());
         //Company.setp(JTPlantilla.getText());
-        Company.setRutap(JTRutaAplicacion.getText());
-
+        Company.setRutap(JTRutaAplicacion.getText().replace("\\", "\\\\"));
+        
+        if(CertificatesDataModel!=null){
+            Company.setRutcer(CertificatesDataModel.getCertificatePath());
+            Company.setRutkey(CertificatesDataModel.getCertificateKeyPath());
+        }        
+                
         //Update or add the new company
         if(update){
             RepositoryFactory.getInstance().getBasDatsRepository().update(Company);
@@ -429,8 +697,7 @@ public class EmpresasViewController extends EmpresasJFrame {
             RepositoryFactory.getInstance().getBasDatsRepository().save(Company);
         }
 
-        //Save the new app path        
-        //UtilitiesFactory.getSingleton().getSessionUtility().setRutApp(Company.getRutap());
+        return true;
     }
     
     private void buttonUpdateCompanyClicked(ActionEvent e){
@@ -452,7 +719,7 @@ public class EmpresasViewController extends EmpresasJFrame {
                 try{
                     
                     //Updte the company in the database
-                    updateCompany(true);
+                    addOrUpdateCompany();
                              
                     jTabEmpresas.clearRows();
                     
@@ -510,33 +777,87 @@ public class EmpresasViewController extends EmpresasJFrame {
             QuestionDialog.setPropertyText("question_continue");
             QuestionDialog.setOKDialogInterface((JFrame jFrame) -> {                
                 
-                try{
-                    
-                    final BasDats BasDats = (BasDats) jTabEmpresas.getRowSelected();
-                    
-                    //Delete company database and record from basdats
-                    final HibernateConfigModel HibernateConfigModel = HibernateConfigUtil.getInstance().getHibernateConfigFile();
-                    MysqlScriptsUtil.getInstance().deleteDatabase(HibernateConfigModel.getUser(), HibernateConfigModel.getPassword(), HibernateConfigModel.getInstance(), HibernateConfigModel.getPort(), BasDats.getBd());
-                    RepositoryFactory.getInstance().getBasDatsRepository().deleteBasDats(BasDats.getCodemp());
-                    
-                    //Clear all fields
-                    clearFields();
-                    
-                    //Reload table
-                    loadCompanies();                    
-                    
-                }catch(Exception ex){
-            
-                    try {
-
-                        LoggerUtility.getSingleton().logError(EmpresasViewController.class, ex);
-
-                        DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
-
-                    } catch (Exception ex1) {
-                        Logger.getLogger(EmpresasViewController.class.getName()).log(Level.SEVERE, null, ex1);
+                final BaseSwingWorker BaseSwingWorker = new BaseSwingWorker();
+                BaseSwingWorker.setShowLoading(baseJFrame);
+                BaseSwingWorker.setISwingWorkerActions(new ISwingWorkerActions(){
+                    @Override
+                    public void before() {
                     }
-                }
+
+                    @Override
+                    public Object doinbackground() {
+                        
+                        try{
+
+                            final BasDats BasDats = (BasDats) jTabEmpresas.getRowSelected();
+
+                            //Delete company database and record from basdats
+                            final HibernateConfigModel HibernateConfigModel = HibernateConfigUtil.getInstance().getHibernateConfigFile();
+                            MysqlScriptsUtil.getInstance().deleteDatabase(HibernateConfigModel.getUser(), HibernateConfigModel.getPassword(), HibernateConfigModel.getInstance(), HibernateConfigModel.getPort(), BasDats.getBd());
+                            RepositoryFactory.getInstance().getBasDatsRepository().deleteBasDats(BasDats.getCodemp());
+
+                            //Clear all fields
+                            clearFields();
+
+                            //Reload table
+                            loadCompanies();
+                            
+                            //No errors
+                            return null;
+
+                        }catch(Exception ex){
+
+                            //Error
+                            return ex;
+                        }
+                    }
+
+                    @Override
+                    public void after(Object Object) {
+                        
+                        try{
+                            
+                            //No error
+                            if(Object==null){
+
+                                //Reload table
+                                loadCompanies();
+
+                                //Show success dialog
+                                final OKDialog OKDialog = DialogsFactory.getSingleton().getOKDialog(baseJFrame);
+                                OKDialog.setPropertyText("company_deleted");
+                                OKDialog.show();
+
+                            }
+                            else{
+
+                                final Exception Exception = (Exception) Object;
+                                try {
+
+                                    LoggerUtility.getSingleton().logError(EmpresasViewController.class, Exception);
+
+                                    DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, Exception).show();
+
+                                } catch (Exception ex1) {
+                                    Logger.getLogger(EmpresasViewController.class.getName()).log(Level.SEVERE, null, ex1);
+                                }
+                            }
+
+                        }catch(Exception ex){
+            
+                            try {
+
+                                LoggerUtility.getSingleton().logError(EmpresasViewController.class, ex);
+
+                                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+
+                            } catch (Exception ex1) {
+                                Logger.getLogger(EmpresasViewController.class.getName()).log(Level.SEVERE, null, ex1);
+                            }
+                        }
+                    }
+                });
+                BaseSwingWorker.execute();
             });
             QuestionDialog.show();
             
@@ -570,24 +891,87 @@ public class EmpresasViewController extends EmpresasJFrame {
             FileChooserUtility.setPropertyTitle("basdats_frame_msg10");
             FileChooserUtility.setIApproveOpption((String absolutePath, String fileName) -> {
                 
-                try{
-                    
-                    final String backupDBPath = absolutePath + "\\" + fileName;
+                if(!fileName.endsWith(".sql")){
+                    fileName = fileName + ".sql";
+                }
+                
+                final String backupDBPath = absolutePath + "\\" + fileName;
+                
+                final BaseSwingWorker BaseSwingWorker = new BaseSwingWorker();
+                BaseSwingWorker.setShowLoading(baseJFrame);
+                BaseSwingWorker.setISwingWorkerActions(new ISwingWorkerActions(){
 
-                    final HibernateConfigModel HibernateConfigModel = HibernateConfigUtil.getInstance().getHibernateConfigFile();
+                    @Override
+                    public void before() {                        
+                    }
 
-                    final BasDats BasDats = (BasDats) jTabEmpresas.getRowSelected();
+                    @Override
+                    public Object doinbackground() {       
+                        
+                        try{
+                            
+                            final HibernateConfigModel HibernateConfigModel = HibernateConfigUtil.getInstance().getHibernateConfigFile();
+
+                            final BasDats BasDats = (BasDats) jTabEmpresas.getRowSelected();
+
+                            //Backup database
+                            final boolean success = MysqlScriptsUtil.getInstance().backupDatabase(HibernateConfigModel.getUser(), HibernateConfigModel.getPassword(), HibernateConfigModel.getInstance(), HibernateConfigModel.getPort(), BasDats.getBd(), backupDBPath);
+
+                            if(success){
+                                return null;
+                            }
+                            else{
+                                return new Exception("Error en mysql scripts");
+                            }
+                            
+                        }catch(Exception ex){
+
+                            try {
+
+                                LoggerUtility.getSingleton().logError(EmpresasViewController.class, ex);
+
+                            } catch (Exception ex1) {
+                                Logger.getLogger(EmpresasViewController.class.getName()).log(Level.SEVERE, null, ex1);
+                            }
+                            
+                            return ex;
+                        }
+                    }
+
+                    @Override
+                    public void after(Object Object) {
+                        
+                        try{
+
+                            //No error
+                            final OKDialog OKDialog = DialogsFactory.getSingleton().getOKDialog(baseJFrame);
+                            if(Object==null){ //No error                               
+                                OKDialog.setPropertyText("basdats_frame_msg11");
+                            }
+                            else{
+                                OKDialog.setPropertyText("basdats_frame_msg12");
+                            }
+                            
+                            OKDialog.show();
+
+                        }catch(Exception ex){
+
+                            try {
+
+                                LoggerUtility.getSingleton().logError(EmpresasViewController.class, ex);
+
+                            } catch (Exception ex1) {
+                                Logger.getLogger(EmpresasViewController.class.getName()).log(Level.SEVERE, null, ex1);
+                            }
+                        }
+                    }
+                });
+                BaseSwingWorker.execute();
+                
+                try{                                        
+
                     
-                    //Backup database
-                    final boolean success = MysqlScriptsUtil.getInstance().backupDatabase(HibernateConfigModel.getUser(), HibernateConfigModel.getPassword(), HibernateConfigModel.getInstance(), HibernateConfigModel.getPort(), BasDats.getBd(), backupDBPath);
-                    final OKDialog OKDialog = DialogsFactory.getSingleton().getOKDialog(baseJFrame);
-                    if(success){                        
-                        OKDialog.setPropertyText("basdats_frame_msg11");                        
-                    }
-                    else{                        
-                        OKDialog.setPropertyText("basdats_frame_msg12");                        
-                    }
-                    OKDialog.show();
+                    
                     
                 }catch(Exception ex){
             
@@ -635,37 +1019,79 @@ public class EmpresasViewController extends EmpresasJFrame {
             FileChooserUtility.setPropertyTitle("question_continue");
             FileChooserUtility.setIApproveOpption((String absolutePath, String fileName) -> {
                 
-                try{
+                final String backupRestoreDBPath = absolutePath + "\\" + fileName;
+                
+                final BaseSwingWorker BaseSwingWorker = new BaseSwingWorker();
+                BaseSwingWorker.setShowLoading(baseJFrame);
+                BaseSwingWorker.setISwingWorkerActions(new ISwingWorkerActions(){
                     
-                    final String backupRestoreDBPath = absolutePath + "\\" + fileName;
-
-                    final HibernateConfigModel HibernateConfigModel = HibernateConfigUtil.getInstance().getHibernateConfigFile();
-
-                    final BasDats BasDats = (BasDats) jTabEmpresas.getRowSelected();
-                    
-                    //Backup database
-                    final boolean success = MysqlScriptsUtil.getInstance().importBackupDatabase(HibernateConfigModel.getUser(), HibernateConfigModel.getPassword(), HibernateConfigModel.getInstance(), HibernateConfigModel.getPort(), BasDats.getBd(), backupRestoreDBPath);
-                    final OKDialog OKDialog = DialogsFactory.getSingleton().getOKDialog(baseJFrame);
-                    if(success){                        
-                        OKDialog.setPropertyText("basdats_frame_msg23");                        
+                    @Override
+                    public void before() {                    
                     }
-                    else{                        
-                        OKDialog.setPropertyText("basdats_frame_msg24");                        
-                    }
-                    OKDialog.show();
-                    
-                }catch(Exception ex){
+
+                    @Override
+                    public Object doinbackground() {
+                        
+                        try{
+                            
+                            final HibernateConfigModel HibernateConfigModel = HibernateConfigUtil.getInstance().getHibernateConfigFile();
+
+                            final BasDats BasDats = (BasDats) jTabEmpresas.getRowSelected();
+
+                            //Backup database
+                            final boolean success = MysqlScriptsUtil.getInstance().importBackupDatabase(HibernateConfigModel.getUser(), HibernateConfigModel.getPassword(), HibernateConfigModel.getInstance(), HibernateConfigModel.getPort(), BasDats.getBd(), backupRestoreDBPath);
+                            
+                            if(success){
+                                return null;
+                            }
+                            else{
+                                return new Exception("Error en mysql scripts");
+                            }
+                            
+                        }catch(Exception ex){
             
-                    try {
+                            try {
 
-                        LoggerUtility.getSingleton().logError(EmpresasViewController.class, ex);
+                                LoggerUtility.getSingleton().logError(EmpresasViewController.class, ex);
 
-                        DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
-
-                    } catch (Exception ex1) {
-                        Logger.getLogger(EmpresasViewController.class.getName()).log(Level.SEVERE, null, ex1);
+                            } catch (Exception ex1) {
+                                Logger.getLogger(EmpresasViewController.class.getName()).log(Level.SEVERE, null, ex1);
+                            }
+                            
+                            return ex;
+                        }
                     }
-                }
+
+                    @Override
+                    public void after(Object Object) {
+                        
+                        try{
+
+                            //No error
+                            final OKDialog OKDialog = DialogsFactory.getSingleton().getOKDialog(baseJFrame);
+                            if(Object==null){ //No error                               
+                                OKDialog.setPropertyText("basdats_frame_msg23");
+                            }
+                            else{
+                                OKDialog.setPropertyText("basdats_frame_msg24");
+                            }
+                            
+                            OKDialog.show();
+
+                        }catch(Exception ex){
+
+                            try {
+
+                                LoggerUtility.getSingleton().logError(EmpresasViewController.class, ex);
+
+                            } catch (Exception ex1) {
+                                Logger.getLogger(EmpresasViewController.class.getName()).log(Level.SEVERE, null, ex1);
+                            }
+                        }
+                    }
+                });
+                BaseSwingWorker.execute();
+                
             });
             FileChooserUtility.showSaveDialog(baseJFrame);
             
@@ -694,16 +1120,18 @@ public class EmpresasViewController extends EmpresasJFrame {
                 
                 try{
                     
-                    if(!fileName.endsWith(".key")){
+                    if(!fileName.endsWith(".cer")){
                         final OKDialog OKDialog = DialogsFactory.getSingleton().getOKDialog(baseJFrame);
-                        OKDialog.setPropertyText("basdats_frame_msg17");
+                        OKDialog.setPropertyText("basdats_frame_msg16");
                         OKDialog.show();
                         return;
                     }
                     
                     //Save the path and add the path to the path
-                    certificatePath = absolutePath + "\\" + fileName;
+                    final String certificatePath = absolutePath + "\\" + fileName;
                     JTRutaCertificado.setText(certificatePath);
+                    
+                    certificateCer = true;
                     
                 }catch(Exception ex){
             
@@ -744,16 +1172,18 @@ public class EmpresasViewController extends EmpresasJFrame {
                 
                 try{
                     
-                    if(!fileName.endsWith(".cer")){
+                    if(!fileName.endsWith(".key")){
                         final OKDialog OKDialog = DialogsFactory.getSingleton().getOKDialog(baseJFrame);
-                        OKDialog.setPropertyText("basdats_frame_msg16");
+                        OKDialog.setPropertyText("basdats_frame_msg17");
                         OKDialog.show();
                         return;
                     }
                     
                     //Save the path and add the path to the path
-                    certificateKeyPath = absolutePath + "\\" + fileName;
+                    final String certificateKeyPath = absolutePath + "\\" + fileName;
                     JTRutaKey.setText(certificateKeyPath);
+                    
+                    certificateKey = true;
                     
                 }catch(Exception ex){
             
@@ -838,7 +1268,7 @@ public class EmpresasViewController extends EmpresasJFrame {
                 try{
                     
                     //Save the path and add the path to the path
-                    appPath = absolutePath + "\\" + fileName;
+                    final String appPath = absolutePath + "\\" + fileName;
                     JTRutaAplicacion.setText(appPath);
                     
                 }catch(Exception ex){
@@ -854,7 +1284,7 @@ public class EmpresasViewController extends EmpresasJFrame {
                     }
                 }
             });
-            FileChooserUtility.showSaveDialog(baseJFrame);
+            FileChooserUtility.showSaveFolderDialog(baseJFrame);
             
         }catch(Exception ex){
             
@@ -873,69 +1303,80 @@ public class EmpresasViewController extends EmpresasJFrame {
     public boolean validateCertificate() throws Exception{
         
         /*Si no hay archivo escrito entonces*/
-        if(this.certificatePath.isEmpty()){
+        if(JTRutaCertificado.getText().trim().isEmpty()){
 
             final OKDialog OKDialog = DialogsFactory.getSingleton().getOKDialog(baseJFrame);
             OKDialog.setPropertyText("basdats_frame_msg1");
+            OKDialog.show();
             return false;
         }
 
         /*Si no hay archivo key escrito entonces*/
-        if(this.certificateKeyPath.isEmpty())
+        if(JTRutaKey.getText().trim().isEmpty())
         {
             final OKDialog OKDialog = DialogsFactory.getSingleton().getOKDialog(baseJFrame);
             OKDialog.setPropertyText("basdats_frame_msg4");
+            OKDialog.show();
             return false;
         }
         
-        /*Si no hay contraseña escrito entonces*/
+        /*Si no hay contraseña escrito entonces*/        
         if(JTPasswordCertificado.getText().isEmpty())
         {
             final OKDialog OKDialog = DialogsFactory.getSingleton().getOKDialog(baseJFrame);
             OKDialog.setPropertyText("basdats_frame_msg7");
+            OKDialog.show();
             return false;
         }
         
+        final String certificatePath = JTRutaCertificado.getText().trim();
+        final String keyPath = JTRutaKey.getText().trim();
+        
         /*Si no existe el archivo cer entonces*/            
-        if(!UtilitiesFactory.getSingleton().getFilesUtility().fileExists(this.appPath))
+        if(!UtilitiesFactory.getSingleton().getFilesUtility().fileExists(certificatePath))
         {
             final OKDialog OKDialog = DialogsFactory.getSingleton().getOKDialog(baseJFrame);
             OKDialog.setPropertyText("basdats_frame_msg2");
+            OKDialog.show();
             return false;
         }
 
         /*Si el archivo no termina en cer entonces*/
-        if(!this.certificatePath.trim().toLowerCase().endsWith(".cer"))
+        if(!certificatePath.toLowerCase().endsWith(".cer"))
         {
             final OKDialog OKDialog = DialogsFactory.getSingleton().getOKDialog(baseJFrame);
             OKDialog.setPropertyText("basdats_frame_msg3");
+            OKDialog.show();
             return false;
         }        
 
         /*Si no existe el archivo key entonces*/
-        if(!UtilitiesFactory.getSingleton().getFilesUtility().fileExists(this.certificateKeyPath))
+        if(!UtilitiesFactory.getSingleton().getFilesUtility().fileExists(keyPath))
         {
             final OKDialog OKDialog = DialogsFactory.getSingleton().getOKDialog(baseJFrame);
             OKDialog.setPropertyText("basdats_frame_msg5");
+            OKDialog.show();
             return false;
         }
 
         /*Si el archivo no termina en key entonces*/
-        if(!certificateKeyPath.trim().toLowerCase().endsWith(".key"))
+        if(!keyPath.toLowerCase().endsWith(".key"))
         {
             final OKDialog OKDialog = DialogsFactory.getSingleton().getOKDialog(baseJFrame);
             OKDialog.setPropertyText("basdats_frame_msg6");
+            OKDialog.show();
             return false;
         }
 
         final String certificatePassword = JTPasswordCertificado.getText().trim();
 
         //Vaidate the certificate
-        final boolean validCertificate = UtilitiesFactory.getSingleton().getCertificatesUtility().validateCertificate(certificatePath, certificateKeyPath, certificatePassword);
+        final boolean validCertificate = UtilitiesFactory.getSingleton().getCertificatesUtility().validateCertificate(certificatePath, keyPath, certificatePassword);
         if(!validCertificate){
 
             final OKDialog OKDialog = DialogsFactory.getSingleton().getOKDialog(baseJFrame);
             OKDialog.setPropertyText("basdats_frame_msg8");
+            OKDialog.show();
             return false;
         }
         
@@ -979,7 +1420,13 @@ public class EmpresasViewController extends EmpresasJFrame {
         return val;
     }
     
-    public void clearFields() throws Exception {
+    private void clearTable(){
+        if(jTabEmpresas.isTableInitialized()){
+            jTabEmpresas.clearRows();
+        }
+    }
+    
+    public final void clearFields() throws Exception {
         
         JTIdEmpresa.setText("");
         JTCodigoEmpresa.setText(UtilitiesFactory.getSingleton().getGeneralsUtility().getUniqueDayCode());
@@ -997,21 +1444,22 @@ public class EmpresasViewController extends EmpresasJFrame {
         JTPais.setText("");
         JTRFC.setText("");
         JTCorreoElectronico.setText("");
-        JTSucursal.setText("");
-        JTCaja.setText("");
         JTSitioWeb.setText("");
-        JTEstacion.setText("");
         JTLugarDeExpedicion.setText("");
         JTRegimenFiscal.setText("");
         JTRutaCertificado.setText("");
         JTRutaKey.setText("");
         JTPasswordCertificado.setText("");
-        JTRutaAplicacion.setText("");
-        JTPlantilla.setText("");                
+        JTRutaAplicacion.setText(UtilitiesFactory.getSingleton().getFilesUtility().getCurrentWorkingDir());
+        JTPlantilla.setText("");
         
-        if(jTabEmpresas.isTableInitialized()){
-            jTabEmpresas.clearRows();
-        }
+        BTNActualiza.setEnabled(false);
+        BTNNuevaEmpresa.setEnabled(true);
+        
+        JTBaseDeDatos.setEditable(true);
+        
+        certificateCer = false;
+        certificateKey = false;
         
         /*Selecciona el método de costeo que sea de la empresa*/
         bgMetodoCosteo.setSelected(JRBPEPS.getModel(), true);
@@ -1025,8 +1473,7 @@ public class EmpresasViewController extends EmpresasJFrame {
         jLImg.setIcon(null);
         jLImg.setVisible(false);
         
-        //Reload table
-        this.loadCompanies();
+        Company = null;
     }
     
     public final void loadCompanies() throws Exception {
@@ -1053,16 +1500,18 @@ public class EmpresasViewController extends EmpresasJFrame {
         JTPais.setText(Company.getPai());
         JTRFC.setText(Company.getRFC());
         JTCorreoElectronico.setText(Company.getCorr());
-        JTSucursal.setText(Company.getSucu());
-        JTCaja.setText(Company.getNocaj());
         JTSitioWeb.setText(Company.getPagweb());
-        JTEstacion.setText(Company.getEstac());
         JTLugarDeExpedicion.setText(Company.getLugexp());
         JTRegimenFiscal.setText(Company.getRegfisc());
-        JTRutaCertificado.setText(Company.getRutcer());
-        JTRutaKey.setText(Company.getRutkey());
+        
+        final String certPath = Company.getRutcer()==null?"":Company.getRutcer().replace("\\\\", "\\");
+        final String certKeyPath = Company.getRutkey()==null?"":Company.getRutkey().replace("\\\\", "\\");
+        final String appPath = Company.getRutap()==null?UtilitiesFactory.getSingleton().getFilesUtility().getCurrentWorkingDir():Company.getRutkey().replace("\\\\", "\\");
+        
+        JTRutaCertificado.setText(certPath);
+        JTRutaKey.setText(certKeyPath);
         JTPasswordCertificado.setText(Company.getPasscer());
-        JTRutaAplicacion.setText(Company.getRutap());
+        JTRutaAplicacion.setText(appPath);
         JTPlantilla.setText("");
         
         UtilitiesFactory.getSingleton().getPathsUtility().initPaths(null, Company.getCodemp());
