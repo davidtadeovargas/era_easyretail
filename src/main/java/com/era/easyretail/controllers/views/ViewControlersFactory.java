@@ -88,7 +88,61 @@ public class ViewControlersFactory {
     private CatalogoMonedaViewController CatalogoMonedaViewController;
     private CatalBancosViewController CatalBancosViewController;
     private AlmasViewController AlmasViewController;
+    private ClientViewController ClientViewController;
+    private AltsMaxsViewController AltsMaxsViewController;
+    private AcerDViewController AcerDViewController;
+    private AbonosViewController AbonosViewController;
+    private ClavMastViewController ClavMastViewController;
+    private BajsMinViewController BajsMinViewController;
+    private ComprViewController ComprViewController;    
     
+    private NewNotViewController NewNotViewController;
+    private NewNotProvViewController NewNotProvViewController;
+    private PedidoViewController PedidoViewController;
+    private PedidosViewController PedidosViewController;
+    private PrevCompViewController PrevCompViewController;
+    private ProdExisAlmViewController ProdExisAlmViewController;
+    private RecibOrdViewController RecibOrdViewController;
+    private SalidaViewController SalidaViewController;
+    private SalidaEntradaViewController SalidaEntradaViewController;
+    private SelCorrViewController SelCorrViewController;
+    private TicketsFacturadosViewController TicketsFacturadosViewController;
+    private TraspasViewController TraspasViewController;
+    private TraspasosSalidaViewController TraspasosSalidaViewController;
+    private UltPrecsViewController UltPrecsViewController;
+    private VAbonsViewController VAbonsViewController;
+    private VCompViewController VCompViewController;
+    private VOrdsViewController VOrdsViewController;
+    private VVtasViewController VVtasViewController;
+    private correoTerminalViewController correoTerminalViewController;
+    private NewClienExpViewController NewClienExpViewController;
+    private MovimientosInventariosViewController MovimientosInventariosViewController;
+    private LogCorrsViewController LogCorrsViewController;
+    private LPrecsViewController LPrecsViewController;
+    private KitsViewController KitsViewController;
+    private IngrPrevComViewController IngrPrevComViewController;
+    private IngrInventViewController IngrInventViewController;
+    private DocumentosTimbradosViewController DocumentosTimbradosViewController;
+    private EntradasSalidasViewController EntradasSalidasViewController;
+    private FacturarTicketsViewController FacturarTicketsViewController;
+    private Impuestos_X_partidaViewController Impuestos_X_partidaViewController;
+    private DesLoginViewController DesLoginViewController;
+    private DatsCartaPorViewController DatsCartaPorViewController;
+    private CxpViewController CxpViewController;
+    private CxcViewController CxcViewController;
+    private ConfigBancosViewController ConfigBancosViewController;
+    private CobroViewController CobroViewController;
+    private BuscCompViewController BuscCompViewController;
+    private BuscVtaViewController BuscVtaViewController;
+    private NewVtaViewController NewVtaViewController;
+    private OptPtoVtaViewController OptPtoVtaViewController;
+    private PermsEstacsViewController PermsEstacsViewController;
+    private PtoVtaTouViewController PtoVtaTouViewController;
+    private VtasViewController VtasViewController;
+    private IngrComViewController IngrComViewController;
+    private ImpresViewController ImpresViewController;
+    private CotNormViewController CotNormViewController;
+    private ConfGralViewController ConfGralViewController;
     
     
     private ViewControlersFactory(){        
@@ -235,6 +289,282 @@ public class ViewControlersFactory {
         return AlmasViewController;       
     }
     
+    public ClientViewController getClientViewController(){
+        ClientViewController = new ClientViewController();
+        return ClientViewController;       
+    }
+    
+    public AltsMaxsViewController getAltsMaxsViewController(){
+        AltsMaxsViewController = new AltsMaxsViewController();
+        return AltsMaxsViewController;       
+    }
+    
+    public AcerDViewController getAcerDViewController(){
+        AcerDViewController = new AcerDViewController();
+        return AcerDViewController;       
+    }
+    
+    public AbonosViewController getAbonosViewController(){
+        AbonosViewController = new AbonosViewController();
+        return AbonosViewController;       
+    }
+        
+    public ClavMastViewController getClavMastViewController(){
+        ClavMastViewController = new ClavMastViewController();
+        return ClavMastViewController;       
+    }
+    
+    public BajsMinViewController getBajsMinViewController(){
+        BajsMinViewController = new BajsMinViewController();
+        return BajsMinViewController;       
+    }        
+    
+    public ComprViewController getComprViewController(){
+        ComprViewController = new ComprViewController();
+        return ComprViewController;       
+    }
+                
+    public NewNotViewController getNewNotViewController(){
+        NewNotViewController = new NewNotViewController();
+        return NewNotViewController;       
+    }
+    
+    public NewNotProvViewController getNewNotProvViewController(){
+        NewNotProvViewController = new NewNotProvViewController();
+        return NewNotProvViewController;       
+    }
+    
+    public PedidoViewController getPedidoViewController(){
+        PedidoViewController = new PedidoViewController();
+        return PedidoViewController;       
+    }
+    
+    public PedidosViewController getPedidosViewController(){
+        PedidosViewController = new PedidosViewController();
+        return PedidosViewController;       
+    }
+    
+    public PrevCompViewController getPrevCompViewController(){
+        PrevCompViewController = new PrevCompViewController();
+        return PrevCompViewController;       
+    }
+    
+    public ProdExisAlmViewController getProdExisAlmViewController(){
+        ProdExisAlmViewController = new ProdExisAlmViewController();
+        return ProdExisAlmViewController;       
+    }
+    
+    public RecibOrdViewController getRecibOrdViewController(){
+        RecibOrdViewController = new RecibOrdViewController();
+        return RecibOrdViewController;       
+    }
+    
+    public SalidaViewController getSalidaViewController(){
+        SalidaViewController = new SalidaViewController();
+        return SalidaViewController;       
+    }
+    
+    public SalidaEntradaViewController getSalidaEntradaViewController(){
+        SalidaEntradaViewController = new SalidaEntradaViewController();
+        return SalidaEntradaViewController;       
+    }
+    
+    public SelCorrViewController getSelCorrViewController(){
+        SelCorrViewController = new SelCorrViewController();
+        return SelCorrViewController;       
+    }
+    
+    public TicketsFacturadosViewController getTicketsFacturadosViewController(){
+        TicketsFacturadosViewController = new TicketsFacturadosViewController();
+        return TicketsFacturadosViewController;       
+    }
+    
+    public TraspasViewController getTraspasViewController(){
+        TraspasViewController = new TraspasViewController();
+        return TraspasViewController;       
+    }
+    
+    public TraspasosSalidaViewController getTraspasosSalidaViewController(){
+        TraspasosSalidaViewController = new TraspasosSalidaViewController();
+        return TraspasosSalidaViewController;       
+    }
+    
+    public UltPrecsViewController getUltPrecsViewController(){
+        UltPrecsViewController = new UltPrecsViewController();
+        return UltPrecsViewController;       
+    }
+    
+    public VAbonsViewController getVAbonsViewController(){
+        VAbonsViewController = new VAbonsViewController();
+        return VAbonsViewController;       
+    }
+    
+    public VCompViewController getVCompViewController(){
+        VCompViewController = new VCompViewController();
+        return VCompViewController;       
+    }
+    
+    public VOrdsViewController getVOrdsViewController(){
+        VOrdsViewController = new VOrdsViewController();
+        return VOrdsViewController;       
+    }
+    
+    public VVtasViewController getVVtasViewController(){
+        VVtasViewController = new VVtasViewController();
+        return VVtasViewController;       
+    }
+    
+    public correoTerminalViewController getcorreoTerminalViewController(){
+        correoTerminalViewController = new correoTerminalViewController();
+        return correoTerminalViewController;       
+    }
+    
+    public NewClienExpViewController getNewClienExpViewController(){
+        NewClienExpViewController = new NewClienExpViewController();
+        return NewClienExpViewController;       
+    }
+    
+    public MovimientosInventariosViewController getMovimientosInventariosViewController(){
+        MovimientosInventariosViewController = new MovimientosInventariosViewController();
+        return MovimientosInventariosViewController;       
+    }
+    
+    public LogCorrsViewController getLogCorrsViewController(){
+        LogCorrsViewController = new LogCorrsViewController();
+        return LogCorrsViewController;       
+    }
+    
+    public LPrecsViewController getLPrecsViewController(){
+        LPrecsViewController = new LPrecsViewController();
+        return LPrecsViewController;       
+    }
+    
+    public KitsViewController getKitsViewController(){
+        KitsViewController = new KitsViewController();
+        return KitsViewController;       
+    }
+    
+    public IngrPrevComViewController getIngrPrevComViewController(){
+        IngrPrevComViewController = new IngrPrevComViewController();
+        return IngrPrevComViewController;       
+    }
+    
+    public IngrInventViewController getIngrInventViewController(){
+        IngrInventViewController = new IngrInventViewController();
+        return IngrInventViewController;       
+    }
+    
+    public DocumentosTimbradosViewController getDocumentosTimbradosViewController(){
+        DocumentosTimbradosViewController = new DocumentosTimbradosViewController();
+        return DocumentosTimbradosViewController;       
+    }
+    
+    public EntradasSalidasViewController getEntradasSalidasViewController(){
+        EntradasSalidasViewController = new EntradasSalidasViewController();
+        return EntradasSalidasViewController;       
+    }
+    
+    public FacturarTicketsViewController getFacturarTicketsViewController(){
+        FacturarTicketsViewController = new FacturarTicketsViewController();
+        return FacturarTicketsViewController;       
+    }
+    
+    public Impuestos_X_partidaViewController getImpuestos_X_partidaViewController(){
+        Impuestos_X_partidaViewController = new Impuestos_X_partidaViewController();
+        return Impuestos_X_partidaViewController;       
+    }
+    
+    public DesLoginViewController getDesLoginViewController(){
+        DesLoginViewController = new DesLoginViewController();
+        return DesLoginViewController;       
+    }
+    
+    public DatsCartaPorViewController getDatsCartaPorViewController(){
+        DatsCartaPorViewController = new DatsCartaPorViewController();
+        return DatsCartaPorViewController;       
+    }
+    
+    public CxpViewController getCxpViewController(){
+        CxpViewController = new CxpViewController();
+        return CxpViewController;       
+    }
+    
+    public CxcViewController getCxcViewController(){
+        CxcViewController = new CxcViewController();
+        return CxcViewController;       
+    }
+    
+    public ConfigBancosViewController getConfigBancosViewController(){
+        ConfigBancosViewController = new ConfigBancosViewController();
+        return ConfigBancosViewController;       
+    }
+    
+    public CobroViewController getCobroViewController(){
+        CobroViewController = new CobroViewController();
+        return CobroViewController;       
+    }
+    
+    public BuscCompViewController getBuscCompViewController(){
+        BuscCompViewController = new BuscCompViewController();
+        return BuscCompViewController;       
+    }
+    
+    public BuscVtaViewController getBuscVtaViewController(){
+        BuscVtaViewController = new BuscVtaViewController();
+        return BuscVtaViewController;       
+    }
+    
+    public NewVtaViewController getNewVtaViewController(){
+        NewVtaViewController = new NewVtaViewController();
+        return NewVtaViewController;       
+    }
+    
+    public OptPtoVtaViewController getOptPtoVtaViewController(){
+        OptPtoVtaViewController = new OptPtoVtaViewController();
+        return OptPtoVtaViewController;       
+    }
+    
+    public PermsEstacsViewController getPermsEstacsViewController(){
+        PermsEstacsViewController = new PermsEstacsViewController();
+        return PermsEstacsViewController;       
+    }
+    
+    public PtoVtaTouViewController getPtoVtaTouViewController(){
+        PtoVtaTouViewController = new PtoVtaTouViewController();
+        return PtoVtaTouViewController;       
+    }
+    
+    
+    public VtasViewController getVtasViewController(){
+        VtasViewController = new VtasViewController();
+        return VtasViewController;       
+    }
+    
+    
+    public IngrComViewController getIngrComViewController(){
+        IngrComViewController = new IngrComViewController();
+        return IngrComViewController;       
+    }
+    
+    public ImpresViewController getImpresViewController(){
+        ImpresViewController = new ImpresViewController();
+        return ImpresViewController;       
+    }
+    
+    public CotNormViewController getCotNormViewController(){
+        CotNormViewController = new CotNormViewController();
+        return CotNormViewController;       
+    }
+    
+    public ConfGralViewController getConfGralViewController(){
+        ConfGralViewController = new ConfGralViewController();
+        return ConfGralViewController;       
+    }
+    
+    public ComprViewController getComprViewController(){
+        ComprViewController = new ComprViewController();
+        return ComprViewController;       
+    }
     
     @Override
     protected Object clone() throws CloneNotSupportedException {
