@@ -560,12 +560,7 @@ public class ViewControlersFactory {
         ConfGralViewController = new ConfGralViewController();
         return ConfGralViewController;       
     }
-    
-    public ComprViewController getComprViewController(){
-        ComprViewController = new ComprViewController();
-        return ComprViewController;       
-    }
-    
+       
     @Override
     protected Object clone() throws CloneNotSupportedException {
         throw new CloneNotSupportedException();
