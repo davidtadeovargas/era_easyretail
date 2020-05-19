@@ -8,3 +8,5 @@ target/classes/com/era/easyretail/controllers/views/EmpresasViewController$3.cla
 *.class
 *.class
 *.class
+target/classes/com/era/easyretail/controllers/views/EmpresasViewController$1.class
+*.class

@@ -416,7 +416,7 @@ public class EmpresasViewController extends EmpresasJFrame {
                         return;
                     }                        
 
-                    //Vaidate that the database does not exists
+                    //Vaildate that the database does not exists
                     final String database = JTBaseDeDatos.getText().trim();
                     final HibernateConfigModel HibernateConfigModel = HibernateUtil.getSingleton().getHibernateConfigModel();
                     final boolean exists = MysqlScriptsUtil.getInstance().testDatabaseConnection(database, HibernateConfigModel.getUser(), HibernateConfigModel.getPassword(), HibernateConfigModel.getInstance(), HibernateConfigModel.getPort());

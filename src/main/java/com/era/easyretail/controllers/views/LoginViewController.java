@@ -10,7 +10,6 @@ import com.era.logger.LoggerUtility;
 import com.era.models.BasDats;
 import com.era.models.User;
 import com.era.repositories.RepositoryFactory;
-import com.era.repositories.models.HibernateConfigModel;
 import com.era.repositories.utils.HibernateUtil;
 import com.era.utilities.UtilitiesFactory;
 import com.era.views.LoginJFrame;
