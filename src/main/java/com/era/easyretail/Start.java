@@ -17,6 +17,7 @@ import com.era.easyretail.controllers.views.DBFileConnectionConfigurationControl
 import com.era.easyretail.premium.PremiumFunctionsManager;
 import com.era.easyretail.controllers.views.LoginLocalViewController;
 import com.era.easyretail.controllers.views.PresentationController;
+import com.era.httpclient.subscriber.HttpClientErrorSubscriberInterface;
 import com.era.logger.LoggerUtility;
 import com.era.models.License;
 import com.era.models.ServerSession;
@@ -25,6 +26,8 @@ import com.era.repositories.utils.MysqlScriptsUtil;
 import com.era.utilities.UtilitiesFactory;
 import com.era.utilities.WinRegistry;
 import com.era.views.ViewsFactory;
+import com.era.views.dialogs.DialogsFactory;
+import java.awt.event.ActionEvent;
 
 //Initialization of the system
 public class Start {
@@ -165,7 +168,28 @@ public class Start {
         LoggerUtility.getSingleton().logInfo(Start.class, "Licenciamiento: Obteniendo información con el servidor de licenciamiento del computador");
 
         //Get information about the license from the server
-        final GetComputerStatusHttpClient GetComputerStatusHttpClient = new GetComputerStatusHttpClient();                            
+        final GetComputerStatusHttpClient GetComputerStatusHttpClient = new GetComputerStatusHttpClient();        
+        GetComputerStatusHttpClient.getBaseHttpClientManager().setHttpClientErrorSubscriberInterface(new HttpClientErrorSubscriberInterface() {
+            
+            @Override
+            public void OnException(Exception Exception) {
+                
+                try{
+                    
+                    //Show the error dialog and exit system when user press ok
+                    DialogsFactory.getSingleton().getErrorDialogJFrame("errors_failed_connection_to_ws", (ActionEvent evt) -> {                    
+                        System.exit(-1);
+                    });
+
+                }catch(Exception e){
+                    LoggerUtility.getSingleton().logError(Start.class, e);
+                }                                
+            }
+
+            @Override
+            public void OnUnknownError() {             
+            }
+        });
         GetComputerStatusHttpClient.setGetComputerStatusSubscriberInteface((ComputerLicenseDataModel ComputerLicenseDataModel) -> {
 
             LoggerUtility.getSingleton().logInfo(Start.class, "Licenciamiento: El servidor devolvio información de licenciamiento");
