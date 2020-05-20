@@ -143,6 +143,8 @@ public class ViewControlersFactory {
     private CotNormViewController CotNormViewController;
     private ConfGralViewController ConfGralViewController;
     private LoginOtraViewController LoginOtraViewController;
+    private PresentationController PresentationController;
+    private LoginViewController LoginViewController;
     
     
     private ViewControlersFactory(){        
@@ -176,7 +178,9 @@ public class ViewControlersFactory {
     }
     
     public PrincipViewController getPrincipViewController(){
-        PrincipViewController = new PrincipViewController();
+        if(PrincipViewController == null){
+            PrincipViewController = new PrincipViewController();
+        }        
         return PrincipViewController;       
     }
     
@@ -564,6 +568,16 @@ public class ViewControlersFactory {
     public LoginOtraViewController getLoginOtraViewController(){
         LoginOtraViewController = new LoginOtraViewController();
         return LoginOtraViewController;
+    }
+    
+    public PresentationController getPresentationController(){
+        PresentationController = new PresentationController();
+        return PresentationController;
+    }
+    
+    public LoginViewController getLoginViewController(){
+        LoginViewController = new LoginViewController();
+        return LoginViewController;
     }
     
     @Override

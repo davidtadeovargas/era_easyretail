@@ -6,6 +6,7 @@
 package com.era.easyretail.controllers.views;
 
 import com.era.datamodels.enums.SearchCommonTypeEnum;
+import com.era.easyretail.enums.LoginTypeEmpresa;
 import com.era.logger.LoggerUtility;
 import com.era.models.BasDats;
 import com.era.models.User;
@@ -15,6 +16,7 @@ import com.era.utilities.UtilitiesFactory;
 import com.era.views.LoginJFrame;
 import com.era.views.dialogs.DialogsFactory;
 import com.era.views.dialogs.ExceptionDialog;
+import com.era.views.dialogs.OKDialog;
 import java.awt.event.ActionEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -26,9 +28,10 @@ import javax.swing.JOptionPane;
  */
 public class LoginViewController extends LoginJFrame {
     
-    private String companyCode;    
-    private boolean onlyExitWindow;
+    private String companyCode;        
     private boolean alreadyDBConfig;
+    
+    private LoginTypeEmpresa LoginTypeEmpresa;
     
     //Contiene el contador de intentos de ingreso al sistema
     int iContEnt = 0;
@@ -91,7 +94,11 @@ public class LoginViewController extends LoginJFrame {
             }
         }
     }
-    
+
+    public void setLoginTypeEmpresa(LoginTypeEmpresa LoginTypeEmpresa) {
+        this.LoginTypeEmpresa = LoginTypeEmpresa;
+    }
+            
     private void onSearchComapnyCliced(ActionEvent ActionEvent){
         
         try{
@@ -260,18 +267,40 @@ public class LoginViewController extends LoginJFrame {
                 return;
             }
             
-            //Set the user session in the system
+            //Get the user from db
             final User User = RepositoryFactory.getInstance().getUsersRepository().getUsrByCode(user);           
-            UtilitiesFactory.getSingleton().getSessionUtility().userInitSession(User);
             
+            if(this.LoginTypeEmpresa == LoginTypeEmpresa.FIRST_LOGIN){                                
+            }
+            else{
+                
+                //Deslogin the current user
+                UtilitiesFactory.getSingleton().getSessionUtility().deslogUserSession();
+                
+                //Close the principal window
+                ViewControlersFactory.getSingleton().getPrincipViewController().dispose();
+            }
+            
+            //Set the user session in the system            
+            UtilitiesFactory.getSingleton().getSessionUtility().userInitSession(User);
+
             //Save session data for the system
             final BasDats BasDats = RepositoryFactory.getInstance().getBasDatsRepository().getByDBName(companyCode);            
             UtilitiesFactory.getSingleton().getSessionUtility().setBasDats(BasDats);                        
-                        
+
             dispose();
-            
+
             //Open the main window
             ViewControlersFactory.getSingleton().getPrincipViewController().setVisible();
+
+            if(this.LoginTypeEmpresa == LoginTypeEmpresa.FIRST_LOGIN){                                
+            }
+            else{
+                
+                final OKDialog OKDialog = DialogsFactory.getSingleton().getOKDialog(baseJFrame);
+                OKDialog.setPropertyText("new_company_login_correct");
+                OKDialog.show();                
+            }
             
         }catch(Exception ex){
                                     
@@ -290,14 +319,11 @@ public class LoginViewController extends LoginJFrame {
     
     public final void buttonExitClicked(ActionEvent event){
     
-        //Close the window or exit the system
-        if(onlyExitWindow){
-                        
-            System.gc();        
-            dispose();
-        }        
-        else                
+        if(this.LoginTypeEmpresa == LoginTypeEmpresa.FIRST_LOGIN){
             System.exit(0);
-        
+        }
+        else{
+            dispose();
+        }                
     }
 }

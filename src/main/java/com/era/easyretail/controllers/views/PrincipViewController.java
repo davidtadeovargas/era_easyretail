@@ -6,6 +6,7 @@
 package com.era.easyretail.controllers.views;
 
 import com.era.easyretail.enums.LoginType;
+import com.era.easyretail.enums.LoginTypeEmpresa;
 import com.era.logger.LoggerUtility;
 import com.era.models.BasDats;
 import com.era.models.Confgral;
@@ -914,10 +915,11 @@ public class PrincipViewController extends PrincipJFrame {
     }
     
     private void jMenItCamEmpActionPerformed(java.awt.event.ActionEvent evt) {                                             
-                
-        /*Muestra la forma para logearse con otra empresa*/
-        //Login l = new Login(true);
-        //l.setVisible(true);        
+        
+        //Show login company window
+        final LoginViewController LoginViewController = ViewControlersFactory.getSingleton().getLoginViewController();
+        LoginViewController.setLoginTypeEmpresa(LoginTypeEmpresa.ANOTHER_LOGIN);
+        LoginViewController.setVisible();
     }
     
     private void jMenCXCRActionPerformed(java.awt.event.ActionEvent evt) {                                         

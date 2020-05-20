@@ -17,6 +17,7 @@ import com.era.easyretail.controllers.views.DBFileConnectionConfigurationControl
 import com.era.easyretail.premium.PremiumFunctionsManager;
 import com.era.easyretail.controllers.views.LoginLocalViewController;
 import com.era.easyretail.controllers.views.PresentationController;
+import com.era.easyretail.controllers.views.ViewControlersFactory;
 import com.era.httpclient.subscriber.HttpClientErrorSubscriberInterface;
 import com.era.logger.LoggerUtility;
 import com.era.models.License;
@@ -254,9 +255,8 @@ public class Start {
                 UtilitiesFactory.getSingleton().getPathsUtility().initPaths(currentWorkingDir, "");
                 
                 //Continue with the presentation screen
-                final PresentationController PresentationController = new PresentationController();
-                PresentationController.setVisible();
-
+                ViewControlersFactory.getSingleton().getPresentationController().setVisible();
+                
             }catch(Exception e){
                 LoggerUtility.getSingleton().logError(Start.class, e);
             }

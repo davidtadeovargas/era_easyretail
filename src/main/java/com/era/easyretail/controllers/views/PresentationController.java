@@ -5,6 +5,7 @@
  */
 package com.era.easyretail.controllers.views;
 
+import com.era.easyretail.enums.LoginTypeEmpresa;
 import com.era.views.PresentationJFrame;
 
 /**
@@ -42,8 +43,9 @@ public class PresentationController extends PresentationJFrame {
                 dispose();
                 
                 //Show login screen
-                LoginViewController LoginController = new LoginViewController();
-                LoginController.setVisible();
+                final LoginViewController LoginViewController = ViewControlersFactory.getSingleton().getLoginViewController();
+                LoginViewController.setLoginTypeEmpresa(LoginTypeEmpresa.FIRST_LOGIN);
+                LoginViewController.setVisible();
             }
             
         }).start();
