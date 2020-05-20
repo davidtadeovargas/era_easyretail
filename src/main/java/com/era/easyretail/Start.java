@@ -62,6 +62,17 @@ public class Start {
                         
         }catch(Exception e){
             LoggerUtility.getSingleton().logError(Start.class, e);
+            
+            try{
+                    
+                //Show the error dialog and exit system when user press ok
+                DialogsFactory.getSingleton().getErrorDialogByTextJFrame(e.getMessage(), (ActionEvent evt) -> {                    
+                    System.exit(-1);
+                });
+
+            }catch(Exception ex){
+                LoggerUtility.getSingleton().logError(Start.class, ex);
+            }
         }
     }
         
@@ -140,9 +151,9 @@ public class Start {
                 
         LoggerUtility.getSingleton().logInfo(Start.class, "Licenciamiento: Obteniendo información de licenciamiento");
 
-        RepositoryFactory.getInstance().getUsersRepository().setUser("INICIAL");
-        RepositoryFactory.getInstance().getUsersRepository().setSucursal("INICIAL");
-        RepositoryFactory.getInstance().getUsersRepository().setStation("INICIAL");
+        UtilitiesFactory.getSingleton().getUserSessionUtility().setUser("INICIAL");
+        UtilitiesFactory.getSingleton().getUserSessionUtility().setSucursal("INICIAL");
+        UtilitiesFactory.getSingleton().getUserSessionUtility().setEstation("INICIAL");
         
         License License = RepositoryFactory.getInstance().getLicenseRepository().getLicense();
 
@@ -177,13 +188,13 @@ public class Start {
                 try{
                     
                     //Show the error dialog and exit system when user press ok
-                    DialogsFactory.getSingleton().getErrorDialogJFrame("errors_failed_connection_to_ws", (ActionEvent evt) -> {                    
+                    DialogsFactory.getSingleton().getErrorDialogByIdTextJFrame("errors_failed_connection_to_ws", (ActionEvent evt) -> {                    
                         System.exit(-1);
                     });
 
                 }catch(Exception e){
                     LoggerUtility.getSingleton().logError(Start.class, e);
-                }                                
+                }
             }
 
             @Override
@@ -193,6 +204,7 @@ public class Start {
         GetComputerStatusHttpClient.setGetComputerStatusSubscriberInteface((ComputerLicenseDataModel ComputerLicenseDataModel) -> {
 
             LoggerUtility.getSingleton().logInfo(Start.class, "Licenciamiento: El servidor devolvio información de licenciamiento");
+            
             //Get the serie
             final boolean serieExists = ComputerLicenseDataModel.getSerie()!=null;
             final String serie = serieExists ? ComputerLicenseDataModel.getSerie():"";

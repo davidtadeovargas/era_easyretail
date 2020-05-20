@@ -275,7 +275,7 @@ public class LoginViewController extends LoginJFrame {
             dispose();
             
             //Open the main window
-            ViewControlersFactory.getSingleton().getPrincipViewController().show();
+            ViewControlersFactory.getSingleton().getPrincipViewController().setVisible();
             
         }catch(Exception ex){
                                     
