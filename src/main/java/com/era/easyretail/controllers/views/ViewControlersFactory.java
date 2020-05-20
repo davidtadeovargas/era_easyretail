@@ -95,7 +95,7 @@ public class ViewControlersFactory {
     private ClavMastViewController ClavMastViewController;
     private BajsMinViewController BajsMinViewController;
     private ComprViewController ComprViewController;    
-    
+    private CotsViewController CotsViewController;
     private NewNotViewController NewNotViewController;
     private NewNotProvViewController NewNotProvViewController;
     private PedidoViewController PedidoViewController;
@@ -143,6 +143,7 @@ public class ViewControlersFactory {
     private ImpresViewController ImpresViewController;
     private CotNormViewController CotNormViewController;
     private ConfGralViewController ConfGralViewController;
+    private LoginOtraViewController LoginOtraViewController;
     
     
     private ViewControlersFactory(){        
@@ -561,6 +562,16 @@ public class ViewControlersFactory {
         return ConfGralViewController;       
     }
        
+    public CotsViewController getCotsViewController(){
+        CotsViewController = new CotsViewController();
+        return CotsViewController;
+    }
+    
+    public LoginOtraViewController getLoginOtraViewController(){
+        LoginOtraViewController = new LoginOtraViewController();
+        return LoginOtraViewController;
+    }
+    
     @Override
     protected Object clone() throws CloneNotSupportedException {
         throw new CloneNotSupportedException();

@@ -260,17 +260,13 @@ public class LoginViewController extends LoginJFrame {
                 return;
             }
             
-            final User User = RepositoryFactory.getInstance().getUsersRepository().getUsrByCode(user);
-
-            //Save session data for the system
-            final BasDats BasDats = RepositoryFactory.getInstance().getBasDatsRepository().getByDBName(companyCode);
-            UtilitiesFactory.getSingleton().getSessionUtility().setBasDats(BasDats);
-            UtilitiesFactory.getSingleton().getSessionUtility().setUser(User);            
-            final String currentTimeAndDate = UtilitiesFactory.getSingleton().getDateTimeUtility().getQuickCurrentTimeAndDate();            
-            UtilitiesFactory.getSingleton().getSessionUtility().setUserLoggedTime(currentTimeAndDate);
+            //Set the user session in the system
+            final User User = RepositoryFactory.getInstance().getUsersRepository().getUsrByCode(user);           
+            UtilitiesFactory.getSingleton().getSessionUtility().userInitSession(User);
             
-            //Log the loggin of the user
-            RepositoryFactory.getInstance().getUsersRepository().userLoggedToSystem(user);
+            //Save session data for the system
+            final BasDats BasDats = RepositoryFactory.getInstance().getBasDatsRepository().getByDBName(companyCode);            
+            UtilitiesFactory.getSingleton().getSessionUtility().setBasDats(BasDats);                        
                         
             dispose();
             

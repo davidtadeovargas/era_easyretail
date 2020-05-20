@@ -151,9 +151,9 @@ public class Start {
                 
         LoggerUtility.getSingleton().logInfo(Start.class, "Licenciamiento: Obteniendo información de licenciamiento");
 
-        UtilitiesFactory.getSingleton().getUserSessionUtility().setUser("INICIAL");
-        UtilitiesFactory.getSingleton().getUserSessionUtility().setSucursal("INICIAL");
-        UtilitiesFactory.getSingleton().getUserSessionUtility().setEstation("INICIAL");
+        UtilitiesFactory.getSingleton().getSessionUtility().getUser().setStation("INICIAL");
+        UtilitiesFactory.getSingleton().getSessionUtility().getUser().setSucursal("INICIAL");
+        UtilitiesFactory.getSingleton().getSessionUtility().getUser().setEstacglo("INICIAL");
         
         License License = RepositoryFactory.getInstance().getLicenseRepository().getLicense();
 

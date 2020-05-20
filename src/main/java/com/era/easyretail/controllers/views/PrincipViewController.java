@@ -18,6 +18,7 @@ import com.era.views.dialogs.ErrorOKDialog;
 import com.era.views.dialogs.ExceptionDialog;
 import com.era.views.dialogs.OKDialog;
 import com.era.views.dialogs.QuestionDialog;
+import com.era.views.interfaces.OnJFrameVisible;
 import java.awt.Desktop;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -41,6 +42,17 @@ public class PrincipViewController extends PrincipJFrame {
             else{
                 jBReporteCaja.setEnabled(Confgral.getVal()==1);
             }
+                        
+            //When window is visible
+            this.OnJFrameVisible = new OnJFrameVisible(){
+                @Override
+                public void onVisible() {
+                    
+                    //Refresh the actual user
+                    final String sessionString = UtilitiesFactory.getSingleton().getUsersUtility().getSessionString();            
+                    setTitle(sessionString);
+                }                
+            };
             
             //Override default functionality
             JComponentUtils.setDisposeInEscapeEvent(false);            
@@ -51,8 +63,6 @@ public class PrincipViewController extends PrincipJFrame {
             final BasDats BasDats = UtilitiesFactory.getSingleton().getSessionUtility().getBasDats();
             final User User = UtilitiesFactory.getSingleton().getSessionUtility().getUser();
             final String userLoggedTime = UtilitiesFactory.getSingleton().getSessionUtility().getUserLoggedTime();
-
-            this.setTitle(BasDats.getNom() + " Usuario: <" + User.getName() + "> V2.5.9 " + userLoggedTime);
 
             jMenIt4.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jMenIt4ActionPerformed(evt);
@@ -69,6 +79,9 @@ public class PrincipViewController extends PrincipJFrame {
             jMenItPermEstacs.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jMenItPermEstacsActionPerformed(evt);
             });
+            jBProvs.addActionListener((java.awt.event.ActionEvent evt) -> {
+                jBProvsActionPerformed(evt);
+            });            
             jMenItEstacs.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jMenItEstacsActionPerformed(evt);
             });
@@ -499,6 +512,13 @@ public class PrincipViewController extends PrincipJFrame {
         }
     }
     
+    private void jMenItEstacsActionPerformed(java.awt.event.ActionEvent evt) {                                             
+        
+        /*Muestra el fomrulario de usuarios*/
+        //Usrs e = new Usrs();
+        //e.setVisible(true);
+    }
+    
     private void jMenIt4ActionPerformed(java.awt.event.ActionEvent evt) {                                        
         
         /*Muestra el gráfico de corrs electrónicos*/
@@ -515,15 +535,11 @@ public class PrincipViewController extends PrincipJFrame {
     }
     
     private void jMMClienActionPerformed(java.awt.event.ActionEvent evt) {                                         
-        
-        /*Muestra el gráfico de manejo de clientes*/
-        //vAbrClients();        
+        ViewControlersFactory.getSingleton().getClientsViewController().setVisible();        
     }
     
     private void jMenItManProvsActionPerformed(java.awt.event.ActionEvent evt) {                                               
-        
-        /*Mustra el gráfico de manejo de proveedores*/        
-        //vAbrProvs();        
+        ViewControlersFactory.getSingleton().getProvsViewController().setVisible();        
     }
     
     private void jMenItPermEstacsActionPerformed(java.awt.event.ActionEvent evt) {                                                 
@@ -533,18 +549,13 @@ public class PrincipViewController extends PrincipJFrame {
         //p.setVisible(true);        
     }
     
-    private void jMenItEstacsActionPerformed(java.awt.event.ActionEvent evt) {                                             
-        
-        /*Muestra el fomrulario de usuarios*/
-        //Usrs e = new Usrs();
-        //e.setVisible(true);
+    private void jBProvsActionPerformed(java.awt.event.ActionEvent evt) {                                             
+        ViewControlersFactory.getSingleton().getProvsViewController().setVisible();
     }
     
     private void jMenItLogearActionPerformed(java.awt.event.ActionEvent evt) {                                             
+        ViewControlersFactory.getSingleton().getLoginOtraViewController().setVisible();
         
-        /*Muestra el gráfico de loggearse*/
-        //LoginOtra l = new LoginOtra(this, null);
-        //l.getObj(this, null).setVisible(true);        
     }
      
     private void jMenItSalActionPerformed(java.awt.event.ActionEvent evt) {                                          
@@ -593,21 +604,15 @@ public class PrincipViewController extends PrincipJFrame {
     }
     
     private void jMenItCompsActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        
-        /*Muestra el formulario de compras*/
-        //vAbrComprs();        
+        ViewControlersFactory.getSingleton().getCompsViewController().setVisible();        
     }
     
     private void jMenCotsTActionPerformed(java.awt.event.ActionEvent evt) {                                          
-
-        /*Muestra el formulario para ver todos las cotizaciones de los proyectos*/
-        //vAbrCots();
+        ViewControlersFactory.getSingleton().getCotsViewController().setVisible();
     }
     
     private void jMenItVtasActionPerformed(java.awt.event.ActionEvent evt) {                                           
-        
-        /*Muestra el formulario de ventas*/
-        //vAbrVtas();        
+        ViewControlersFactory.getSingleton().getVtasViewController().setVisible();
     }
     
     private void vAbrPto()
@@ -626,6 +631,7 @@ public class PrincipViewController extends PrincipJFrame {
             }
 
             //Open the window
+            ViewControlersFactory.getSingleton().getPtoVtaTouViewController().setVisible();
         }
         catch (Exception ex) {
             LoggerUtility.getSingleton().logError(PrincipViewController.class, ex);
@@ -637,9 +643,7 @@ public class PrincipViewController extends PrincipJFrame {
         }
     }
     
-    private void jMenItTouchActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        
-        /*Abre el punto de venta*/
+    private void jMenItTouchActionPerformed(java.awt.event.ActionEvent evt) {
         vAbrPto();
     }
     
@@ -739,9 +743,7 @@ public class PrincipViewController extends PrincipJFrame {
     }
     
     private void jMVProdActionPerformed(java.awt.event.ActionEvent evt) {                                        
-
-        /*Si se tiene que mostrar la ventana entonces*/
-        //vAbrProds();        
+        ViewControlersFactory.getSingleton().getProdsViewController().setVisible();
     }
     
     private void jMenItProdsBajMinActionPerformed(java.awt.event.ActionEvent evt) {                                                  
@@ -1197,38 +1199,23 @@ public class PrincipViewController extends PrincipJFrame {
     }
     
     private void jBPtoVtaActionPerformed(java.awt.event.ActionEvent evt) {                                         
-        
-        /*Abre el punto de venta*/
-        //vAbrPto();
-        
+        vAbrPto();
     }
     
     private void jBVtasActionPerformed(java.awt.event.ActionEvent evt) {                                       
-        
-        /*Muestra el formulario de ventas*/
-        //vAbrVtas();
-        
+        ViewControlersFactory.getSingleton().getVtasViewController().setVisible();
     }
     
     private void jBCompsActionPerformed(java.awt.event.ActionEvent evt) {                                        
-        
-        /*Muestra el formulario de compras*/
-        //vAbrComprs();
-        
+        ViewControlersFactory.getSingleton().getCompsViewController().setVisible();
     }
     
-    private void jBEmpsActionPerformed(java.awt.event.ActionEvent evt) {                                       
-        
-        /*Muestra el gráfico de manejo de clientes*/
-        //vAbrClients();
-        
+    private void jBEmpsActionPerformed(java.awt.event.ActionEvent evt) {
+        ViewControlersFactory.getSingleton().getClientsViewController().setVisible();
     }
     
     private void jBProdsActionPerformed(java.awt.event.ActionEvent evt) {                                        
-        
-        /*Si se tiene que mostrar la ventana entonces*/
-        //vAbrProds();
-        
+        ViewControlersFactory.getSingleton().getProdsViewController().setVisible();
     }
     
     private void jBCotsActionPerformed(java.awt.event.ActionEvent evt) {                                       
@@ -1263,11 +1250,7 @@ public class PrincipViewController extends PrincipJFrame {
     }
     
     private void jMRepOrActionPerformed(java.awt.event.ActionEvent evt) {                                        
-        
-        /*Muestra el reporteador de las órdenes de compra*/
-        //RepOrd r = new RepOrd();
-        //r.setVisible(true);
-        
+        ViewControlersFactory.getSingleton().getCotsViewController().setVisible();
     }
     
     private void formWindowClosing(java.awt.event.WindowEvent evt) {                                   
@@ -1740,15 +1723,11 @@ public class PrincipViewController extends PrincipJFrame {
     }
     
     private void jBPrevCompActionPerformed(java.awt.event.ActionEvent evt) {                                           
-        //Se llama al previo de compra
-        //vPrevComps();        
+        ViewControlersFactory.getSingleton().getPrevCompViewController().setVisible();
     }
     
     private void jMPrevioCompActionPerformed(java.awt.event.ActionEvent evt) {                                             
-        
-        //Se llama al previo de compra
-        //vPrevComps();
-        
+        ViewControlersFactory.getSingleton().getPrevCompViewController().setVisible();    
     }
     
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {                                           
@@ -1787,12 +1766,8 @@ public class PrincipViewController extends PrincipJFrame {
        //t.setVisible(true);
     }
     
-    private void jMenuItemPedidosActionPerformed(java.awt.event.ActionEvent evt) {                                                 
-
-        //Muestra la ventana de pedidos
-        //final Pedidos pedidos = new Pedidos();
-        //pedidos.setVisible(true);
-
+    private void jMenuItemPedidosActionPerformed(java.awt.event.ActionEvent evt) {
+        ViewControlersFactory.getSingleton().getPedidosViewController().setVisible();
     }
     
     private void jMenuItemRemisionesActionPerformed(java.awt.event.ActionEvent evt) {                                                    
@@ -1803,9 +1778,7 @@ public class PrincipViewController extends PrincipJFrame {
     }
     
     private void jButtonPedidosActionPerformed(java.awt.event.ActionEvent evt) {                                               
-        
-        //final Pedidos pedidos = new Pedidos();
-        //pedidos.setVisible(true);        
+        ViewControlersFactory.getSingleton().getPedidosViewController().setVisible();
     }
     
     private void jButtonPedidos1ActionPerformed(java.awt.event.ActionEvent evt) {                                                
