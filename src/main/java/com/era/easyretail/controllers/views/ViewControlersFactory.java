@@ -126,7 +126,6 @@ public class ViewControlersFactory {
     private EntradasSalidasViewController EntradasSalidasViewController;
     private FacturarTicketsViewController FacturarTicketsViewController;
     private Impuestos_X_partidaViewController Impuestos_X_partidaViewController;
-    private DesLoginViewController DesLoginViewController;
     private DatsCartaPorViewController DatsCartaPorViewController;
     private CxpViewController CxpViewController;
     private CxcViewController CxcViewController;
@@ -473,11 +472,6 @@ public class ViewControlersFactory {
     public Impuestos_X_partidaViewController getImpuestos_X_partidaViewController(){
         Impuestos_X_partidaViewController = new Impuestos_X_partidaViewController();
         return Impuestos_X_partidaViewController;       
-    }
-    
-    public DesLoginViewController getDesLoginViewController(){
-        DesLoginViewController = new DesLoginViewController();
-        return DesLoginViewController;       
     }
     
     public DatsCartaPorViewController getDatsCartaPorViewController(){

@@ -5,6 +5,7 @@
  */
 package com.era.easyretail.controllers.views;
 
+import com.era.easyretail.enums.LoginType;
 import com.era.logger.LoggerUtility;
 import com.era.models.User;
 import com.era.repositories.RepositoryFactory;
@@ -23,6 +24,8 @@ import javax.swing.JFrame;
  * @author PC
  */
 public class LoginOtraViewController extends LoginOtraJFrame {
+    
+    private LoginType LoginType;
     
     public LoginOtraViewController(){
         
@@ -53,7 +56,11 @@ public class LoginOtraViewController extends LoginOtraJFrame {
             }
         }
     }
-    
+
+    public void setLoginType(LoginType LoginType) {
+        this.LoginType = LoginType;                
+    }        
+
     private void jBIngActionPerformed(java.awt.event.ActionEvent evt) {                                             
         
         try{
@@ -96,17 +103,30 @@ public class LoginOtraViewController extends LoginOtraJFrame {
                 return;
             }                        
             
-            //Set the user session in the system
-            final User User = RepositoryFactory.getInstance().getUsersRepository().getUsrByCode(user);           
-            UtilitiesFactory.getSingleton().getSessionUtility().userInitSession(User);
+            //Get the user from database
+            final User User = RepositoryFactory.getInstance().getUsersRepository().getUsrByCode(user);                       
             
-            //Show the correct message login to the user
-            final OKDialog OKDialog = DialogsFactory.getSingleton().getOKDialog(baseJFrame);
-            OKDialog.setPropertyText("session_changed");
-            OKDialog.setOKDialogInterface((JFrame jFrame) -> {
-                dispose();
-            });
-            OKDialog.show();
+            if(this.LoginType == LoginType.DESLOGIN){
+                
+                //Deslog the user in system
+                UtilitiesFactory.getSingleton().getSessionUtility().deslogUserSession();
+                
+                //Open the principal screen
+                ViewControlersFactory.getSingleton().getPrincipViewController().setVisible();
+            }
+            else{
+                
+                //Register in system de logged user
+                UtilitiesFactory.getSingleton().getSessionUtility().userInitSession(User);
+                
+                //Show the correct message login to the user
+                final OKDialog OKDialog = DialogsFactory.getSingleton().getOKDialog(baseJFrame);
+                OKDialog.setPropertyText("session_changed");
+                OKDialog.setOKDialogInterface((JFrame jFrame) -> {
+                    dispose();
+                });
+                OKDialog.show();
+            }
             
         }catch (Exception ex) {
             LoggerUtility.getSingleton().logError(LoginOtraViewController.class, ex);
@@ -140,6 +160,12 @@ public class LoginOtraViewController extends LoginOtraJFrame {
     }
     
     private void jBSalActionPerformed(java.awt.event.ActionEvent evt) {
-        this.dispose();        
+        
+        if(this.LoginType == LoginType.DESLOGIN){
+            System.exit(0);
+        }
+        else{
+            this.dispose();            
+        }                
     }
 }

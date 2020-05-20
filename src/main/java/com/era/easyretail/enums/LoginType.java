@@ -3,14 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.era.easyretail.controllers.views;
-
-import com.era.views.DesLoginJFrame;
+package com.era.easyretail.enums;
 
 /**
  *
  * @author PC
  */
-public class DesLoginViewController extends DesLoginJFrame {
-    
+public enum LoginType {    
+    NEW_LOGIN,
+    DESLOGIN
 }

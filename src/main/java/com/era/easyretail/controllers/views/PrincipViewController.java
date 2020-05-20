@@ -5,6 +5,7 @@
  */
 package com.era.easyretail.controllers.views;
 
+import com.era.easyretail.enums.LoginType;
 import com.era.logger.LoggerUtility;
 import com.era.models.BasDats;
 import com.era.models.Confgral;
@@ -905,10 +906,11 @@ public class PrincipViewController extends PrincipJFrame {
     
     private void jMenItDeslogActionPerformed(java.awt.event.ActionEvent evt) {                                             
         
-        /*Llama a la forma que deslogea*/
-        //DesLogin l = new DesLogin(jFram);
-        //l.setVisible(true);
-        
+        //Close the current window and open the login screen as login
+        dispose();
+        final LoginOtraViewController LoginOtraViewController = ViewControlersFactory.getSingleton().getLoginOtraViewController();
+        LoginOtraViewController.setLoginType(LoginType.DESLOGIN);
+        LoginOtraViewController.setVisible();
     }
     
     private void jMenItCamEmpActionPerformed(java.awt.event.ActionEvent evt) {                                             
