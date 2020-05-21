@@ -12,5 +12,8 @@ import com.era.views.CxcJFrame;
  * @author PC
  */
 public class CxcViewController extends CxcJFrame {
-    
+ 
+    public CxcViewController() {
+        super("window_title_cxc");
+    }
 }

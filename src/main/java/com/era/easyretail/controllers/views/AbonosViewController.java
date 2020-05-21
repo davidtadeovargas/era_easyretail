@@ -12,5 +12,8 @@ import com.era.views.AbonosJFrame;
  * @author PC
  */
 public class AbonosViewController extends AbonosJFrame {
-    
+ 
+    public AbonosViewController() {
+        super("window_title_abons");
+    }
 }

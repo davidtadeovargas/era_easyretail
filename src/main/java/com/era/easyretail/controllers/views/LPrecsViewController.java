@@ -13,4 +13,7 @@ import com.era.views.LPrecsJFrame;
  */
 public class LPrecsViewController extends LPrecsJFrame {
     
+    public LPrecsViewController() {
+        super("window_title_lprecs");
+    }
 }

@@ -12,5 +12,8 @@ import com.era.views.VCompJFrame;
  * @author PC
  */
 public class VCompViewController extends VCompJFrame {
-    
+ 
+    public VCompViewController() {
+        super("window_title_vercomps");
+    }
 }

@@ -37,6 +37,8 @@ public class DBFileConnectionConfigurationController extends DBFileConnectionCon
     
     public DBFileConnectionConfigurationController(){
         
+        super("window_title_conectionfile");
+        
         // 03 Julio 2015 // Heriberto // Configuracion de sistema
         jTNom.setEnabled(true); 
         jTNom.setToolTipText("");

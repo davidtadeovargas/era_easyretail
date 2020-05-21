@@ -13,4 +13,7 @@ import com.era.views.ConceptosPagoJFrame;
  */
 public class ConceptosPagoViewController extends ConceptosPagoJFrame{
     
+    public ConceptosPagoViewController() {
+        super("window_title_conceppagos");
+    }
 }

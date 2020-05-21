@@ -13,4 +13,7 @@ import com.era.views.BajsMinJFrame;
  */
 public class BajsMinViewController extends BajsMinJFrame {
     
+    public BajsMinViewController() {
+        super("window_title_prodsbajmin");
+    }
 }

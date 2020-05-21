@@ -51,125 +51,141 @@ public class EmpresasViewController extends EmpresasJFrame {
     
     
     
-    public EmpresasViewController() throws Exception{
+    public EmpresasViewController() {
         
-        this.setPropertyTitle("companies_title");                
+        super("window_title_emps");
         
-        //Validate the premium functionality for the button color
-        final BasePremiumImpl BasePremiumImpl_ = BasePremiumImpl.getSingleton();
-        BasePremiumImpl_.setINotPremium(() -> {
-            BasePremiumImpl_.paintButton(BTNNuevaEmpresa); //Paint the button to desired premium                        
-        });
-        BasePremiumImpl_.validate();
-        
-        JTCodigoEmpresa.setText(UtilitiesFactory.getSingleton().getGeneralsUtility().getUniqueDayCode());
-        
-        loadCompanies();
-        
-        JTCodigoEmpresa.setEditable(false);
-        
-        JComponentUtils.addFocusLost(JTBaseDeDatos, (FocusEvent e) -> {
-            final String newString = JTBaseDeDatos.getText().trim().replace(" ", "");
-            JTBaseDeDatos.setText(newString);
-        });
-        
-        BTNActualiza.setEnabled(false);
-        
-        jTabEmpresas.setITableRowSelected((ListSelectionEvent lse) -> {
-            
-            try{
-             
-                if(jTabEmpresas.getRowCount() > 0){
+        try{                        
+
+            this.setPropertyTitle("companies_title");                
+
+            //Validate the premium functionality for the button color
+            final BasePremiumImpl BasePremiumImpl_ = BasePremiumImpl.getSingleton();
+            BasePremiumImpl_.setINotPremium(() -> {
+                BasePremiumImpl_.paintButton(BTNNuevaEmpresa); //Paint the button to desired premium                        
+            });
+            BasePremiumImpl_.validate();
+
+            JTCodigoEmpresa.setText(UtilitiesFactory.getSingleton().getGeneralsUtility().getUniqueDayCode());
+
+            loadCompanies();
+
+            JTCodigoEmpresa.setEditable(false);
+
+            JComponentUtils.addFocusLost(JTBaseDeDatos, (FocusEvent e) -> {
+                final String newString = JTBaseDeDatos.getText().trim().replace(" ", "");
+                JTBaseDeDatos.setText(newString);
+            });
+
+            BTNActualiza.setEnabled(false);
+
+            jTabEmpresas.setITableRowSelected((ListSelectionEvent lse, Object Object) -> {
+
+                try{
+
+                    //Cast the model
+                    Company = (BasDats) Object;
                     
                     if (jTabEmpresas.getSelectedRow() == -1){
                         jTabEmpresas.setRowSelectionInterval(0, 0);
                     }
                     
                     clearFields();
-                    
+
                     Company = (BasDats) jTabEmpresas.getRowSelected();
 
                     vCargaComponentes(Company);
-                    
+
                     BTNActualiza.setEnabled(true);
                     BTNNuevaEmpresa.setEnabled(false);
-                    
+
                     JTBaseDeDatos.setEditable(false);
                 }
+                catch(Exception ex){
+
+                    try {
+
+                        LoggerUtility.getSingleton().logError(EmpresasViewController.class, ex);
+
+                        DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+
+                    } catch (Exception ex1) {
+                        Logger.getLogger(EmpresasViewController.class.getName()).log(Level.SEVERE, null, ex1);
+                    }
+                }                            
+            });  
+
+            //To mayus when typed
+            JComponentUtils.onKeyTypedToMayus(JTRFC);
+
+            BTNCargaCDS.addActionListener((ActionEvent e) -> {
+                buttonCertificatePathClicked(e);
+            });
+            BTNCargaKey.addActionListener((ActionEvent e) -> {
+                buttonCertificateKeyPathClicked(e);
+            });
+            BTNPlantilla.addActionListener((ActionEvent e) -> {
+                buttonPlantillaPathClicked(e);
+            });
+            btnRutaAplicacion.addActionListener((ActionEvent e) -> {
+                buttonAppPathClicked(e);
+            });
+            BTNRespalda.addActionListener((ActionEvent e) -> {
+                buttonBackupDBPathClicked(e);
+            });
+            BTNRestaura.addActionListener((ActionEvent e) -> {
+                buttonImportBackupClicked(e);
+            });        
+            BTNBorraPorId.addActionListener((ActionEvent e) -> {
+                buttonDeleteCompanyClicked(e);
+            });
+            BTNActualiza.addActionListener((ActionEvent e) -> {
+                buttonUpdateCompanyClicked(e);
+            });
+            BTNNuevaEmpresa.addActionListener((ActionEvent e) -> {
+                buttonNewCompanyClicked(e);
+            });
+            BTNLimpiarCampos.addActionListener((ActionEvent e) -> {
+                buttonClearFieldsClicked(e);
+            });
+            BTNPruebaPW.addActionListener((ActionEvent e) -> {
+                buttonTestCertificateClicked(e);
+            });
+            BTNCodigoPostal.addActionListener((ActionEvent e) -> {
+                buttonSearchCPClicked(e);
+            });
+            BTNCargaPais.addActionListener((ActionEvent e) -> {
+                buttonSearchCountryClicked(e);
+            });
+            jBCargImg.addActionListener((ActionEvent e) -> {
+                buttonLoadIconClicked(e);
+            });
+            jBDelImg.addActionListener((ActionEvent e) -> {
+                buttonDeleteImageClicked(e);
+            });
+            BTNCargaRegimenFiscal.addActionListener((ActionEvent e) -> {
+                buttonSearchFiscalRegimenClicked(e);
+            });
+            BTNCargaLugarExpedicion.addActionListener((ActionEvent e) -> {
+                buttonSearchExpeditionPlaceClicked(e);
+            });
+
+            String workingDir = UtilitiesFactory.getSingleton().getFilesUtility().getCurrentWorkingDir();        
+
+            JTRutaAplicacion.setText(workingDir);
+            
+        }catch(Exception ex){
+
+            try {
+
+                LoggerUtility.getSingleton().logError(EmpresasViewController.class, ex);
+
+                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+
+            } catch (Exception ex1) {
+                Logger.getLogger(EmpresasViewController.class.getName()).log(Level.SEVERE, null, ex1);
             }
-            catch(Exception ex){
-
-                try {
-
-                    LoggerUtility.getSingleton().logError(EmpresasViewController.class, ex);
-
-                    DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
-
-                } catch (Exception ex1) {
-                    Logger.getLogger(EmpresasViewController.class.getName()).log(Level.SEVERE, null, ex1);
-                }
-            }                            
-        });  
-        
-        //To mayus when typed
-        JComponentUtils.onKeyTypedToMayus(JTRFC);
-        
-        BTNCargaCDS.addActionListener((ActionEvent e) -> {
-            buttonCertificatePathClicked(e);
-        });
-        BTNCargaKey.addActionListener((ActionEvent e) -> {
-            buttonCertificateKeyPathClicked(e);
-        });
-        BTNPlantilla.addActionListener((ActionEvent e) -> {
-            buttonPlantillaPathClicked(e);
-        });
-        btnRutaAplicacion.addActionListener((ActionEvent e) -> {
-            buttonAppPathClicked(e);
-        });
-        BTNRespalda.addActionListener((ActionEvent e) -> {
-            buttonBackupDBPathClicked(e);
-        });
-        BTNRestaura.addActionListener((ActionEvent e) -> {
-            buttonImportBackupClicked(e);
-        });        
-        BTNBorraPorId.addActionListener((ActionEvent e) -> {
-            buttonDeleteCompanyClicked(e);
-        });
-        BTNActualiza.addActionListener((ActionEvent e) -> {
-            buttonUpdateCompanyClicked(e);
-        });
-        BTNNuevaEmpresa.addActionListener((ActionEvent e) -> {
-            buttonNewCompanyClicked(e);
-        });
-        BTNLimpiarCampos.addActionListener((ActionEvent e) -> {
-            buttonClearFieldsClicked(e);
-        });
-        BTNPruebaPW.addActionListener((ActionEvent e) -> {
-            buttonTestCertificateClicked(e);
-        });
-        BTNCodigoPostal.addActionListener((ActionEvent e) -> {
-            buttonSearchCPClicked(e);
-        });
-        BTNCargaPais.addActionListener((ActionEvent e) -> {
-            buttonSearchCountryClicked(e);
-        });
-        jBCargImg.addActionListener((ActionEvent e) -> {
-            buttonLoadIconClicked(e);
-        });
-        jBDelImg.addActionListener((ActionEvent e) -> {
-            buttonDeleteImageClicked(e);
-        });
-        BTNCargaRegimenFiscal.addActionListener((ActionEvent e) -> {
-            buttonSearchFiscalRegimenClicked(e);
-        });
-        BTNCargaLugarExpedicion.addActionListener((ActionEvent e) -> {
-            buttonSearchExpeditionPlaceClicked(e);
-        });
-        
-        String workingDir = UtilitiesFactory.getSingleton().getFilesUtility().getCurrentWorkingDir();        
-        
-        JTRutaAplicacion.setText(workingDir);
-        
+        }
     }
         
     private void buttonSearchExpeditionPlaceClicked(ActionEvent e){

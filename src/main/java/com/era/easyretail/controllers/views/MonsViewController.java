@@ -12,5 +12,8 @@ import com.era.views.MonsJFrame;
  * @author PC
  */
 public class MonsViewController extends MonsJFrame {
-    
+
+    public MonsViewController() {
+        super("window_title_mons");
+    }
 }

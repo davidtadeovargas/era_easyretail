@@ -12,5 +12,8 @@ import com.era.views.SelCorrJFrame;
  * @author PC
  */
 public class SelCorrViewController extends SelCorrJFrame {
-    
+ 
+    public SelCorrViewController() {
+        super("window_title_sendcorr");
+    }
 }

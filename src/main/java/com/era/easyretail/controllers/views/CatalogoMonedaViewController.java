@@ -13,4 +13,7 @@ import com.era.views.CatalogoMonedaJFrame;
  */
 public class CatalogoMonedaViewController extends CatalogoMonedaJFrame {
     
+    public CatalogoMonedaViewController() {
+        super("window_title_mons");
+    }
 }

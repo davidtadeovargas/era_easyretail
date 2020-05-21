@@ -13,4 +13,7 @@ import com.era.views.FacturarTicketsJFrame;
  */
 public class FacturarTicketsViewController extends FacturarTicketsJFrame {
     
+    public FacturarTicketsViewController() {
+        super("window_title_factiks");
+    }
 }

@@ -13,4 +13,7 @@ import com.era.views.BuscVtaJFrame;
  */
 public class BuscVtaViewController extends BuscVtaJFrame{
     
+    public BuscVtaViewController() {
+        super("window_title_buscvta");
+    }
 }

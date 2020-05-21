@@ -13,4 +13,7 @@ import com.era.views.SectoresJFrame;
  */
 public class SectoresViewController extends SectoresJFrame {
     
+    public SectoresViewController() {
+        super("window_title_sectors");
+    }
 }

@@ -13,4 +13,7 @@ import com.era.views.CatalBancosJFrame;
  */
 public class CatalBancosViewController extends CatalBancosJFrame {
     
+    public CatalBancosViewController() {
+        super("window_title_bancs");
+    }
 }

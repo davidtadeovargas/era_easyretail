@@ -29,6 +29,8 @@ public class LoginOtraViewController extends LoginOtraJFrame {
     
     public LoginOtraViewController(){
         
+        super("window_title_login");
+        
         try{
             
             //Default button

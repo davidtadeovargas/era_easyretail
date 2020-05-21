@@ -13,5 +13,8 @@ import com.era.views.IngrInventJFrame;
  */
 public class IngrInventViewController extends IngrInventJFrame
 {
+    public IngrInventViewController() {
+        super("window_title_inginven");
+    }
     
 }

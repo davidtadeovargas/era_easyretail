@@ -12,5 +12,8 @@ import com.era.views.MovimientosInventariosJFrame;
  * @author PC
  */
 public class MovimientosInventariosViewController extends MovimientosInventariosJFrame {
-    
+
+    public MovimientosInventariosViewController() {
+        super("window_title_movinvent");
+    }
 }

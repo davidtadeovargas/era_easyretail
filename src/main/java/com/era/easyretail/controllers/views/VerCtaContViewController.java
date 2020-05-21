@@ -13,4 +13,7 @@ import com.era.views.VerCtaContJFrame;
  */
 public class VerCtaContViewController extends VerCtaContJFrame {
     
+    public VerCtaContViewController() {
+        super("window_title_vercta");
+    }
 }

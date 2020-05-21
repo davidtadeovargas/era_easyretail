@@ -13,4 +13,7 @@ import com.era.views.CompsJFrame;
  */
 public class CompsViewController extends CompsJFrame {
     
+    public CompsViewController() {
+        super("window_title_comps");
+    }
 }

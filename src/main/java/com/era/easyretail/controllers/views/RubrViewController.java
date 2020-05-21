@@ -12,5 +12,8 @@ import com.era.views.RubrJFrame;
  * @author PC
  */
 public class RubrViewController extends RubrJFrame {
-    
+ 
+    public RubrViewController() {
+        super("window_title_rubros");
+    }
 }

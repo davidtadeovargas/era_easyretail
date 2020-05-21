@@ -12,5 +12,8 @@ import com.era.views.NewNotProvJFrame;
  * @author PC
  */
 public class NewNotProvViewController extends NewNotProvJFrame {
-    
+   
+    public NewNotProvViewController() {
+        super("window_title_newnotprov");
+    }
 }

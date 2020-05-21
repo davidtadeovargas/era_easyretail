@@ -12,5 +12,8 @@ import com.era.views.Impuestos_X_partidaJFrame;
  * @author PC
  */
 public class Impuestos_X_partidaViewController extends Impuestos_X_partidaJFrame {
-    
+
+    public Impuestos_X_partidaViewController() {
+        super("window_title_impxpartida");
+    }
 }

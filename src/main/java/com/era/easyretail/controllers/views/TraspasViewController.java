@@ -13,4 +13,7 @@ import com.era.views.TraspasJFrame;
  */
 public class TraspasViewController extends TraspasJFrame{
     
+    public TraspasViewController() {
+        super("window_title_trapas");
+    }
 }

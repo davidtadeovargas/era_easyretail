@@ -6,7 +6,6 @@
 package com.era.easyretail.controllers.views;
 
 import com.era.views.ProdSerJFrame;
-import com.era.views.ProdsJFrame;
 
 /**
  *
@@ -14,7 +13,8 @@ import com.era.views.ProdsJFrame;
  */
 public class ProdSerViewController extends ProdSerJFrame {
     
-    public ProdSerViewController() {        
+    public ProdSerViewController() {
+        super("window_title_seriexprod");
     }
         
 }

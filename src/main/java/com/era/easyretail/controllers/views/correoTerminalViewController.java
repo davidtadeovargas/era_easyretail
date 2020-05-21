@@ -12,5 +12,9 @@ import com.era.views.correoTerminalJFrame;
  * @author PC
  */
 public class correoTerminalViewController extends correoTerminalJFrame {
+
+    public correoTerminalViewController() {
+        super("window_title_correo_terminal");
+    }
     
 }

@@ -13,4 +13,7 @@ import com.era.views.MaxsMinsJFrame;
  */
 public class MaxsMinsViewController extends MaxsMinsJFrame {
     
+    public MaxsMinsViewController() {
+        super("window_title_moxmins");
+    }
 }

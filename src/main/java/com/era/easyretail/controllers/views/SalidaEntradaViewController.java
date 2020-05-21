@@ -12,5 +12,8 @@ import com.era.views.SalidaEntradaJFrame;
  * @author PC
  */
 public class SalidaEntradaViewController extends SalidaEntradaJFrame {
-    
+ 
+    public SalidaEntradaViewController() {
+        super("window_title_salidaentrada");
+    }
 }

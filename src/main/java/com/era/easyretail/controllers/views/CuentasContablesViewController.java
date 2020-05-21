@@ -12,5 +12,8 @@ import com.era.views.CuentasContablesJFrame;
  * @author PC
  */
 public class CuentasContablesViewController extends CuentasContablesJFrame {
-    
+ 
+    public CuentasContablesViewController() {
+        super("window_title_contablescta");
+    }
 }

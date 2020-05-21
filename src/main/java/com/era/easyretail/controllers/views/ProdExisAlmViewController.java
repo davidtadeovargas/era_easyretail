@@ -13,4 +13,8 @@ import com.era.views.ProdExisAlmJFrame;
  */
 public class ProdExisAlmViewController extends ProdExisAlmJFrame {
     
+    public ProdExisAlmViewController() {
+        super("window_title_exisalma");
+    }
+    
 }

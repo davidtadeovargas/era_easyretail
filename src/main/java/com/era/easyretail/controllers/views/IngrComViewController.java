@@ -12,5 +12,8 @@ import com.era.views.IngrComJFrame;
  * @author PC
  */
 public class IngrComViewController extends IngrComJFrame {
-    
+
+    public IngrComViewController() {
+        super("window_title_ingcomp");
+    }
 }

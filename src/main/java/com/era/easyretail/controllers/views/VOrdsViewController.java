@@ -13,4 +13,7 @@ import com.era.views.VOrdsJFrame;
  */
 public class VOrdsViewController extends VOrdsJFrame {
     
+    public VOrdsViewController() {
+        super("window_title_verords");
+    }
 }

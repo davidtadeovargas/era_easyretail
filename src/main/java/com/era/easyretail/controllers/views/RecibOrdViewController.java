@@ -13,4 +13,7 @@ import com.era.views.RecibOrdJFrame;
  */
 public class RecibOrdViewController extends RecibOrdJFrame{
     
+    public RecibOrdViewController() {
+        super("window_title_recibord");
+    }
 }

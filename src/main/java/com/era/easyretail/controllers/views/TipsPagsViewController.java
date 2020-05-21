@@ -13,4 +13,7 @@ import com.era.views.TipsPagsJFrame;
  */
 public class TipsPagsViewController extends TipsPagsJFrame {
     
+    public TipsPagsViewController() {
+        super("window_title_tipspags");
+    }
 }

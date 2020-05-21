@@ -13,4 +13,7 @@ import com.era.views.NewNotJFrame;
  */
 public class NewNotViewController extends NewNotJFrame {
     
+    public NewNotViewController() {
+        super("window_title_newnotvta");
+    }
 }

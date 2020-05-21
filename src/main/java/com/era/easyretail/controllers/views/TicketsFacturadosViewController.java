@@ -13,4 +13,7 @@ import com.era.views.TicketsFacturadosJFrame;
  */
 public class TicketsFacturadosViewController extends TicketsFacturadosJFrame {
     
+    public TicketsFacturadosViewController() {
+        super("window_title_tiksfactu");
+    }
 }

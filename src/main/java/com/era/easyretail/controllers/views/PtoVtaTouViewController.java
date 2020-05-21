@@ -12,5 +12,8 @@ import com.era.views.PtoVtaTouJFrame;
  * @author PC
  */
 public class PtoVtaTouViewController extends PtoVtaTouJFrame {
-    
+ 
+    public PtoVtaTouViewController() {
+        super("window_title_ptovta");
+    }
 }

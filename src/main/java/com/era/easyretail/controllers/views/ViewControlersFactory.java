@@ -38,7 +38,7 @@ public class ViewControlersFactory {
     private static ViewControlersFactory RenderControlersViewManager;
     
     private PremiumViewController PremiumViewController;
-    private LoadingViewController CreatingDatabaseWaitViewController;
+    private LoadingViewController LoadingViewController;
     private EmpresasViewController EmpresasViewController;
     private SearchViewController SearchViewController;
     private PrincipViewController PrincipViewController;
@@ -163,8 +163,10 @@ public class ViewControlersFactory {
     }
     
     public LoadingViewController getCreatingDatabaseWaitViewController(){
-        CreatingDatabaseWaitViewController = new LoadingViewController();
-        return CreatingDatabaseWaitViewController;
+        if(LoadingViewController == null){
+            LoadingViewController = new LoadingViewController();
+        }        
+        return LoadingViewController;
     }
     
     public EmpresasViewController getEmpresasViewController() throws Exception{

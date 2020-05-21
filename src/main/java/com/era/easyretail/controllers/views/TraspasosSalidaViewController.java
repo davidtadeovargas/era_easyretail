@@ -13,4 +13,7 @@ import com.era.views.TraspasosSalidaJFrame;
  */
 public class TraspasosSalidaViewController extends TraspasosSalidaJFrame {
     
+    public TraspasosSalidaViewController() {
+        super("window_title_trapas");
+    }
 }

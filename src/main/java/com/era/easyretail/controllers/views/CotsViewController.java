@@ -13,4 +13,7 @@ import com.era.views.CotsJFrame;
  */
 public class CotsViewController extends CotsJFrame {
     
+    public CotsViewController() {
+        super("window_title_cots");
+    }
 }

@@ -13,4 +13,7 @@ import com.era.views.ComprJFrame;
  */
 public class ComprViewController extends ComprJFrame {
     
+    public ComprViewController() {
+        super("window_title_newcomp");
+    }
 }

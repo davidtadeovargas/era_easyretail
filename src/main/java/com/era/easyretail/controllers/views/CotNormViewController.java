@@ -12,5 +12,8 @@ import com.era.views.CotNormJFrame;
  * @author PC
  */
 public class CotNormViewController extends CotNormJFrame {
-    
+ 
+    public CotNormViewController() {
+        super("window_title_newcot");
+    }
 }

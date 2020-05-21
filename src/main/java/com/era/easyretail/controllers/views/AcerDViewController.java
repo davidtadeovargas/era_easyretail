@@ -13,4 +13,7 @@ import com.era.views.AcerDJFrame;
  */
 public class AcerDViewController extends AcerDJFrame {
     
+    public AcerDViewController() {
+        super("window_title_acerd");
+    }
 }

@@ -12,5 +12,8 @@ import com.era.views.VAbonsJFrame;
  * @author PC
  */
 public class VAbonsViewController extends VAbonsJFrame {
-    
+
+    public VAbonsViewController() {
+        super("window_title_verabons");
+    }
 }

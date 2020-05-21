@@ -13,4 +13,7 @@ import com.era.views.UnidadesJFrame;
  */
 public class UnidadesViewController extends UnidadesJFrame {
     
+    public UnidadesViewController() {
+        super("window_title_unids");
+    }
 }

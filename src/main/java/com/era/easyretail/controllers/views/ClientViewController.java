@@ -13,4 +13,7 @@ import com.era.views.ClientJFrame;
  */
 public class ClientViewController extends ClientJFrame {
     
+    public ClientViewController() {
+        super("window_title_newcustomer");
+    }
 }

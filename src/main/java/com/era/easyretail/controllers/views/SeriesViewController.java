@@ -13,4 +13,7 @@ import com.era.views.SeriesJFrame;
  */
 public class SeriesViewController extends SeriesJFrame {
     
+    public SeriesViewController() {
+        super("window_title_series");
+    }
 }

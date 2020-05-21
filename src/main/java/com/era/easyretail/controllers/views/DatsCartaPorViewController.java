@@ -13,4 +13,7 @@ import com.era.views.DatsCartaPorJFrame;
  */
 public class DatsCartaPorViewController extends DatsCartaPorJFrame {
     
+    public DatsCartaPorViewController() {
+        super("window_title_datscartport");
+    }
 }

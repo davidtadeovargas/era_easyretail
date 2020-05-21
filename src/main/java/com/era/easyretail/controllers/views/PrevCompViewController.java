@@ -13,4 +13,7 @@ import com.era.views.PrevCompJFrame;
  */
 public class PrevCompViewController extends PrevCompJFrame {
     
+    public PrevCompViewController() {
+        super("window_title_prevcomp");
+    }
 }

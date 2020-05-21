@@ -13,4 +13,7 @@ import com.era.views.ProdsJFrame;
  */
 public class ProdsViewController extends ProdsJFrame {
     
+    public ProdsViewController() {
+        super("window_title_prods");
+    }
 }

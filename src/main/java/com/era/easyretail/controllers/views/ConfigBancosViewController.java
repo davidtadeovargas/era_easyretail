@@ -13,4 +13,7 @@ import com.era.views.ConfigBancosJFrame;
  */
 public class ConfigBancosViewController extends ConfigBancosJFrame {
     
+    public ConfigBancosViewController() {
+        super("window_title_configbancs");
+    }
 }

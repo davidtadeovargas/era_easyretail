@@ -13,4 +13,7 @@ import com.era.views.CobroJFrame;
  */
 public class CobroViewController extends CobroJFrame {
     
+    public CobroViewController() {
+        super("window_title_cobro");
+    }
 }

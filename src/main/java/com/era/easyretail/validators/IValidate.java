@@ -9,5 +9,6 @@ package com.era.easyretail.validators;
  *
  * @author PC
  */
-public interface IValidate {    
+public interface IValidate {
+    public void validate() throws Exception;
 }

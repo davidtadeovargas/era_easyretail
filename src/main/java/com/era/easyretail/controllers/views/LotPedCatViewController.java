@@ -13,4 +13,7 @@ import com.era.views.LotPedCatJFrame;
  */
 public class LotPedCatViewController extends LotPedCatJFrame {
     
+    public LotPedCatViewController() {
+        super("window_title_lotped");
+    }
 }

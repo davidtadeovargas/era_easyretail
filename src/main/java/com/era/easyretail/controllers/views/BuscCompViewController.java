@@ -13,4 +13,7 @@ import com.era.views.BuscCompJFrame;
  */
 public class BuscCompViewController extends BuscCompJFrame{
     
+    public BuscCompViewController() {
+        super("window_title_busccomp");
+    }
 }

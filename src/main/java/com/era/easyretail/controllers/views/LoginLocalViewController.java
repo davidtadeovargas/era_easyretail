@@ -47,7 +47,7 @@ public class LoginLocalViewController extends LoginLicenseJFrame {
     
     public LoginLocalViewController(){
         
-        super();
+        super("window_title_login");
         
         //Add the fields that when pressing enter inside click in continue button
         final List<JTextField> JTextFields = new ArrayList<>();

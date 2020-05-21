@@ -20,7 +20,7 @@ import com.era.views.dialogs.OKDialog;
 import java.awt.event.ActionEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JOptionPane;
+import javax.swing.JFrame;
 
 /**
  *
@@ -33,16 +33,15 @@ public class LoginViewController extends LoginJFrame {
     
     private LoginTypeEmpresa LoginTypeEmpresa;
     
-    //Contiene el contador de intentos de ingreso al sistema
-    int iContEnt = 0;
-    
     
     
     
     public LoginViewController(){
         
-        try{                        
-                                
+        super("window_title_login");
+        
+        try{
+            
             setDefaultButton(jbuttonLogin);
             
             jTEmp.grabFocus();
@@ -183,24 +182,36 @@ public class LoginViewController extends LoginJFrame {
             
             if(jTEmp.getText().compareTo("")==0){
 
-                JOptionPane.showMessageDialog(null, "La empresa esta vacia.", "Empresa", JOptionPane.INFORMATION_MESSAGE, null);
-                jBEmp.grabFocus();
+                final OKDialog OKDialog = DialogsFactory.getSingleton().getOKDialog(baseJFrame);
+                OKDialog.setPropertyText("company_missing_filled_fields");
+                OKDialog.setOKDialogInterface((JFrame jFrame) -> {
+                    jBEmp.grabFocus();                    
+                });
+                OKDialog.show();                
                 return;
             }
 
             //Check if a valid company 
             if(companyCode.compareTo("")==0){
 
-                JOptionPane.showMessageDialog(null, "La empresa: " + jTEmp.getText() + " no existe.", "Empresa", JOptionPane.INFORMATION_MESSAGE, null);
-                jTEmp.grabFocus();
+                final OKDialog OKDialog = DialogsFactory.getSingleton().getOKDialog(baseJFrame);
+                OKDialog.setPropertyText("company_not_exists");
+                OKDialog.setOKDialogInterface((JFrame jFrame) -> {
+                    jTEmp.grabFocus();                    
+                });
+                OKDialog.show();
                 return;
             }
 
             //Valid user
             if(jTEsta.getText().compareTo("")==0){
 
-                JOptionPane.showMessageDialog(null, "El campo de usuario esta vacio.", "Usuario", JOptionPane.INFORMATION_MESSAGE, null);
-                jTEsta.grabFocus();
+                final OKDialog OKDialog = DialogsFactory.getSingleton().getOKDialog(baseJFrame);
+                OKDialog.setPropertyText("company_missing_filled_fields");
+                OKDialog.setOKDialogInterface((JFrame jFrame) -> {
+                    jTEsta.grabFocus();                    
+                });
+                OKDialog.show();
                 return;
             }
             
@@ -218,8 +229,12 @@ public class LoginViewController extends LoginJFrame {
             //Valid password
             if(password.compareTo("")==0){
 
-                JOptionPane.showMessageDialog(null, "El campo de contraseña esta vacio.", "Password", JOptionPane.INFORMATION_MESSAGE);
-                jPContra.grabFocus();
+                final OKDialog OKDialog = DialogsFactory.getSingleton().getOKDialog(baseJFrame);
+                OKDialog.setPropertyText("company_missing_filled_fields");
+                OKDialog.setOKDialogInterface((JFrame jFrame) -> {
+                    jPContra.grabFocus();                    
+                });
+                OKDialog.show();
                 return;
             }
 
@@ -228,20 +243,12 @@ public class LoginViewController extends LoginJFrame {
             //If the user does not exists
             if(!userExists){
                 
-                //Si ya se ingresarón el número máximo de intentos entonces
-                if(iContEnt>3)
-                {
-                    //Mensajea y sal del sistema
-                    JOptionPane.showMessageDialog(null, "Límite de intentos de ingreso alcanzado, el sistema se va a cerrar.", "Ingresar", JOptionPane.INFORMATION_MESSAGE);
-                    System.exit(0);
-                }
-
-                //Aumenta el contador de intentos de ingreso
-                iContEnt   += 1;
-                
-                JOptionPane.showMessageDialog(null, "Usuario/contraseña incorrectos.", "Datos incorrectos", JOptionPane.INFORMATION_MESSAGE);
-
-                jTEsta.grabFocus();
+                final OKDialog OKDialog = DialogsFactory.getSingleton().getOKDialog(baseJFrame);
+                OKDialog.setPropertyText("users_invalid_login");
+                OKDialog.setOKDialogInterface((JFrame jFrame) -> {
+                    jTEsta.grabFocus();                    
+                });
+                OKDialog.show();
                 return;
             }
             
@@ -250,20 +257,12 @@ public class LoginViewController extends LoginJFrame {
             //Passwords match ?
             if(password.compareTo(decryptedPassword)!=0){
                 
-                //Si ya se ingresarón el número máximo de intentos entonces
-                if(iContEnt>3)
-                {
-                    //Mensajea y sal del sistema
-                    JOptionPane.showMessageDialog(null, "Límite de intentos de ingreso alcanzado, el sistema se va a cerrar.", "Ingresar", JOptionPane.INFORMATION_MESSAGE);
-                    System.exit(0);
-                }
-
-                //Aumenta el contador de intentos de ingreso
-                iContEnt   += 1;
-                
-                JOptionPane.showMessageDialog(null, "Usuario/contraseña incorrectos." , "Datos incorrectos", JOptionPane.INFORMATION_MESSAGE);
-                
-                jPContra.grabFocus();
+                final OKDialog OKDialog = DialogsFactory.getSingleton().getOKDialog(baseJFrame);
+                OKDialog.setPropertyText("users_invalid_login");
+                OKDialog.setOKDialogInterface((JFrame jFrame) -> {
+                    jTEsta.grabFocus();                    
+                });
+                OKDialog.show();
                 return;
             }
             

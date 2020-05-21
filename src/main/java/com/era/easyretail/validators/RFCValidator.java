@@ -110,4 +110,9 @@ public class RFCValidator implements IValidate{
     public void setMoral(boolean moral) {
         this.moral = moral;
     }
+
+    @Override
+    public void validate() throws Exception {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

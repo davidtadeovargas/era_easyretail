@@ -13,4 +13,7 @@ import com.era.views.VVtasJFrame;
  */
 public class VVtasViewController extends VVtasJFrame {
     
+    public VVtasViewController() {
+        super("window_title_vervtas");
+    }
 }

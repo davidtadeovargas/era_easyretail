@@ -13,4 +13,7 @@ import com.era.views.KitsJFrame;
  */
 public class KitsViewController extends KitsJFrame {
     
+    public KitsViewController() {
+        super("window_title_kits");
+    }
 }

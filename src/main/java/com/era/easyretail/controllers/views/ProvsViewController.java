@@ -13,4 +13,7 @@ import com.era.views.ProvsJFrame;
  */
 public class ProvsViewController extends ProvsJFrame {
     
+    public ProvsViewController() {
+        super("window_title_provs");
+    }
 }

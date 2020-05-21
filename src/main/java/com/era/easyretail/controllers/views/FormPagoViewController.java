@@ -13,4 +13,7 @@ import com.era.views.FormPagoJFrame;
  */
 public class FormPagoViewController extends FormPagoJFrame {
     
+    public FormPagoViewController() {
+        super("window_title_formpag");
+    }
 }

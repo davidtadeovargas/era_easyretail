@@ -13,4 +13,7 @@ import com.era.views.IngrPrevComJFrame;
  */
 public class IngrPrevComViewController extends IngrPrevComJFrame {
     
+    public IngrPrevComViewController() {
+        super("window_title_prevcomp");
+    }
 }

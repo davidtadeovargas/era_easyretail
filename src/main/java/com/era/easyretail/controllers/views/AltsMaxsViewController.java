@@ -13,4 +13,7 @@ import com.era.views.AltsMaxsJFrame;
  */
 public class AltsMaxsViewController extends AltsMaxsJFrame {
     
+    public AltsMaxsViewController() {
+        super("window_title_prodsarribmax");
+    }
 }

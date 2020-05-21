@@ -13,4 +13,7 @@ import com.era.views.Impuestos_X_productos_nuevoJFrame;
  */
 public class Impuestos_X_productos_nuevoViewController extends Impuestos_X_productos_nuevoJFrame {
     
+    public Impuestos_X_productos_nuevoViewController() {
+        super("window_title_impxproduct");
+    }
 }

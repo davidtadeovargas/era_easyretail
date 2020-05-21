@@ -13,4 +13,7 @@ import com.era.views.PedidosJFrame;
  */
 public class PedidosViewController extends PedidosJFrame {
     
+    public PedidosViewController() {
+        super("window_title_peds");
+    }
 }

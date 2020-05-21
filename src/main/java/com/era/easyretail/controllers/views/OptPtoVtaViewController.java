@@ -12,5 +12,8 @@ import com.era.views.OptPtoVtaJFrame;
  * @author PC
  */
 public class OptPtoVtaViewController extends OptPtoVtaJFrame {
-    
+ 
+    public OptPtoVtaViewController() {
+        super("window_title_optsptovta");
+    }
 }

@@ -13,4 +13,7 @@ import com.era.views.LogCorrsJFrame;
  */
 public class LogCorrsViewController extends LogCorrsJFrame {
     
+    public LogCorrsViewController() {
+        super("window_title_logemails");
+    }
 }

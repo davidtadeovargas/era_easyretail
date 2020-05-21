@@ -12,5 +12,8 @@ import com.era.views.EntradasSalidasJFrame;
  * @author PC
  */
 public class EntradasSalidasViewController extends EntradasSalidasJFrame {
-    
+ 
+    public EntradasSalidasViewController() {
+        super("window_title_entsals");
+    }
 }

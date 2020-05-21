@@ -13,4 +13,7 @@ import com.era.views.AlmasJFrame;
  */
 public class AlmasViewController extends AlmasJFrame {
     
+    public AlmasViewController() {
+        super("window_title_almas");
+    }
 }

@@ -14,8 +14,7 @@ import com.era.views.PremiumJFrame;
  */
 public class PremiumViewController extends PremiumJFrame {
     
-    public PremiumViewController(){        
-        super();
+    public PremiumViewController(){                        
         
         JFrameUtils.getInstance().setIconToWindow(this);
     }

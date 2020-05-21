@@ -12,5 +12,8 @@ import com.era.views.ClavMastJFrame;
  * @author PC
  */
 public class ClavMastViewController extends ClavMastJFrame {
-    
+ 
+    public ClavMastViewController() {
+        super("window_title_adminpassword");
+    }
 }

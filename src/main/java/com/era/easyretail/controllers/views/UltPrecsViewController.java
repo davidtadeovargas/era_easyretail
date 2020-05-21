@@ -13,4 +13,7 @@ import com.era.views.UltPrecsJFrame;
  */
 public class UltPrecsViewController extends UltPrecsJFrame {
     
+    public UltPrecsViewController() {
+        super("window_title_ultprecs");
+    }
 }

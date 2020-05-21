@@ -20,7 +20,6 @@ import com.era.views.dialogs.ErrorOKDialog;
 import com.era.views.dialogs.ExceptionDialog;
 import com.era.views.dialogs.OKDialog;
 import com.era.views.dialogs.QuestionDialog;
-import com.era.views.interfaces.OnJFrameVisible;
 import java.awt.Desktop;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -35,7 +34,9 @@ public class PrincipViewController extends PrincipJFrame {
     
     public PrincipViewController(){
      
-        try{
+        super("window_title_principl");
+        
+        try{                        
             
             final Confgral Confgral = RepositoryFactory.getInstance().getConfgralRepository().getSistemClasifByConf("reporteCaja");
             if(Confgral==null){
@@ -44,18 +45,7 @@ public class PrincipViewController extends PrincipJFrame {
             else{
                 jBReporteCaja.setEnabled(Confgral.getVal()==1);
             }
-                        
-            //When window is visible
-            this.OnJFrameVisible = new OnJFrameVisible(){
-                @Override
-                public void onVisible() {
-                    
-                    //Refresh the actual user
-                    final String sessionString = UtilitiesFactory.getSingleton().getUsersUtility().getSessionString();            
-                    setTitle(sessionString);
-                }                
-            };
-            
+                                    
             //Override default functionality
             JComponentUtils.setDisposeInEscapeEvent(false);            
             
@@ -514,11 +504,8 @@ public class PrincipViewController extends PrincipJFrame {
         }
     }
     
-    private void jMenItEstacsActionPerformed(java.awt.event.ActionEvent evt) {                                             
-        
-        /*Muestra el fomrulario de usuarios*/
-        //Usrs e = new Usrs();
-        //e.setVisible(true);
+    private void jMenItEstacsActionPerformed(java.awt.event.ActionEvent evt) {        
+        ViewControlersFactory.getSingleton().getUsrsViewController().setVisible();
     }
     
     private void jMenIt4ActionPerformed(java.awt.event.ActionEvent evt) {                                        
@@ -537,7 +524,7 @@ public class PrincipViewController extends PrincipJFrame {
     }
     
     private void jMMClienActionPerformed(java.awt.event.ActionEvent evt) {                                         
-        ViewControlersFactory.getSingleton().getClientsViewController().setVisible();        
+        ViewControlersFactory.getSingleton().getClientsViewController().setVisible();
     }
     
     private void jMenItManProvsActionPerformed(java.awt.event.ActionEvent evt) {                                               

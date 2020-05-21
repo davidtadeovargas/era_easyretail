@@ -13,4 +13,7 @@ import com.era.views.NewVtaJFrame;
  */
 public class NewVtaViewController extends NewVtaJFrame {
     
+    public NewVtaViewController() {
+        super("window_title_newvta");
+    }
 }

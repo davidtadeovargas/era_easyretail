@@ -13,4 +13,7 @@ import com.era.views.CxpJFrame;
  */
 public class CxpViewController extends CxpJFrame{
     
+    public CxpViewController() {
+        super("window_title_cxp");
+    }
 }

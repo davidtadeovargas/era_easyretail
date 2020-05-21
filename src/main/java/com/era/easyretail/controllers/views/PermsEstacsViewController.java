@@ -13,4 +13,7 @@ import com.era.views.PermsEstacsJFrame;
  */
 public class PermsEstacsViewController extends PermsEstacsJFrame {
     
+    public PermsEstacsViewController() {
+        super("window_title_permestacs");
+    }
 }

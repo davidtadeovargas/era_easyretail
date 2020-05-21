@@ -13,4 +13,7 @@ import com.era.views.SubramosJFrame;
  */
 public class SubramosViewController extends SubramosJFrame {
     
+    public SubramosViewController() {
+        super("window_title_subramos");
+    }
 }

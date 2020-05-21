@@ -15,7 +15,6 @@ import com.era.views.LoadingWaitJFrame;
 public class LoadingViewController extends LoadingWaitJFrame {
     
     public LoadingViewController(){
-        super();
         
         JFrameUtils.getInstance().setIconToWindow(this);
     }

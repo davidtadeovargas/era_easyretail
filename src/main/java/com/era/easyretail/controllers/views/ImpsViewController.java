@@ -13,4 +13,7 @@ import com.era.views.ImpsJFrame;
  */
 public class ImpsViewController extends ImpsJFrame {
     
+    public ImpsViewController() {
+        super("window_title_imps");
+    }
 }

@@ -13,4 +13,7 @@ import com.era.views.DocumentosTimbradosJFrame;
  */
 public class DocumentosTimbradosViewController extends DocumentosTimbradosJFrame {
     
+    public DocumentosTimbradosViewController() {
+        super("window_title_docutimbr");
+    }
 }

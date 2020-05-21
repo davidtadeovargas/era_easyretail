@@ -13,4 +13,7 @@ import com.era.views.NewClienExpJFrame;
  */
 public class NewClienExpViewController extends NewClienExpJFrame {
     
+    public NewClienExpViewController() {
+        super("window_title_newclient");
+    }
 }

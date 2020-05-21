@@ -56,7 +56,7 @@ public class SearchViewController extends SearchJFrame {
     
     protected SearchViewController() throws Exception{
         
-        this.setPropertyTitle("general_search_title");
+        super("general_search_title");
         
         alwaysOnTop();
                 

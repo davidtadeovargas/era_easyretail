@@ -13,4 +13,7 @@ import com.era.views.ConfGralJFrame;
  */
 public class ConfGralViewController extends ConfGralJFrame {
     
+    public ConfGralViewController() {
+        super("window_title_confgral");
+    }
 }

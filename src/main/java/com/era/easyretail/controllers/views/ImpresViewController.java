@@ -13,4 +13,7 @@ import com.era.views.ImpresJFrame;
  */
 public class ImpresViewController extends ImpresJFrame {
     
+    public ImpresViewController() {
+        super("window_title_impres");
+    }
 }

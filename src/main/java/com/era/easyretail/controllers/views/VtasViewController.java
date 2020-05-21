@@ -13,4 +13,7 @@ import com.era.views.VtasJFrame;
  */
 public class VtasViewController extends VtasJFrame {
     
+    public VtasViewController() {
+        super("window_title_sales");
+    }
 }

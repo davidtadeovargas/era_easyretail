@@ -13,4 +13,7 @@ import com.era.views.SalidaJFrame;
  */
 public class SalidaViewController extends SalidaJFrame {
     
+    public SalidaViewController() {
+        super("window_title_salida");
+    }
 }
