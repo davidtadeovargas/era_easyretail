@@ -5,10 +5,11 @@
  */
 package com.era.easyretail.validators;
 
-import com.era.easyretail.validators.exceptions.MissingAlmacenException;
 import com.era.easyretail.validators.exceptions.MissingUserException;
 import com.era.easyretail.validators.exceptions.NotExistsUserException;
+import com.era.easyretail.validators.exceptions.WarehouseNotExistsException;
 import com.era.models.User;
+import com.era.models.Warehouse;
 import com.era.repositories.RepositoryFactory;
 import javax.swing.JTextField;
 
@@ -29,8 +30,14 @@ public class UpdateUsersValidator implements IValidate {
         if(user.getText().isEmpty()){
             throw new MissingUserException();
         }
-        if(almacen.getText().isEmpty()){
-            throw new MissingAlmacenException();
+        if(!almacen.getText().isEmpty()){
+            
+            //Validate if the warehouse exists
+            final String warehouseCode = almacen.getText().trim();
+            final Warehouse Warehouse_ = (Warehouse) RepositoryFactory.getInstance().getWarehousesRepository().getByCode(warehouseCode);
+            if(Warehouse_ == null){
+                throw new WarehouseNotExistsException();
+            }            
         }
         
         //Validate that the user not exists
@@ -41,5 +48,13 @@ public class UpdateUsersValidator implements IValidate {
         }
         
         //All is correct
-    }       
+    }
+
+    public void setUser(JTextField user) {
+        this.user = user;
+    }
+
+    public void setAlmacen(JTextField almacen) {
+        this.almacen = almacen;
+    }
 }

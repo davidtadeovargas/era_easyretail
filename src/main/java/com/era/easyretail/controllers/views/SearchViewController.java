@@ -173,7 +173,7 @@ public class SearchViewController extends SearchJFrame {
                     break;
 
                case WAREHOUSES:
-                    list = RepositoryManager_.getWarehouseRepository().getAll();
+                    list = RepositoryManager_.getWarehousesRepository().getAll();
                     break;
 
                case CLASSIFICATIONS:

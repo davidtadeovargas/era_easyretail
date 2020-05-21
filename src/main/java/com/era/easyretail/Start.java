@@ -16,7 +16,6 @@ import com.era.easyretail.constants.Constants;
 import com.era.easyretail.controllers.views.DBFileConnectionConfigurationController;
 import com.era.easyretail.premium.PremiumFunctionsManager;
 import com.era.easyretail.controllers.views.LoginLocalViewController;
-import com.era.easyretail.controllers.views.PresentationController;
 import com.era.easyretail.controllers.views.ViewControlersFactory;
 import com.era.httpclient.subscriber.HttpClientErrorSubscriberInterface;
 import com.era.logger.LoggerUtility;
@@ -152,9 +151,9 @@ public class Start {
                 
         LoggerUtility.getSingleton().logInfo(Start.class, "Licenciamiento: Obteniendo información de licenciamiento");
 
-        UtilitiesFactory.getSingleton().getSessionUtility().getUser().setStation("INICIAL");
-        UtilitiesFactory.getSingleton().getSessionUtility().getUser().setSucursal("INICIAL");
-        UtilitiesFactory.getSingleton().getSessionUtility().getUser().setEstacglo("INICIAL");
+        UtilitiesFactory.getSingleton().getSessionUtility().getUser().setCode("INICIAL");
+        UtilitiesFactory.getSingleton().getSessionUtility().getUser().setSucu("INICIAL");
+        UtilitiesFactory.getSingleton().getSessionUtility().getUser().setEstac("INICIAL");
         
         License License = RepositoryFactory.getInstance().getLicenseRepository().getLicense();
 

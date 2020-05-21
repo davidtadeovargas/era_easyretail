@@ -5,12 +5,13 @@
  */
 package com.era.easyretail.controllers.views;
 
+import com.era.datamodels.enums.SearchCommonTypeEnum;
 import com.era.easyretail.validators.NewUsersValidator;
 import com.era.easyretail.validators.UpdateUsersValidator;
 import com.era.easyretail.validators.exceptions.ExistsUserException;
-import com.era.easyretail.validators.exceptions.MissingAlmacenException;
 import com.era.easyretail.validators.exceptions.MissingUserException;
 import com.era.easyretail.validators.exceptions.NotExistsUserException;
+import com.era.easyretail.validators.exceptions.WarehouseNotExistsException;
 import com.era.logger.LoggerUtility;
 import com.era.models.User;
 import com.era.repositories.RepositoryFactory;
@@ -53,6 +54,11 @@ public class UsrsViewController extends UsrsJFrame {
             
             jTEstac.grabFocus();
 
+            //Onlu numbers
+            this.JComponentUtils.onlyNumbers(jTDesc);
+            this.JComponentUtils.onlyNumbers(jTComi);
+            this.JComponentUtils.onlyNumbers(jTCP);
+            
             //Get all the users and load them in table
             loadUsersInTable();
             
@@ -63,7 +69,10 @@ public class UsrsViewController extends UsrsJFrame {
                 final User User = (User)Object;
                 
                 //Save the selected user globally
-                User_ = User;
+                User_ = User;                                
+                
+                //Clear all fields befor load new ones
+                clearAllForm();
                 
                 //The user code can not change for editing
                 jTEstac.setEditable(false);
@@ -95,9 +104,76 @@ public class UsrsViewController extends UsrsJFrame {
             });
             jBDelImg.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jBDelImgActionPerformed(evt);
+            });
+            jBtnAlmacen.addActionListener((java.awt.event.ActionEvent evt) -> {
+                jBtnAlmacenActionPerformed(evt);
+            });
+            jBVe.addActionListener((java.awt.event.ActionEvent evt) -> {
+                jBVeActionPerformed(evt);
             });            
-                    
+                                
         }catch (Exception ex) {
+            LoggerUtility.getSingleton().logError(UsrsViewController.class, ex);
+            try {
+                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+            } catch (Exception ex1) {
+                Logger.getLogger(UsrsViewController.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+        }
+    }
+    
+    private void jBVeActionPerformed(java.awt.event.ActionEvent evt) {
+        
+        try{
+            
+            //First select user
+            if(!jTab.isRowSelected()){
+                final OKDialog OKDialog = DialogsFactory.getSingleton().getOKDialog(baseJFrame);
+                OKDialog.setPropertyText("selection_first");
+                OKDialog.show();
+                return;
+            }
+
+            //Cast the model
+            final User User = (User)this.jTab.getRowSelected();
+            
+            //Validate that the image exists before
+            final String userImagePath = UtilitiesFactory.getSingleton().getImagesUtility().getUserImagePath(User.getCode());
+            if(!UtilitiesFactory.getSingleton().getFilesUtility().fileExists(userImagePath)){
+                DialogsFactory.getSingleton().showErrorOKDialog(baseJFrame, "errors_file_not_exists");
+                return;
+            }
+            
+            //Open the image
+            UtilitiesFactory.getSingleton().getImagesUtility().openImageInVisor(userImagePath);            
+            
+        }catch (Exception ex) {
+                    
+            LoggerUtility.getSingleton().logError(UsrsViewController.class, ex);
+            try {
+                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+            } catch (Exception ex1) {
+                Logger.getLogger(UsrsViewController.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+        }
+    }
+    
+    private void jBtnAlmacenActionPerformed(java.awt.event.ActionEvent evt) {
+        
+        try{
+            
+            //Search warehouse
+            final SearchViewController SearchViewController = new SearchViewController();
+            SearchViewController.setSEARCH_TYPE(SearchCommonTypeEnum.WAREHOUSES);
+            SearchViewController.setButtonAceptClicked(() -> {
+
+                final String warehouseCode = SearchViewController.getCod();
+                jTxtAlmacen.setText(warehouseCode);
+            });
+            SearchViewController.setVisible();
+            
+        }catch (Exception ex) {
+                    
             LoggerUtility.getSingleton().logError(UsrsViewController.class, ex);
             try {
                 DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
@@ -118,9 +194,11 @@ public class UsrsViewController extends UsrsJFrame {
                 OKDialog.show();
                 return;
             }
+            //Cast the model
+            final User User = (User)this.jTab.getRowSelected();
             
             //Validate that the user has asociated image
-            final boolean userImageExists = UtilitiesFactory.getSingleton().getImagesUtility().usersImageExists(titleWindow);
+            final boolean userImageExists = UtilitiesFactory.getSingleton().getImagesUtility().usersImageExists(User.getCode());
             if(!userImageExists){
                 
                 final OKDialog OKDialog = DialogsFactory.getSingleton().getOKDialog(baseJFrame);
@@ -130,21 +208,16 @@ public class UsrsViewController extends UsrsJFrame {
             }
             
             //Question to continue
-            final QuestionDialog QuestionDialog = DialogsFactory.getSingleton().getQuestionDialog(baseJFrame);
-            QuestionDialog.setPropertyText("");
-            QuestionDialog.setOKDialogInterface((JFrame jFrame) -> {
+            DialogsFactory.getSingleton().showQuestionContinueDialog(baseJFrame, (JFrame jFrame) -> {
             
                 try{
                     
-                    //Get user model
-                    final User User = (User) jTab.getRowSelected();
-
                     //Remove image from disk
-                    UtilitiesFactory.getSingleton().getImagesUtility().deleteUserImage(User.getStation());
+                    UtilitiesFactory.getSingleton().getImagesUtility().deleteUserImage(User.getCode());
 
-                     //Remove image from user
+                    //Remove image from user
                     jLImg.setVisible(false);
-                    jLImg.setIcon(null);                                
+                    jLImg.setIcon(null);
 
                     //Show success dialog
                     final OKDialog OKDialog = DialogsFactory.getSingleton().getOKDialog(jFrame);
@@ -161,7 +234,6 @@ public class UsrsViewController extends UsrsJFrame {
                     }
                 }
             });
-            QuestionDialog.show();                        
             
         }catch (Exception ex) {
                     
@@ -213,10 +285,10 @@ public class UsrsViewController extends UsrsJFrame {
                     final String finalPath = absolutePath + "\\" + fileName;
                     
                     //Save the user image in folder
-                    UtilitiesFactory.getSingleton().getImagesUtility().saveUserImage(User.getStation(), finalPath);
+                    UtilitiesFactory.getSingleton().getImagesUtility().saveUserImage(User.getCode(), finalPath);
                     
                     //Load image in the panel
-                    jLImg.setIcon(new ImageIcon(UtilitiesFactory.getSingleton().getImagesUtility().getUserImagePath(User.getStation())));
+                    jLImg.setIcon(new ImageIcon(UtilitiesFactory.getSingleton().getImagesUtility().getUserImagePath(User.getCode())));
                     jLImg.setVisible(true);
                     
                 }catch (Exception ex) {
@@ -252,6 +324,8 @@ public class UsrsViewController extends UsrsJFrame {
                 try{
 
                     final NewUsersValidator UsersValidator = new NewUsersValidator();
+                    UsersValidator.setUser(jTEstac);
+                    UsersValidator.setAlmacen(jTxtAlmacen);
                     UsersValidator.validate();
 
                 }catch(Exception ex){
@@ -262,7 +336,7 @@ public class UsrsViewController extends UsrsJFrame {
                     else if(ex instanceof MissingUserException){
 
                     }
-                    else if(ex instanceof MissingAlmacenException){
+                    else if(ex instanceof WarehouseNotExistsException){
 
                     }
 
@@ -277,6 +351,8 @@ public class UsrsViewController extends UsrsJFrame {
                 try{
 
                     final UpdateUsersValidator UpdateUsersValidator = new UpdateUsersValidator();
+                    UpdateUsersValidator.setUser(jTEstac);
+                    UpdateUsersValidator.setAlmacen(jTxtAlmacen);
                     UpdateUsersValidator.validate();
 
                 }catch(Exception ex){
@@ -287,7 +363,7 @@ public class UsrsViewController extends UsrsJFrame {
                     else if(ex instanceof MissingUserException){
 
                     }
-                    else if(ex instanceof MissingAlmacenException){
+                    else if(ex instanceof WarehouseNotExistsException){
 
                     }
 
@@ -329,7 +405,7 @@ public class UsrsViewController extends UsrsJFrame {
                     
                     if(!update){
                         User_ = new User();
-                        User_.setStation(jTEstac.getText().trim());
+                        User_.setCode(jTEstac.getText().trim());
                     }
                     
                      //Create the user model
@@ -352,23 +428,21 @@ public class UsrsViewController extends UsrsJFrame {
                     User_.setCity(city);
                     User_.setCommission(commision);
                     User_.setPtovta(ptovta);
-                    User_.setEmail(email);
+                    User_.setEmail(email);                    
+                    User_.setPassword(new String(JTContrasenia.getPassword()));
                     
                     //Save or update the new user in database
                     if(!update){
                         RepositoryFactory.getInstance().getUsersRepository().addUser(User_);
                     }
                     else{
-                        RepositoryFactory.getInstance().getUsersRepository().update(User_);
+                        RepositoryFactory.getInstance().getUsersRepository().updateUser(User_);
                     }
                                         
-                    //Clear table selection                    
-                    jTab.clearSelection();
-
                     jTEstac.grabFocus();
 
                     //Reload the users table
-                    jTab.reloadTable();
+                    loadUsersInTable();
                     
                     final OKDialog OKDialog = DialogsFactory.getSingleton().getOKDialog(baseJFrame);
                     OKDialog.setPropertyText("operation_completed");
@@ -401,17 +475,25 @@ public class UsrsViewController extends UsrsJFrame {
         saveOrUpdateUser(true);
     }
     
-    private void jBLimActionPerformed(java.awt.event.ActionEvent evt) {                                             
+    private void jBLimActionPerformed(java.awt.event.ActionEvent evt) {
+        clearAllForm();
+        
+        //Clear table selection
+        jTab.clearSelection();
+    }
+    
+    private void clearAllForm(){
         
         try{                        
             
+            JTContrasenia.setText("");
             jTEstac.setText("");
             jTxtAlmacen.setText("");
-            jTNom.getText();                                  
-            jTCall.getText();                                
-            jTCol.getText();                                
-            jTCP.getText();  
-            jTDesc.getText();
+            jTNom.setText("");
+            jTCall.setText("");
+            jTCol.setText("");
+            jTCP.setText("0");
+            jTDesc.setText("0");
             jCHabDesc.setSelected(false);
             jTTel.setText("");
             jTCel.setText("");
@@ -427,8 +509,12 @@ public class UsrsViewController extends UsrsJFrame {
             jTCorreo.setText("");
             
             //Clear table selection
-            jTab.clearSelection();
+            //jTab.clearSelection();
             
+            //Remove image from user
+            jLImg.setVisible(false);
+            jLImg.setIcon(null);
+
             jTEstac.setEditable(true);
                 
         }catch (Exception ex) {
@@ -462,7 +548,7 @@ public class UsrsViewController extends UsrsJFrame {
         try{                        
             
             //If no row selected return
-            if(!jTab.isRowSelected(WIDTH)){
+            if(!jTab.isRowSelected()){
                 final OKDialog OKDialog = DialogsFactory.getSingleton().getOKDialog(baseJFrame);
                 OKDialog.setPropertyText("selection_first");
                 OKDialog.show();
@@ -470,7 +556,7 @@ public class UsrsViewController extends UsrsJFrame {
             }
             
             //Get the selected model
-            final User User = (User) jTab.getSelectionModel();
+            final User User = (User) jTab.getRowSelected();
             
             //Supervisor user can not be deleted
             if(User.isSupervisor()){
@@ -487,17 +573,20 @@ public class UsrsViewController extends UsrsJFrame {
                 
                 try{
                     
-                    //Get the selected model
-                    final User User1 = (User) jTab.getSelectionModel();
-
                     //Delete user from database
-                    RepositoryFactory.getInstance().getUsersRepository().deleteByEstac(User1.getStation());
+                    RepositoryFactory.getInstance().getUsersRepository().delete(User);
 
                     //Show success dialog to user
                     final OKDialog OKDialog = DialogsFactory.getSingleton().getOKDialog(baseJFrame);
                     OKDialog.setPropertyText("operation_completed");
                     OKDialog.show();
 
+                    //Clear all form
+                    clearAllForm();
+                    
+                    //Clear table selection
+                    jTab.clearSelection();
+                    
                     //Realod the users table
                     loadUsersInTable();
                     
@@ -554,7 +643,9 @@ public class UsrsViewController extends UsrsJFrame {
          
             //Get all the users and load them in table
             final List<User> users = (List<User>) RepositoryFactory.getInstance().getUsersRepository().getAll();
-            jTab.clearRows();
+            if(jTab.cointainsRows()){
+                jTab.clearRows();
+            }            
             jTab.initTable(users);
 
         }catch (Exception ex) {
@@ -589,10 +680,11 @@ public class UsrsViewController extends UsrsJFrame {
         
         try{
             
-            jTEstac.setText(User.getStation());
+            jTEstac.setText(User.getCode());
             jTDesc.setText(String.valueOf(User.getDisccount()));
             final String decryptedPassword = UtilitiesFactory.getSingleton().getSecurityUtil().decryptString(User.getPassword());            
-            JTContrasenia.setText(decryptedPassword);
+            LoggerUtility.getSingleton().logInfo(UsrsViewController.class, "Decrypted password: " + decryptedPassword);
+            JTContrasenia.setText(decryptedPassword);            
             jTCall.setText(User.getStreet());
             jTCol.setText(User.getColony());
             jTCP.setText(String.valueOf(User.getCp()));
@@ -623,10 +715,10 @@ public class UsrsViewController extends UsrsJFrame {
             }
             
             //If the user has image
-            if(UtilitiesFactory.getSingleton().getImagesUtility().usersImageExists(User.getStation())){
+            if(UtilitiesFactory.getSingleton().getImagesUtility().usersImageExists(User.getCode())){
                 
                 //Get the user image path
-                final String userImagePath = UtilitiesFactory.getSingleton().getImagesUtility().getUserImagePath(titleWindow);
+                final String userImagePath = UtilitiesFactory.getSingleton().getImagesUtility().getUserImagePath(User.getCode());
                 
                 //Load the image in the panel
                 jLImg.setIcon(new ImageIcon(userImagePath));
