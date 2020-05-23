@@ -5,23 +5,25 @@
  */
 package com.era.easyretail.controllers.views;
 
-import com.era.easyretail.constants.Constants;
+import com.era.easyretail.enums.DBFileConnectionConfigurationType;
 import com.era.logger.LoggerUtility;
-import com.era.repositories.RepositoryFactory;
 import com.era.repositories.utils.MysqlScriptsUtil;
 import com.era.utilities.ConfigFileUtil;
 import com.era.utilities.SecurityUtil;
 import com.era.utilities.UtilitiesFactory;
 import com.era.utilities.models.ConfigFileModel;
 import com.era.views.DBFileConnectionConfigurationJFrame;
+import com.era.views.dialogs.DialogsFactory;
 import java.awt.event.ActionEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.ObjectInputStream;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 /**
@@ -31,9 +33,11 @@ import javax.swing.JOptionPane;
 public class DBFileConnectionConfigurationController extends DBFileConnectionConfigurationJFrame {
     
     private ConfigFileModel ConfigFileModel;
-    private boolean closeSystem;
-    private boolean onSaveExistApp;
     private OnSave OnSave;
+    private DBFileConnectionConfigurationType DBFileConnectionConfigurationType;
+    
+    
+    
     
     public DBFileConnectionConfigurationController(){
         
@@ -43,28 +47,6 @@ public class DBFileConnectionConfigurationController extends DBFileConnectionCon
         jTNom.setEnabled(true); 
         jTNom.setToolTipText("");
                    
-        JComponentUtils.addComponentToKeyPress(jBGua);
-        JComponentUtils.addComponentToKeyPress(jP1);
-        JComponentUtils.addComponentToKeyPress(jBSal);
-        JComponentUtils.addComponentToKeyPress(jTUsr);
-        JComponentUtils.addComponentToKeyPress(jTBD);
-        JComponentUtils.addComponentToKeyPress(jPCont);
-        JComponentUtils.addComponentToKeyPress(jTNom);
-        JComponentUtils.addComponentToKeyPress(jBProb);
-        JComponentUtils.addComponentToKeyPress(jCMosC);
-        JComponentUtils.addComponentToKeyPress(jTSuc);
-        JComponentUtils.addComponentToKeyPress(jTNoCaj);
-        JComponentUtils.addComponentToKeyPress(jTPort);        
-                
-        JComponentUtils.selectAllTextInControlOnFocus(jTInst);
-        JComponentUtils.selectAllTextInControlOnFocus(jTUsr);
-        JComponentUtils.selectAllTextInControlOnFocus(jTBD);
-        JComponentUtils.selectAllTextInControlOnFocus(jPCont);
-        JComponentUtils.selectAllTextInControlOnFocus(jTNom);
-        JComponentUtils.selectAllTextInControlOnFocus(jTSuc);
-        JComponentUtils.selectAllTextInControlOnFocus(jTNoCaj);
-        JComponentUtils.selectAllTextInControlOnFocus(jTPort);        
-        
         JComponentUtils.interceptWindowClosingToButton(jBSal);
         
         JComponentUtils.onKeyTypedToMayus(jTBD);
@@ -121,15 +103,24 @@ public class DBFileConnectionConfigurationController extends DBFileConnectionCon
             }            
         });
         
-        //If config file exists load it
-        if(!new File(Constants.CONFIG_FILE).exists()){
+        //If config file exists load it        
+        final boolean exists = UtilitiesFactory.getSingleton().getConfigFileUtil().configFileExists();
+        if(exists){
             try{            
                 loadConfigFile();
             }catch(Exception e){
                 LoggerUtility.getSingleton().logError(DBFileConnectionConfigurationController.class, e);
             }
         }
+        else{
+            
+        }
     }
+
+    public void setDBFileConnectionConfigurationType(DBFileConnectionConfigurationType DBFileConnectionConfigurationType) {
+        this.DBFileConnectionConfigurationType = DBFileConnectionConfigurationType;
+    }
+        
     
     private void showOrHidePassword(){
         
@@ -262,16 +253,42 @@ public class DBFileConnectionConfigurationController extends DBFileConnectionCon
     }
     
     private void buttonExitClicked(ActionEvent e){
+    
+        try{
+            
+            try{
                 
-        Object[] op = {"Si","No"};
-        int iRes    = JOptionPane.showOptionDialog(this, "¿Seguro que quieres salir?", "Salir Aplicación", JOptionPane.YES_NO_OPTION,  JOptionPane.QUESTION_MESSAGE, null, op, op[0]);
-        if(iRes==JOptionPane.NO_OPTION || iRes==JOptionPane.CLOSED_OPTION)
-            return;   
+                //If the user is creating the config file for the first time
+                if(DBFileConnectionConfigurationType == DBFileConnectionConfigurationType.NEW){
+
+                    //Question if continue
+                    DialogsFactory.getSingleton().showQuestionContinueDialog(baseJFrame, (JFrame jFrame) -> {
+                        System.exit(0);
+                    });
+                }
+                else{ //The config file is being upated
+                    dispose();
+                }
                 
-        if(closeSystem)
-            System.exit(0);                    
-        else            
-            dispose();
+            }catch (Exception ex) {
+                    
+                LoggerUtility.getSingleton().logError(DBFileConnectionConfigurationController.class, ex);
+                try {
+                    DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+                } catch (Exception ex1) {
+                    Logger.getLogger(DBFileConnectionConfigurationController.class.getName()).log(Level.SEVERE, null, ex1);
+                }
+            }                
+            
+        }catch (Exception ex) {
+                    
+            LoggerUtility.getSingleton().logError(DBFileConnectionConfigurationController.class, ex);
+            try {
+                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+            } catch (Exception ex1) {
+                Logger.getLogger(DBFileConnectionConfigurationController.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+        }
     }
     
     private void buttonSaveClicked(ActionEvent e){
@@ -294,8 +311,9 @@ public class DBFileConnectionConfigurationController extends DBFileConnectionCon
             final String instance = jTInst.getText().trim();
             if(instance.compareTo("")==0)
             {
-                JOptionPane.showMessageDialog(null, "El campo de instancia esta vacio.", "Campo vacio", JOptionPane.INFORMATION_MESSAGE);
-                jTInst.grabFocus();           
+                DialogsFactory.getSingleton().showOKCallbackDialog(baseJFrame, "empty_fields", (JFrame jFrame) -> {
+                    jTInst.grabFocus();
+                });
                 return;
             }
 
@@ -303,19 +321,19 @@ public class DBFileConnectionConfigurationController extends DBFileConnectionCon
             final String user = jTUsr.getText().trim();                
             if(user.compareTo("")==0)
             {
-                JOptionPane.showMessageDialog(null, "El campo de usuario esta vacio.", "Campo vacio", JOptionPane.INFORMATION_MESSAGE);
-                jTUsr.grabFocus();            
+                DialogsFactory.getSingleton().showOKCallbackDialog(baseJFrame, "empty_fields", (JFrame jFrame) -> {
+                    jTUsr.grabFocus();
+                });
                 return;
             }
-
-            final String password = new String(jPCont.getPassword()).trim();
 
             //Database should contains a value
             final String database = jTBD.getText().trim();
             if(database.compareTo("")==0)
             {
-                JOptionPane.showMessageDialog(null, "El campo de base de datos esta vacio.", "Campo vacio", JOptionPane.INFORMATION_MESSAGE);
-                jTBD.grabFocus();            
+                DialogsFactory.getSingleton().showOKCallbackDialog(baseJFrame, "empty_fields", (JFrame jFrame) -> {
+                    jTBD.grabFocus();
+                });
                 return;
             }
 
@@ -323,87 +341,110 @@ public class DBFileConnectionConfigurationController extends DBFileConnectionCon
             final String sucursal = jTSuc.getText().trim();                
             if(sucursal.compareTo("")==0)
             {
-                JOptionPane.showMessageDialog(null, "El campo de base de la sucursal esta vacio.", "Campo vacio", JOptionPane.INFORMATION_MESSAGE);
-                jTSuc.grabFocus();            
+                DialogsFactory.getSingleton().showOKCallbackDialog(baseJFrame, "empty_fields", (JFrame jFrame) -> {
+                    jTSuc.grabFocus();
+                });
                 return;
             }
 
             final String nocaj = jTNoCaj.getText().trim();
             if(nocaj.compareTo("")==0)
             {
-                JOptionPane.showMessageDialog(null, "El campo del número de caja esta vacio.", "Campo vacio", JOptionPane.INFORMATION_MESSAGE);
-                jTNoCaj.grabFocus();            
+                DialogsFactory.getSingleton().showOKCallbackDialog(baseJFrame, "empty_fields", (JFrame jFrame) -> {
+                    jTNoCaj.grabFocus();
+                });
                 return;
             }
 
             final String port = jTPort.getText().trim();
             if(port.compareTo("")==0)
             {
-                JOptionPane.showMessageDialog(null, "El campo del puerto esta vacio.", "Campo vacio", JOptionPane.INFORMATION_MESSAGE);
-                jTPort.grabFocus();           
+                DialogsFactory.getSingleton().showOKCallbackDialog(baseJFrame, "empty_fields", (JFrame jFrame) -> {
+                    jTPort.grabFocus();
+                });
                 return;
             }
 
             //Check database connection before continue
+            final String password = new String(jPCont.getPassword()).trim();
             final boolean successConnection = MysqlScriptsUtil.getInstance().testSysConnection(user, password, instance, Integer.valueOf(port));
             if(!successConnection){
-                JOptionPane.showMessageDialog(null, "Conexión no exitosa a la base de datos", "Conexión", JOptionPane.ERROR_MESSAGE);
+                DialogsFactory.getSingleton().showErrorOKCallbackDialog(baseJFrame, "errors_failed_connection_to_db", (JFrame jFrame) -> {
+                    jTInst.grabFocus();
+                });
                 return;
             }           
             
-            Object[] op = {"Si","No"};
-            int iRes = JOptionPane.showOptionDialog(this, "¿Seguro que estan bien los datos?", "Guardar conexión", JOptionPane.YES_NO_OPTION,  JOptionPane.QUESTION_MESSAGE, null, op, op[0]);
-            if(iRes==JOptionPane.NO_OPTION || iRes==JOptionPane.CLOSED_OPTION)
-                return;
-
-            //If file exists
-            if(ConfigFileUtil.getSingleton().configFileExists())
-            {
-               JOptionPane.showMessageDialog(null, "El archivo de configuracion ya existe. Borrando archivo.", "Instalación", JOptionPane.ERROR_MESSAGE, null); 
-
-               ConfigFileUtil.getSingleton().deleteFile();
-
-               //If any error deleting notice user
-               if(ConfigFileUtil.getSingleton().configFileExists())
-               {
-                   JOptionPane.showMessageDialog(null, "No se pudo borrar el archivo existente de configuración.", "Archivo de Configuración", JOptionPane.INFORMATION_MESSAGE); 
-                   return;
-               }
-            }                
-
-            //Create the config file in disk
-            final ConfigFileModel ConfigFileModel_ = new ConfigFileModel();
-            ConfigFileModel_.setInstance(instance);
-            ConfigFileModel_.setUser(user);
-            ConfigFileModel_.setPassword(password);
-            ConfigFileModel_.setDb(database);
-            ConfigFileModel_.setSucursal(sucursal);
-            ConfigFileModel_.setCashNumber(nocaj);
-            ConfigFileModel_.setPort(port);
-            ConfigFileModel_.setCompanyName(companyName);
-
-            ConfigFileUtil.getSingleton(Constants.CONFIG_FILE).createConfigFile(ConfigFileModel_);
-                        
-            LoggerUtility.getSingleton().logInfo(DBFileConnectionConfigurationController.class, "Exito en el archivo de configuración.");            
-        
-            //Should close system to reload config file?
-            if(onSaveExistApp){
+            //Question if continue
+            DialogsFactory.getSingleton().showQuestionContinueDialog(baseJFrame, (JFrame jFrame) -> {
                 
-                JOptionPane.showMessageDialog(null, "La aplicación se va a cerrar.", "Aplicación", JOptionPane.INFORMATION_MESSAGE);
+                try{
+                 
+                    //If file exists
+                    if(ConfigFileUtil.getSingleton().configFileExists())
+                    {
+                        //Delete the file
+                       ConfigFileUtil.getSingleton().deleteFile();
+                    }                
 
-                //Reigster the user logut                
-                RepositoryFactory.getInstance().getLogRepository().userLoggedOutToSystem();
+                    //Create the config file in disk
+                    final ConfigFileModel ConfigFileModel_ = new ConfigFileModel();
+                    ConfigFileModel_.setInstance(instance);
+                    ConfigFileModel_.setUser(user);
+                    ConfigFileModel_.setPassword(password);
+                    ConfigFileModel_.setDb(database);
+                    ConfigFileModel_.setSucursal(sucursal);
+                    ConfigFileModel_.setCashNumber(nocaj);
+                    ConfigFileModel_.setPort(port);
+                    ConfigFileModel_.setCompanyName(companyName);
+                    UtilitiesFactory.getSingleton().getConfigFileUtil().createConfigFile(ConfigFileModel_);
+
+                    LoggerUtility.getSingleton().logInfo(DBFileConnectionConfigurationController.class, "Exito en el archivo de configuración.");            
+
+                    //Inversion of control
+                    if(OnSave!=null){
+                        OnSave.OnSave();
+                    }
+                    
+                    //If the user is creating for the first time the config file
+                    if(DBFileConnectionConfigurationType == DBFileConnectionConfigurationType.NEW){
+                        this.close();
+                    }
+                    else{ //User editing the existing config file
+                    
+                        //
+                        DialogsFactory.getSingleton().showOKCallbackDialog(jFrame, "system_will_close", (JFrame jFrame1) -> {
+                            
+                            try{
                                 
-                System.exit(0);
-            }
-            else{
-                this.close();
-            }
-            
-            //Inversion of control
-            if(OnSave!=null){
-                OnSave.OnSave();
-            }
+                                //Reigster the user logut
+                                UtilitiesFactory.getSingleton().getSessionUtility().deslogUserSession();
+
+                                //Exit app
+                                System.exit(0);
+                                
+                            }catch (Exception ex) {
+                    
+                                LoggerUtility.getSingleton().logError(DBFileConnectionConfigurationController.class, ex);
+                                try {
+                                    DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+                                } catch (Exception ex1) {
+                                    Logger.getLogger(DBFileConnectionConfigurationController.class.getName()).log(Level.SEVERE, null, ex1);
+                                }
+                            }
+                        });
+                    }
+                    
+                }catch (Exception ex) {
+                    
+                    LoggerUtility.getSingleton().logError(DBFileConnectionConfigurationController.class, ex);
+                    try {
+                        DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+                    } catch (Exception ex1) {
+                        Logger.getLogger(DBFileConnectionConfigurationController.class.getName()).log(Level.SEVERE, null, ex1);
+                    }
+                }
+            });
             
         }catch(Exception ex){
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -413,7 +454,8 @@ public class DBFileConnectionConfigurationController extends DBFileConnectionCon
     
     private void loadConfigFile() throws Exception {
                 
-        try(FileInputStream fileIn = new FileInputStream(Constants.CONFIG_FILE); ObjectInputStream in = new ObjectInputStream(fileIn);){
+        final String configFilePath = UtilitiesFactory.getSingleton().getConfigFileUtil().getConfigFilePath();
+        try(FileInputStream fileIn = new FileInputStream(configFilePath); ObjectInputStream in = new ObjectInputStream(fileIn);){
             ConfigFileModel = (ConfigFileModel)in.readObject();
          }
 
@@ -440,10 +482,6 @@ public class DBFileConnectionConfigurationController extends DBFileConnectionCon
         jTPort.setText(ConfigFileModel.getPort());
     }
 
-    public void setCloseSystem(boolean closeSystem) {
-        this.closeSystem = closeSystem;
-    }
-    
     public interface OnSave{
         public void OnSave();
     }
@@ -451,10 +489,4 @@ public class DBFileConnectionConfigurationController extends DBFileConnectionCon
     public void setOnSave(OnSave OnSave) {
         this.OnSave = OnSave;
     }
-
-    public void setOnSaveExistApp(boolean onSaveExistApp) {
-        this.onSaveExistApp = onSaveExistApp;
-    }
-    
-    
 }

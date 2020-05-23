@@ -12,11 +12,11 @@ import com.era.httpclient.GetComputerStatusHttpClient;
 import com.era.views.LoginLicenseJFrame;
 import com.era.repositories.RepositoryFactory;
 import com.era.datamodels.ComputerLicenseDataModel;
-import com.era.easyretail.constants.Constants;
 import com.era.easyretail.controllers.views.DBFileConnectionConfigurationController;
 import com.era.easyretail.premium.PremiumFunctionsManager;
 import com.era.easyretail.controllers.views.LoginLocalViewController;
 import com.era.easyretail.controllers.views.ViewControlersFactory;
+import com.era.easyretail.enums.DBFileConnectionConfigurationType;
 import com.era.httpclient.subscriber.HttpClientErrorSubscriberInterface;
 import com.era.logger.LoggerUtility;
 import com.era.models.License;
@@ -38,15 +38,12 @@ public class Start {
         
         try{
             
-            //Init the config file path
-            ConfigFileUtil.getSingleton(Constants.CONFIG_FILE);
-            
             //If the configuration file does not exists
             if(!ConfigFileUtil.getSingleton().configFileExists()){
                 
                 //Show the window to create it
                 final DBFileConnectionConfigurationController DBFileConnectionConfigurationController = new DBFileConnectionConfigurationController();
-                DBFileConnectionConfigurationController.setCloseSystem(true);                
+                DBFileConnectionConfigurationController.setDBFileConnectionConfigurationType(DBFileConnectionConfigurationType.NEW);
                 DBFileConnectionConfigurationController.setOnSave(() -> {
                     try{
                         initSystem();

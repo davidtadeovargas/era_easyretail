@@ -3,13 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.era.easyretail.constants;
+package com.era.easyretail.enums;
 
 /**
  *
  * @author PC
  */
-public class Constants {
+public enum DBFileConnectionConfigurationType {
     
-    public static final String CONFIG_FILE = "config.cfg";
+    NEW,
+    UPDATE
 }

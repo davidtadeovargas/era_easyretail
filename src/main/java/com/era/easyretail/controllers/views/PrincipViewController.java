@@ -5,6 +5,7 @@
  */
 package com.era.easyretail.controllers.views;
 
+import com.era.easyretail.enums.DBFileConnectionConfigurationType;
 import com.era.easyretail.enums.LoginType;
 import com.era.easyretail.enums.LoginTypeEmpresa;
 import com.era.logger.LoggerUtility;
@@ -14,13 +15,13 @@ import com.era.models.User;
 import com.era.repositories.RepositoryFactory;
 import com.era.utilities.FileChooserUtility;
 import com.era.utilities.UtilitiesFactory;
+import com.era.utilities.WinRegistry;
 import com.era.views.PrincipJFrame;
 import com.era.views.dialogs.DialogsFactory;
 import com.era.views.dialogs.ErrorOKDialog;
 import com.era.views.dialogs.ExceptionDialog;
 import com.era.views.dialogs.OKDialog;
 import com.era.views.dialogs.QuestionDialog;
-import java.awt.Desktop;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
@@ -59,9 +60,6 @@ public class PrincipViewController extends PrincipJFrame {
             jMenIt4.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jMenIt4ActionPerformed(evt);
             });
-            jMenItCambClavSeg.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jMenItCambClavSegActionPerformed(evt);
-            });
             jMMClien.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jMMClienActionPerformed(evt);
             });
@@ -82,12 +80,6 @@ public class PrincipViewController extends PrincipJFrame {
             });
             jMenItSal.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jMenItSalActionPerformed(evt);
-            });
-            jMenItModBD.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jMenItModBDActionPerformed(evt);
-            });
-            jMenItResps.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jMenItRespsActionPerformed(evt);
             });
             jMenItComps.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jMenItCompsActionPerformed(evt);
@@ -185,14 +177,8 @@ public class PrincipViewController extends PrincipJFrame {
             jMCXP.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jMCXPActionPerformed(evt);
             });
-            jMContra.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jMContraActionPerformed(evt);
-            });
             jMenConfigFil.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jMenConfigFilActionPerformed(evt);
-            });
-            jMenCatGral.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jMenCatGralActionPerformed(evt);
             });
             jMenItDeslog.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jMenItDeslogActionPerformed(evt);
@@ -215,14 +201,8 @@ public class PrincipViewController extends PrincipJFrame {
             jMDelLog.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jMDelLogActionPerformed(evt);
             });
-            jMClasProd.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jMClasProdActionPerformed(evt);
-            });
             jMUbiAd.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jMUbiAdActionPerformed(evt);
-            });
-            jMUsr.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jMUsrActionPerformed(evt);
             });
             jMEstacs.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jMEstacsActionPerformed(evt);
@@ -230,68 +210,11 @@ public class PrincipViewController extends PrincipJFrame {
             jMLogProd.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jMLogProdActionPerformed(evt);
             });
-            jMLogK.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jMLogKActionPerformed(evt);
-            });
-            jMLogLin.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jMLogLinActionPerformed(evt);
-            });
-            jMLogMarc.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jMLogMarcActionPerformed(evt);
-            });
-            jMLogFab.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jMLogFabActionPerformed(evt);
-            });
-            jMLogColo.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jMLogColoActionPerformed(evt);
-            });
-            jMLogClas.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jMLogClasActionPerformed(evt);
-            });
-            jMLogPes.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jMLogPesActionPerformed(evt);
-            });
-            jMLogMed.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jMLogMedActionPerformed(evt);
-            });
-            jMLogUnid.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jMLogUnidActionPerformed(evt);
-            });
-            jMLogMon.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jMLogMonActionPerformed(evt);
-            });
-            jMLogImpu.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jMLogImpuActionPerformed(evt);
-            });
-            jMLogConcep.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jMLogConcepActionPerformed(evt);
-            });
-            jMLogAlma.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jMLogAlmaActionPerformed(evt);
-            });
-            jMenuItem1.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jMenuItem1ActionPerformed(evt);
-            });
-            jMLogLug.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jMLogLugActionPerformed(evt);
-            });
-            jMLogUbiE.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jMLogUbiEActionPerformed(evt);
-            });
             jMRepCot.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jMRepCotActionPerformed(evt);
             });
-            jMCatMsj.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jMCatMsjActionPerformed(evt);
-            });
             addWindowStateListener((java.awt.event.WindowEvent evt) -> {
                 formWindowStateChanged(evt);
-            });
-            jMChatC.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jMChatCActionPerformed(evt);
-            });
-            jMChat.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jMChatActionPerformed(evt);
             });
             jBPtoVta.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jBPtoVtaActionPerformed(evt);
@@ -338,77 +261,23 @@ public class PrincipViewController extends PrincipJFrame {
             jMKard.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jMKardActionPerformed(evt);
             });
-            jMCosts.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jMCostsActionPerformed(evt);
-            });
-            jMLogRes.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jMLogResActionPerformed(evt);
-            });
             jMResp.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jMRespActionPerformed(evt);
             });
             jMFluj.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jMFlujActionPerformed(evt);
             });
-            jMClasCli.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jMClasCliActionPerformed(evt);
-            });
-            jMClasProv.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jMClasProvActionPerformed(evt);
-            });
-            jMRepLogCo.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jMRepLogCoActionPerformed(evt);
-            });
             jMModel.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jMModelActionPerformed(evt);
-            });
-            jMTabCompa.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jMTabCompaActionPerformed(evt);
-            });
-            jMenuItem2.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jMenuItem2ActionPerformed(evt);
-            });
-            jMLogMod.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jMLogModActionPerformed(evt);
-            });
-            jMLogTall.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jMLogTallActionPerformed(evt);
-            });
-            jMTallCol.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jMTallColActionPerformed(evt);
             });
             jMLotPed.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jMLotPedActionPerformed(evt);
             });
-            jMRepBackO.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jMRepBackOActionPerformed(evt);
-            });
             jMTip.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jMTipActionPerformed(evt);
             });
-            jMLogTip.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jMLogTipActionPerformed(evt);
-            });
-            jMInvenExpor.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jMInvenExporActionPerformed(evt);
-            });
-            jMEstadisCor.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jMEstadisCorActionPerformed(evt);
-            });
-            jMAsoc.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jMAsocActionPerformed(evt);
-            });
             jMZon.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jMZonActionPerformed(evt);
-            });
-            jMGir.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jMGirActionPerformed(evt);
-            });
-            jMEasCon.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jMEasConActionPerformed(evt);
-            });
-            jMRubr.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jMRubrActionPerformed(evt);
             });
             jMRepCli.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jMRepCliActionPerformed(evt);
@@ -416,29 +285,11 @@ public class PrincipViewController extends PrincipJFrame {
             jMRepProv.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jMRepProvActionPerformed(evt);
             });
-            jMClasJer.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jMClasJerActionPerformed(evt);
-            });
-            jMClasJerP.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jMClasJerPActionPerformed(evt);
-            });
-            jMFlujAct.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jMFlujActActionPerformed(evt);
-            });
-            jMForLin.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jMForLinActionPerformed(evt);
-            });
             jMConcepNot.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jMConcepNotActionPerformed(evt);
             });
             jMImpAlma.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jMImpAlmaActionPerformed(evt);
-            });
-            jMLogConcepNot.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jMLogConcepNotActionPerformed(evt);
-            });
-            jMLogGir.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jMLogGirActionPerformed(evt);
             });
             jMConcepPags.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jMConcepPagsActionPerformed(evt);
@@ -816,12 +667,12 @@ public class PrincipViewController extends PrincipJFrame {
         try{
             
             if(UtilitiesFactory.getSingleton().getFilesUtility().logFileExists())
-            {
-                /*Si el sistema soporta esta característica entonces*/
-                if(Desktop.isDesktopSupported()) 
-                {          
-                    /*Abre el archivo*/
-                    Desktop.getDesktop().edit(UtilitiesFactory.getSingleton().getFilesUtility().getLogFile());
+            {                                                
+                if(UtilitiesFactory.getSingleton().getDesktopUtility().isSupported())
+                {   
+                    //Open the file in edit app of the system
+                    final String logFilePath = UtilitiesFactory.getSingleton().getFilesUtility().getLogFilePath();                
+                    UtilitiesFactory.getSingleton().getDesktopUtility().edit(logFilePath);
                 } 
                 else 
                 {
@@ -830,6 +681,10 @@ public class PrincipViewController extends PrincipJFrame {
                     ErrorOKDialog.setPropertyText("errors_desktop_not_supported");
                     ErrorOKDialog.show();
                 }
+            }
+            else{
+                
+                DialogsFactory.getSingleton().showOKDialog(baseJFrame, "errors_file_not_exists");
             }
             
         }catch(Exception e){
@@ -878,10 +733,10 @@ public class PrincipViewController extends PrincipJFrame {
     
     private void jMenConfigFilActionPerformed(java.awt.event.ActionEvent evt) {                                              
         
-        /*Abre el archivo de configuración*/
-        //BDCon b = new BDCon(false);
-        //b.setVisible(true);
-        
+        //Open the configuration to database screen
+        final DBFileConnectionConfigurationController DBFileConnectionConfigurationController = new DBFileConnectionConfigurationController();
+        DBFileConnectionConfigurationController.setDBFileConnectionConfigurationType(DBFileConnectionConfigurationType.UPDATE);
+        DBFileConnectionConfigurationController.setVisible();
     }
     
     private void jMenCatGralActionPerformed(java.awt.event.ActionEvent evt) {                                            
@@ -943,14 +798,14 @@ public class PrincipViewController extends PrincipJFrame {
         
         try{
             
-            /*Preguntar al usr si esta seguro de querer borrar el archivo*/
+            //Question if continue
             final QuestionDialog QuestionDialog = DialogsFactory.getSingleton().getQuestionDialog(baseJFrame);
             QuestionDialog.setPropertyText("question_delete_log_file");
             QuestionDialog.setOKDialogInterface((JFrame jFrame) -> {
                 
                 try{
                  
-                    UtilitiesFactory.getSingleton().getFilesUtility().deleteLogFile();
+                    UtilitiesFactory.getSingleton().getFilesUtility().resetLogFile();
 
                     final OKDialog OKDialog = DialogsFactory.getSingleton().getOKDialog(baseJFrame);
                     OKDialog.setPropertyText("log_file_reset");
@@ -1794,25 +1649,39 @@ public class PrincipViewController extends PrincipJFrame {
     
     private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {                                           
         
-        /*Object[] op = {"Si","No"};
-        int iRes    = JOptionPane.showOptionDialog(this, "¿Seguro que quieres cerrar sesión?", "Salir", JOptionPane.YES_NO_OPTION,  JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource(Star.sRutIconDu)), op, op[0]);
-        if(iRes==JOptionPane.YES_OPTION){
-            try{
-             
-                HibernateUtil.connectToDbEmpresas();
-                RepositoryManager.getInstance().getLicenseRepository().deleteLicense();                
-                WinRegistry.deleteUserLicense();
+        try{
+            
+            //Question if continue
+            DialogsFactory.getSingleton().showQuestionContinueDialog(baseJFrame, (JFrame jFrame) -> {
+                try{
+                    
+                    //Clear the licence information in system
+                    RepositoryFactory.getInstance().getLicenseRepository().deleteLicense();                    
+                    WinRegistry.deleteUserLicense();
+                    
+                    //Exit app after queston
+                    DialogsFactory.getSingleton().showOKCallbackDialog(jFrame, "session_closed_correctly", (JFrame jFrame1) -> {
+                        System.exit(0);
+                    });
+                    
+                }catch (Exception ex) {
+                    LoggerUtility.getSingleton().logError(PrincipViewController.class, ex);
+                    try {
+                        DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+                    } catch (Exception ex1) {
+                        Logger.getLogger(PrincipViewController.class.getName()).log(Level.SEVERE, null, ex1);
+                    }
+                }
+            });
 
-                JOptionPane.showMessageDialog(null, "Sesión cerrada correctamente, el sistema se cerrará en este momento", "Sistema", JOptionPane.INFORMATION_MESSAGE, null);             
-
-                System.exit(0);
-                
-            }catch(Exception e){
-                LoggerUtility.getSingleton().logError(PrincipJFrame.class, e);
-                JOptionPane.showMessageDialog(null, "Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE, null);             
+        }catch (Exception ex) {
+            LoggerUtility.getSingleton().logError(PrincipViewController.class, ex);
+            try {
+                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+            } catch (Exception ex1) {
+                Logger.getLogger(PrincipViewController.class.getName()).log(Level.SEVERE, null, ex1);
             }
-        }*/
-        
+        }
     }
     
     
