@@ -1079,12 +1079,8 @@ public class PrincipViewController extends PrincipJFrame {
         
     }
     
-    private void jMAcercActionPerformed(java.awt.event.ActionEvent evt) {                                        
-        
-        /*Muestra la forma de acerca de*/
-        //AcerD a = new AcerD();
-        //a.setVisible(true);
-        
+    private void jMAcercActionPerformed(java.awt.event.ActionEvent evt) {
+        ViewControlersFactory.getSingleton().getAcerDViewController().setVisible();        
     }
     
     private void jMRepComActionPerformed(java.awt.event.ActionEvent evt) {                                         
