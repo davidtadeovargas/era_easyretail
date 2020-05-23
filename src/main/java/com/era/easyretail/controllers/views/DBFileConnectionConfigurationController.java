@@ -420,8 +420,8 @@ public class DBFileConnectionConfigurationController extends DBFileConnectionCon
                                 //Reigster the user logut
                                 UtilitiesFactory.getSingleton().getSessionUtility().deslogUserSession();
 
-                                //Exit app
-                                System.exit(0);
+                                //Restart app
+                                UtilitiesFactory.getSingleton().getSystemUtility().restartSystem();
                                 
                             }catch (Exception ex) {
                     
