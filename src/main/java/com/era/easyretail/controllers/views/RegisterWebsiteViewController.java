@@ -12,12 +12,18 @@ import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.List;
 
 /**
  *
  * @author PC
  */
 public class RegisterWebsiteViewController extends RegisterWebsiteJFrame {
+    
+    private OnURLLabelClicked OnURLLabelClicked;
+    private OnOKButtonClicked OnOKButtonClicked;
+    
+    
     
     public RegisterWebsiteViewController(){
         
@@ -33,5 +39,34 @@ public class RegisterWebsiteViewController extends RegisterWebsiteJFrame {
         this.setOnOKButtonClicked((ActionEvent ae) -> {
             dispose();
         });
-    }       
+    }
+    
+    public OnURLLabelClicked getOnURLLabelClicked() {
+        return OnURLLabelClicked;
+    }
+
+    public void setOnURLLabelClicked(OnURLLabelClicked OnURLLabelClicked) {
+        this.OnURLLabelClicked = OnURLLabelClicked;
+    }
+
+    public OnOKButtonClicked getOnOKButtonClicked() {
+        return OnOKButtonClicked;
+    }
+
+    public void setOnOKButtonClicked(OnOKButtonClicked OnOKButtonClicked) {
+        this.OnOKButtonClicked = OnOKButtonClicked;
+    }
+    
+    @Override
+    public List<?> getItemsToLoadInTable() throws Exception {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+     public interface OnURLLabelClicked{
+        public void onClicked(java.awt.event.MouseEvent evt);
+    }
+    
+    public interface OnOKButtonClicked{
+        public void onClicked(java.awt.event.ActionEvent evt);
+    }
 }

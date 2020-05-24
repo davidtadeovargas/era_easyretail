@@ -9,7 +9,6 @@ import com.era.utilities.ConfigFileUtil;
 import com.era.utilities.models.ConfigFileModel;
 import com.era.repositories.models.HibernateConfigModel;
 import com.era.httpclient.GetComputerStatusHttpClient;
-import com.era.views.LoginLicenseJFrame;
 import com.era.repositories.RepositoryFactory;
 import com.era.datamodels.ComputerLicenseDataModel;
 import com.era.easyretail.controllers.views.DBFileConnectionConfigurationController;
@@ -229,7 +228,7 @@ public class Start {
                 //Save premium functions
                 PremiumFunctionsManager.getSingleton().setPremiumFuntionsDataModel(ComputerLicenseDataModel.getPremiumFuntionsDataModel());
 
-                LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Updating channel " + ComputerLicenseDataModel.getChannel());
+                LoggerUtility.getSingleton().logInfo(Start.class, "Licenciamiento: Updating channel " + ComputerLicenseDataModel.getChannel());
                 License License1 = RepositoryFactory.getInstance().getLicenseRepository().getLicense();
                 License1.setChannel(ComputerLicenseDataModel.getChannel());
                 License1.setRemainingDays(ComputerLicenseDataModel.getRemainingDays());
@@ -237,13 +236,13 @@ public class Start {
                 final ServerSession ServerSession = new ServerSession();
                 ServerSession.setGenericSerial(ComputerLicenseDataModel.getGenericSerial());
                 RepositoryFactory.getInstance().getServerSessionRepository().addServerSession(ServerSession);
-                LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Channel updated " + ComputerLicenseDataModel.getChannel());
+                LoggerUtility.getSingleton().logInfo(Start.class, "Licenciamiento: Channel updated " + ComputerLicenseDataModel.getChannel());
 
-                LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Is premium: " + ComputerLicenseDataModel.getPremiumFuntionsDataModel().isPremium());
-                LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: sendToOnlyOneDestinataryInFact: " + ComputerLicenseDataModel.getPremiumFuntionsDataModel().isSendToOnlyOneDestinataryInFact());
-                LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: onlyUseIVATax: " + ComputerLicenseDataModel.getPremiumFuntionsDataModel().isOnlyUseIVATax());
-                LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: onlyOneSerieForDocument: " + ComputerLicenseDataModel.getPremiumFuntionsDataModel().isOnlyOneSerieForDocument());
-                LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: disableInvoiceTicketsWindow: " + ComputerLicenseDataModel.getPremiumFuntionsDataModel().isDisableInvoiceTicketsWindow());
+                LoggerUtility.getSingleton().logInfo(Start.class, "Licenciamiento: Is premium: " + ComputerLicenseDataModel.getPremiumFuntionsDataModel().isPremium());
+                LoggerUtility.getSingleton().logInfo(Start.class, "Licenciamiento: sendToOnlyOneDestinataryInFact: " + ComputerLicenseDataModel.getPremiumFuntionsDataModel().isSendToOnlyOneDestinataryInFact());
+                LoggerUtility.getSingleton().logInfo(Start.class, "Licenciamiento: onlyUseIVATax: " + ComputerLicenseDataModel.getPremiumFuntionsDataModel().isOnlyUseIVATax());
+                LoggerUtility.getSingleton().logInfo(Start.class, "Licenciamiento: onlyOneSerieForDocument: " + ComputerLicenseDataModel.getPremiumFuntionsDataModel().isOnlyOneSerieForDocument());
+                LoggerUtility.getSingleton().logInfo(Start.class, "Licenciamiento: disableInvoiceTicketsWindow: " + ComputerLicenseDataModel.getPremiumFuntionsDataModel().isDisableInvoiceTicketsWindow());
                 LoggerUtility.getSingleton().logInfo(Start.class, "Licenciamiento: Mostrando la pantalla de presentación del sistema");
 
                 //Init the working direcory

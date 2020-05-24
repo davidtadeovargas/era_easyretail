@@ -22,6 +22,7 @@ import com.era.views.dialogs.DialogsFactory;
 import com.era.views.dialogs.ErrorOKDialog;
 import com.era.views.dialogs.OKDialog;
 import com.era.views.dialogs.QuestionDialog;
+import com.era.views.tables.headers.TableHeaderFactory;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -46,6 +47,8 @@ public class UsrsViewController extends UsrsJFrame {
         
         try{
             
+            jLImg.setVisible(false);
+
             //Set defalut button
             this.setDefaultButton(jBNew);
 
@@ -60,7 +63,11 @@ public class UsrsViewController extends UsrsJFrame {
             this.JComponentUtils.onlyNumbers(jTCP);
             
             //Get all the users and load them in table
-            loadUsersInTable();
+            this.BaseJTable = jTab;
+            this.BaseJTable.addShowColumn(TableHeaderFactory.getSigleton().getUsersTableHeader().getNO());
+            this.BaseJTable.addShowColumn(TableHeaderFactory.getSigleton().getUsersTableHeader().getUSER());
+            this.BaseJTable.addShowColumn(TableHeaderFactory.getSigleton().getUsersTableHeader().getNAME());
+            this.loadItemsInTable();
             
             //When the table is selected
             jTab.setITableRowSelected((ListSelectionEvent lse, Object Object) -> {
@@ -428,11 +435,11 @@ public class UsrsViewController extends UsrsJFrame {
                     User_.setCity(city);
                     User_.setCommission(commision);
                     User_.setPtovta(ptovta);
-                    User_.setEmail(email);                    
+                    User_.setEmail(email);
                     User_.setPassword(new String(JTContrasenia.getPassword()));
                     
                     //Save or update the new user in database
-                    if(!update){
+                    if(!update){                        
                         RepositoryFactory.getInstance().getUsersRepository().addUser(User_);
                     }
                     else{
@@ -442,7 +449,7 @@ public class UsrsViewController extends UsrsJFrame {
                     jTEstac.grabFocus();
 
                     //Reload the users table
-                    loadUsersInTable();
+                    this.loadItemsInTable();
                     
                     final OKDialog OKDialog = DialogsFactory.getSingleton().getOKDialog(baseJFrame);
                     OKDialog.setPropertyText("operation_completed");
@@ -588,7 +595,7 @@ public class UsrsViewController extends UsrsJFrame {
                     jTab.clearSelection();
                     
                     //Realod the users table
-                    loadUsersInTable();
+                    this.loadItemsInTable();
                     
                 }catch (Exception ex) {
                     LoggerUtility.getSingleton().logError(UsrsViewController.class, ex);
@@ -624,8 +631,7 @@ public class UsrsViewController extends UsrsJFrame {
             }
             
             //Search all the ocurrences
-            final List<User> users = RepositoryFactory.getInstance().getUsersRepository().getByLikeEncabezados(search);
-            this.jTab.initTable(users);
+            this.loadItemsInTable();
             
         }catch (Exception ex) {
             LoggerUtility.getSingleton().logError(UsrsViewController.class, ex);
@@ -637,34 +643,20 @@ public class UsrsViewController extends UsrsJFrame {
         }
     }
     
-    private void loadUsersInTable(){
+    @Override
+    public final List<?> getItemsToLoadInTable() throws Exception {
         
-        try{
-         
-            //Get all the users and load them in table
-            final List<User> users = (List<User>) RepositoryFactory.getInstance().getUsersRepository().getAll();
-            if(jTab.cointainsRows()){
-                jTab.clearRows();
-            }            
-            jTab.initTable(users);
-
-        }catch (Exception ex) {
-            LoggerUtility.getSingleton().logError(UsrsViewController.class, ex);
-            try {
-                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
-            } catch (Exception ex1) {
-                Logger.getLogger(UsrsViewController.class.getName()).log(Level.SEVERE, null, ex1);
-            }
-        }
+        //Get all the items to load in table
+        final List<User> users = (List<User>) RepositoryFactory.getInstance().getUsersRepository().getAll();
+        return users;
     }
-    
     
     private void jBMostTActionPerformed(java.awt.event.ActionEvent evt) {                                             
         
         try{
             
             //Load all the users
-            loadUsersInTable();
+            this.loadItemsInTable();
             
         }catch (Exception ex) {
             LoggerUtility.getSingleton().logError(UsrsViewController.class, ex);

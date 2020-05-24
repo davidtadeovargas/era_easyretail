@@ -6,6 +6,7 @@
 package com.era.easyretail.controllers.views;
 
 import com.era.views.Impuestos_X_partidaJFrame;
+import java.util.List;
 
 /**
  *
@@ -15,5 +16,10 @@ public class Impuestos_X_partidaViewController extends Impuestos_X_partidaJFrame
 
     public Impuestos_X_partidaViewController() {
         super("window_title_impxpartida");
+    }
+    
+    @Override
+    public List<?> getItemsToLoadInTable() throws Exception {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

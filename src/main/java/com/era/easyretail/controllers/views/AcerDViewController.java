@@ -13,6 +13,7 @@ import com.era.repositories.RepositoryFactory;
 import com.era.utilities.WinRegistry;
 import com.era.views.AcerDJFrame;
 import com.era.views.dialogs.DialogsFactory;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -69,5 +70,10 @@ public class AcerDViewController extends AcerDJFrame {
             }
         }
         
+    }
+    
+    @Override
+    public List<?> getItemsToLoadInTable() throws Exception {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

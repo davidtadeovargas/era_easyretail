@@ -6,6 +6,7 @@
 package com.era.easyretail.controllers.views;
 
 import com.era.views.CobroJFrame;
+import java.util.List;
 
 /**
  *
@@ -15,5 +16,10 @@ public class CobroViewController extends CobroJFrame {
     
     public CobroViewController() {
         super("window_title_cobro");
+    }
+    
+    @Override
+    public List<?> getItemsToLoadInTable() throws Exception {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

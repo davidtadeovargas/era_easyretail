@@ -6,6 +6,7 @@
 package com.era.easyretail.controllers.views;
 
 import com.era.views.EntradasSalidasJFrame;
+import java.util.List;
 
 /**
  *
@@ -15,5 +16,10 @@ public class EntradasSalidasViewController extends EntradasSalidasJFrame {
  
     public EntradasSalidasViewController() {
         super("window_title_entsals");
+    }
+    
+    @Override
+    public List<?> getItemsToLoadInTable() throws Exception {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

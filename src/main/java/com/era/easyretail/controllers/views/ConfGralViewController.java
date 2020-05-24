@@ -6,6 +6,7 @@
 package com.era.easyretail.controllers.views;
 
 import com.era.views.ConfGralJFrame;
+import java.util.List;
 
 /**
  *
@@ -15,5 +16,10 @@ public class ConfGralViewController extends ConfGralJFrame {
     
     public ConfGralViewController() {
         super("window_title_confgral");
+    }
+    
+    @Override
+    public List<?> getItemsToLoadInTable() throws Exception {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

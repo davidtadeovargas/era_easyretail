@@ -14,10 +14,10 @@ import com.era.views.dialogs.DialogsFactory;
 import com.era.views.dialogs.ErrorOKDialog;
 import com.era.views.dialogs.OKDialog;
 import com.era.views.tables.SearchCommonJTable;
+import com.era.views.tables.headers.TableHeaderFactory;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -86,8 +86,12 @@ public class SearchViewController extends SearchJFrame {
         }
         labelLoading.setPreferredSize(new Dimension(70,50));
         labelLoading.setVisible(false);
-        
+                
         jTab = new SearchCommonJTable();
+        jTab.addShowColumn(TableHeaderFactory.getSigleton().getSearchTableHeader().getNO());
+        jTab.addShowColumn(TableHeaderFactory.getSigleton().getSearchTableHeader().getCODE());
+        jTab.addShowColumn(TableHeaderFactory.getSigleton().getSearchTableHeader().getDESCRIPTION());        
+        this.BaseJTable = jTab;
     }
     
      private ImageIcon scaleImage(ImageIcon icon, int w, int h){
@@ -113,11 +117,6 @@ public class SearchViewController extends SearchJFrame {
     private void buttonExitClicked(ActionEvent ActionEvent){
         this.canceled = true;
         dispose();
-    }
-    
-    private void tableMouseClicked(MouseEvent evt){        
-        if(evt.getClickCount() == 2) 
-            jBCarg.doClick();
     }
     
     @Override
@@ -334,7 +333,7 @@ public class SearchViewController extends SearchJFrame {
                    break;
             }
             
-            if(list!=null){
+            if(list!=null){                
                 initTable(list);
             }                
             
@@ -395,10 +394,9 @@ public class SearchViewController extends SearchJFrame {
         }
     }
     
-    private void initTable(final List<?> items){
+    private void initTable(final List<?> items) throws Exception {
                 
-        jTab.setSearchCommonTypeEnum(SearchCommonTypeEnum);
-        jTab.initTable(items);
+        jTab.setSearchCommonTypeEnum(SearchCommonTypeEnum);        
         jTab.setJTableDoubleClic((int selectedRow) -> {
             jBCarg.doClick();
         });
@@ -459,6 +457,8 @@ public class SearchViewController extends SearchJFrame {
         jTab.setJTableEnterKeyPressed((int selectedRow) -> {
             jBCarg.doClick();
         });
+        //jTab.initTable(items);
+        this.loadItemsInTable();
         
         this.pack();
     }
@@ -515,6 +515,11 @@ public class SearchViewController extends SearchJFrame {
 
     public void setSEARCH_TYPE(SearchCommonTypeEnum SearchCommonTypeEnum) {
         this.SearchCommonTypeEnum = SearchCommonTypeEnum;
+    }
+
+    @Override
+    public List<?> getItemsToLoadInTable() throws Exception {
+        return this.list;
     }
     
 

@@ -6,6 +6,7 @@
 package com.era.easyretail.controllers.views;
 
 import com.era.views.VAbonsJFrame;
+import java.util.List;
 
 /**
  *
@@ -15,5 +16,10 @@ public class VAbonsViewController extends VAbonsJFrame {
 
     public VAbonsViewController() {
         super("window_title_verabons");
+    }
+    
+    @Override
+    public List<?> getItemsToLoadInTable() throws Exception {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

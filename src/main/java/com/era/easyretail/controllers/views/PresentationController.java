@@ -7,6 +7,7 @@ package com.era.easyretail.controllers.views;
 
 import com.era.easyretail.enums.LoginTypeEmpresa;
 import com.era.views.PresentationJFrame;
+import java.util.List;
 
 /**
  *
@@ -49,5 +50,10 @@ public class PresentationController extends PresentationJFrame {
             }
             
         }).start();
+    }
+    
+    @Override
+    public List<?> getItemsToLoadInTable() throws Exception {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

@@ -6,6 +6,7 @@
 package com.era.easyretail.controllers.views;
 
 import com.era.views.ProdExisAlmJFrame;
+import java.util.List;
 
 /**
  *
@@ -16,5 +17,9 @@ public class ProdExisAlmViewController extends ProdExisAlmJFrame {
     public ProdExisAlmViewController() {
         super("window_title_exisalma");
     }
-    
+
+    @Override
+    public List<?> getItemsToLoadInTable() throws Exception {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

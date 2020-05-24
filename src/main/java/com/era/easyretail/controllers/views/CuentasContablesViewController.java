@@ -6,6 +6,7 @@
 package com.era.easyretail.controllers.views;
 
 import com.era.views.CuentasContablesJFrame;
+import java.util.List;
 
 /**
  *
@@ -15,5 +16,10 @@ public class CuentasContablesViewController extends CuentasContablesJFrame {
  
     public CuentasContablesViewController() {
         super("window_title_contablescta");
+    }
+    
+    @Override
+    public List<?> getItemsToLoadInTable() throws Exception {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

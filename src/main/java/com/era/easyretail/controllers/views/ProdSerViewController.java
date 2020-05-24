@@ -6,6 +6,7 @@
 package com.era.easyretail.controllers.views;
 
 import com.era.views.ProdSerJFrame;
+import java.util.List;
 
 /**
  *
@@ -16,5 +17,9 @@ public class ProdSerViewController extends ProdSerJFrame {
     public ProdSerViewController() {
         super("window_title_seriexprod");
     }
-        
+
+    @Override
+    public List<?> getItemsToLoadInTable() throws Exception {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

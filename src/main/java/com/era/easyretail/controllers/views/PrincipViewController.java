@@ -22,6 +22,7 @@ import com.era.views.dialogs.ErrorOKDialog;
 import com.era.views.dialogs.ExceptionDialog;
 import com.era.views.dialogs.OKDialog;
 import com.era.views.dialogs.QuestionDialog;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
@@ -656,9 +657,6 @@ public class PrincipViewController extends PrincipJFrame {
     
     private void jMenItImpresActionPerformed(java.awt.event.ActionEvent evt) {                                             
         
-        /*Muestra la forma para ver las impresoras por estacions*/
-        //Impres i = new Impres();
-        //i.setVisible(true);
         
     }
     
@@ -1680,5 +1678,9 @@ public class PrincipViewController extends PrincipJFrame {
         }
     }
     
-    
+ 
+    @Override
+    public List<?> getItemsToLoadInTable() throws Exception {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

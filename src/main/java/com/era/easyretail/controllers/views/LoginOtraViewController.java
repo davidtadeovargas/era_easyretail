@@ -15,6 +15,7 @@ import com.era.views.dialogs.DialogsFactory;
 import com.era.views.dialogs.ErrorOKDialog;
 import com.era.views.dialogs.OKDialog;
 import java.awt.event.ActionEvent;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
@@ -169,5 +170,10 @@ public class LoginOtraViewController extends LoginOtraJFrame {
         else{
             this.dispose();            
         }                
+    }
+    
+    @Override
+    public List<?> getItemsToLoadInTable() throws Exception {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

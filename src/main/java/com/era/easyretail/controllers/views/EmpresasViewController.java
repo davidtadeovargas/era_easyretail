@@ -28,6 +28,7 @@ import com.era.views.dialogs.DialogsFactory;
 import com.era.views.dialogs.ErrorOKDialog;
 import com.era.views.dialogs.OKDialog;
 import com.era.views.dialogs.QuestionDialog;
+import com.era.views.tables.headers.TableHeaderFactory;
 import java.awt.event.ActionEvent;
 import java.awt.event.FocusEvent;
 import java.util.List;
@@ -68,7 +69,20 @@ public class EmpresasViewController extends EmpresasJFrame {
 
             JTCodigoEmpresa.setText(UtilitiesFactory.getSingleton().getGeneralsUtility().getUniqueDayCode());
 
-            loadCompanies();
+            this.BaseJTable = jTabEmpresas;
+            this.BaseJTable.addShowColumn(TableHeaderFactory.getSigleton().getBasdatsTableHeader().getID());
+            this.BaseJTable.addShowColumn(TableHeaderFactory.getSigleton().getBasdatsTableHeader().getCOMPANY_CODE());
+            this.BaseJTable.addShowColumn(TableHeaderFactory.getSigleton().getBasdatsTableHeader().getCOMPANY());
+            this.BaseJTable.addShowColumn(TableHeaderFactory.getSigleton().getBasdatsTableHeader().getDATABASE());
+            this.BaseJTable.addShowColumn(TableHeaderFactory.getSigleton().getBasdatsTableHeader().getSTREET()); 
+            this.BaseJTable.addShowColumn(TableHeaderFactory.getSigleton().getBasdatsTableHeader().getNOEXT());
+            this.BaseJTable.addShowColumn(TableHeaderFactory.getSigleton().getBasdatsTableHeader().getNOINT());
+            this.BaseJTable.addShowColumn(TableHeaderFactory.getSigleton().getBasdatsTableHeader().getCITY());
+            this.BaseJTable.addShowColumn(TableHeaderFactory.getSigleton().getBasdatsTableHeader().getCOUNTRY());
+            this.BaseJTable.addShowColumn(TableHeaderFactory.getSigleton().getBasdatsTableHeader().getCP());            
+            this.BaseJTable.addShowColumn(TableHeaderFactory.getSigleton().getBasdatsTableHeader().getEMAIL());            
+            this.BaseJTable.addShowColumn(TableHeaderFactory.getSigleton().getBasdatsTableHeader().getRFC());            
+            this.loadItemsInTable();
 
             JTCodigoEmpresa.setEditable(false);
 
@@ -387,7 +401,7 @@ public class EmpresasViewController extends EmpresasJFrame {
             
             clearTable();
             
-            this.loadCompanies();
+            this.loadItemsInTable();
         }
         catch(Exception ex){
             
@@ -494,7 +508,7 @@ public class EmpresasViewController extends EmpresasJFrame {
                                 if(Object==null){
 
                                     //Reload table
-                                    loadCompanies();
+                                    loadItemsInTable();
 
                                     //Show success dialog
                                     final OKDialog OKDialog = DialogsFactory.getSingleton().getOKDialog(baseJFrame);
@@ -740,7 +754,7 @@ public class EmpresasViewController extends EmpresasJFrame {
                     jTabEmpresas.clearRows();
                     
                     //Reload table
-                    this.loadCompanies();
+                    this.loadItemsInTable();
                     
                     //Success message
                     final OKDialog OKDialog = DialogsFactory.getSingleton().getOKDialog(baseJFrame);
@@ -816,7 +830,7 @@ public class EmpresasViewController extends EmpresasJFrame {
                             clearFields();
 
                             //Reload table
-                            loadCompanies();
+                            loadItemsInTable();
                             
                             //No errors
                             return null;
@@ -837,7 +851,7 @@ public class EmpresasViewController extends EmpresasJFrame {
                             if(Object==null){
 
                                 //Reload table
-                                loadCompanies();
+                                loadItemsInTable();
 
                                 //Show success dialog
                                 final OKDialog OKDialog = DialogsFactory.getSingleton().getOKDialog(baseJFrame);
@@ -1492,12 +1506,6 @@ public class EmpresasViewController extends EmpresasJFrame {
         Company = null;
     }
     
-    public final void loadCompanies() throws Exception {
-        
-        final List<BasDats> companies = (List<BasDats>) RepositoryFactory.getInstance().getBasDatsRepository().getAll();        
-        jTabEmpresas.initTable(companies);        
-    }
-    
     public final synchronized void vCargaComponentes(BasDats Company)
     {
         JTIdEmpresa.setText(String.valueOf(Company.getId()));
@@ -1565,5 +1573,11 @@ public class EmpresasViewController extends EmpresasJFrame {
                 bgTipoContribuyente.setSelected(JRBFisica.getModel(), true);
                 break;
         }
+    }
+
+    @Override
+    public List<?> getItemsToLoadInTable() throws Exception {
+        final List<BasDats> companies = (List<BasDats>) RepositoryFactory.getInstance().getBasDatsRepository().getAll();        
+        return companies;
     }
 }
