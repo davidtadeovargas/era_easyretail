@@ -16,6 +16,8 @@ public class ProvsViewController extends ProvsJFrame {
     
     public ProvsViewController() {
         super("window_title_provs");
+        
+        jBNew.grabFocus();
     }
     
     @Override

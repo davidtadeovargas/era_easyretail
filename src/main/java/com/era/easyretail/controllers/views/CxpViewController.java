@@ -6,6 +6,7 @@
 package com.era.easyretail.controllers.views;
 
 import com.era.views.CxpJFrame;
+import java.util.List;
 
 /**
  *
@@ -15,5 +16,10 @@ public class CxpViewController extends CxpJFrame{
     
     public CxpViewController() {
         super("window_title_cxp");
+    }
+
+    @Override
+    public List<?> getItemsToLoadInTable() throws Exception {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
