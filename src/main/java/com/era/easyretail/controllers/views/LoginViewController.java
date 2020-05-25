@@ -11,6 +11,7 @@ import com.era.logger.LoggerUtility;
 import com.era.models.BasDats;
 import com.era.models.User;
 import com.era.repositories.RepositoryFactory;
+import com.era.repositories.models.HibernateConfigModel;
 import com.era.repositories.utils.HibernateUtil;
 import com.era.utilities.UtilitiesFactory;
 import com.era.views.LoginJFrame;
@@ -218,8 +219,14 @@ public class LoginViewController extends LoginJFrame {
             
             if(!alreadyDBConfig){
                 
+                //Create the hibernate config model connection file                
+                final HibernateConfigModel HibernateConfigModel = HibernateUtil.getSingleton().createLocalHibernateConfigModel(companyCode);
+                
                 //Save the local connections param
-                HibernateUtil.getSingleton().createLocalHibernateConfigModel(companyCode,true);
+                HibernateUtil.getSingleton().setHibernateConfigModelLocal(HibernateConfigModel);
+                
+                //Load the local factory
+                HibernateUtil.getSingleton().loadDbLocal();
 
                 alreadyDBConfig = true;
             }

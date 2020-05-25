@@ -448,7 +448,7 @@ public class EmpresasViewController extends EmpresasJFrame {
 
                     //Vaildate that the database does not exists
                     final String database = JTBaseDeDatos.getText().trim();
-                    final HibernateConfigModel HibernateConfigModel = HibernateUtil.getSingleton().getHibernateConfigModel();
+                    final HibernateConfigModel HibernateConfigModel = HibernateUtil.getSingleton().getHibernateConfigModelCurrent();
                     final boolean exists = MysqlScriptsUtil.getInstance().testDatabaseConnection(database, HibernateConfigModel.getUser(), HibernateConfigModel.getPassword(), HibernateConfigModel.getInstance(), HibernateConfigModel.getPort());
                     if(exists){
                         final ErrorOKDialog ErrorOKDialog = DialogsFactory.getSingleton().getErrorOKDialog(baseJFrame);
@@ -475,14 +475,10 @@ public class EmpresasViewController extends EmpresasJFrame {
                         public Object doinbackground(){
 
                             try{
-
-                                final HibernateConfigModel HibernateConfigModel_ = HibernateUtil.getSingleton().createLocalHibernateConfigModel(Company.getBd(),true);
-
-                                //Create the new database structure
-                                MysqlScriptsUtil.getInstance().creaDB(HibernateConfigModel_.getDatabase(), HibernateConfigModel_.getUser(), HibernateConfigModel_.getPassword(), HibernateConfigModel_.getInstance(), HibernateConfigModel_.getPort());
-
-                                HibernateUtil.getSingleton().connectToDbEmpresas();
-
+                                
+                                //Create new database, populate schemes and load initial catalogs
+                                HibernateUtil.getSingleton().createNewLocalDatabase(Company.getBd());
+                                
                                 return null;
 
                             }catch(Exception ex){

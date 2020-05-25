@@ -68,6 +68,7 @@ public class LoginLocalViewController extends LoginLicenseJFrame {
         LoginLicenseValidator.setPasswordJPasswordField(jPasswordFieldPassword);
         LoginLicenseValidator.setUserEditJTextField(jTextFieldUser);
         try{
+            
             LoginLicenseValidator.validate();
 
         }catch(InvalidEmailSintaxException InvalidEmailSintaxException){
@@ -157,7 +158,7 @@ public class LoginLocalViewController extends LoginLicenseJFrame {
                 
                 try{
 
-                    getComputerInformationWithServer(LoginLocalResponseRequestModel,user,password);        
+                    getComputerInformationWithServer(LoginLocalResponseRequestModel,user,password);
 
                 }catch(Exception e){
 
@@ -273,32 +274,13 @@ public class LoginLocalViewController extends LoginLicenseJFrame {
         CompanyTest.setRutap(System.getProperty("user.dir"));        
         CompanyTest.setTest(true);
         
-        //Get hibernate configuration file
-        HibernateConfigModel HibernateConfigModel = HibernateUtil.getSingleton().getHibernateConfigModel();
+        //Create new database, populate schemes and load initial catalogs
+        HibernateUtil.getSingleton().createNewLocalDatabase(CompanyTest.getBd());
         
-        //Save the local connections params for local db
-        HibernateConfigModel HibernateConfigModel_ = new HibernateConfigModel();
-        HibernateConfigModel_.setInstance(HibernateConfigModel.getInstance());
-        HibernateConfigModel_.setPassword(HibernateConfigModel.getPassword());
-        HibernateConfigModel_.setPort(HibernateConfigModel.getPort());
-        HibernateConfigModel_.setUrl(HibernateConfigModel.getUrl());
-        HibernateConfigModel_.setUser(HibernateConfigModel.getUser());
-        HibernateConfigModel_.setDatabase(CompanyTest.getBd());
-        HibernateUtil.getSingleton().setHibernateConfigModelLocal(HibernateConfigModel_); //Set this for the entire system
-
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Hibernate: Connecting to hibernate local");
-        
-        //Load the base catalogs for dbempresas
-        MysqlScriptsUtil.getInstance().loadDBEmpresasCatalogFileIntoDatabase(HibernateConfigModel.getDatabase(), HibernateConfigModel.getUser(), HibernateConfigModel.getPassword(), HibernateConfigModel.getInstance(), HibernateConfigModel.getPort());
-        
-        //Connect to local
-        HibernateUtil.getSingleton().connectToDbLocal();
-        
-        LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Hibernate: Creating jdbc database and reading scripts file");
-        
-        //Create the new company with JDBC and read all the catalogs script from disk
-        MysqlScriptsUtil.getInstance().creaDB(CompanyTest.getBd(), HibernateConfigModel.getUser(), HibernateConfigModel.getPassword(), HibernateConfigModel.getInstance(), HibernateConfigModel.getPort());
                 
+        LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Hibernate: Creating jdbc database and reading scripts file");                                        
+        
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Hibernate: finished");
                 
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Hibernate: Finished");
@@ -430,8 +412,6 @@ public class LoginLocalViewController extends LoginLicenseJFrame {
 
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Connecting to dbempresas again");
         
-        HibernateUtil.getSingleton().connectToDbEmpresas();
-
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Finished");
         
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Showing next window");

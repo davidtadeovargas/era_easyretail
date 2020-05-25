@@ -31,8 +31,6 @@ import java.awt.event.ActionEvent;
 //Initialization of the system
 public class Start {
  
-    private static HibernateConfigModel HibernateConfigModel;    
-    
     public static void main(String[] args) throws Exception {
         
         try{
@@ -86,16 +84,16 @@ public class Start {
         final String port = ConfigFileModel.getPort();            
 
         //Save dbempresas params connection to hibernate config file
-        HibernateConfigModel = new HibernateConfigModel();
-        HibernateConfigModel.setUser(user);
-        HibernateConfigModel.setPassword(password);
-        HibernateConfigModel.setPort(Integer.valueOf(port));
-        HibernateConfigModel.setInstance(instance);
-        HibernateConfigModel.setDatabase(db);
-        HibernateUtil.getSingleton().setHibernateConfigModelDbEmpresas(HibernateConfigModel);
+        final HibernateConfigModel HibernateConfigModel_ = new HibernateConfigModel();
+        HibernateConfigModel_.setUser(user);        
+        HibernateConfigModel_.setPassword(password);
+        HibernateConfigModel_.setPort(Integer.valueOf(port));
+        HibernateConfigModel_.setInstance(instance);
+        HibernateConfigModel_.setDatabase(db);
+        HibernateUtil.getSingleton().setHibernateConfigModelDbEmpresas(HibernateConfigModel_);
 
         //Check if the main database exists
-        boolean result = MysqlScriptsUtil.getInstance().existsDBEmpresasDatabase(HibernateConfigModel.getUser(), HibernateConfigModel.getPassword(), HibernateConfigModel.getInstance(), HibernateConfigModel.getPort());                
+        boolean result = MysqlScriptsUtil.getInstance().existsDB(HibernateConfigModel_.getDatabase(), HibernateConfigModel_.getUser(), HibernateConfigModel_.getPassword(), HibernateConfigModel_.getInstance(), HibernateConfigModel_.getPort());                
         
         UtilitiesFactory.getSingleton().getImagesUtility().init(System.getProperty("user.dir"));
                 
@@ -106,6 +104,8 @@ public class Start {
             dbempresasNotExists();
         }
         else {  //The dabatase already exists 
+            
+            HibernateUtil.getSingleton().loadDbEmpresas();
             veryLicense();
         }
     }
@@ -117,12 +117,20 @@ public class Start {
         new Thread(() -> {
             
             try {
-                        
-                MysqlScriptsUtil.getInstance().creaDBEmpresas(HibernateConfigModel.getUser(), HibernateConfigModel.getPassword(), HibernateConfigModel.getInstance(), HibernateConfigModel.getPort());
                 
-                //Create schemes for dbempresas
-                HibernateUtil.getSingleton().buildSessionFactoryFordbempresasCreate(HibernateConfigModel);
+                //Grt the connection params to dbempresas
+                final ConfigFileModel ConfigFileModel = ConfigFileUtil.getSingleton().getConfigFileModel();
                 
+                //Create the jdbc datanase
+                MysqlScriptsUtil.getInstance().creaDBJDBC(ConfigFileModel.getDb(), ConfigFileModel.getUser(), ConfigFileModel.getPassword(), ConfigFileModel.getInstance(), Integer.valueOf(ConfigFileModel.getPort()));
+                
+                //Create hibernate schemes and initial connection for dbempresas
+                HibernateUtil.getSingleton().createDbEmpresas();                
+                
+                //Insert base catalogs in dbempresa
+                MysqlScriptsUtil.getInstance().loadDBEmpresasCatalogFileIntoDatabase(ConfigFileModel.getDb(), ConfigFileModel.getUser(), ConfigFileModel.getPassword(), ConfigFileModel.getInstance(), Integer.valueOf(ConfigFileModel.getPort()));
+                
+                //Continue with the normal system flow
                 veryLicense();
             
             } catch (Exception ex) {
@@ -130,7 +138,9 @@ public class Start {
 
                 try {
                     //Rollback
-                    MysqlScriptsUtil.getInstance().rollbackDBEmpresas(HibernateConfigModel.getUser(), HibernateConfigModel.getPassword(), HibernateConfigModel.getInstance(), HibernateConfigModel.getPort());
+                    final HibernateConfigModel HibernateConfigModel_ = HibernateUtil.getSingleton().getHibernateConfigModelDbempresas();
+                    MysqlScriptsUtil.getInstance().rollbackDBEmpresas(HibernateConfigModel_.getUser(), HibernateConfigModel_.getPassword(), HibernateConfigModel_.getInstance(), HibernateConfigModel_.getPort());
+                    
                 } catch (Exception ex1) {
                     LoggerUtility.getSingleton().logError(Start.class, ex1);
                 }
