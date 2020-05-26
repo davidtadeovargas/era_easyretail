@@ -81,7 +81,7 @@ public class Start {
         final String user = ConfigFileModel.getUser();
         final String password = ConfigFileModel.getPassword();
         final String db = ConfigFileModel.getDb();
-        final String port = ConfigFileModel.getPort();            
+        final String port = ConfigFileModel.getPort();
 
         //Save dbempresas params connection to hibernate config file
         final HibernateConfigModel HibernateConfigModel_ = new HibernateConfigModel();

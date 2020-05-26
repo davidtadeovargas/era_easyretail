@@ -67,7 +67,7 @@ public class UsrsViewController extends UsrsJFrame {
             this.BaseJTable.addShowColumn(TableHeaderFactory.getSigleton().getUsersTableHeader().getNO());
             this.BaseJTable.addShowColumn(TableHeaderFactory.getSigleton().getUsersTableHeader().getUSER());
             this.BaseJTable.addShowColumn(TableHeaderFactory.getSigleton().getUsersTableHeader().getNAME());
-            this.loadItemsInTable();
+            this.loadAllItemsInTable();
             
             //When the table is selected
             jTab.setITableRowSelected((ListSelectionEvent lse, Object Object) -> {
@@ -449,7 +449,7 @@ public class UsrsViewController extends UsrsJFrame {
                     jTEstac.grabFocus();
 
                     //Reload the users table
-                    this.loadItemsInTable();
+                    this.jTab.loadAllItemsInTable();
                     
                     final OKDialog OKDialog = DialogsFactory.getSingleton().getOKDialog(baseJFrame);
                     OKDialog.setPropertyText("operation_completed");
@@ -595,7 +595,7 @@ public class UsrsViewController extends UsrsJFrame {
                     jTab.clearSelection();
                     
                     //Realod the users table
-                    this.loadItemsInTable();
+                    this.jTab.loadAllItemsInTable();
                     
                 }catch (Exception ex) {
                     LoggerUtility.getSingleton().logError(UsrsViewController.class, ex);
@@ -631,7 +631,7 @@ public class UsrsViewController extends UsrsJFrame {
             }
             
             //Search all the ocurrences
-            this.loadItemsInTable();
+            this.jTab.loadAllItemsInTable();
             
         }catch (Exception ex) {
             LoggerUtility.getSingleton().logError(UsrsViewController.class, ex);
@@ -643,20 +643,12 @@ public class UsrsViewController extends UsrsJFrame {
         }
     }
     
-    @Override
-    public final List<?> getItemsToLoadInTable() throws Exception {
-        
-        //Get all the items to load in table
-        final List<User> users = (List<User>) RepositoryFactory.getInstance().getUsersRepository().getAll();
-        return users;
-    }
-    
     private void jBMostTActionPerformed(java.awt.event.ActionEvent evt) {                                             
         
         try{
             
             //Load all the users
-            this.loadItemsInTable();
+            this.jTab.loadAllItemsInTable();
             
         }catch (Exception ex) {
             LoggerUtility.getSingleton().logError(UsrsViewController.class, ex);
@@ -725,5 +717,10 @@ public class UsrsViewController extends UsrsJFrame {
                 Logger.getLogger(UsrsViewController.class.getName()).log(Level.SEVERE, null, ex1);
             }
         }
+    }
+
+    @Override
+    public List<?> getItemsToLoadInTable() throws Exception {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
