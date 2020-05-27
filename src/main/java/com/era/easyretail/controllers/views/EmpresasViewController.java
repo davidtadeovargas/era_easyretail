@@ -82,7 +82,7 @@ public class EmpresasViewController extends EmpresasJFrame {
             this.BaseJTable.addShowColumn(TableHeaderFactory.getSigleton().getBasdatsTableHeader().getCP());            
             this.BaseJTable.addShowColumn(TableHeaderFactory.getSigleton().getBasdatsTableHeader().getEMAIL());            
             this.BaseJTable.addShowColumn(TableHeaderFactory.getSigleton().getBasdatsTableHeader().getRFC());            
-            this.loadItemsInTable();
+            this.BaseJTable.loadAllItemsInTable();
 
             JTCodigoEmpresa.setEditable(false);
 
@@ -401,7 +401,7 @@ public class EmpresasViewController extends EmpresasJFrame {
             
             clearTable();
             
-            this.loadItemsInTable();
+            this.BaseJTable.loadAllItemsInTable();
         }
         catch(Exception ex){
             
@@ -504,7 +504,7 @@ public class EmpresasViewController extends EmpresasJFrame {
                                 if(Object==null){
 
                                     //Reload table
-                                    loadItemsInTable();
+                                    BaseJTable.loadAllItemsInTable();
 
                                     //Show success dialog
                                     final OKDialog OKDialog = DialogsFactory.getSingleton().getOKDialog(baseJFrame);
@@ -717,10 +717,10 @@ public class EmpresasViewController extends EmpresasJFrame {
                 
         //Update or add the new company
         if(update){
-            RepositoryFactory.getInstance().getBasDatsRepository().update(Company);
+            RepositoryFactory.getInstance().getBasDatssRepository().update(Company);
         }
         else{
-            RepositoryFactory.getInstance().getBasDatsRepository().save(Company);
+            RepositoryFactory.getInstance().getBasDatssRepository().save(Company);
         }
 
         return true;
@@ -750,7 +750,7 @@ public class EmpresasViewController extends EmpresasJFrame {
                     jTabEmpresas.clearRows();
                     
                     //Reload table
-                    this.loadItemsInTable();
+                    this.BaseJTable.loadAllItemsInTable();
                     
                     //Success message
                     final OKDialog OKDialog = DialogsFactory.getSingleton().getOKDialog(baseJFrame);
@@ -820,13 +820,13 @@ public class EmpresasViewController extends EmpresasJFrame {
                             //Delete company database and record from basdats
                             final HibernateConfigModel HibernateConfigModel = HibernateConfigUtil.getInstance().getHibernateConfigFile();
                             MysqlScriptsUtil.getInstance().deleteDatabase(HibernateConfigModel.getUser(), HibernateConfigModel.getPassword(), HibernateConfigModel.getInstance(), HibernateConfigModel.getPort(), BasDats.getBd());
-                            RepositoryFactory.getInstance().getBasDatsRepository().deleteBasDats(BasDats.getCodemp());
+                            RepositoryFactory.getInstance().getBasDatssRepository().deleteBasDats(BasDats.getCodemp());
 
                             //Clear all fields
                             clearFields();
 
                             //Reload table
-                            loadItemsInTable();
+                            BaseJTable.loadAllItemsInTable();
                             
                             //No errors
                             return null;
@@ -847,7 +847,7 @@ public class EmpresasViewController extends EmpresasJFrame {
                             if(Object==null){
 
                                 //Reload table
-                                loadItemsInTable();
+                                BaseJTable.loadAllItemsInTable();
 
                                 //Show success dialog
                                 final OKDialog OKDialog = DialogsFactory.getSingleton().getOKDialog(baseJFrame);
@@ -1573,7 +1573,7 @@ public class EmpresasViewController extends EmpresasJFrame {
 
     @Override
     public List<?> getItemsToLoadInTable() throws Exception {
-        final List<BasDats> companies = (List<BasDats>) RepositoryFactory.getInstance().getBasDatsRepository().getAll();        
+        final List<BasDats> companies = (List<BasDats>) RepositoryFactory.getInstance().getBasDatssRepository().getAll();        
         return companies;
     }
 }

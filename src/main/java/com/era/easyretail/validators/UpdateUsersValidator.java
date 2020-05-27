@@ -17,13 +17,12 @@ import javax.swing.JTextField;
  *
  * @author PC
  */
-public class UpdateUsersValidator implements IValidate {
+public class UpdateUsersValidator  {
 
     private JTextField user;
     private JTextField almacen;
     
-    
-    @Override
+        
     public void validate() throws Exception {
         
         //Validate empty fields
@@ -42,7 +41,7 @@ public class UpdateUsersValidator implements IValidate {
         
         //Validate that the user not exists
         final String userCode = user.getText().trim();
-        final User User = RepositoryFactory.getInstance().getUsersRepository().getUsrByCode(userCode);
+        final User User = (User) RepositoryFactory.getInstance().getUsersRepository().getByCode(userCode);
         if(User == null){
             throw new NotExistsUserException();
         }

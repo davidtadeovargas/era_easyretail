@@ -136,15 +136,15 @@ public class SearchViewController extends SearchJFrame {
             switch(SearchCommonTypeEnum){
 
                 case CUSTOMERS:
-                    list = RepositoryManager_.getCompanyRepository().getAll();                    
+                    list = RepositoryManager_.getCompanysRepository().getAll();                    
                     break;
                     
                 case BASDATS:
-                    list = RepositoryManager_.getBasDatsRepository().getAll();
+                    list = RepositoryManager_.getBasDatssRepository().getAll();
                     break;
 
                 case PRODUCTS:
-                    list = RepositoryManager_.getProductRepository().getAll();
+                    list = RepositoryManager_.getProductsRepository().getAll();
                     break;
 
                 case SUPPLIERS:
@@ -156,11 +156,11 @@ public class SearchViewController extends SearchJFrame {
                     break;
 
                case KITS:
-                    list = RepositoryManager_.getKitsRepository().getAll();
+                    list = RepositoryManager_.getKitssRepository().getAll();
                     break;
 
                case CONCEPTS:
-                    list = RepositoryManager_.getConcepnotRepository().getAll();
+                    list = RepositoryManager_.getConcepnotsRepository().getAll();
                     break;
 
                case PAYMENT_TYPES:
@@ -176,7 +176,7 @@ public class SearchViewController extends SearchJFrame {
                     break;
 
                case CLASSIFICATIONS:
-                    list = RepositoryManager_.getClasificacionRepository().getAll();
+                    list = RepositoryManager_.getClasificacionsRepository().getAll();
                     break;
 
                case SUPPLIERS_CLASIFICATION:
@@ -184,15 +184,15 @@ public class SearchViewController extends SearchJFrame {
                     break;
 
                 case ANAQS:
-                    list = RepositoryManager_.getAnaqsRepository().getAll();
+                    list = RepositoryManager_.getAnaqssRepository().getAll();
                     break;
 
                 case GENERAL_PLACES:
-                    list = RepositoryManager_.getLugsRepository().getAll();
+                    list = RepositoryManager_.getLugssRepository().getAll();
                     break;
 
                 case BRANDS:
-                    list = RepositoryManager_.getMarcsRepository().getAll();
+                    list = RepositoryManager_.getMarcssRepository().getAll();
                     break;
 
                 case LINES:
@@ -208,23 +208,23 @@ public class SearchViewController extends SearchJFrame {
                     break;
 
                 case PESOS:
-                    list = RepositoryManager_.getPesRepository().getAll();
+                    list = RepositoryManager_.getPessRepository().getAll();
                     break;
 
                 case COLORS:
-                    list = RepositoryManager_.getColosRepository().getAll();
+                    list = RepositoryManager_.getColossRepository().getAll();
                     break;
 
                 case ADITIONAL_UBIQS:
-                    list = RepositoryManager_.getUbiadRepository().getAll();
+                    list = RepositoryManager_.getUbiadsRepository().getAll();
                     break;
 
                 case MEASURES:
-                    list = RepositoryManager_.getMedsRepository().getAll();
+                    list = RepositoryManager_.getMedssRepository().getAll();
                     break;
 
                 case FABRICANTES:
-                    list = RepositoryManager_.getFabsRepository().getAll();
+                    list = RepositoryManager_.getFabssRepository().getAll();
                     break;
 
                 case SALES_MAN:
@@ -232,63 +232,63 @@ public class SearchViewController extends SearchJFrame {
                     break;
 
                 case MODELS:
-                    list = RepositoryManager_.getModelRepository().getAll();
+                    list = RepositoryManager_.getModelsRepository().getAll();
                     break;
 
                 case ALL_COMPUESTS_PRODUCTS: // AND prods.COMPUE = 0
-                    list = RepositoryManager_.getProductRepository().getAllCompuests();
+                    list = RepositoryManager_.getProductsRepository().getAllCompuests();
                     break;
 
                 case TYPES:
-                    list = RepositoryManager_.getTipsRepository().getAll();
+                    list = RepositoryManager_.getTipssRepository().getAll();
                     break;
 
                 case ZONES:
-                    list = RepositoryManager_.getZonaRepository().getAll();
+                    list = RepositoryManager_.getZonasRepository().getAll();
                     break;
 
                 case GIROS:
-                    list = RepositoryManager_.getGiroRepository().getAll();
+                    list = RepositoryManager_.getGirosRepository().getAll();
                     break;
 
                 case PRODDS_SERIE:
-                    list = RepositoryManager_.getProductRepository().getAllProdsWithSerie();
+                    list = RepositoryManager_.getProductsRepository().getAllProdsWithSerie();
                     break;
 
                 case PRODS_NOT_SERIE:
-                    list = RepositoryManager_.getProductRepository().getAllProdsNotSerie();
+                    list = RepositoryManager_.getProductsRepository().getAllProdsNotSerie();
                     break;
 
                 case RUBROS:
-                    list = RepositoryManager_.getRubrRepository().getAll();
+                    list = RepositoryManager_.getRubrsRepository().getAll();
                     break;
 
                 case CREDIT_NOTES:
-                    list = RepositoryManager_.getSalesRepository().getAllNotsCred();
+                    list = RepositoryManager_.getSalessRepository().getAllNotsCred();
                     break;
 
                 case TALLAS:
-                    list = RepositoryManager_.getTallRepository().getAll();
+                    list = RepositoryManager_.getTallsRepository().getAll();
                     break;
 
                 case PAYMENT_CONCEPTS:
-                    list = RepositoryManager_.getConceppagRepository().getAll();
+                    list = RepositoryManager_.getConceppagsRepository().getAll();
                     break;
 
                 case BANKS:
-                    list = RepositoryManager_.getBancoRepository().getAll();
+                    list = RepositoryManager_.getBancosRepository().getAll();
                     break;
 
                 case SUCURSALS:
-                    list = RepositoryManager_.getSucursalRepository().getAll();
+                    list = RepositoryManager_.getSucursalsRepository().getAll();
                     break;
 
                 case RESPONSABLES:
-                    list = RepositoryManager_.getSucursalRepository().getAll();
+                    list = RepositoryManager_.getSucursalsRepository().getAll();
                     break;
 
                 case CUSTOMERS_SERIE:
-                    list = RepositoryManager_.getSerieRepository().getAllSerieEMP();
+                    list = RepositoryManager_.getSeriesRepository().getAllSerieEMP();
                     break;
 
                 case CPS:
@@ -325,7 +325,7 @@ public class SearchViewController extends SearchJFrame {
                     break;                   
                     
                 case SECTORS:
-                   list = RepositoryManager_.getSectoresRepository().getAll();
+                   list = RepositoryManager_.getSectoressRepository().getAll();
                    break;
                    
                 case FISCAL_REGIMEN:
@@ -457,8 +457,8 @@ public class SearchViewController extends SearchJFrame {
         jTab.setJTableEnterKeyPressed((int selectedRow) -> {
             jBCarg.doClick();
         });
-        //jTab.initTable(items);
-        this.loadItemsInTable();
+        
+        this.loadAllItemsInTable();
         
         this.pack();
     }

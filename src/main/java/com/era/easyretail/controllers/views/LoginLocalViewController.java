@@ -19,9 +19,7 @@ import com.era.models.Company;
 import com.era.models.Product;
 import com.era.models.Supplier;
 import com.era.repositories.RepositoryFactory;
-import com.era.repositories.models.HibernateConfigModel;
 import com.era.repositories.utils.HibernateUtil;
-import com.era.repositories.utils.MysqlScriptsUtil;
 import com.era.utilities.UtilitiesFactory;
 import com.era.utilities.WinRegistry;
 import com.era.views.LoginLicenseJFrame;
@@ -244,7 +242,7 @@ public class LoginLocalViewController extends LoginLicenseJFrame {
         BasDats.setNom(CompanyTest.getNom());
                 
         //Save the basdats record
-        RepositoryFactory.getInstance().getBasDatsRepository().save(BasDats);                  
+        RepositoryFactory.getInstance().getBasDatssRepository().save(BasDats);                  
 
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Finished");
         
@@ -258,7 +256,7 @@ public class LoginLocalViewController extends LoginLicenseJFrame {
         License.setRemainingDays(ComputerLicenseDataModel.getRemainingDays());
         License.setServerDate(ComputerLicenseDataModel.getCreated_at());
         License.setChannel(ComputerLicenseDataModel.getChannel());
-        RepositoryFactory.getInstance().getLicenseRepository().addLicense(License);
+        RepositoryFactory.getInstance().getLicensesRepository().addLicense(License);
 
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Licence information saved in database");
         
@@ -266,7 +264,7 @@ public class LoginLocalViewController extends LoginLicenseJFrame {
         
         final ServerSession ServerSession = new ServerSession();
         ServerSession.setGenericSerial(ComputerLicenseDataModel.getGenericSerial());                                
-        RepositoryFactory.getInstance().getServerSessionRepository().addServerSession(ServerSession);
+        RepositoryFactory.getInstance().getServerSessionsRepository().addServerSession(ServerSession);
         
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Finished");                
         
@@ -288,13 +286,13 @@ public class LoginLocalViewController extends LoginLicenseJFrame {
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Hibernate: Adding test company");
         
         //Save the company in database
-        RepositoryFactory.getInstance().getCompanyRepository().save(CompanyTest);       
+        RepositoryFactory.getInstance().getCompanysRepository().save(CompanyTest);       
 
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Hibernate: Test company added");
 
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Saving test product 1 into database");
         final Product Product1 = ComputerLicenseDataModel.getTestCompanyDataModel().getProduct1();
-        RepositoryFactory.getInstance().getProductRepository().addOrUpdateProduct(Product1);
+        RepositoryFactory.getInstance().getProductsRepository().addOrUpdateProduct(Product1);
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Test product 1 saved in the database");
 
         final String pathImgProduc1 = ComputerLicenseDataModel.getTestCompanyDataModel().getProduct1().getPathIMG();
@@ -305,7 +303,7 @@ public class LoginLocalViewController extends LoginLicenseJFrame {
 
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Saving test product 2 into database");
         final Product Product2 = ComputerLicenseDataModel.getTestCompanyDataModel().getProduct2();                                
-        RepositoryFactory.getInstance().getProductRepository().addOrUpdateProduct(Product2);
+        RepositoryFactory.getInstance().getProductsRepository().addOrUpdateProduct(Product2);
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Test product 2 saved in the database");
 
         final String pathImgProduc2 = ComputerLicenseDataModel.getTestCompanyDataModel().getProduct2().getPathIMG();
@@ -316,7 +314,7 @@ public class LoginLocalViewController extends LoginLicenseJFrame {
 
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Saving test product 3 into database");
         final Product Product3 = ComputerLicenseDataModel.getTestCompanyDataModel().getProduct3();                                
-        RepositoryFactory.getInstance().getProductRepository().addOrUpdateProduct(Product3);
+        RepositoryFactory.getInstance().getProductsRepository().addOrUpdateProduct(Product3);
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Test product 3 saved in the database");
 
         final String pathImgProduc3 = ComputerLicenseDataModel.getTestCompanyDataModel().getProduct3().getPathIMG();
@@ -327,7 +325,7 @@ public class LoginLocalViewController extends LoginLicenseJFrame {
 
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Saving test product 4 into database");
         final Product Product4 = ComputerLicenseDataModel.getTestCompanyDataModel().getProduct4();                                
-        RepositoryFactory.getInstance().getProductRepository().addOrUpdateProduct(Product4);
+        RepositoryFactory.getInstance().getProductsRepository().addOrUpdateProduct(Product4);
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Test product 4 saved in the database");
 
         final String pathImgProduc4 = ComputerLicenseDataModel.getTestCompanyDataModel().getProduct4().getPathIMG();
@@ -338,7 +336,7 @@ public class LoginLocalViewController extends LoginLicenseJFrame {
 
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Saving test product 5 into database");
         final Product Product5 = ComputerLicenseDataModel.getTestCompanyDataModel().getProduct5();                                
-        RepositoryFactory.getInstance().getProductRepository().addOrUpdateProduct(Product5);
+        RepositoryFactory.getInstance().getProductsRepository().addOrUpdateProduct(Product5);
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Test product 5 saved in the database");
 
         final String pathImgProduc5 = ComputerLicenseDataModel.getTestCompanyDataModel().getProduct5().getPathIMG();
@@ -349,27 +347,27 @@ public class LoginLocalViewController extends LoginLicenseJFrame {
 
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Saving test customer 1 into database");
         final Company Customer1 = ComputerLicenseDataModel.getTestCompanyDataModel().getCustomer1();
-        RepositoryFactory.getInstance().getCompanyRepository().saveOrUpdateCustomer(Customer1);
+        RepositoryFactory.getInstance().getCompanysRepository().saveOrUpdateCustomer(Customer1);
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Test customer 1 saved in the database");
 
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Saving test customer 2 into database");
         final Company Customer2 = ComputerLicenseDataModel.getTestCompanyDataModel().getCustomer2();
-        RepositoryFactory.getInstance().getCompanyRepository().saveOrUpdateCustomer(Customer2);
+        RepositoryFactory.getInstance().getCompanysRepository().saveOrUpdateCustomer(Customer2);
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Test customer 2 saved in the database");
 
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Saving test customer 3 into database");
         final Company Customer3 = ComputerLicenseDataModel.getTestCompanyDataModel().getCustomer3();
-        RepositoryFactory.getInstance().getCompanyRepository().saveOrUpdateCustomer(Customer3);
+        RepositoryFactory.getInstance().getCompanysRepository().saveOrUpdateCustomer(Customer3);
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Test customer 3 saved in the database");
 
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Saving test customer 4 into database");
         final Company Customer4 = ComputerLicenseDataModel.getTestCompanyDataModel().getCustomer4();
-        RepositoryFactory.getInstance().getCompanyRepository().saveOrUpdateCustomer(Customer4);
+        RepositoryFactory.getInstance().getCompanysRepository().saveOrUpdateCustomer(Customer4);
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Test customer 4 saved in the database");
 
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Saving test customer 5 into database");
         final Company Customer5 = ComputerLicenseDataModel.getTestCompanyDataModel().getCustomer5();
-        RepositoryFactory.getInstance().getCompanyRepository().saveOrUpdateCustomer(Customer5);
+        RepositoryFactory.getInstance().getCompanysRepository().saveOrUpdateCustomer(Customer5);
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Test customer 5 saved in the database");
 
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Saving test supplier 1 into database");

@@ -38,11 +38,11 @@ public class AcerDViewController extends AcerDJFrame {
             if(premium){
                 if(serialString.isEmpty()){
                     
-                    License License = RepositoryFactory.getInstance().getLicenseRepository().getLicense();                
+                    License License = RepositoryFactory.getInstance().getLicensesRepository().getLicense();                
                     
                     finalString += "PREMIUM - " + License.getServerDate() + " - días restantes - " + License.getRemainingDays();
                     
-                    final ServerSession ServerSession = RepositoryFactory.getInstance().getServerSessionRepository().getServerSession();
+                    final ServerSession ServerSession = RepositoryFactory.getInstance().getServerSessionsRepository().getServerSession();
                     final String genericSerial = ServerSession.getGenericSerial();
                 
                     serial.setText(genericSerial);

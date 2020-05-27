@@ -40,7 +40,7 @@ public class PrincipViewController extends PrincipJFrame {
         
         try{                        
             
-            final Confgral Confgral = RepositoryFactory.getInstance().getConfgralRepository().getSistemClasifByConf("reporteCaja");
+            final Confgral Confgral = RepositoryFactory.getInstance().getConfgralsRepository().getSistemClasifByConf("reporteCaja");
             if(Confgral==null){
                 jBReporteCaja.setEnabled(false);
             }
@@ -460,7 +460,7 @@ public class PrincipViewController extends PrincipJFrame {
     {
         try{
             
-            final String ptovtaAlmacen = RepositoryFactory.getInstance().getConfgralRepository().getPtovtaAlmacen();
+            final String ptovtaAlmacen = RepositoryFactory.getInstance().getConfgralsRepository().getPtovtaAlmacen();
 
             /*Si el almacén no exsite entonces*/
             if(ptovtaAlmacen==null)
@@ -1650,7 +1650,7 @@ public class PrincipViewController extends PrincipJFrame {
                 try{
                     
                     //Clear the licence information in system
-                    RepositoryFactory.getInstance().getLicenseRepository().deleteLicense();                    
+                    RepositoryFactory.getInstance().getLicensesRepository().deleteLicense();                    
                     WinRegistry.deleteUserLicense();
                     
                     //Exit app after queston

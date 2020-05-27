@@ -161,7 +161,7 @@ public class Start {
         UtilitiesFactory.getSingleton().getSessionUtility().getUser().setSucu("INICIAL");
         UtilitiesFactory.getSingleton().getSessionUtility().getUser().setEstac("INICIAL");
         
-        License License = RepositoryFactory.getInstance().getLicenseRepository().getLicense();
+        License License = RepositoryFactory.getInstance().getLicensesRepository().getLicense();
 
         if(License==null){
 
@@ -239,13 +239,13 @@ public class Start {
                 PremiumFunctionsManager.getSingleton().setPremiumFuntionsDataModel(ComputerLicenseDataModel.getPremiumFuntionsDataModel());
 
                 LoggerUtility.getSingleton().logInfo(Start.class, "Licenciamiento: Updating channel " + ComputerLicenseDataModel.getChannel());
-                License License1 = RepositoryFactory.getInstance().getLicenseRepository().getLicense();
+                License License1 = RepositoryFactory.getInstance().getLicensesRepository().getLicense();
                 License1.setChannel(ComputerLicenseDataModel.getChannel());
                 License1.setRemainingDays(ComputerLicenseDataModel.getRemainingDays());
-                RepositoryFactory.getInstance().getLicenseRepository().addLicense(License1);
+                RepositoryFactory.getInstance().getLicensesRepository().addLicense(License1);
                 final ServerSession ServerSession = new ServerSession();
                 ServerSession.setGenericSerial(ComputerLicenseDataModel.getGenericSerial());
-                RepositoryFactory.getInstance().getServerSessionRepository().addServerSession(ServerSession);
+                RepositoryFactory.getInstance().getServerSessionsRepository().addServerSession(ServerSession);
                 LoggerUtility.getSingleton().logInfo(Start.class, "Licenciamiento: Channel updated " + ComputerLicenseDataModel.getChannel());
 
                 LoggerUtility.getSingleton().logInfo(Start.class, "Licenciamiento: Is premium: " + ComputerLicenseDataModel.getPremiumFuntionsDataModel().isPremium());

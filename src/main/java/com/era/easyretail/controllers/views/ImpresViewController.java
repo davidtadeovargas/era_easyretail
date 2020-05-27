@@ -27,7 +27,7 @@ public class ImpresViewController extends ImpresJFrame {
         try{
          
             //Load the items in table
-            this.loadItemsInTable();
+            this.jTab.loadAllItemsInTable();
 
             //Load the printers
             jComImpTick.loadItems();
@@ -35,15 +35,15 @@ public class ImpresViewController extends ImpresJFrame {
 
             //Specify the columnos to show in the table
             this.BaseJTable = this.jTab;
-            this.jTab.addShowColumn(TableHeaderFactory.getSigleton().getUsersTableHeader().getNO());
-            this.jTab.addShowColumn(TableHeaderFactory.getSigleton().getUsersTableHeader().getUSER());
-            this.jTab.addShowColumn(TableHeaderFactory.getSigleton().getUsersTableHeader().getTICKET_PRINTER());
-            this.jTab.addShowColumn(TableHeaderFactory.getSigleton().getUsersTableHeader().getINVOICE_PRINTER());
-            this.jTab.addShowColumn(TableHeaderFactory.getSigleton().getUsersTableHeader().getMM_52());
+            this.jTab.addShowColumn(TableHeaderFactory.getSigleton().getUsersTableHeader().getROWNUMBER());
+            this.jTab.addShowColumn(TableHeaderFactory.getSigleton().getUsersTableHeader().getCODE());
+            this.jTab.addShowColumn(TableHeaderFactory.getSigleton().getUsersTableHeader().getTICKETPRINTER());
+            this.jTab.addShowColumn(TableHeaderFactory.getSigleton().getUsersTableHeader().getINVOICEPRINTER());
+            this.jTab.addShowColumn(TableHeaderFactory.getSigleton().getUsersTableHeader().getM52());
             this.jTab.addShowColumn(TableHeaderFactory.getSigleton().getUsersTableHeader().getCORT());
             
             //Load all the users in the table
-            this.loadItemsInTable();
+            this.jTab.loadAllItemsInTable();
             
         }catch (Exception ex) {
             LoggerUtility.getSingleton().logError(ImpresViewController.class, ex);
