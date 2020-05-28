@@ -107,7 +107,7 @@ public class LoginOtraViewController extends LoginOtraJFrame {
             }                        
             
             //Get the user from database
-            final User User = RepositoryFactory.getInstance().getUsersRepository().getUsrByCode(user);                       
+            final User User = (User) RepositoryFactory.getInstance().getUsersRepository().getByCode(user);                       
             
             if(this.LoginType == LoginType.DESLOGIN){
                 

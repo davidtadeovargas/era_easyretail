@@ -440,10 +440,10 @@ public class UsrsViewController extends UsrsJFrame {
                     
                     //Save or update the new user in database
                     if(!update){                        
-                        RepositoryFactory.getInstance().getUsersRepository().addUser(User_);
+                        RepositoryFactory.getInstance().getUsersRepository().save(User_);
                     }
                     else{
-                        RepositoryFactory.getInstance().getUsersRepository().updateUser(User_);
+                        RepositoryFactory.getInstance().getUsersRepository().update(User_);
                     }
                                         
                     jTEstac.grabFocus();

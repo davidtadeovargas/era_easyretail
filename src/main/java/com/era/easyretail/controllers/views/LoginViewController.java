@@ -275,7 +275,7 @@ public class LoginViewController extends LoginJFrame {
             }
             
             //Get the user from db
-            final User User = RepositoryFactory.getInstance().getUsersRepository().getUsrByCode(user);           
+            final User User = (User) RepositoryFactory.getInstance().getUsersRepository().getByCode(user);           
             
             if(this.LoginTypeEmpresa == LoginTypeEmpresa.FIRST_LOGIN){                                
             }
