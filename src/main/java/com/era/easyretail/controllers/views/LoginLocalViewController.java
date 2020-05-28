@@ -196,6 +196,17 @@ public class LoginLocalViewController extends LoginLicenseJFrame {
                 onUserNotExistsServer();                    
             }
         });
+        LoginLocalHttpClient.setErrorInPetition((Exception Exception) -> {
+            try{
+                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, Exception).show();
+            }
+            catch(Exception ex){
+                Logger.getLogger(LoginLocalViewController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
+        LoginLocalHttpClient.setErrorCodeSubscriberInterface((String code) -> {
+            
+        });
         LoginLocalHttpClient.execute();
     }    
     

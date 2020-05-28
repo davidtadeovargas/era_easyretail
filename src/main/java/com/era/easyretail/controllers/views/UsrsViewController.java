@@ -681,7 +681,7 @@ public class UsrsViewController extends UsrsJFrame {
             jTNom.setText(User.getName());
             jTCiu.setText(User.getCity());
             jTxtAlmacen.setText(User.getAlmacen());
-            jCHabDesc.setSelected(User.getEnableDisccount());
+            jCHabDesc.setSelected(User.isEnableDisccount());
             jCPto.setSelected(User.isPtovta());
             jCVend.setSelected(User.isSalesMan());
             jCAdmCaj.setSelected(User.isCasherAdmin());
