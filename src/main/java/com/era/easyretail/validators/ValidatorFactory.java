@@ -67,10 +67,6 @@ public class ValidatorFactory {
        return new CFDIRelacionadosPagosValidator();
    }
 
-   public ChatsValidator getChatsValidator(){
-       return new ChatsValidator();
-   }
-
    public ClasempsValidator getClasempsValidator(){
        return new ClasempsValidator();
    }
@@ -193,10 +189,6 @@ public class ValidatorFactory {
 
    public CuentasContablessValidator getCuentasContablessValidator(){
        return new CuentasContablessValidator();
-   }
-
-   public CumplesValidator getCumplesValidator(){
-       return new CumplesValidator();
    }
 
    public CUsoCFDIsValidator getCUsoCFDIsValidator(){

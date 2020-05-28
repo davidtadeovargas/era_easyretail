@@ -67,7 +67,7 @@ public class UsrsViewController extends UsrsJFrame {
             this.BaseJTable.addShowColumn(TableHeaderFactory.getSigleton().getUsersTableHeader().getROWNUMBER());
             this.BaseJTable.addShowColumn(TableHeaderFactory.getSigleton().getUsersTableHeader().getCODE());
             this.BaseJTable.addShowColumn(TableHeaderFactory.getSigleton().getUsersTableHeader().getNAME());
-            this.loadAllItemsInTable();
+            this.BaseJTable.loadAllItemsInTable();
             
             //When the table is selected
             jTab.setITableRowSelected((ListSelectionEvent lse, Object Object) -> {

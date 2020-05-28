@@ -70,18 +70,18 @@ public class EmpresasViewController extends EmpresasJFrame {
             JTCodigoEmpresa.setText(UtilitiesFactory.getSingleton().getGeneralsUtility().getUniqueDayCode());
 
             this.BaseJTable = jTabEmpresas;
-            this.BaseJTable.addShowColumn(TableHeaderFactory.getSigleton().getBasdatsTableHeader().getID());
-            this.BaseJTable.addShowColumn(TableHeaderFactory.getSigleton().getBasdatsTableHeader().getCOMPANY_CODE());
-            this.BaseJTable.addShowColumn(TableHeaderFactory.getSigleton().getBasdatsTableHeader().getCOMPANY());
-            this.BaseJTable.addShowColumn(TableHeaderFactory.getSigleton().getBasdatsTableHeader().getDATABASE());
-            this.BaseJTable.addShowColumn(TableHeaderFactory.getSigleton().getBasdatsTableHeader().getSTREET()); 
-            this.BaseJTable.addShowColumn(TableHeaderFactory.getSigleton().getBasdatsTableHeader().getNOEXT());
-            this.BaseJTable.addShowColumn(TableHeaderFactory.getSigleton().getBasdatsTableHeader().getNOINT());
-            this.BaseJTable.addShowColumn(TableHeaderFactory.getSigleton().getBasdatsTableHeader().getCITY());
-            this.BaseJTable.addShowColumn(TableHeaderFactory.getSigleton().getBasdatsTableHeader().getCOUNTRY());
-            this.BaseJTable.addShowColumn(TableHeaderFactory.getSigleton().getBasdatsTableHeader().getCP());            
-            this.BaseJTable.addShowColumn(TableHeaderFactory.getSigleton().getBasdatsTableHeader().getEMAIL());            
-            this.BaseJTable.addShowColumn(TableHeaderFactory.getSigleton().getBasdatsTableHeader().getRFC());            
+            this.BaseJTable.addShowColumn(TableHeaderFactory.getSigleton().getBasDatssTableHeader().getROWNUMBER());
+            this.BaseJTable.addShowColumn(TableHeaderFactory.getSigleton().getBasDatssTableHeader().getCODEMP());
+            this.BaseJTable.addShowColumn(TableHeaderFactory.getSigleton().getBasDatssTableHeader().getNOM());
+            this.BaseJTable.addShowColumn(TableHeaderFactory.getSigleton().getBasDatssTableHeader().getBD());
+            this.BaseJTable.addShowColumn(TableHeaderFactory.getSigleton().getBasDatssTableHeader().getCALLE()); 
+            this.BaseJTable.addShowColumn(TableHeaderFactory.getSigleton().getBasDatssTableHeader().getNOEXT());
+            this.BaseJTable.addShowColumn(TableHeaderFactory.getSigleton().getBasDatssTableHeader().getNOINT());
+            this.BaseJTable.addShowColumn(TableHeaderFactory.getSigleton().getBasDatssTableHeader().getCIU());
+            this.BaseJTable.addShowColumn(TableHeaderFactory.getSigleton().getBasDatssTableHeader().getPAI());
+            this.BaseJTable.addShowColumn(TableHeaderFactory.getSigleton().getBasDatssTableHeader().getCP());            
+            this.BaseJTable.addShowColumn(TableHeaderFactory.getSigleton().getBasDatssTableHeader().getCORR());
+            this.BaseJTable.addShowColumn(TableHeaderFactory.getSigleton().getBasDatssTableHeader().getRFC());            
             this.BaseJTable.loadAllItemsInTable();
 
             JTCodigoEmpresa.setEditable(false);
