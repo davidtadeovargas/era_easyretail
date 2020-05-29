@@ -45,19 +45,24 @@ public class ViewControlersFactory {
     private VerCtaContJFrame VerCtaContJFrame;
     private UsrsJFrame UsrsJFrame;
     private UnidadesJFrame UnidadesJFrame;
+    private GeneralCatalogsViewController GeneralCatalogsViewController;
     private TipsPagsJFrame TipsPagsJFrame;
+    private ReportsViewController ReportsViewController;
     private SubramosJFrame SubramosJFrame;
     private SeriesJFrame SeriesJFrame;
     private SectoresJFrame SectoresJFrame;
     private RubrJFrame RubrJFrame;
     private ProvsJFrame ProvsJFrame;
     private ProdsJFrame ProdsJFrame;
+    private ActivosViewController ActivosViewController;
     private ProdSerJFrame ProdSerJFrame;
     private MonsJFrame MonsJFrame;
     private MaxsMinsJFrame MaxsMinsJFrame;
+    private CorrElecsViewController CorrElecsViewController;
     private LotPedCatJFrame LotPedCatJFrame;
     private Impuestos_X_productos_nuevoJFrame Impuestos_X_productos_nuevoJFrame;
     private ImpsJFrame ImpsJFrame;
+    private ListadoPagosViewController ListadoPagosViewController;
     private CuentasContablesJFrame CuentasContablesJFrame;
     private ConceptosPagoJFrame ConceptosPagoJFrame;
     private CompsJFrame CompsJFrame;
@@ -580,6 +585,36 @@ public class ViewControlersFactory {
     public LoginViewController getLoginViewController(){
         LoginViewController = new LoginViewController();
         return LoginViewController;
+    }
+    
+    public ListadoPagosViewController getListadoPagosViewController(){
+        ListadoPagosViewController = new ListadoPagosViewController();
+        return ListadoPagosViewController;
+    }
+    
+    public ActivosViewController getActivosViewController(){
+        ActivosViewController = new ActivosViewController();
+        return ActivosViewController;
+    }
+    
+    public ReportsViewController getReportsViewController(){
+        ReportsViewController = new ReportsViewController();
+        return ReportsViewController;
+    }
+ 
+    public GeneralCatalogsViewController getGeneralCatalogsViewController(){
+        GeneralCatalogsViewController = new GeneralCatalogsViewController();
+        return GeneralCatalogsViewController;
+    }
+    
+    public MaxsMinsViewController getMaxsMinsViewController(){
+        MaxsMinsViewController = new MaxsMinsViewController();
+        return MaxsMinsViewController;
+    }
+    
+    public CorrElecsViewController getCorrElecsViewController(){
+        CorrElecsViewController = new CorrElecsViewController();
+        return CorrElecsViewController;
     }
     
     @Override

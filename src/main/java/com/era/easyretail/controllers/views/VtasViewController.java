@@ -16,6 +16,10 @@ public class VtasViewController extends VtasJFrame {
     
     public VtasViewController() {
         super("window_title_sales");
+        
+        this.PostInitComponents = () -> {
+            maximizedWindow();
+        };
     }
     
     @Override
