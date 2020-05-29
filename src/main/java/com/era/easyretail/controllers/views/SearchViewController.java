@@ -88,10 +88,7 @@ public class SearchViewController extends SearchJFrame {
         labelLoading.setVisible(false);
                 
         jTab = new SearchCommonJTable();
-        jTab.addShowColumn(TableHeaderFactory.getSigleton().getSearchTableHeader().getNO());
-        jTab.addShowColumn(TableHeaderFactory.getSigleton().getSearchTableHeader().getCODE());
-        jTab.addShowColumn(TableHeaderFactory.getSigleton().getSearchTableHeader().getDESCRIPTION());        
-        this.BaseJTable = jTab;
+                
     }
     
      private ImageIcon scaleImage(ImageIcon icon, int w, int h){
@@ -457,6 +454,150 @@ public class SearchViewController extends SearchJFrame {
         jTab.setJTableEnterKeyPressed((int selectedRow) -> {
             jBCarg.doClick();
         });
+        this.BaseJTable = jTab;
+        switch(SearchCommonTypeEnum){
+
+            case CUSTOMERS:
+                jTab.addShowColumn(TableHeaderFactory.getSigleton().getCompaniesTableHeader().getCOMPANY_CODE());
+                jTab.addShowColumn(TableHeaderFactory.getSigleton().getCompaniesTableHeader().getCOMPANY());
+                jTab.addShowColumn(TableHeaderFactory.getSigleton().getCompaniesTableHeader().getEMAIL());
+                break;
+
+            case BASDATS:
+                jTab.addShowColumn(TableHeaderFactory.getSigleton().getBasDatssTableHeader().getCODEMP());
+                jTab.addShowColumn(TableHeaderFactory.getSigleton().getBasDatssTableHeader().getNOM());
+                jTab.addShowColumn(TableHeaderFactory.getSigleton().getBasDatssTableHeader().getBD());                
+                break;
+
+            case PRODUCTS:
+                break;
+
+            case SUPPLIERS:
+                break;
+
+           case USERS:
+                jTab.addShowColumn(TableHeaderFactory.getSigleton().getUsersTableHeader().getCODE());
+                jTab.addShowColumn(TableHeaderFactory.getSigleton().getUsersTableHeader().getNAME());
+                jTab.addShowColumn(TableHeaderFactory.getSigleton().getUsersTableHeader().getEMAIL());
+                break;
+
+           case KITS:
+                break;
+
+           case CONCEPTS:
+                break;
+
+           case PAYMENT_TYPES:
+                break;
+
+           case COINS:
+                break;
+
+           case WAREHOUSES:
+                break;
+
+           case CLASSIFICATIONS:
+                break;
+
+           case SUPPLIERS_CLASIFICATION:
+                break;
+
+            case ANAQS:
+                break;
+
+            case GENERAL_PLACES:
+                break;
+
+            case BRANDS:
+                break;
+
+            case LINES:
+                break;
+
+            case TAXES:
+                break;
+
+            case UNIDS:
+                break;
+
+            case PESOS:                
+                break;
+
+            case COLORS:                
+                break;
+
+            case ADITIONAL_UBIQS:                
+                break;
+
+            case MEASURES:
+                break;
+
+            case FABRICANTES:
+                break;
+
+            case SALES_MAN:
+                break;
+
+            case MODELS:
+                break;
+
+            case ALL_COMPUESTS_PRODUCTS: // AND prods.COMPUE = 0
+                break;
+
+            case TYPES:
+                break;
+
+            case ZONES:
+                break;
+
+            case GIROS:
+                break;
+
+            case PRODDS_SERIE:
+                break;
+
+            case PRODS_NOT_SERIE:
+                break;
+
+            case RUBROS:
+                break;
+
+            case CREDIT_NOTES:
+                break;
+
+            case TALLAS:
+                break;
+
+            case PAYMENT_CONCEPTS:
+                break;
+
+            case BANKS:
+                break;
+
+            case SUCURSALS:
+                break;
+
+            case RESPONSABLES:
+                break;
+
+            case CUSTOMERS_SERIE:
+                break;
+
+            case CPS:
+                break;
+
+            case EXPEDITION_PLACE:
+                break;
+
+            case COUNTRIES:
+                break;                   
+
+            case SECTORS:               
+               break;
+
+            case FISCAL_REGIMEN:               
+               break;
+        }
         
         this.loadAllItemsInTable();
         

@@ -283,8 +283,7 @@ public class PrincipViewController extends PrincipJFrame {
     
     private void jMenIt4ActionPerformed(java.awt.event.ActionEvent evt) {                                        
         ViewControlersFactory.getSingleton().getCorrElecsViewController().setVisible();
-    }
-    
+    }    
     private void jMenItCambClavSegActionPerformed(java.awt.event.ActionEvent evt) {                                                  
                
         /*Mostrar el gráfico de cambiar clave de seguridad 1*/

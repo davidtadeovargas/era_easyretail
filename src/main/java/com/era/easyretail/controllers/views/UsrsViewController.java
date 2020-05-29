@@ -631,7 +631,7 @@ public class UsrsViewController extends UsrsJFrame {
             }
             
             //Search all the ocurrences
-            this.jTab.loadAllItemsInTable();
+            this.jTab.getByLikeEncabezados(search);
             
         }catch (Exception ex) {
             LoggerUtility.getSingleton().logError(UsrsViewController.class, ex);
