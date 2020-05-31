@@ -75,7 +75,7 @@ public class PrincipViewController extends PrincipJFrame {
             });
             jBProvs.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jBProvsActionPerformed(evt);
-            });            
+            });
             jMenItEstacs.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jMenItEstacsActionPerformed(evt);
             });
@@ -479,7 +479,7 @@ public class PrincipViewController extends PrincipJFrame {
         //l.setVisible(true);
     }
     
-    private void jMVProdActionPerformed(java.awt.event.ActionEvent evt) {                                        
+    private void jMVProdActionPerformed(java.awt.event.ActionEvent evt) {
         ViewControlersFactory.getSingleton().getProdsViewController().setVisible();
     }
     
@@ -530,10 +530,8 @@ public class PrincipViewController extends PrincipJFrame {
     }
     
     private void jMenItLogCorrActionPerformed(java.awt.event.ActionEvent evt) {                                              
+        ViewControlersFactory.getSingleton().getLogCorrsViewController().setVisible();
         
-        /*Muestra el formulario de log de corrs*/
-        //LogCorrs l = new LogCorrs();
-        //l.setVisible(true);        
     }
     
     private void jMenItTipsPagsActionPerformed(java.awt.event.ActionEvent evt) {
@@ -742,11 +740,7 @@ public class PrincipViewController extends PrincipJFrame {
     }
     
     private void jMLogProdActionPerformed(java.awt.event.ActionEvent evt) {                                          
-        
-        /*Abre la forma para ver el log de productos*/
-        //LogGral l = new LogGral("Log productos", "logprods", "descrip");
-        //l.setVisible(true);
-        
+                      
     }
     private void jMLogKActionPerformed(java.awt.event.ActionEvent evt) {                                       
         

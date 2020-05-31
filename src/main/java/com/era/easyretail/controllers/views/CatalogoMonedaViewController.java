@@ -7,6 +7,10 @@ package com.era.easyretail.controllers.views;
 
 import com.era.views.CatalogoMonedaJFrame;
 import java.util.List;
+import com.era.logger.LoggerUtility;
+import com.era.views.dialogs.DialogsFactory;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -16,6 +20,36 @@ public class CatalogoMonedaViewController extends CatalogoMonedaJFrame {
     
     public CatalogoMonedaViewController() {
         super("window_title_mons");
+        
+        try{
+                     
+            jButton1.addActionListener((java.awt.event.ActionEvent evt) -> {
+                jButton1ActionPerformed(evt);
+            });
+            
+        }catch (Exception ex) {
+            LoggerUtility.getSingleton().logError(CatalogoMonedaViewController.class, ex);
+            try {
+                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+            } catch (Exception ex1) {
+                Logger.getLogger(CatalogoMonedaViewController.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+        }
+    }
+    
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                             
+
+	try{            	
+            
+	}
+	catch (Exception ex) {
+            LoggerUtility.getSingleton().logError(CatalogoMonedaViewController.class, ex);
+            try {
+                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+            } catch (Exception ex1) {
+                Logger.getLogger(CatalogoMonedaViewController.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+	}
     }
     
     @Override

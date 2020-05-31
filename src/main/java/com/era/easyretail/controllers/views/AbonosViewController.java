@@ -5,8 +5,13 @@
  */
 package com.era.easyretail.controllers.views;
 
-import com.era.views.AbonosJFrame;
+import com.era.logger.LoggerUtility;
+import com.era.views.dialogs.DialogsFactory;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import java.util.List;
+import com.era.views.AbonosJFrame;
 
 /**
  *
@@ -16,6 +21,36 @@ public class AbonosViewController extends AbonosJFrame {
  
     public AbonosViewController() {
         super("window_title_abons");
+        
+        try{
+                     
+            jBSal.addActionListener((java.awt.event.ActionEvent evt) -> {
+                jBSalActionPerformed(evt);
+            });
+            
+        }catch (Exception ex) {
+            LoggerUtility.getSingleton().logError(AbonosViewController.class, ex);
+            try {
+                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+            } catch (Exception ex1) {
+                Logger.getLogger(AbonosViewController.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+        }
+    }
+    
+    private void jBSalActionPerformed(java.awt.event.ActionEvent evt) {                                             
+
+	try{            	
+            
+	}
+	catch (Exception ex) {
+            LoggerUtility.getSingleton().logError(AbonosViewController.class, ex);
+            try {
+                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+            } catch (Exception ex1) {
+                Logger.getLogger(AbonosViewController.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+	}
     }
     
     @Override

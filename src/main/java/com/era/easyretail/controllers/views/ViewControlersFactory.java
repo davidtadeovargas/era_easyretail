@@ -42,6 +42,7 @@ public class ViewControlersFactory {
     private EmpresasViewController EmpresasViewController;
     private SearchViewController SearchViewController;
     private PrincipViewController PrincipViewController;
+    private DevPVtaViewController DevPVtaViewController;
     private VerCtaContJFrame VerCtaContJFrame;
     private UsrsJFrame UsrsJFrame;
     private UnidadesJFrame UnidadesJFrame;
@@ -51,6 +52,8 @@ public class ViewControlersFactory {
     private SubramosJFrame SubramosJFrame;
     private SeriesJFrame SeriesJFrame;
     private SectoresJFrame SectoresJFrame;
+    private ProvViewController ProvViewController;
+    private DevPVtaPtoViewController DevPVtaPtoViewController;
     private RubrJFrame RubrJFrame;
     private ProvsJFrame ProvsJFrame;
     private ProdsJFrame ProdsJFrame;
@@ -75,6 +78,7 @@ public class ViewControlersFactory {
     private UnidadesViewController UnidadesViewController;
     private TipsPagsViewController TipsPagsViewController;
     private SubramosViewController SubramosViewController;
+    private DevPComViewController DevPComViewController;
     private SeriesViewController SeriesViewController;
     private SectoresViewController SectoresViewController;
     private RubrViewController RubrViewController;
@@ -118,8 +122,7 @@ public class ViewControlersFactory {
     private VAbonsViewController VAbonsViewController;
     private VCompViewController VCompViewController;
     private VOrdsViewController VOrdsViewController;
-    private VVtasViewController VVtasViewController;
-    private correoTerminalViewController correoTerminalViewController;
+    private VVtasViewController VVtasViewController;    
     private NewClienExpViewController NewClienExpViewController;
     private MovimientosInventariosViewController MovimientosInventariosViewController;
     private LogCorrsViewController LogCorrsViewController;
@@ -425,11 +428,6 @@ public class ViewControlersFactory {
         return VVtasViewController;       
     }
     
-    public correoTerminalViewController getcorreoTerminalViewController(){
-        correoTerminalViewController = new correoTerminalViewController();
-        return correoTerminalViewController;       
-    }
-    
     public NewClienExpViewController getNewClienExpViewController(){
         NewClienExpViewController = new NewClienExpViewController();
         return NewClienExpViewController;       
@@ -615,6 +613,26 @@ public class ViewControlersFactory {
     public CorrElecsViewController getCorrElecsViewController(){
         CorrElecsViewController = new CorrElecsViewController();
         return CorrElecsViewController;
+    }
+ 
+    public ProvViewController getProvViewController(){
+        ProvViewController = new ProvViewController();
+        return ProvViewController;
+    }
+    
+    public DevPComViewController getDevPComViewController(){
+        DevPComViewController = new DevPComViewController();
+        return DevPComViewController;
+    }
+    
+    public DevPVtaPtoViewController getDevPVtaPtoViewController(){
+        DevPVtaPtoViewController = new DevPVtaPtoViewController();
+        return DevPVtaPtoViewController;
+    }
+    
+    public DevPVtaViewController getDevPVtaViewController(){
+        DevPVtaViewController = new DevPVtaViewController();
+        return DevPVtaViewController;
     }
     
     @Override

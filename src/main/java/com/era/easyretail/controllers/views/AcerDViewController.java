@@ -62,11 +62,11 @@ public class AcerDViewController extends AcerDJFrame {
             estadJTextField.setText(finalString);
             
         }catch (Exception ex) {
-            LoggerUtility.getSingleton().logError(PrincipViewController.class, ex);
+            LoggerUtility.getSingleton().logError(AcerDViewController.class, ex);
             try {
                 DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
             } catch (Exception ex1) {
-                Logger.getLogger(PrincipViewController.class.getName()).log(Level.SEVERE, null, ex1);
+                Logger.getLogger(AcerDViewController.class.getName()).log(Level.SEVERE, null, ex1);
             }
         }
         

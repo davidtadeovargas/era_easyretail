@@ -7,7 +7,10 @@ package com.era.easyretail.controllers.views;
 
 import com.era.views.MonsJFrame;
 import java.util.List;
-
+import com.era.logger.LoggerUtility;
+import com.era.views.dialogs.DialogsFactory;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 /**
  *
  * @author PC
@@ -16,6 +19,162 @@ public class MonsViewController extends MonsJFrame {
 
     public MonsViewController() {
         super("window_title_mons");
+        
+        try{
+                     
+            jBDel.addActionListener((java.awt.event.ActionEvent evt) -> {
+                jBDelActionPerformed(evt);
+            });
+            jBNew.addActionListener((java.awt.event.ActionEvent evt) -> {
+                jBNewActionPerformed(evt);
+            });
+            jBBusc.addActionListener((java.awt.event.ActionEvent evt) -> {
+                jBBuscActionPerformed(evt);
+            });
+            jBMostT.addActionListener((java.awt.event.ActionEvent evt) -> {
+                jBMostTActionPerformed(evt);
+            });
+            jBDol.addActionListener((java.awt.event.ActionEvent evt) -> {
+                jBDolActionPerformed(evt);
+            });
+            jBActua.addActionListener((java.awt.event.ActionEvent evt) -> {
+                jBActuaActionPerformed(evt);
+            });
+            jBGua.addActionListener((java.awt.event.ActionEvent evt) -> {
+                jBGuaActionPerformed(evt);
+            });
+            jBClaveSat.addActionListener((java.awt.event.ActionEvent evt) -> {
+                jBClaveSatActionPerformed(evt);
+            });
+            
+        }catch (Exception ex) {
+            LoggerUtility.getSingleton().logError(MonsViewController.class, ex);
+            try {
+                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+            } catch (Exception ex1) {
+                Logger.getLogger(MonsViewController.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+        }
+    }
+    
+    private void jBClaveSatActionPerformed(java.awt.event.ActionEvent evt) {                                             
+
+	try{            	
+            
+	}
+	catch (Exception ex) {
+            LoggerUtility.getSingleton().logError(MonsViewController.class, ex);
+            try {
+                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+            } catch (Exception ex1) {
+                Logger.getLogger(MonsViewController.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+	}
+    }
+    
+    private void jBGuaActionPerformed(java.awt.event.ActionEvent evt) {                                             
+
+	try{            	
+            
+	}
+	catch (Exception ex) {
+            LoggerUtility.getSingleton().logError(MonsViewController.class, ex);
+            try {
+                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+            } catch (Exception ex1) {
+                Logger.getLogger(MonsViewController.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+	}
+    }
+    
+    private void jBActuaActionPerformed(java.awt.event.ActionEvent evt) {                                             
+
+	try{            	
+            
+	}
+	catch (Exception ex) {
+            LoggerUtility.getSingleton().logError(MonsViewController.class, ex);
+            try {
+                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+            } catch (Exception ex1) {
+                Logger.getLogger(MonsViewController.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+	}
+    }
+    
+    private void jBDolActionPerformed(java.awt.event.ActionEvent evt) {                                             
+
+	try{            	
+            
+	}
+	catch (Exception ex) {
+            LoggerUtility.getSingleton().logError(MonsViewController.class, ex);
+            try {
+                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+            } catch (Exception ex1) {
+                Logger.getLogger(MonsViewController.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+	}
+    }
+    
+    private void jBMostTActionPerformed(java.awt.event.ActionEvent evt) {                                             
+
+	try{            	
+            
+	}
+	catch (Exception ex) {
+            LoggerUtility.getSingleton().logError(MonsViewController.class, ex);
+            try {
+                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+            } catch (Exception ex1) {
+                Logger.getLogger(MonsViewController.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+	}
+    }
+    
+    private void jBBuscActionPerformed(java.awt.event.ActionEvent evt) {                                             
+
+	try{            	
+            
+	}
+	catch (Exception ex) {
+            LoggerUtility.getSingleton().logError(MonsViewController.class, ex);
+            try {
+                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+            } catch (Exception ex1) {
+                Logger.getLogger(MonsViewController.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+	}
+    }
+    
+    private void jBNewActionPerformed(java.awt.event.ActionEvent evt) {                                             
+
+	try{            	
+            
+	}
+	catch (Exception ex) {
+            LoggerUtility.getSingleton().logError(MonsViewController.class, ex);
+            try {
+                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+            } catch (Exception ex1) {
+                Logger.getLogger(MonsViewController.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+	}
+    }
+    
+    private void jBDelActionPerformed(java.awt.event.ActionEvent evt) {                                             
+
+	try{            	
+            
+	}
+	catch (Exception ex) {
+            LoggerUtility.getSingleton().logError(MonsViewController.class, ex);
+            try {
+                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+            } catch (Exception ex1) {
+                Logger.getLogger(MonsViewController.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+	}
     }
     
     @Override

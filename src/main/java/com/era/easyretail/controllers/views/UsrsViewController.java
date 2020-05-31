@@ -62,12 +62,11 @@ public class UsrsViewController extends UsrsJFrame {
             this.JComponentUtils.onlyNumbers(jTComi);
             this.JComponentUtils.onlyNumbers(jTCP);
             
-            //Get all the users and load them in table
-            this.BaseJTable = jTab;
+            //Get all the users and load them in table            
             this.BaseJTable.addShowColumn(TableHeaderFactory.getSigleton().getUsersTableHeader().getROWNUMBER());
             this.BaseJTable.addShowColumn(TableHeaderFactory.getSigleton().getUsersTableHeader().getCODE());
             this.BaseJTable.addShowColumn(TableHeaderFactory.getSigleton().getUsersTableHeader().getNAME());
-            this.BaseJTable.loadAllItemsInTable();
+            this.BaseJTable.loadAllItemsInTable();            
             
             //When the table is selected
             jTab.setITableRowSelected((ListSelectionEvent lse, Object Object) -> {
@@ -721,6 +720,6 @@ public class UsrsViewController extends UsrsJFrame {
 
     @Override
     public List<?> getItemsToLoadInTable() throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+       return null;
     }
 }

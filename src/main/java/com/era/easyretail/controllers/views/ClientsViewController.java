@@ -5,8 +5,12 @@
  */
 package com.era.easyretail.controllers.views;
 
+import com.era.logger.LoggerUtility;
 import com.era.views.ClientsJFrame;
+import com.era.views.dialogs.DialogsFactory;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -16,6 +20,127 @@ public class ClientsViewController extends ClientsJFrame {
     
     public ClientsViewController() {
         super("window_title_customers");
+        
+        try{
+            
+            jBNew.addActionListener((java.awt.event.ActionEvent evt) -> {
+                jBNewActionPerformed(evt);
+            });
+            jBAbr.addActionListener((java.awt.event.ActionEvent evt) -> {
+                jBAbrActionPerformed(evt);
+            });
+            jBDel.addActionListener((java.awt.event.ActionEvent evt) -> {
+                jBDelActionPerformed(evt);
+            });
+            jBSal.addActionListener((java.awt.event.ActionEvent evt) -> {
+                jBSalActionPerformed(evt);
+            });
+            jBBusc.addActionListener((java.awt.event.ActionEvent evt) -> {
+                jBBuscActionPerformed(evt);
+            });
+            jBMostT.addActionListener((java.awt.event.ActionEvent evt) -> {
+                jBMostTActionPerformed(evt);
+            });
+            
+        }catch (Exception ex) {
+            LoggerUtility.getSingleton().logError(ClientsViewController.class, ex);
+            try {
+                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+            } catch (Exception ex1) {
+                Logger.getLogger(ClientsViewController.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+        }
+    }
+    
+    private void jBBuscActionPerformed(java.awt.event.ActionEvent evt) {                                             
+
+	try{            	
+            
+	}
+	catch (Exception ex) {
+            LoggerUtility.getSingleton().logError(ClientsViewController.class, ex);
+            try {
+                    DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+            } catch (Exception ex1) {
+                    Logger.getLogger(ClientsViewController.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+	}
+    }
+    
+    private void jBMostTActionPerformed(java.awt.event.ActionEvent evt) {                                             
+
+	try{            	
+            
+	}
+	catch (Exception ex) {
+            LoggerUtility.getSingleton().logError(ClientsViewController.class, ex);
+            try {
+                    DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+            } catch (Exception ex1) {
+                    Logger.getLogger(ClientsViewController.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+	}
+    }
+    
+    
+    private void jBSalActionPerformed(java.awt.event.ActionEvent evt) {                                             
+
+	try{            	
+            
+	}
+	catch (Exception ex) {
+            LoggerUtility.getSingleton().logError(ClientsViewController.class, ex);
+            try {
+                    DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+            } catch (Exception ex1) {
+                    Logger.getLogger(ClientsViewController.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+	}
+    }
+    
+    private void jBDelActionPerformed(java.awt.event.ActionEvent evt) {                                             
+
+	try{            	
+            
+	}
+	catch (Exception ex) {
+            LoggerUtility.getSingleton().logError(ClientsViewController.class, ex);
+            try {
+                    DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+            } catch (Exception ex1) {
+                    Logger.getLogger(ClientsViewController.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+	}
+    }
+    
+    private void jBAbrActionPerformed(java.awt.event.ActionEvent evt) {                                             
+
+	try{            	
+            
+	}
+	catch (Exception ex) {
+            LoggerUtility.getSingleton().logError(ClientsViewController.class, ex);
+            try {
+                    DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+            } catch (Exception ex1) {
+                    Logger.getLogger(ClientsViewController.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+	}
+    }
+    
+    private void jBNewActionPerformed(java.awt.event.ActionEvent evt) {                                             
+
+	try{            	
+            
+	}
+	catch (Exception ex) {
+            LoggerUtility.getSingleton().logError(ClientsViewController.class, ex);
+            try {
+                    DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+            } catch (Exception ex1) {
+                    Logger.getLogger(ClientsViewController.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+	}
     }
     
     @Override
