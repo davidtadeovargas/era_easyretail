@@ -6,9 +6,16 @@ import com.era.repositories.RepositoryFactory;
 
 public class DocumentosOrigensValidator extends IValidate{
 
-   private String code;
    private String nombre;
+   public void setNombre(String property){
+       this.nombre = property;
+   }
+
    private String tipo;
+   public void setTipo(String property){
+       this.tipo = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
@@ -19,11 +26,6 @@ public class DocumentosOrigensValidator extends IValidate{
 
        if(tipo==null || tipo.isEmpty()){
            throw new DocumentosOrigensValidatorsExceptions().getTipoException();
-       }
-
-       final DocumentosOrigen DocumentosOrigen = (DocumentosOrigen) RepositoryFactory.getInstance().getDocumentosOrigensRepository().getByCode(code);
-       if(DocumentosOrigen != null){            
-           throw new DocumentosOrigensValidatorsExceptions().getModelExistsException();
        }
 
        if(IInsertValidation!=null){
@@ -48,23 +50,4 @@ public class DocumentosOrigensValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new DocumentosOrigensValidatorsExceptions().getCodeException();
-       }
-
-       final DocumentosOrigen DocumentosOrigen = (DocumentosOrigen) RepositoryFactory.getInstance().getDocumentosOrigensRepository().getByCode(code);
-       if(DocumentosOrigen == null){            
-           throw new DocumentosOrigensValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new DocumentosOrigensValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

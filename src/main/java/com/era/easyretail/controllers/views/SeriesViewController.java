@@ -48,6 +48,10 @@ public class SeriesViewController extends SeriesJFrame {
         }
     }
     
+    @Override
+    public void clearFields(){
+    }
+    
     private void jBMostTActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	

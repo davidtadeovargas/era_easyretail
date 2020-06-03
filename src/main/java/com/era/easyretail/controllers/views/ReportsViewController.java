@@ -40,6 +40,10 @@ public class ReportsViewController extends ReportsJFrame {
         }
     }    
 
+    @Override
+    public void clearFields(){
+    }
+    
     private void generateButtonActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	

@@ -156,6 +156,10 @@ public class VtasViewController extends VtasJFrame {
         }
     }
     
+    @Override
+    public void clearFields(){
+    }
+    
     private void jBAbrNotCredActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	

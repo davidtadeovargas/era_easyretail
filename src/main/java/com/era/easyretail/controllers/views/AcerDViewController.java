@@ -43,7 +43,7 @@ public class AcerDViewController extends AcerDJFrame {
                     finalString += "PREMIUM - " + License.getServerDate() + " - días restantes - " + License.getRemainingDays();
                     
                     final ServerSession ServerSession = RepositoryFactory.getInstance().getServerSessionsRepository().getServerSession();
-                    final String genericSerial = ServerSession.getGenericSerial();
+                    final String genericSerial = ServerSession.getCode();
                 
                     serial.setText(genericSerial);
                     serial.setCaretPosition(0);
@@ -70,6 +70,10 @@ public class AcerDViewController extends AcerDJFrame {
             }
         }
         
+    }
+    
+    @Override
+    public void clearFields(){            
     }
     
     @Override

@@ -6,24 +6,91 @@ import com.era.repositories.RepositoryFactory;
 
 public class FacturassValidator extends IValidate{
 
-   private String code;
    private String cantidad;
+   public void setCantidad(String property){
+       this.cantidad = property;
+   }
+
    private String clavesat;
+   public void setClavesat(String property){
+       this.clavesat = property;
+   }
+
    private String cliente;
+   public void setCliente(String property){
+       this.cliente = property;
+   }
+
    private String descripcion;
+   public void setDescripcion(String property){
+       this.descripcion = property;
+   }
+
    private String descuento;
+   public void setDescuento(String property){
+       this.descuento = property;
+   }
+
    private String fentrega;
+   public void setFentrega(String property){
+       this.fentrega = property;
+   }
+
    private String importe;
+   public void setImporte(String property){
+       this.importe = property;
+   }
+
    private String pdescuento;
+   public void setPdescuento(String property){
+       this.pdescuento = property;
+   }
+
    private String precio;
+   public void setPrecio(String property){
+       this.precio = property;
+   }
+
    private String producto;
+   public void setProducto(String property){
+       this.producto = property;
+   }
+
    private String subtotal;
+   public void setSubtotal(String property){
+       this.subtotal = property;
+   }
+
    private String tdescuento;
+   public void setTdescuento(String property){
+       this.tdescuento = property;
+   }
+
    private String total;
+   public void setTotal(String property){
+       this.total = property;
+   }
+
    private String total_retencion;
+   public void setTotal_retencion(String property){
+       this.total_retencion = property;
+   }
+
    private String total_traslado;
+   public void setTotal_traslado(String property){
+       this.total_traslado = property;
+   }
+
    private String unidad;
+   public void setUnidad(String property){
+       this.unidad = property;
+   }
+
    private String usocfdi;
+   public void setUsocfdi(String property){
+       this.usocfdi = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
@@ -96,11 +163,6 @@ public class FacturassValidator extends IValidate{
            throw new FacturassValidatorsExceptions().getUsocfdiException();
        }
 
-       final Facturas Facturas = (Facturas) RepositoryFactory.getInstance().getFacturassRepository().getByCode(code);
-       if(Facturas != null){            
-           throw new FacturassValidatorsExceptions().getModelExistsException();
-       }
-
        if(IInsertValidation!=null){
             final boolean response = IInsertValidation.validate();
             if(!response){
@@ -123,23 +185,4 @@ public class FacturassValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new FacturassValidatorsExceptions().getCodeException();
-       }
-
-       final Facturas Facturas = (Facturas) RepositoryFactory.getInstance().getFacturassRepository().getByCode(code);
-       if(Facturas == null){            
-           throw new FacturassValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new FacturassValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

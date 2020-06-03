@@ -7,23 +7,25 @@ import com.era.repositories.RepositoryFactory;
 public class MedssValidator extends IValidate{
 
    private String code;
-   private String cod;
+   public void setCode(String property){
+       this.code = property;
+   }
+
    private String descrip;
+   public void setDescrip(String property){
+       this.descrip = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
 
-       if(cod==null || cod.isEmpty()){
-           throw new MedssValidatorsExceptions().getCodException();
+       if(code==null || code.isEmpty()){
+           throw new MedssValidatorsExceptions().getCodeException();
        }
 
        if(descrip==null || descrip.isEmpty()){
            throw new MedssValidatorsExceptions().getDescripException();
-       }
-
-       final Meds Meds = (Meds) RepositoryFactory.getInstance().getMedssRepository().getByCode(code);
-       if(Meds != null){            
-           throw new MedssValidatorsExceptions().getModelExistsException();
        }
 
        if(IInsertValidation!=null){
@@ -48,23 +50,4 @@ public class MedssValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new MedssValidatorsExceptions().getCodeException();
-       }
-
-       final Meds Meds = (Meds) RepositoryFactory.getInstance().getMedssRepository().getByCode(code);
-       if(Meds == null){            
-           throw new MedssValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new MedssValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

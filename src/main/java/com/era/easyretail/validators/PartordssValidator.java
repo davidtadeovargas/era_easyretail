@@ -6,20 +6,71 @@ import com.era.repositories.RepositoryFactory;
 
 public class PartordssValidator extends IValidate{
 
-   private String code;
    private String alma;
+   public void setAlma(String property){
+       this.alma = property;
+   }
+
    private String cant;
+   public void setCant(String property){
+       this.cant = property;
+   }
+
    private String codcot;
+   public void setCodcot(String property){
+       this.codcot = property;
+   }
+
    private String codord;
+   public void setCodord(String property){
+       this.codord = property;
+   }
+
    private String descad;
+   public void setDescad(String property){
+       this.descad = property;
+   }
+
    private String descrip;
+   public void setDescrip(String property){
+       this.descrip = property;
+   }
+
    private String descu;
+   public void setDescu(String property){
+       this.descu = property;
+   }
+
    private String fent;
+   public void setFent(String property){
+       this.fent = property;
+   }
+
    private String impue;
+   public void setImpue(String property){
+       this.impue = property;
+   }
+
    private String impueval;
+   public void setImpueval(String property){
+       this.impueval = property;
+   }
+
    private String mon;
+   public void setMon(String property){
+       this.mon = property;
+   }
+
    private String prod;
+   public void setProd(String property){
+       this.prod = property;
+   }
+
    private String unid;
+   public void setUnid(String property){
+       this.unid = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
@@ -76,11 +127,6 @@ public class PartordssValidator extends IValidate{
            throw new PartordssValidatorsExceptions().getUnidException();
        }
 
-       final Partords Partords = (Partords) RepositoryFactory.getInstance().getPartordssRepository().getByCode(code);
-       if(Partords != null){            
-           throw new PartordssValidatorsExceptions().getModelExistsException();
-       }
-
        if(IInsertValidation!=null){
             final boolean response = IInsertValidation.validate();
             if(!response){
@@ -103,23 +149,4 @@ public class PartordssValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new PartordssValidatorsExceptions().getCodeException();
-       }
-
-       final Partords Partords = (Partords) RepositoryFactory.getInstance().getPartordssRepository().getByCode(code);
-       if(Partords == null){            
-           throw new PartordssValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new PartordssValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

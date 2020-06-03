@@ -50,6 +50,10 @@ public class GeneralCatalogsViewController extends GeneralCatalogsJFrame {
         }
     }
     
+    @Override
+    public void clearFields(){            
+    }
+    
     private void jBActuaActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	

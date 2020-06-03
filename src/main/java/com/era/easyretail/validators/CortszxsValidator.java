@@ -6,10 +6,21 @@ import com.era.repositories.RepositoryFactory;
 
 public class CortszxsValidator extends IValidate{
 
-   private String code;
    private String cort;
+   public void setCort(String property){
+       this.cort = property;
+   }
+
    private String numcort;
+   public void setNumcort(String property){
+       this.numcort = property;
+   }
+
    private String totvtas;
+   public void setTotvtas(String property){
+       this.totvtas = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
@@ -24,11 +35,6 @@ public class CortszxsValidator extends IValidate{
 
        if(totvtas==null || totvtas.isEmpty()){
            throw new CortszxsValidatorsExceptions().getTotvtasException();
-       }
-
-       final Cortszx Cortszx = (Cortszx) RepositoryFactory.getInstance().getCortszxsRepository().getByCode(code);
-       if(Cortszx != null){            
-           throw new CortszxsValidatorsExceptions().getModelExistsException();
        }
 
        if(IInsertValidation!=null){
@@ -53,23 +59,4 @@ public class CortszxsValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new CortszxsValidatorsExceptions().getCodeException();
-       }
-
-       final Cortszx Cortszx = (Cortszx) RepositoryFactory.getInstance().getCortszxsRepository().getByCode(code);
-       if(Cortszx == null){            
-           throw new CortszxsValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new CortszxsValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

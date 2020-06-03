@@ -6,9 +6,16 @@ import com.era.repositories.RepositoryFactory;
 
 public class BasDatssValidator extends IValidate{
 
-   private String code;
    private String codemp;
+   public void setCodemp(String property){
+       this.codemp = property;
+   }
+
    private String nom;
+   public void setNom(String property){
+       this.nom = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
@@ -19,11 +26,6 @@ public class BasDatssValidator extends IValidate{
 
        if(nom==null || nom.isEmpty()){
            throw new BasDatssValidatorsExceptions().getNomException();
-       }
-
-       final BasDats BasDats = (BasDats) RepositoryFactory.getInstance().getBasDatssRepository().getByCode(code);
-       if(BasDats != null){            
-           throw new BasDatssValidatorsExceptions().getModelExistsException();
        }
 
        if(IInsertValidation!=null){
@@ -48,23 +50,4 @@ public class BasDatssValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new BasDatssValidatorsExceptions().getCodeException();
-       }
-
-       final BasDats BasDats = (BasDats) RepositoryFactory.getInstance().getBasDatssRepository().getByCode(code);
-       if(BasDats == null){            
-           throw new BasDatssValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new BasDatssValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

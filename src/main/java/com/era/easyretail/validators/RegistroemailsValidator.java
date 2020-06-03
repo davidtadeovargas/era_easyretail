@@ -6,12 +6,31 @@ import com.era.repositories.RepositoryFactory;
 
 public class RegistroemailsValidator extends IValidate{
 
-   private String code;
    private String cambiada_fecha;
+   public void setCambiada_fecha(String property){
+       this.cambiada_fecha = property;
+   }
+
    private String contra;
+   public void setContra(String property){
+       this.contra = property;
+   }
+
    private String correo;
+   public void setCorreo(String property){
+       this.correo = property;
+   }
+
    private String generada_fecha;
+   public void setGenerada_fecha(String property){
+       this.generada_fecha = property;
+   }
+
    private String ya_entro_booleano;
+   public void setYa_entro_booleano(String property){
+       this.ya_entro_booleano = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
@@ -36,11 +55,6 @@ public class RegistroemailsValidator extends IValidate{
            throw new RegistroemailsValidatorsExceptions().getYa_entro_booleanoException();
        }
 
-       final Registroemail Registroemail = (Registroemail) RepositoryFactory.getInstance().getRegistroemailsRepository().getByCode(code);
-       if(Registroemail != null){            
-           throw new RegistroemailsValidatorsExceptions().getModelExistsException();
-       }
-
        if(IInsertValidation!=null){
             final boolean response = IInsertValidation.validate();
             if(!response){
@@ -63,23 +77,4 @@ public class RegistroemailsValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new RegistroemailsValidatorsExceptions().getCodeException();
-       }
-
-       final Registroemail Registroemail = (Registroemail) RepositoryFactory.getInstance().getRegistroemailsRepository().getByCode(code);
-       if(Registroemail == null){            
-           throw new RegistroemailsValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new RegistroemailsValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

@@ -6,10 +6,21 @@ import com.era.repositories.RepositoryFactory;
 
 public class PerssValidator extends IValidate{
 
-   private String code;
    private String fingemp;
+   public void setFingemp(String property){
+       this.fingemp = property;
+   }
+
    private String fsalemp;
+   public void setFsalemp(String property){
+       this.fsalemp = property;
+   }
+
    private String nom;
+   public void setNom(String property){
+       this.nom = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
@@ -24,11 +35,6 @@ public class PerssValidator extends IValidate{
 
        if(nom==null || nom.isEmpty()){
            throw new PerssValidatorsExceptions().getNomException();
-       }
-
-       final Pers Pers = (Pers) RepositoryFactory.getInstance().getPerssRepository().getByCode(code);
-       if(Pers != null){            
-           throw new PerssValidatorsExceptions().getModelExistsException();
        }
 
        if(IInsertValidation!=null){
@@ -53,23 +59,4 @@ public class PerssValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new PerssValidatorsExceptions().getCodeException();
-       }
-
-       final Pers Pers = (Pers) RepositoryFactory.getInstance().getPerssRepository().getByCode(code);
-       if(Pers == null){            
-           throw new PerssValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new PerssValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

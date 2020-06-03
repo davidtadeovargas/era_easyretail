@@ -28,8 +28,4 @@ public class TipactfijsValidatorsExceptions {
        return new Exception("Falta espeficiar Descrip");
    }
 
-   public Exception getTipException(){
-       return new Exception("Falta espeficiar Tip");
-   }
-
 }

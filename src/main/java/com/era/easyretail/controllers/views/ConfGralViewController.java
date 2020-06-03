@@ -123,6 +123,10 @@ public class ConfGralViewController extends ConfGralJFrame {
         }
     }
     
+    @Override
+    public void clearFields(){            
+    }
+    
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	

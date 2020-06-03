@@ -24,8 +24,4 @@ public class ServerSessionsValidatorsExceptions {
        return new Exception("Falta espeficiar codigo");
    }
 
-   public Exception getGenericSerialException(){
-       return new Exception("Falta espeficiar GenericSerial");
-   }
-
 }

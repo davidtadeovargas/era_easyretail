@@ -6,21 +6,76 @@ import com.era.repositories.RepositoryFactory;
 
 public class CotssValidator extends IValidate{
 
-   private String code;
    private String codcot;
+   public void setCodcot(String property){
+       this.codcot = property;
+   }
+
    private String codemp;
+   public void setCodemp(String property){
+       this.codemp = property;
+   }
+
    private String descrip;
+   public void setDescrip(String property){
+       this.descrip = property;
+   }
+
    private String estad;
+   public void setEstad(String property){
+       this.estad = property;
+   }
+
    private String fdoc;
+   public void setFdoc(String property){
+       this.fdoc = property;
+   }
+
    private String fentre;
+   public void setFentre(String property){
+       this.fentre = property;
+   }
+
    private String fvenc;
+   public void setFvenc(String property){
+       this.fvenc = property;
+   }
+
    private String mon;
+   public void setMon(String property){
+       this.mon = property;
+   }
+
    private String noser;
+   public void setNoser(String property){
+       this.noser = property;
+   }
+
    private String observ;
+   public void setObserv(String property){
+       this.observ = property;
+   }
+
    private String proy;
+   public void setProy(String property){
+       this.proy = property;
+   }
+
    private String ser;
+   public void setSer(String property){
+       this.ser = property;
+   }
+
    private String subtotgral2;
+   public void setSubtotgral2(String property){
+       this.subtotgral2 = property;
+   }
+
    private String subtotmat2;
+   public void setSubtotmat2(String property){
+       this.subtotmat2 = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
@@ -81,11 +136,6 @@ public class CotssValidator extends IValidate{
            throw new CotssValidatorsExceptions().getSubtotmat2Exception();
        }
 
-       final Cots Cots = (Cots) RepositoryFactory.getInstance().getCotssRepository().getByCode(code);
-       if(Cots != null){            
-           throw new CotssValidatorsExceptions().getModelExistsException();
-       }
-
        if(IInsertValidation!=null){
             final boolean response = IInsertValidation.validate();
             if(!response){
@@ -108,23 +158,4 @@ public class CotssValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new CotssValidatorsExceptions().getCodeException();
-       }
-
-       final Cots Cots = (Cots) RepositoryFactory.getInstance().getCotssRepository().getByCode(code);
-       if(Cots == null){            
-           throw new CotssValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new CotssValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

@@ -45,6 +45,10 @@ public class VOrdsViewController extends VOrdsJFrame {
         }
     }
     
+    @Override
+    public void clearFields(){
+    }
+    
     private void jBActuaActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	

@@ -7,17 +7,18 @@ import com.era.repositories.RepositoryFactory;
 public class LinesValidator extends IValidate{
 
    private String code;
-   private String cashNumber;
+   public void setCode(String property){
+       this.code = property;
+   }
+
    private String description;
-   private String station;
-   private String sucursal;
+   public void setDescription(String property){
+       this.description = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
-
-       if(cashNumber==null || cashNumber.isEmpty()){
-           throw new LinesValidatorsExceptions().getCashNumberException();
-       }
 
        if(code==null || code.isEmpty()){
            throw new LinesValidatorsExceptions().getCodeException();
@@ -25,19 +26,6 @@ public class LinesValidator extends IValidate{
 
        if(description==null || description.isEmpty()){
            throw new LinesValidatorsExceptions().getDescriptionException();
-       }
-
-       if(station==null || station.isEmpty()){
-           throw new LinesValidatorsExceptions().getStationException();
-       }
-
-       if(sucursal==null || sucursal.isEmpty()){
-           throw new LinesValidatorsExceptions().getSucursalException();
-       }
-
-       final Line Line = (Line) RepositoryFactory.getInstance().getLinesRepository().getByCode(code);
-       if(Line != null){            
-           throw new LinesValidatorsExceptions().getModelExistsException();
        }
 
        if(IInsertValidation!=null){
@@ -62,23 +50,4 @@ public class LinesValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new LinesValidatorsExceptions().getCodeException();
-       }
-
-       final Line Line = (Line) RepositoryFactory.getInstance().getLinesRepository().getByCode(code);
-       if(Line == null){            
-           throw new LinesValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new LinesValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

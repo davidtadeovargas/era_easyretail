@@ -6,19 +6,66 @@ import com.era.repositories.RepositoryFactory;
 
 public class PartprevcomprssValidator extends IValidate{
 
-   private String code;
    private String alma;
+   public void setAlma(String property){
+       this.alma = property;
+   }
+
    private String cant;
+   public void setCant(String property){
+       this.cant = property;
+   }
+
    private String codcom;
+   public void setCodcom(String property){
+       this.codcom = property;
+   }
+
    private String codimpue;
+   public void setCodimpue(String property){
+       this.codimpue = property;
+   }
+
    private String comenser;
+   public void setComenser(String property){
+       this.comenser = property;
+   }
+
    private String descrip;
+   public void setDescrip(String property){
+       this.descrip = property;
+   }
+
    private String flotvenc;
+   public void setFlotvenc(String property){
+       this.flotvenc = property;
+   }
+
    private String garan;
+   public void setGaran(String property){
+       this.garan = property;
+   }
+
    private String mon;
+   public void setMon(String property){
+       this.mon = property;
+   }
+
    private String prod;
+   public void setProd(String property){
+       this.prod = property;
+   }
+
    private String serprod;
+   public void setSerprod(String property){
+       this.serprod = property;
+   }
+
    private String unid;
+   public void setUnid(String property){
+       this.unid = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
@@ -71,11 +118,6 @@ public class PartprevcomprssValidator extends IValidate{
            throw new PartprevcomprssValidatorsExceptions().getUnidException();
        }
 
-       final Partprevcomprs Partprevcomprs = (Partprevcomprs) RepositoryFactory.getInstance().getPartprevcomprssRepository().getByCode(code);
-       if(Partprevcomprs != null){            
-           throw new PartprevcomprssValidatorsExceptions().getModelExistsException();
-       }
-
        if(IInsertValidation!=null){
             final boolean response = IInsertValidation.validate();
             if(!response){
@@ -98,23 +140,4 @@ public class PartprevcomprssValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new PartprevcomprssValidatorsExceptions().getCodeException();
-       }
-
-       final Partprevcomprs Partprevcomprs = (Partprevcomprs) RepositoryFactory.getInstance().getPartprevcomprssRepository().getByCode(code);
-       if(Partprevcomprs == null){            
-           throw new PartprevcomprssValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new PartprevcomprssValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

@@ -7,23 +7,25 @@ import com.era.repositories.RepositoryFactory;
 public class ProdpartsValidator extends IValidate{
 
    private String code;
+   public void setCode(String property){
+       this.code = property;
+   }
+
    private String part;
-   private String prod;
+   public void setPart(String property){
+       this.part = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
 
+       if(code==null || code.isEmpty()){
+           throw new ProdpartsValidatorsExceptions().getCodeException();
+       }
+
        if(part==null || part.isEmpty()){
            throw new ProdpartsValidatorsExceptions().getPartException();
-       }
-
-       if(prod==null || prod.isEmpty()){
-           throw new ProdpartsValidatorsExceptions().getProdException();
-       }
-
-       final Prodpart Prodpart = (Prodpart) RepositoryFactory.getInstance().getProdpartsRepository().getByCode(code);
-       if(Prodpart != null){            
-           throw new ProdpartsValidatorsExceptions().getModelExistsException();
        }
 
        if(IInsertValidation!=null){
@@ -48,23 +50,4 @@ public class ProdpartsValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new ProdpartsValidatorsExceptions().getCodeException();
-       }
-
-       final Prodpart Prodpart = (Prodpart) RepositoryFactory.getInstance().getProdpartsRepository().getByCode(code);
-       if(Prodpart == null){            
-           throw new ProdpartsValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new ProdpartsValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

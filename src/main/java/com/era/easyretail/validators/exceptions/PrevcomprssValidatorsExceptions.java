@@ -24,10 +24,6 @@ public class PrevcomprssValidatorsExceptions {
        return new Exception("Falta espeficiar codigo");
    }
 
-   public Exception getCodprevcompException(){
-       return new Exception("Falta espeficiar Codprevcomp");
-   }
-
    public Exception getEstadoException(){
        return new Exception("Falta espeficiar Estado");
    }

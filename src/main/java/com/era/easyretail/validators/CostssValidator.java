@@ -6,10 +6,21 @@ import com.era.repositories.RepositoryFactory;
 
 public class CostssValidator extends IValidate{
 
-   private String code;
    private String monedaID;
+   public void setMonedaID(String property){
+       this.monedaID = property;
+   }
+
    private String prod;
+   public void setProd(String property){
+       this.prod = property;
+   }
+
    private String tipcam;
+   public void setTipcam(String property){
+       this.tipcam = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
@@ -24,11 +35,6 @@ public class CostssValidator extends IValidate{
 
        if(tipcam==null || tipcam.isEmpty()){
            throw new CostssValidatorsExceptions().getTipcamException();
-       }
-
-       final Costs Costs = (Costs) RepositoryFactory.getInstance().getCostssRepository().getByCode(code);
-       if(Costs != null){            
-           throw new CostssValidatorsExceptions().getModelExistsException();
        }
 
        if(IInsertValidation!=null){
@@ -53,23 +59,4 @@ public class CostssValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new CostssValidatorsExceptions().getCodeException();
-       }
-
-       final Costs Costs = (Costs) RepositoryFactory.getInstance().getCostssRepository().getByCode(code);
-       if(Costs == null){            
-           throw new CostssValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new CostssValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

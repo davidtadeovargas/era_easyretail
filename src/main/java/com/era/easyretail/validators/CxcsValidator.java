@@ -6,19 +6,66 @@ import com.era.repositories.RepositoryFactory;
 
 public class CxcsValidator extends IValidate{
 
-   private String code;
    private String abon;
+   public void setAbon(String property){
+       this.abon = property;
+   }
+
    private String carg;
+   public void setCarg(String property){
+       this.carg = property;
+   }
+
    private String empre;
+   public void setEmpre(String property){
+       this.empre = property;
+   }
+
    private String fdoc;
+   public void setFdoc(String property){
+       this.fdoc = property;
+   }
+
    private String id_venta;
+   public void setId_venta(String property){
+       this.id_venta = property;
+   }
+
    private String impue;
+   public void setImpue(String property){
+       this.impue = property;
+   }
+
    private String monedaID;
+   public void setMonedaID(String property){
+       this.monedaID = property;
+   }
+
    private String norefer;
+   public void setNorefer(String property){
+       this.norefer = property;
+   }
+
    private String noser;
+   public void setNoser(String property){
+       this.noser = property;
+   }
+
    private String ser;
+   public void setSer(String property){
+       this.ser = property;
+   }
+
    private String subtot;
+   public void setSubtot(String property){
+       this.subtot = property;
+   }
+
    private String tot;
+   public void setTot(String property){
+       this.tot = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
@@ -71,11 +118,6 @@ public class CxcsValidator extends IValidate{
            throw new CxcsValidatorsExceptions().getTotException();
        }
 
-       final Cxc Cxc = (Cxc) RepositoryFactory.getInstance().getCxcsRepository().getByCode(code);
-       if(Cxc != null){            
-           throw new CxcsValidatorsExceptions().getModelExistsException();
-       }
-
        if(IInsertValidation!=null){
             final boolean response = IInsertValidation.validate();
             if(!response){
@@ -98,23 +140,4 @@ public class CxcsValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new CxcsValidatorsExceptions().getCodeException();
-       }
-
-       final Cxc Cxc = (Cxc) RepositoryFactory.getInstance().getCxcsRepository().getByCode(code);
-       if(Cxc == null){            
-           throw new CxcsValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new CxcsValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

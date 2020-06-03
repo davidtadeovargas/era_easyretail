@@ -6,9 +6,16 @@ import com.era.repositories.RepositoryFactory;
 
 public class CFDIRelacionadosPagosValidator extends IValidate{
 
-   private String code;
    private String tipo_relacion;
+   public void setTipo_relacion(String property){
+       this.tipo_relacion = property;
+   }
+
    private String uuid;
+   public void setUuid(String property){
+       this.uuid = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
@@ -19,11 +26,6 @@ public class CFDIRelacionadosPagosValidator extends IValidate{
 
        if(uuid==null || uuid.isEmpty()){
            throw new CFDIRelacionadosPagosValidatorsExceptions().getUuidException();
-       }
-
-       final CFDIRelacionadosPago CFDIRelacionadosPago = (CFDIRelacionadosPago) RepositoryFactory.getInstance().getCFDIRelacionadosPagosRepository().getByCode(code);
-       if(CFDIRelacionadosPago != null){            
-           throw new CFDIRelacionadosPagosValidatorsExceptions().getModelExistsException();
        }
 
        if(IInsertValidation!=null){
@@ -48,23 +50,4 @@ public class CFDIRelacionadosPagosValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new CFDIRelacionadosPagosValidatorsExceptions().getCodeException();
-       }
-
-       final CFDIRelacionadosPago CFDIRelacionadosPago = (CFDIRelacionadosPago) RepositoryFactory.getInstance().getCFDIRelacionadosPagosRepository().getByCode(code);
-       if(CFDIRelacionadosPago == null){            
-           throw new CFDIRelacionadosPagosValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new CFDIRelacionadosPagosValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

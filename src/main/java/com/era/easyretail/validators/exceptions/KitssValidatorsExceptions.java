@@ -28,10 +28,6 @@ public class KitssValidatorsExceptions {
        return new Exception("Falta espeficiar Alma");
    }
 
-   public Exception getCodkitException(){
-       return new Exception("Falta espeficiar Codkit");
-   }
-
    public Exception getProdException(){
        return new Exception("Falta espeficiar Prod");
    }

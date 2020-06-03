@@ -6,16 +6,51 @@ import com.era.repositories.RepositoryFactory;
 
 public class IngresosEncabsValidator extends IValidate{
 
-   private String code;
    private String alma;
+   public void setAlma(String property){
+       this.alma = property;
+   }
+
    private String caducidad;
+   public void setCaducidad(String property){
+       this.caducidad = property;
+   }
+
    private String canttotal;
+   public void setCanttotal(String property){
+       this.canttotal = property;
+   }
+
    private String concep;
+   public void setConcep(String property){
+       this.concep = property;
+   }
+
    private String entsal;
+   public void setEntsal(String property){
+       this.entsal = property;
+   }
+
    private String lote;
+   public void setLote(String property){
+       this.lote = property;
+   }
+
    private String norefer;
+   public void setNorefer(String property){
+       this.norefer = property;
+   }
+
    private String noser;
+   public void setNoser(String property){
+       this.noser = property;
+   }
+
    private String pedimento;
+   public void setPedimento(String property){
+       this.pedimento = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
@@ -56,11 +91,6 @@ public class IngresosEncabsValidator extends IValidate{
            throw new IngresosEncabsValidatorsExceptions().getPedimentoException();
        }
 
-       final IngresosEncab IngresosEncab = (IngresosEncab) RepositoryFactory.getInstance().getIngresosEncabsRepository().getByCode(code);
-       if(IngresosEncab != null){            
-           throw new IngresosEncabsValidatorsExceptions().getModelExistsException();
-       }
-
        if(IInsertValidation!=null){
             final boolean response = IInsertValidation.validate();
             if(!response){
@@ -83,23 +113,4 @@ public class IngresosEncabsValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new IngresosEncabsValidatorsExceptions().getCodeException();
-       }
-
-       final IngresosEncab IngresosEncab = (IngresosEncab) RepositoryFactory.getInstance().getIngresosEncabsRepository().getByCode(code);
-       if(IngresosEncab == null){            
-           throw new IngresosEncabsValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new IngresosEncabsValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

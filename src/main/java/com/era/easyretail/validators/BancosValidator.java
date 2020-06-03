@@ -6,9 +6,16 @@ import com.era.repositories.RepositoryFactory;
 
 public class BancosValidator extends IValidate{
 
-   private String code;
    private String cuentabanco;
+   public void setCuentabanco(String property){
+       this.cuentabanco = property;
+   }
+
    private String descrip;
+   public void setDescrip(String property){
+       this.descrip = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
@@ -19,11 +26,6 @@ public class BancosValidator extends IValidate{
 
        if(descrip==null || descrip.isEmpty()){
            throw new BancosValidatorsExceptions().getDescripException();
-       }
-
-       final Banco Banco = (Banco) RepositoryFactory.getInstance().getBancosRepository().getByCode(code);
-       if(Banco != null){            
-           throw new BancosValidatorsExceptions().getModelExistsException();
        }
 
        if(IInsertValidation!=null){
@@ -48,23 +50,4 @@ public class BancosValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new BancosValidatorsExceptions().getCodeException();
-       }
-
-       final Banco Banco = (Banco) RepositoryFactory.getInstance().getBancosRepository().getByCode(code);
-       if(Banco == null){            
-           throw new BancosValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new BancosValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

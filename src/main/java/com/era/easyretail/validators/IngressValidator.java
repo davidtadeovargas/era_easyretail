@@ -6,16 +6,51 @@ import com.era.repositories.RepositoryFactory;
 
 public class IngressValidator extends IValidate{
 
-   private String code;
    private String alma;
+   public void setAlma(String property){
+       this.alma = property;
+   }
+
    private String caducidad;
+   public void setCaducidad(String property){
+       this.caducidad = property;
+   }
+
    private String concep;
+   public void setConcep(String property){
+       this.concep = property;
+   }
+
    private String entsal;
+   public void setEntsal(String property){
+       this.entsal = property;
+   }
+
    private String lote;
+   public void setLote(String property){
+       this.lote = property;
+   }
+
    private String pedimento;
+   public void setPedimento(String property){
+       this.pedimento = property;
+   }
+
    private String prod;
+   public void setProd(String property){
+       this.prod = property;
+   }
+
    private String tipcamnac;
+   public void setTipcamnac(String property){
+       this.tipcamnac = property;
+   }
+
    private String unid;
+   public void setUnid(String property){
+       this.unid = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
@@ -56,11 +91,6 @@ public class IngressValidator extends IValidate{
            throw new IngressValidatorsExceptions().getUnidException();
        }
 
-       final Ingres Ingres = (Ingres) RepositoryFactory.getInstance().getIngressRepository().getByCode(code);
-       if(Ingres != null){            
-           throw new IngressValidatorsExceptions().getModelExistsException();
-       }
-
        if(IInsertValidation!=null){
             final boolean response = IInsertValidation.validate();
             if(!response){
@@ -83,23 +113,4 @@ public class IngressValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new IngressValidatorsExceptions().getCodeException();
-       }
-
-       final Ingres Ingres = (Ingres) RepositoryFactory.getInstance().getIngressRepository().getByCode(code);
-       if(Ingres == null){            
-           throw new IngressValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new IngressValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

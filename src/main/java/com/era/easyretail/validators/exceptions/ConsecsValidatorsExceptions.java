@@ -24,10 +24,6 @@ public class ConsecsValidatorsExceptions {
        return new Exception("Falta espeficiar codigo");
    }
 
-   public Exception getCashNumberException(){
-       return new Exception("Falta espeficiar CashNumber");
-   }
-
    public Exception getConsecException(){
        return new Exception("Falta espeficiar Consec");
    }
@@ -38,14 +34,6 @@ public class ConsecsValidatorsExceptions {
 
    public Exception getSerieException(){
        return new Exception("Falta espeficiar Serie");
-   }
-
-   public Exception getStationException(){
-       return new Exception("Falta espeficiar Station");
-   }
-
-   public Exception getSucursalException(){
-       return new Exception("Falta espeficiar Sucursal");
    }
 
    public Exception getTypeException(){

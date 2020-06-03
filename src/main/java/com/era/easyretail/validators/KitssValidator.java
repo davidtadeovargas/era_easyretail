@@ -6,10 +6,21 @@ import com.era.repositories.RepositoryFactory;
 
 public class KitssValidator extends IValidate{
 
-   private String code;
    private String alma;
-   private String codkit;
+   public void setAlma(String property){
+       this.alma = property;
+   }
+
+   private String code;
+   public void setCode(String property){
+       this.code = property;
+   }
+
    private String prod;
+   public void setProd(String property){
+       this.prod = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
@@ -18,17 +29,12 @@ public class KitssValidator extends IValidate{
            throw new KitssValidatorsExceptions().getAlmaException();
        }
 
-       if(codkit==null || codkit.isEmpty()){
-           throw new KitssValidatorsExceptions().getCodkitException();
+       if(code==null || code.isEmpty()){
+           throw new KitssValidatorsExceptions().getCodeException();
        }
 
        if(prod==null || prod.isEmpty()){
            throw new KitssValidatorsExceptions().getProdException();
-       }
-
-       final Kits Kits = (Kits) RepositoryFactory.getInstance().getKitssRepository().getByCode(code);
-       if(Kits != null){            
-           throw new KitssValidatorsExceptions().getModelExistsException();
        }
 
        if(IInsertValidation!=null){
@@ -53,23 +59,4 @@ public class KitssValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new KitssValidatorsExceptions().getCodeException();
-       }
-
-       final Kits Kits = (Kits) RepositoryFactory.getInstance().getKitssRepository().getByCode(code);
-       if(Kits == null){            
-           throw new KitssValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new KitssValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

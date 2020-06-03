@@ -51,6 +51,10 @@ public class Impuestos_X_productos_nuevoViewController extends Impuestos_X_produ
         }
     }
     
+    @Override
+    public void clearFields(){            
+    }
+    
     private void jBTodActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	

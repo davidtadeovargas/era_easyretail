@@ -6,27 +6,106 @@ import com.era.repositories.RepositoryFactory;
 
 public class PedidossValidator extends IValidate{
 
-   private String code;
    private String codcot;
+   public void setCodcot(String property){
+       this.codcot = property;
+   }
+
    private String codemp;
+   public void setCodemp(String property){
+       this.codemp = property;
+   }
+
    private String descrip;
+   public void setDescrip(String property){
+       this.descrip = property;
+   }
+
    private String estad;
+   public void setEstad(String property){
+       this.estad = property;
+   }
+
    private String fdoc;
+   public void setFdoc(String property){
+       this.fdoc = property;
+   }
+
    private String fentre;
+   public void setFentre(String property){
+       this.fentre = property;
+   }
+
    private String fvenc;
+   public void setFvenc(String property){
+       this.fvenc = property;
+   }
+
    private String impue;
+   public void setImpue(String property){
+       this.impue = property;
+   }
+
    private String monedaID;
+   public void setMonedaID(String property){
+       this.monedaID = property;
+   }
+
    private String noser;
+   public void setNoser(String property){
+       this.noser = property;
+   }
+
    private String observ;
+   public void setObserv(String property){
+       this.observ = property;
+   }
+
    private String ser;
+   public void setSer(String property){
+       this.ser = property;
+   }
+
    private String subtot;
+   public void setSubtot(String property){
+       this.subtot = property;
+   }
+
    private String tipcam;
+   public void setTipcam(String property){
+       this.tipcam = property;
+   }
+
    private String tipcamnac;
+   public void setTipcamnac(String property){
+       this.tipcamnac = property;
+   }
+
    private String tot;
+   public void setTot(String property){
+       this.tot = property;
+   }
+
    private String total_retencion;
+   public void setTotal_retencion(String property){
+       this.total_retencion = property;
+   }
+
    private String total_traslado;
+   public void setTotal_traslado(String property){
+       this.total_traslado = property;
+   }
+
    private String totcost;
+   public void setTotcost(String property){
+       this.totcost = property;
+   }
+
    private String totdescu;
+   public void setTotdescu(String property){
+       this.totdescu = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
@@ -111,11 +190,6 @@ public class PedidossValidator extends IValidate{
            throw new PedidossValidatorsExceptions().getTotdescuException();
        }
 
-       final Pedidos Pedidos = (Pedidos) RepositoryFactory.getInstance().getPedidossRepository().getByCode(code);
-       if(Pedidos != null){            
-           throw new PedidossValidatorsExceptions().getModelExistsException();
-       }
-
        if(IInsertValidation!=null){
             final boolean response = IInsertValidation.validate();
             if(!response){
@@ -138,23 +212,4 @@ public class PedidossValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new PedidossValidatorsExceptions().getCodeException();
-       }
-
-       final Pedidos Pedidos = (Pedidos) RepositoryFactory.getInstance().getPedidossRepository().getByCode(code);
-       if(Pedidos == null){            
-           throw new PedidossValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new PedidossValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

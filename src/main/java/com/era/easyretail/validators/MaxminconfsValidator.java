@@ -6,9 +6,16 @@ import com.era.repositories.RepositoryFactory;
 
 public class MaxminconfsValidator extends IValidate{
 
-   private String code;
    private String estacglo;
+   public void setEstacglo(String property){
+       this.estacglo = property;
+   }
+
    private String hrs;
+   public void setHrs(String property){
+       this.hrs = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
@@ -19,11 +26,6 @@ public class MaxminconfsValidator extends IValidate{
 
        if(hrs==null || hrs.isEmpty()){
            throw new MaxminconfsValidatorsExceptions().getHrsException();
-       }
-
-       final Maxminconf Maxminconf = (Maxminconf) RepositoryFactory.getInstance().getMaxminconfsRepository().getByCode(code);
-       if(Maxminconf != null){            
-           throw new MaxminconfsValidatorsExceptions().getModelExistsException();
        }
 
        if(IInsertValidation!=null){
@@ -48,23 +50,4 @@ public class MaxminconfsValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new MaxminconfsValidatorsExceptions().getCodeException();
-       }
-
-       final Maxminconf Maxminconf = (Maxminconf) RepositoryFactory.getInstance().getMaxminconfsRepository().getByCode(code);
-       if(Maxminconf == null){            
-           throw new MaxminconfsValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new MaxminconfsValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

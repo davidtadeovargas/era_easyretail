@@ -28,8 +28,4 @@ public class GaransValidatorsExceptions {
        return new Exception("Falta espeficiar Descrip");
    }
 
-   public Exception getGaraException(){
-       return new Exception("Falta espeficiar Gara");
-   }
-
 }

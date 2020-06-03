@@ -6,19 +6,17 @@ import com.era.repositories.RepositoryFactory;
 
 public class PushNotificationsValidator extends IValidate{
 
-   private String code;
    private String bannerAction;
+   public void setBannerAction(String property){
+       this.bannerAction = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
 
        if(bannerAction==null || bannerAction.isEmpty()){
            throw new PushNotificationsValidatorsExceptions().getBannerActionException();
-       }
-
-       final PushNotification PushNotification = (PushNotification) RepositoryFactory.getInstance().getPushNotificationsRepository().getByCode(code);
-       if(PushNotification != null){            
-           throw new PushNotificationsValidatorsExceptions().getModelExistsException();
        }
 
        if(IInsertValidation!=null){
@@ -43,23 +41,4 @@ public class PushNotificationsValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new PushNotificationsValidatorsExceptions().getCodeException();
-       }
-
-       final PushNotification PushNotification = (PushNotification) RepositoryFactory.getInstance().getPushNotificationsRepository().getByCode(code);
-       if(PushNotification == null){            
-           throw new PushNotificationsValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new PushNotificationsValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

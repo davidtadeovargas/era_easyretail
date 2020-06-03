@@ -6,10 +6,21 @@ import com.era.repositories.RepositoryFactory;
 
 public class ConfgralsValidator extends IValidate{
 
-   private String code;
    private String clasif;
+   public void setClasif(String property){
+       this.clasif = property;
+   }
+
    private String conf;
+   public void setConf(String property){
+       this.conf = property;
+   }
+
    private String val;
+   public void setVal(String property){
+       this.val = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
@@ -24,11 +35,6 @@ public class ConfgralsValidator extends IValidate{
 
        if(val==null || val.isEmpty()){
            throw new ConfgralsValidatorsExceptions().getValException();
-       }
-
-       final Confgral Confgral = (Confgral) RepositoryFactory.getInstance().getConfgralsRepository().getByCode(code);
-       if(Confgral != null){            
-           throw new ConfgralsValidatorsExceptions().getModelExistsException();
        }
 
        if(IInsertValidation!=null){
@@ -53,23 +59,4 @@ public class ConfgralsValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new ConfgralsValidatorsExceptions().getCodeException();
-       }
-
-       final Confgral Confgral = (Confgral) RepositoryFactory.getInstance().getConfgralsRepository().getByCode(code);
-       if(Confgral == null){            
-           throw new ConfgralsValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new ConfgralsValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

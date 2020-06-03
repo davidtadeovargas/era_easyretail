@@ -7,21 +7,56 @@ import com.era.repositories.RepositoryFactory;
 public class PrevcomprssValidator extends IValidate{
 
    private String code;
-   private String codprevcomp;
+   public void setCode(String property){
+       this.code = property;
+   }
+
    private String estado;
+   public void setEstado(String property){
+       this.estado = property;
+   }
+
    private String fvenc;
+   public void setFvenc(String property){
+       this.fvenc = property;
+   }
+
    private String mon;
+   public void setMon(String property){
+       this.mon = property;
+   }
+
    private String motiv;
+   public void setMotiv(String property){
+       this.motiv = property;
+   }
+
    private String noser;
+   public void setNoser(String property){
+       this.noser = property;
+   }
+
    private String nosercomp;
+   public void setNosercomp(String property){
+       this.nosercomp = property;
+   }
+
    private String prov;
+   public void setProv(String property){
+       this.prov = property;
+   }
+
    private String ser;
+   public void setSer(String property){
+       this.ser = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
 
-       if(codprevcomp==null || codprevcomp.isEmpty()){
-           throw new PrevcomprssValidatorsExceptions().getCodprevcompException();
+       if(code==null || code.isEmpty()){
+           throw new PrevcomprssValidatorsExceptions().getCodeException();
        }
 
        if(estado==null || estado.isEmpty()){
@@ -56,11 +91,6 @@ public class PrevcomprssValidator extends IValidate{
            throw new PrevcomprssValidatorsExceptions().getSerException();
        }
 
-       final Prevcomprs Prevcomprs = (Prevcomprs) RepositoryFactory.getInstance().getPrevcomprssRepository().getByCode(code);
-       if(Prevcomprs != null){            
-           throw new PrevcomprssValidatorsExceptions().getModelExistsException();
-       }
-
        if(IInsertValidation!=null){
             final boolean response = IInsertValidation.validate();
             if(!response){
@@ -83,23 +113,4 @@ public class PrevcomprssValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new PrevcomprssValidatorsExceptions().getCodeException();
-       }
-
-       final Prevcomprs Prevcomprs = (Prevcomprs) RepositoryFactory.getInstance().getPrevcomprssRepository().getByCode(code);
-       if(Prevcomprs == null){            
-           throw new PrevcomprssValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new PrevcomprssValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

@@ -51,6 +51,10 @@ public class TipsPagsViewController extends TipsPagsJFrame {
         }
     }
     
+    @Override
+    public void clearFields(){
+    }
+    
     private void jBActuaActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	

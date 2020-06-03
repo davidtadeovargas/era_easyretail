@@ -6,12 +6,31 @@ import com.era.repositories.RepositoryFactory;
 
 public class TraspassValidator extends IValidate{
 
-   private String code;
    private String alma;
+   public void setAlma(String property){
+       this.alma = property;
+   }
+
    private String almaa;
+   public void setAlmaa(String property){
+       this.almaa = property;
+   }
+
+   private String code;
+   public void setCode(String property){
+       this.code = property;
+   }
+
    private String concep;
-   private String prod;
+   public void setConcep(String property){
+       this.concep = property;
+   }
+
    private String unid;
+   public void setUnid(String property){
+       this.unid = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
@@ -24,21 +43,16 @@ public class TraspassValidator extends IValidate{
            throw new TraspassValidatorsExceptions().getAlmaaException();
        }
 
+       if(code==null || code.isEmpty()){
+           throw new TraspassValidatorsExceptions().getCodeException();
+       }
+
        if(concep==null || concep.isEmpty()){
            throw new TraspassValidatorsExceptions().getConcepException();
        }
 
-       if(prod==null || prod.isEmpty()){
-           throw new TraspassValidatorsExceptions().getProdException();
-       }
-
        if(unid==null || unid.isEmpty()){
            throw new TraspassValidatorsExceptions().getUnidException();
-       }
-
-       final Traspas Traspas = (Traspas) RepositoryFactory.getInstance().getTraspassRepository().getByCode(code);
-       if(Traspas != null){            
-           throw new TraspassValidatorsExceptions().getModelExistsException();
        }
 
        if(IInsertValidation!=null){
@@ -63,23 +77,4 @@ public class TraspassValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new TraspassValidatorsExceptions().getCodeException();
-       }
-
-       final Traspas Traspas = (Traspas) RepositoryFactory.getInstance().getTraspassRepository().getByCode(code);
-       if(Traspas == null){            
-           throw new TraspassValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new TraspassValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

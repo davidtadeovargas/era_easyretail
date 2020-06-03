@@ -6,9 +6,16 @@ import com.era.repositories.RepositoryFactory;
 
 public class ExistalmasValidator extends IValidate{
 
-   private String code;
    private String alma;
+   public void setAlma(String property){
+       this.alma = property;
+   }
+
    private String prod;
+   public void setProd(String property){
+       this.prod = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
@@ -19,11 +26,6 @@ public class ExistalmasValidator extends IValidate{
 
        if(prod==null || prod.isEmpty()){
            throw new ExistalmasValidatorsExceptions().getProdException();
-       }
-
-       final Existalma Existalma = (Existalma) RepositoryFactory.getInstance().getExistalmasRepository().getByCode(code);
-       if(Existalma != null){            
-           throw new ExistalmasValidatorsExceptions().getModelExistsException();
        }
 
        if(IInsertValidation!=null){
@@ -48,23 +50,4 @@ public class ExistalmasValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new ExistalmasValidatorsExceptions().getCodeException();
-       }
-
-       final Existalma Existalma = (Existalma) RepositoryFactory.getInstance().getExistalmasRepository().getByCode(code);
-       if(Existalma == null){            
-           throw new ExistalmasValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new ExistalmasValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

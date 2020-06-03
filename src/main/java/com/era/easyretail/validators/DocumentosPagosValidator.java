@@ -6,17 +6,56 @@ import com.era.repositories.RepositoryFactory;
 
 public class DocumentosPagosValidator extends IValidate{
 
-   private String code;
    private String cadenaOriginal;
+   public void setCadenaOriginal(String property){
+       this.cadenaOriginal = property;
+   }
+
    private String certificadosat;
+   public void setCertificadosat(String property){
+       this.certificadosat = property;
+   }
+
    private String color;
+   public void setColor(String property){
+       this.color = property;
+   }
+
    private String fecha_alta;
+   public void setFecha_alta(String property){
+       this.fecha_alta = property;
+   }
+
    private String lugarExpedicion;
+   public void setLugarExpedicion(String property){
+       this.lugarExpedicion = property;
+   }
+
    private String regimenFiscal;
+   public void setRegimenFiscal(String property){
+       this.regimenFiscal = property;
+   }
+
    private String selloDigital;
+   public void setSelloDigital(String property){
+       this.selloDigital = property;
+   }
+
    private String selloSat;
+   public void setSelloSat(String property){
+       this.selloSat = property;
+   }
+
    private String transactionid;
+   public void setTransactionid(String property){
+       this.transactionid = property;
+   }
+
    private String uuid_fiscal;
+   public void setUuid_fiscal(String property){
+       this.uuid_fiscal = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
@@ -61,11 +100,6 @@ public class DocumentosPagosValidator extends IValidate{
            throw new DocumentosPagosValidatorsExceptions().getUuid_fiscalException();
        }
 
-       final DocumentosPago DocumentosPago = (DocumentosPago) RepositoryFactory.getInstance().getDocumentosPagosRepository().getByCode(code);
-       if(DocumentosPago != null){            
-           throw new DocumentosPagosValidatorsExceptions().getModelExistsException();
-       }
-
        if(IInsertValidation!=null){
             final boolean response = IInsertValidation.validate();
             if(!response){
@@ -88,23 +122,4 @@ public class DocumentosPagosValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new DocumentosPagosValidatorsExceptions().getCodeException();
-       }
-
-       final DocumentosPago DocumentosPago = (DocumentosPago) RepositoryFactory.getInstance().getDocumentosPagosRepository().getByCode(code);
-       if(DocumentosPago == null){            
-           throw new DocumentosPagosValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new DocumentosPagosValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

@@ -6,9 +6,16 @@ import com.era.repositories.RepositoryFactory;
 
 public class AnaqssValidator extends IValidate{
 
-   private String code;
    private String cod;
+   public void setCod(String property){
+       this.cod = property;
+   }
+
    private String descrip;
+   public void setDescrip(String property){
+       this.descrip = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
@@ -19,11 +26,6 @@ public class AnaqssValidator extends IValidate{
 
        if(descrip==null || descrip.isEmpty()){
            throw new AnaqssValidatorsExceptions().getDescripException();
-       }
-
-       final Anaqs Anaqs = (Anaqs) RepositoryFactory.getInstance().getAnaqssRepository().getByCode(code);
-       if(Anaqs != null){            
-           throw new AnaqssValidatorsExceptions().getModelExistsException();
        }
 
        if(IInsertValidation!=null){
@@ -48,23 +50,4 @@ public class AnaqssValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new AnaqssValidatorsExceptions().getCodeException();
-       }
-
-       final Anaqs Anaqs = (Anaqs) RepositoryFactory.getInstance().getAnaqssRepository().getByCode(code);
-       if(Anaqs == null){            
-           throw new AnaqssValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new AnaqssValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

@@ -40,6 +40,10 @@ public class DevPVtaViewController extends DevPVtaJFrame {
         }
     }
     
+    @Override
+    public void clearFields(){            
+    }
+    
     private void jBGuarActionPerformed(java.awt.event.ActionEvent evt) {
 
 	try{            	

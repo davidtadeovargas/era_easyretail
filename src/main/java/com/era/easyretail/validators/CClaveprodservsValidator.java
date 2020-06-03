@@ -6,9 +6,16 @@ import com.era.repositories.RepositoryFactory;
 
 public class CClaveprodservsValidator extends IValidate{
 
-   private String code;
    private String c_ClaveProdServ;
+   public void setC_ClaveProdServ(String property){
+       this.c_ClaveProdServ = property;
+   }
+
    private String description;
+   public void setDescription(String property){
+       this.description = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
@@ -19,11 +26,6 @@ public class CClaveprodservsValidator extends IValidate{
 
        if(description==null || description.isEmpty()){
            throw new CClaveprodservsValidatorsExceptions().getDescriptionException();
-       }
-
-       final CClaveprodserv CClaveprodserv = (CClaveprodserv) RepositoryFactory.getInstance().getCClaveprodservsRepository().getByCode(code);
-       if(CClaveprodserv != null){            
-           throw new CClaveprodservsValidatorsExceptions().getModelExistsException();
        }
 
        if(IInsertValidation!=null){
@@ -48,23 +50,4 @@ public class CClaveprodservsValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new CClaveprodservsValidatorsExceptions().getCodeException();
-       }
-
-       final CClaveprodserv CClaveprodserv = (CClaveprodserv) RepositoryFactory.getInstance().getCClaveprodservsRepository().getByCode(code);
-       if(CClaveprodserv == null){            
-           throw new CClaveprodservsValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new CClaveprodservsValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

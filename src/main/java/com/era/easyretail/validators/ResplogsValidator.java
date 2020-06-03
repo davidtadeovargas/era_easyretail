@@ -6,19 +6,17 @@ import com.era.repositories.RepositoryFactory;
 
 public class ResplogsValidator extends IValidate{
 
-   private String code;
    private String tip;
+   public void setTip(String property){
+       this.tip = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
 
        if(tip==null || tip.isEmpty()){
            throw new ResplogsValidatorsExceptions().getTipException();
-       }
-
-       final Resplog Resplog = (Resplog) RepositoryFactory.getInstance().getResplogsRepository().getByCode(code);
-       if(Resplog != null){            
-           throw new ResplogsValidatorsExceptions().getModelExistsException();
        }
 
        if(IInsertValidation!=null){
@@ -43,23 +41,4 @@ public class ResplogsValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new ResplogsValidatorsExceptions().getCodeException();
-       }
-
-       final Resplog Resplog = (Resplog) RepositoryFactory.getInstance().getResplogsRepository().getByCode(code);
-       if(Resplog == null){            
-           throw new ResplogsValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new ResplogsValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

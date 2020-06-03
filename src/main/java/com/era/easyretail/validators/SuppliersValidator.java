@@ -6,63 +6,291 @@ import com.era.repositories.RepositoryFactory;
 
 public class SuppliersValidator extends IValidate{
 
-   private String code;
    private String account;
+   public void setAccount(String property){
+       this.account = property;
+   }
+
    private String bank;
+   public void setBank(String property){
+       this.bank = property;
+   }
+
    private String bloq;
+   public void setBloq(String property){
+       this.bloq = property;
+   }
+
    private String bloqlimcred;
+   public void setBloqlimcred(String property){
+       this.bloqlimcred = property;
+   }
+
    private String celphone;
+   public void setCelphone(String property){
+       this.celphone = property;
+   }
+
    private String city;
+   public void setCity(String property){
+       this.city = property;
+   }
+
    private String clasificationCode;
+   public void setClasificationCode(String property){
+       this.clasificationCode = property;
+   }
+
    private String claveBank;
+   public void setClaveBank(String property){
+       this.claveBank = property;
+   }
+
+   private String code;
+   public void setCode(String property){
+       this.code = property;
+   }
+
    private String colony;
+   public void setColony(String property){
+       this.colony = property;
+   }
+
    private String contableAccount;
+   public void setContableAccount(String property){
+       this.contableAccount = property;
+   }
+
    private String contac4;
+   public void setContac4(String property){
+       this.contac4 = property;
+   }
+
    private String country;
+   public void setCountry(String property){
+       this.country = property;
+   }
+
    private String cp;
+   public void setCp(String property){
+       this.cp = property;
+   }
+
    private String creditDays;
+   public void setCreditDays(String property){
+       this.creditDays = property;
+   }
+
    private String deliverCP;
+   public void setDeliverCP(String property){
+       this.deliverCP = property;
+   }
+
    private String deliverCellphone;
+   public void setDeliverCellphone(String property){
+       this.deliverCellphone = property;
+   }
+
    private String deliverCity;
+   public void setDeliverCity(String property){
+       this.deliverCity = property;
+   }
+
    private String deliverColony;
+   public void setDeliverColony(String property){
+       this.deliverColony = property;
+   }
+
    private String deliverCountry;
+   public void setDeliverCountry(String property){
+       this.deliverCountry = property;
+   }
+
    private String deliverEmail1;
+   public void setDeliverEmail1(String property){
+       this.deliverEmail1 = property;
+   }
+
    private String deliverEmail2;
+   public void setDeliverEmail2(String property){
+       this.deliverEmail2 = property;
+   }
+
    private String deliverEmail3;
+   public void setDeliverEmail3(String property){
+       this.deliverEmail3 = property;
+   }
+
    private String deliverEstate;
+   public void setDeliverEstate(String property){
+       this.deliverEstate = property;
+   }
+
    private String deliverInternalNumber;
+   public void setDeliverInternalNumber(String property){
+       this.deliverInternalNumber = property;
+   }
+
    private String deliverLada;
+   public void setDeliverLada(String property){
+       this.deliverLada = property;
+   }
+
    private String deliverStreet;
+   public void setDeliverStreet(String property){
+       this.deliverStreet = property;
+   }
+
    private String deliveryExternalNumber;
+   public void setDeliveryExternalNumber(String property){
+       this.deliveryExternalNumber = property;
+   }
+
    private String disccount;
+   public void setDisccount(String property){
+       this.disccount = property;
+   }
+
    private String email1;
+   public void setEmail1(String property){
+       this.email1 = property;
+   }
+
    private String email2;
+   public void setEmail2(String property){
+       this.email2 = property;
+   }
+
    private String email3;
+   public void setEmail3(String property){
+       this.email3 = property;
+   }
+
    private String estate;
+   public void setEstate(String property){
+       this.estate = property;
+   }
+
    private String extension;
+   public void setExtension(String property){
+       this.extension = property;
+   }
+
    private String externalNumber;
+   public void setExternalNumber(String property){
+       this.externalNumber = property;
+   }
+
    private String giro;
+   public void setGiro(String property){
+       this.giro = property;
+   }
+
    private String interiorNumber;
+   public void setInteriorNumber(String property){
+       this.interiorNumber = property;
+   }
+
    private String jerarchyClasification;
+   public void setJerarchyClasification(String property){
+       this.jerarchyClasification = property;
+   }
+
    private String lada;
+   public void setLada(String property){
+       this.lada = property;
+   }
+
    private String name;
+   public void setName(String property){
+       this.name = property;
+   }
+
    private String observations;
+   public void setObservations(String property){
+       this.observations = property;
+   }
+
    private String paymentMethod;
+   public void setPaymentMethod(String property){
+       this.paymentMethod = property;
+   }
+
    private String payments;
+   public void setPayments(String property){
+       this.payments = property;
+   }
+
    private String pers;
+   public void setPers(String property){
+       this.pers = property;
+   }
+
    private String personalPhone1;
+   public void setPersonalPhone1(String property){
+       this.personalPhone1 = property;
+   }
+
    private String phone;
+   public void setPhone(String property){
+       this.phone = property;
+   }
+
    private String revision;
+   public void setRevision(String property){
+       this.revision = property;
+   }
+
    private String rfc;
+   public void setRfc(String property){
+       this.rfc = property;
+   }
+
    private String serie;
+   public void setSerie(String property){
+       this.serie = property;
+   }
+
    private String street;
+   public void setStreet(String property){
+       this.street = property;
+   }
+
    private String telcon3;
+   public void setTelcon3(String property){
+       this.telcon3 = property;
+   }
+
    private String telcon4;
+   public void setTelcon4(String property){
+       this.telcon4 = property;
+   }
+
    private String telper3;
+   public void setTelper3(String property){
+       this.telper3 = property;
+   }
+
    private String telper33;
+   public void setTelper33(String property){
+       this.telper33 = property;
+   }
+
    private String webpage1;
+   public void setWebpage1(String property){
+       this.webpage1 = property;
+   }
+
    private String webpage2;
+   public void setWebpage2(String property){
+       this.webpage2 = property;
+   }
+
    private String zone;
+   public void setZone(String property){
+       this.zone = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
@@ -295,11 +523,6 @@ public class SuppliersValidator extends IValidate{
            throw new SuppliersValidatorsExceptions().getZoneException();
        }
 
-       final Supplier Supplier = (Supplier) RepositoryFactory.getInstance().getSuppliersRepository().getByCode(code);
-       if(Supplier != null){            
-           throw new SuppliersValidatorsExceptions().getModelExistsException();
-       }
-
        if(IInsertValidation!=null){
             final boolean response = IInsertValidation.validate();
             if(!response){
@@ -322,23 +545,4 @@ public class SuppliersValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new SuppliersValidatorsExceptions().getCodeException();
-       }
-
-       final Supplier Supplier = (Supplier) RepositoryFactory.getInstance().getSuppliersRepository().getByCode(code);
-       if(Supplier == null){            
-           throw new SuppliersValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new SuppliersValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

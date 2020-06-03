@@ -48,6 +48,10 @@ public class SalidaViewController extends SalidaJFrame {
         }
     }
     
+    @Override
+    public void clearFields(){
+    }
+    
     private void jBtnActivoActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	

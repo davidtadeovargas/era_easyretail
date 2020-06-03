@@ -6,9 +6,16 @@ import com.era.repositories.RepositoryFactory;
 
 public class CuentasContablessValidator extends IValidate{
 
-   private String code;
    private String cuenta;
+   public void setCuenta(String property){
+       this.cuenta = property;
+   }
+
    private String descrip;
+   public void setDescrip(String property){
+       this.descrip = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
@@ -19,11 +26,6 @@ public class CuentasContablessValidator extends IValidate{
 
        if(descrip==null || descrip.isEmpty()){
            throw new CuentasContablessValidatorsExceptions().getDescripException();
-       }
-
-       final CuentasContables CuentasContables = (CuentasContables) RepositoryFactory.getInstance().getCuentasContablessRepository().getByCode(code);
-       if(CuentasContables != null){            
-           throw new CuentasContablessValidatorsExceptions().getModelExistsException();
        }
 
        if(IInsertValidation!=null){
@@ -48,23 +50,4 @@ public class CuentasContablessValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new CuentasContablessValidatorsExceptions().getCodeException();
-       }
-
-       final CuentasContables CuentasContables = (CuentasContables) RepositoryFactory.getInstance().getCuentasContablessRepository().getByCode(code);
-       if(CuentasContables == null){            
-           throw new CuentasContablessValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new CuentasContablessValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

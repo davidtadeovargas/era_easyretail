@@ -41,6 +41,10 @@ public class RegisterWebsiteViewController extends RegisterWebsiteJFrame {
         });
     }
     
+    @Override
+    public void clearFields(){
+    }
+    
     public OnURLLabelClicked getOnURLLabelClicked() {
         return OnURLLabelClicked;
     }

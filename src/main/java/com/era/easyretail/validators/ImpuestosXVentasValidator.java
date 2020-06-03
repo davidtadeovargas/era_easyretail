@@ -6,12 +6,31 @@ import com.era.repositories.RepositoryFactory;
 
 public class ImpuestosXVentasValidator extends IValidate{
 
-   private String code;
    private String fvenc;
+   public void setFvenc(String property){
+       this.fvenc = property;
+   }
+
    private String id_partida;
+   public void setId_partida(String property){
+       this.id_partida = property;
+   }
+
    private String impuesto;
+   public void setImpuesto(String property){
+       this.impuesto = property;
+   }
+
    private String retencion;
+   public void setRetencion(String property){
+       this.retencion = property;
+   }
+
    private String total;
+   public void setTotal(String property){
+       this.total = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
@@ -36,11 +55,6 @@ public class ImpuestosXVentasValidator extends IValidate{
            throw new ImpuestosXVentasValidatorsExceptions().getTotalException();
        }
 
-       final ImpuestosXVenta ImpuestosXVenta = (ImpuestosXVenta) RepositoryFactory.getInstance().getImpuestosXVentasRepository().getByCode(code);
-       if(ImpuestosXVenta != null){            
-           throw new ImpuestosXVentasValidatorsExceptions().getModelExistsException();
-       }
-
        if(IInsertValidation!=null){
             final boolean response = IInsertValidation.validate();
             if(!response){
@@ -63,23 +77,4 @@ public class ImpuestosXVentasValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new ImpuestosXVentasValidatorsExceptions().getCodeException();
-       }
-
-       final ImpuestosXVenta ImpuestosXVenta = (ImpuestosXVenta) RepositoryFactory.getInstance().getImpuestosXVentasRepository().getByCode(code);
-       if(ImpuestosXVenta == null){            
-           throw new ImpuestosXVentasValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new ImpuestosXVentasValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

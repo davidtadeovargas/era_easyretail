@@ -24,10 +24,6 @@ public class SubramossValidatorsExceptions {
        return new Exception("Falta espeficiar codigo");
    }
 
-   public Exception getCodigoException(){
-       return new Exception("Falta espeficiar Codigo");
-   }
-
    public Exception getDescripcionException(){
        return new Exception("Falta espeficiar Descripcion");
    }

@@ -6,8 +6,16 @@ import com.era.repositories.RepositoryFactory;
 
 public class UnidsValidator extends IValidate{
 
-   private String code;
    private String claveSAT;
+   public void setClaveSAT(String property){
+       this.claveSAT = property;
+   }
+
+   private String code;
+   public void setCode(String property){
+       this.code = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
@@ -18,11 +26,6 @@ public class UnidsValidator extends IValidate{
 
        if(code==null || code.isEmpty()){
            throw new UnidsValidatorsExceptions().getCodeException();
-       }
-
-       final Unid Unid = (Unid) RepositoryFactory.getInstance().getUnidsRepository().getByCode(code);
-       if(Unid != null){            
-           throw new UnidsValidatorsExceptions().getModelExistsException();
        }
 
        if(IInsertValidation!=null){
@@ -47,23 +50,4 @@ public class UnidsValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new UnidsValidatorsExceptions().getCodeException();
-       }
-
-       final Unid Unid = (Unid) RepositoryFactory.getInstance().getUnidsRepository().getByCode(code);
-       if(Unid == null){            
-           throw new UnidsValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new UnidsValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

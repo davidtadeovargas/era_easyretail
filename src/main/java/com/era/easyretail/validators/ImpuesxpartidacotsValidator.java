@@ -6,14 +6,41 @@ import com.era.repositories.RepositoryFactory;
 
 public class ImpuesxpartidacotsValidator extends IValidate{
 
-   private String code;
    private String codigoImpuesto;
+   public void setCodigoImpuesto(String property){
+       this.codigoImpuesto = property;
+   }
+
    private String idPartida;
+   public void setIdPartida(String property){
+       this.idPartida = property;
+   }
+
    private String idParts;
+   public void setIdParts(String property){
+       this.idParts = property;
+   }
+
    private String ret_tras;
+   public void setRet_tras(String property){
+       this.ret_tras = property;
+   }
+
    private String retencion;
+   public void setRetencion(String property){
+       this.retencion = property;
+   }
+
    private String tasa;
+   public void setTasa(String property){
+       this.tasa = property;
+   }
+
    private String total;
+   public void setTotal(String property){
+       this.total = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
@@ -46,11 +73,6 @@ public class ImpuesxpartidacotsValidator extends IValidate{
            throw new ImpuesxpartidacotsValidatorsExceptions().getTotalException();
        }
 
-       final Impuesxpartidacot Impuesxpartidacot = (Impuesxpartidacot) RepositoryFactory.getInstance().getImpuesxpartidacotsRepository().getByCode(code);
-       if(Impuesxpartidacot != null){            
-           throw new ImpuesxpartidacotsValidatorsExceptions().getModelExistsException();
-       }
-
        if(IInsertValidation!=null){
             final boolean response = IInsertValidation.validate();
             if(!response){
@@ -73,23 +95,4 @@ public class ImpuesxpartidacotsValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new ImpuesxpartidacotsValidatorsExceptions().getCodeException();
-       }
-
-       final Impuesxpartidacot Impuesxpartidacot = (Impuesxpartidacot) RepositoryFactory.getInstance().getImpuesxpartidacotsRepository().getByCode(code);
-       if(Impuesxpartidacot == null){            
-           throw new ImpuesxpartidacotsValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new ImpuesxpartidacotsValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

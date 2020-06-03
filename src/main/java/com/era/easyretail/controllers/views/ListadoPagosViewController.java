@@ -72,6 +72,10 @@ public class ListadoPagosViewController extends ListadoPagosJFrame {
         }
     }
     
+    @Override
+    public void clearFields(){            
+    }
+    
     private void jBBuscActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	

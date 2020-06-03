@@ -6,12 +6,31 @@ import com.era.repositories.RepositoryFactory;
 
 public class AsocdescsValidator extends IValidate{
 
-   private String code;
    private String clas;
+   public void setClas(String property){
+       this.clas = property;
+   }
+
    private String clasjera;
+   public void setClasjera(String property){
+       this.clasjera = property;
+   }
+
    private String clien;
+   public void setClien(String property){
+       this.clien = property;
+   }
+
    private String prod;
+   public void setProd(String property){
+       this.prod = property;
+   }
+
    private String usar;
+   public void setUsar(String property){
+       this.usar = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
@@ -36,11 +55,6 @@ public class AsocdescsValidator extends IValidate{
            throw new AsocdescsValidatorsExceptions().getUsarException();
        }
 
-       final Asocdesc Asocdesc = (Asocdesc) RepositoryFactory.getInstance().getAsocdescsRepository().getByCode(code);
-       if(Asocdesc != null){            
-           throw new AsocdescsValidatorsExceptions().getModelExistsException();
-       }
-
        if(IInsertValidation!=null){
             final boolean response = IInsertValidation.validate();
             if(!response){
@@ -63,23 +77,4 @@ public class AsocdescsValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new AsocdescsValidatorsExceptions().getCodeException();
-       }
-
-       final Asocdesc Asocdesc = (Asocdesc) RepositoryFactory.getInstance().getAsocdescsRepository().getByCode(code);
-       if(Asocdesc == null){            
-           throw new AsocdescsValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new AsocdescsValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

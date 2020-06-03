@@ -28,8 +28,4 @@ public class ProdpartsValidatorsExceptions {
        return new Exception("Falta espeficiar Part");
    }
 
-   public Exception getProdException(){
-       return new Exception("Falta espeficiar Prod");
-   }
-
 }

@@ -6,26 +6,101 @@ import com.era.repositories.RepositoryFactory;
 
 public class PartcotsValidator extends IValidate{
 
-   private String code;
    private String alma;
+   public void setAlma(String property){
+       this.alma = property;
+   }
+
    private String cant;
+   public void setCant(String property){
+       this.cant = property;
+   }
+
    private String codcot;
+   public void setCodcot(String property){
+       this.codcot = property;
+   }
+
    private String codimpue;
+   public void setCodimpue(String property){
+       this.codimpue = property;
+   }
+
    private String comenser;
+   public void setComenser(String property){
+       this.comenser = property;
+   }
+
    private String desc1;
+   public void setDesc1(String property){
+       this.desc1 = property;
+   }
+
    private String desc2;
+   public void setDesc2(String property){
+       this.desc2 = property;
+   }
+
    private String desc3;
+   public void setDesc3(String property){
+       this.desc3 = property;
+   }
+
    private String desc4;
+   public void setDesc4(String property){
+       this.desc4 = property;
+   }
+
    private String desc5;
+   public void setDesc5(String property){
+       this.desc5 = property;
+   }
+
    private String descrip;
+   public void setDescrip(String property){
+       this.descrip = property;
+   }
+
    private String fcadu;
+   public void setFcadu(String property){
+       this.fcadu = property;
+   }
+
    private String impo2;
+   public void setImpo2(String property){
+       this.impo2 = property;
+   }
+
    private String impueimpo2;
+   public void setImpueimpo2(String property){
+       this.impueimpo2 = property;
+   }
+
    private String mon;
+   public void setMon(String property){
+       this.mon = property;
+   }
+
    private String pre2;
+   public void setPre2(String property){
+       this.pre2 = property;
+   }
+
    private String prod;
+   public void setProd(String property){
+       this.prod = property;
+   }
+
    private String serprod;
+   public void setSerprod(String property){
+       this.serprod = property;
+   }
+
    private String unid;
+   public void setUnid(String property){
+       this.unid = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
@@ -106,11 +181,6 @@ public class PartcotsValidator extends IValidate{
            throw new PartcotsValidatorsExceptions().getUnidException();
        }
 
-       final Partcot Partcot = (Partcot) RepositoryFactory.getInstance().getPartcotsRepository().getByCode(code);
-       if(Partcot != null){            
-           throw new PartcotsValidatorsExceptions().getModelExistsException();
-       }
-
        if(IInsertValidation!=null){
             final boolean response = IInsertValidation.validate();
             if(!response){
@@ -133,23 +203,4 @@ public class PartcotsValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new PartcotsValidatorsExceptions().getCodeException();
-       }
-
-       final Partcot Partcot = (Partcot) RepositoryFactory.getInstance().getPartcotsRepository().getByCode(code);
-       if(Partcot == null){            
-           throw new PartcotsValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new PartcotsValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

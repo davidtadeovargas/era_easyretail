@@ -6,53 +6,172 @@ import com.era.repositories.RepositoryFactory;
 
 public class SalessValidator extends IValidate{
 
-   private String code;
    private String account;
-   private String cashNumber;
+   public void setAccount(String property){
+       this.account = property;
+   }
+
    private String certsat;
+   public void setCertsat(String property){
+       this.certsat = property;
+   }
+
    private String codeCotizacion;
+   public void setCodeCotizacion(String property){
+       this.codeCotizacion = property;
+   }
+
    private String coinID;
+   public void setCoinID(String property){
+       this.coinID = property;
+   }
+
    private String companyCode;
+   public void setCompanyCode(String property){
+       this.companyCode = property;
+   }
+
    private String deliverDate;
+   public void setDeliverDate(String property){
+       this.deliverDate = property;
+   }
+
    private String deliverEmail1;
+   public void setDeliverEmail1(String property){
+       this.deliverEmail1 = property;
+   }
+
    private String documentType;
-   private String editedDate;
+   public void setDocumentType(String property){
+       this.documentType = property;
+   }
+
    private String emisionDate;
+   public void setEmisionDate(String property){
+       this.emisionDate = property;
+   }
+
    private String estatus;
+   public void setEstatus(String property){
+       this.estatus = property;
+   }
+
    private String fiscalFolio;
+   public void setFiscalFolio(String property){
+       this.fiscalFolio = property;
+   }
+
    private String invoiced;
+   public void setInvoiced(String property){
+       this.invoiced = property;
+   }
+
    private String noser;
+   public void setNoser(String property){
+       this.noser = property;
+   }
+
    private String observation;
+   public void setObservation(String property){
+       this.observation = property;
+   }
+
    private String paymentForm;
+   public void setPaymentForm(String property){
+       this.paymentForm = property;
+   }
+
    private String paymentMethod;
+   public void setPaymentMethod(String property){
+       this.paymentMethod = property;
+   }
+
    private String razon;
+   public void setRazon(String property){
+       this.razon = property;
+   }
+
    private String referenceNumber;
+   public void setReferenceNumber(String property){
+       this.referenceNumber = property;
+   }
+
    private String salesMan;
+   public void setSalesMan(String property){
+       this.salesMan = property;
+   }
+
    private String sector;
+   public void setSector(String property){
+       this.sector = property;
+   }
+
    private String sell;
+   public void setSell(String property){
+       this.sell = property;
+   }
+
    private String sellsat;
+   public void setSellsat(String property){
+       this.sellsat = property;
+   }
+
    private String serie;
-   private String station;
+   public void setSerie(String property){
+       this.serie = property;
+   }
+
    private String subramo;
+   public void setSubramo(String property){
+       this.subramo = property;
+   }
+
    private String subtotal;
-   private String sucursal;
+   public void setSubtotal(String property){
+       this.subtotal = property;
+   }
+
    private String tax;
+   public void setTax(String property){
+       this.tax = property;
+   }
+
    private String ticket;
+   public void setTicket(String property){
+       this.ticket = property;
+   }
+
    private String total;
+   public void setTotal(String property){
+       this.total = property;
+   }
+
    private String totalTranslade;
+   public void setTotalTranslade(String property){
+       this.totalTranslade = property;
+   }
+
    private String transactionID;
+   public void setTransactionID(String property){
+       this.transactionID = property;
+   }
+
    private String typeExchange;
+   public void setTypeExchange(String property){
+       this.typeExchange = property;
+   }
+
    private String usocfdi;
+   public void setUsocfdi(String property){
+       this.usocfdi = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
 
        if(account==null || account.isEmpty()){
            throw new SalessValidatorsExceptions().getAccountException();
-       }
-
-       if(cashNumber==null || cashNumber.isEmpty()){
-           throw new SalessValidatorsExceptions().getCashNumberException();
        }
 
        if(certsat==null || certsat.isEmpty()){
@@ -81,10 +200,6 @@ public class SalessValidator extends IValidate{
 
        if(documentType==null || documentType.isEmpty()){
            throw new SalessValidatorsExceptions().getDocumentTypeException();
-       }
-
-       if(editedDate==null || editedDate.isEmpty()){
-           throw new SalessValidatorsExceptions().getEditedDateException();
        }
 
        if(emisionDate==null || emisionDate.isEmpty()){
@@ -147,20 +262,12 @@ public class SalessValidator extends IValidate{
            throw new SalessValidatorsExceptions().getSerieException();
        }
 
-       if(station==null || station.isEmpty()){
-           throw new SalessValidatorsExceptions().getStationException();
-       }
-
        if(subramo==null || subramo.isEmpty()){
            throw new SalessValidatorsExceptions().getSubramoException();
        }
 
        if(subtotal==null || subtotal.isEmpty()){
            throw new SalessValidatorsExceptions().getSubtotalException();
-       }
-
-       if(sucursal==null || sucursal.isEmpty()){
-           throw new SalessValidatorsExceptions().getSucursalException();
        }
 
        if(tax==null || tax.isEmpty()){
@@ -191,11 +298,6 @@ public class SalessValidator extends IValidate{
            throw new SalessValidatorsExceptions().getUsocfdiException();
        }
 
-       final Sales Sales = (Sales) RepositoryFactory.getInstance().getSalessRepository().getByCode(code);
-       if(Sales != null){            
-           throw new SalessValidatorsExceptions().getModelExistsException();
-       }
-
        if(IInsertValidation!=null){
             final boolean response = IInsertValidation.validate();
             if(!response){
@@ -218,23 +320,4 @@ public class SalessValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new SalessValidatorsExceptions().getCodeException();
-       }
-
-       final Sales Sales = (Sales) RepositoryFactory.getInstance().getSalessRepository().getByCode(code);
-       if(Sales == null){            
-           throw new SalessValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new SalessValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

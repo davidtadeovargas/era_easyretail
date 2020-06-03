@@ -43,6 +43,10 @@ public class LotPedCatViewController extends LotPedCatJFrame {
         }
     }
     
+    @Override
+    public void clearFields(){
+    }
+    
     private void jBSalActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	

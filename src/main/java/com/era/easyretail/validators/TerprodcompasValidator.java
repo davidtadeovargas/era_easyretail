@@ -6,11 +6,26 @@ import com.era.repositories.RepositoryFactory;
 
 public class TerprodcompasValidator extends IValidate{
 
-   private String code;
    private String marc;
+   public void setMarc(String property){
+       this.marc = property;
+   }
+
    private String model;
+   public void setModel(String property){
+       this.model = property;
+   }
+
    private String prod;
+   public void setProd(String property){
+       this.prod = property;
+   }
+
    private String rut;
+   public void setRut(String property){
+       this.rut = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
@@ -29,11 +44,6 @@ public class TerprodcompasValidator extends IValidate{
 
        if(rut==null || rut.isEmpty()){
            throw new TerprodcompasValidatorsExceptions().getRutException();
-       }
-
-       final Terprodcompa Terprodcompa = (Terprodcompa) RepositoryFactory.getInstance().getTerprodcompasRepository().getByCode(code);
-       if(Terprodcompa != null){            
-           throw new TerprodcompasValidatorsExceptions().getModelExistsException();
        }
 
        if(IInsertValidation!=null){
@@ -58,23 +68,4 @@ public class TerprodcompasValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new TerprodcompasValidatorsExceptions().getCodeException();
-       }
-
-       final Terprodcompa Terprodcompa = (Terprodcompa) RepositoryFactory.getInstance().getTerprodcompasRepository().getByCode(code);
-       if(Terprodcompa == null){            
-           throw new TerprodcompasValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new TerprodcompasValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

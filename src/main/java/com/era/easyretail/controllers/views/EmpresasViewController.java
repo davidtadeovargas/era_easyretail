@@ -201,7 +201,7 @@ public class EmpresasViewController extends EmpresasJFrame {
             }
         }
     }
-        
+      
     private void buttonSearchExpeditionPlaceClicked(ActionEvent e){
      
         try{
@@ -1452,7 +1452,8 @@ public class EmpresasViewController extends EmpresasJFrame {
         }
     }
     
-    public final void clearFields() throws Exception {
+    @Override
+    public void clearFields() {
         
         JTIdEmpresa.setText("");
         JTCodigoEmpresa.setText(UtilitiesFactory.getSingleton().getGeneralsUtility().getUniqueDayCode());

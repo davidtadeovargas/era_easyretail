@@ -51,6 +51,10 @@ public class BajsMinViewController extends BajsMinJFrame {
         }
     }
     
+    @Override
+    public void clearFields(){            
+    }
+    
     private void jBVisActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	

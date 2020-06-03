@@ -28,10 +28,6 @@ public class LogsValidatorsExceptions {
        return new Exception("Falta espeficiar Accio");
    }
 
-   public Exception getCodException(){
-       return new Exception("Falta espeficiar Cod");
-   }
-
    public Exception getDescripException(){
        return new Exception("Falta espeficiar Descrip");
    }

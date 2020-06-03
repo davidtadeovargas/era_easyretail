@@ -58,6 +58,9 @@ public class LoginLocalViewController extends LoginLicenseJFrame {
         });
     }
     
+    @Override
+    public void clearFields(){            
+    }
     
     private void loginButtonClicked(){
         
@@ -274,7 +277,7 @@ public class LoginLocalViewController extends LoginLicenseJFrame {
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Saving server info in database");
         
         final ServerSession ServerSession = new ServerSession();
-        ServerSession.setGenericSerial(ComputerLicenseDataModel.getGenericSerial());                                
+        ServerSession.setCode(ComputerLicenseDataModel.getGenericSerial());                                
         RepositoryFactory.getInstance().getServerSessionsRepository().addServerSession(ServerSession);
         
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Finished");                
@@ -307,7 +310,7 @@ public class LoginLocalViewController extends LoginLicenseJFrame {
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Test product 1 saved in the database");
 
         final String pathImgProduc1 = ComputerLicenseDataModel.getTestCompanyDataModel().getProduct1().getPathIMG();
-        final String productCode1 = ComputerLicenseDataModel.getTestCompanyDataModel().getProduct1().getCodeProduct();                                
+        final String productCode1 = ComputerLicenseDataModel.getTestCompanyDataModel().getProduct1().getCode();
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Product 1 saving image " + pathImgProduc1 + " to local folder");
         UtilitiesFactory.getSingleton().getImagesUtility().saveImageFromUrl(productCode1, pathImgProduc1);
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Saved");
@@ -318,7 +321,7 @@ public class LoginLocalViewController extends LoginLicenseJFrame {
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Test product 2 saved in the database");
 
         final String pathImgProduc2 = ComputerLicenseDataModel.getTestCompanyDataModel().getProduct2().getPathIMG();
-        final String productCode2 = ComputerLicenseDataModel.getTestCompanyDataModel().getProduct2().getCodeProduct();                                
+        final String productCode2 = ComputerLicenseDataModel.getTestCompanyDataModel().getProduct2().getCode();
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Product 2 saving image " + pathImgProduc2 + " to local folder");
         UtilitiesFactory.getSingleton().getImagesUtility().saveImageFromUrl(productCode2, pathImgProduc2);
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Saved");
@@ -329,7 +332,7 @@ public class LoginLocalViewController extends LoginLicenseJFrame {
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Test product 3 saved in the database");
 
         final String pathImgProduc3 = ComputerLicenseDataModel.getTestCompanyDataModel().getProduct3().getPathIMG();
-        final String productCode3 = ComputerLicenseDataModel.getTestCompanyDataModel().getProduct3().getCodeProduct();                                
+        final String productCode3 = ComputerLicenseDataModel.getTestCompanyDataModel().getProduct3().getCode();
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Product 3 saving image " + pathImgProduc3 + " to local folder");
         UtilitiesFactory.getSingleton().getImagesUtility().saveImageFromUrl(productCode3, pathImgProduc3);
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Saved");
@@ -340,7 +343,7 @@ public class LoginLocalViewController extends LoginLicenseJFrame {
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Test product 4 saved in the database");
 
         final String pathImgProduc4 = ComputerLicenseDataModel.getTestCompanyDataModel().getProduct4().getPathIMG();
-        final String productCode4 = ComputerLicenseDataModel.getTestCompanyDataModel().getProduct4().getCodeProduct();                                
+        final String productCode4 = ComputerLicenseDataModel.getTestCompanyDataModel().getProduct4().getCode();
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Product 4 saving image " + pathImgProduc4 + " to local folder");
         UtilitiesFactory.getSingleton().getImagesUtility().saveImageFromUrl(productCode4, pathImgProduc4);
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Saved");
@@ -351,7 +354,7 @@ public class LoginLocalViewController extends LoginLicenseJFrame {
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Test product 5 saved in the database");
 
         final String pathImgProduc5 = ComputerLicenseDataModel.getTestCompanyDataModel().getProduct5().getPathIMG();
-        final String productCode5 = ComputerLicenseDataModel.getTestCompanyDataModel().getProduct5().getCodeProduct();                                
+        final String productCode5 = ComputerLicenseDataModel.getTestCompanyDataModel().getProduct5().getCode();
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Product 5 saving image " + pathImgProduc5 + " to local folder");
         UtilitiesFactory.getSingleton().getImagesUtility().saveImageFromUrl(productCode5, pathImgProduc5);
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Saved");

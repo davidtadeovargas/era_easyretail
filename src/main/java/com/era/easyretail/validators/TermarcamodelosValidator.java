@@ -6,9 +6,16 @@ import com.era.repositories.RepositoryFactory;
 
 public class TermarcamodelosValidator extends IValidate{
 
-   private String code;
    private String marc;
+   public void setMarc(String property){
+       this.marc = property;
+   }
+
    private String model;
+   public void setModel(String property){
+       this.model = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
@@ -19,11 +26,6 @@ public class TermarcamodelosValidator extends IValidate{
 
        if(model==null || model.isEmpty()){
            throw new TermarcamodelosValidatorsExceptions().getModelException();
-       }
-
-       final Termarcamodelo Termarcamodelo = (Termarcamodelo) RepositoryFactory.getInstance().getTermarcamodelosRepository().getByCode(code);
-       if(Termarcamodelo != null){            
-           throw new TermarcamodelosValidatorsExceptions().getModelExistsException();
        }
 
        if(IInsertValidation!=null){
@@ -48,23 +50,4 @@ public class TermarcamodelosValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new TermarcamodelosValidatorsExceptions().getCodeException();
-       }
-
-       final Termarcamodelo Termarcamodelo = (Termarcamodelo) RepositoryFactory.getInstance().getTermarcamodelosRepository().getByCode(code);
-       if(Termarcamodelo == null){            
-           throw new TermarcamodelosValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new TermarcamodelosValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

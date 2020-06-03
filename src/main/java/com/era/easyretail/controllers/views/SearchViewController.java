@@ -91,7 +91,11 @@ public class SearchViewController extends SearchJFrame {
                 
     }
     
-     private ImageIcon scaleImage(ImageIcon icon, int w, int h){
+    @Override
+    public void clearFields(){
+    }
+    
+    private ImageIcon scaleImage(ImageIcon icon, int w, int h){
          
         int nw = icon.getIconWidth();
         int nh = icon.getIconHeight();
@@ -207,15 +211,7 @@ public class SearchViewController extends SearchJFrame {
                 case PESOS:
                     list = RepositoryManager_.getPessRepository().getAll();
                     break;
-
-                case COLORS:
-                    list = RepositoryManager_.getColossRepository().getAll();
-                    break;
-
-                case ADITIONAL_UBIQS:
-                    list = RepositoryManager_.getUbiadsRepository().getAll();
-                    break;
-
+                
                 case MEASURES:
                     list = RepositoryManager_.getMedssRepository().getAll();
                     break;
@@ -262,10 +258,6 @@ public class SearchViewController extends SearchJFrame {
 
                 case CREDIT_NOTES:
                     list = RepositoryManager_.getSalessRepository().getAllNotsCred();
-                    break;
-
-                case TALLAS:
-                    list = RepositoryManager_.getTallsRepository().getAll();
                     break;
 
                 case PAYMENT_CONCEPTS:
@@ -523,12 +515,6 @@ public class SearchViewController extends SearchJFrame {
             case PESOS:                
                 break;
 
-            case COLORS:                
-                break;
-
-            case ADITIONAL_UBIQS:                
-                break;
-
             case MEASURES:
                 break;
 
@@ -563,9 +549,6 @@ public class SearchViewController extends SearchJFrame {
                 break;
 
             case CREDIT_NOTES:
-                break;
-
-            case TALLAS:
                 break;
 
             case PAYMENT_CONCEPTS:
@@ -617,8 +600,8 @@ public class SearchViewController extends SearchJFrame {
             }
 
             cod = jTab.getValueAt(jTab.getSelectedRow(), 0).toString();
-            descrip = jTab.getValueAt(jTab.getSelectedRow(), 1).toString();
-            others = jTab.getValueAt(jTab.getSelectedRow(), 1).toString();
+            descrip = jTab.getValueAt(jTab.getSelectedRow(), 1)==null?"":jTab.getValueAt(jTab.getSelectedRow(), 1).toString();
+            others = jTab.getValueAt(jTab.getSelectedRow(), 2)==null?"":jTab.getValueAt(jTab.getSelectedRow(), 2).toString();
             dispose();
             
             if(ButtonAceptClicked!=null){

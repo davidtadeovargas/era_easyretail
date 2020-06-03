@@ -6,9 +6,16 @@ import com.era.repositories.RepositoryFactory;
 
 public class ConcepnotsValidator extends IValidate{
 
-   private String code;
    private String concep;
+   public void setConcep(String property){
+       this.concep = property;
+   }
+
    private String descrip;
+   public void setDescrip(String property){
+       this.descrip = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
@@ -19,11 +26,6 @@ public class ConcepnotsValidator extends IValidate{
 
        if(descrip==null || descrip.isEmpty()){
            throw new ConcepnotsValidatorsExceptions().getDescripException();
-       }
-
-       final Concepnot Concepnot = (Concepnot) RepositoryFactory.getInstance().getConcepnotsRepository().getByCode(code);
-       if(Concepnot != null){            
-           throw new ConcepnotsValidatorsExceptions().getModelExistsException();
        }
 
        if(IInsertValidation!=null){
@@ -48,23 +50,4 @@ public class ConcepnotsValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new ConcepnotsValidatorsExceptions().getCodeException();
-       }
-
-       final Concepnot Concepnot = (Concepnot) RepositoryFactory.getInstance().getConcepnotsRepository().getByCode(code);
-       if(Concepnot == null){            
-           throw new ConcepnotsValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new ConcepnotsValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

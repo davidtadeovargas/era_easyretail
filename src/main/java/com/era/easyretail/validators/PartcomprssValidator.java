@@ -6,26 +6,101 @@ import com.era.repositories.RepositoryFactory;
 
 public class PartcomprssValidator extends IValidate{
 
-   private String code;
    private String alma;
+   public void setAlma(String property){
+       this.alma = property;
+   }
+
    private String cant;
+   public void setCant(String property){
+       this.cant = property;
+   }
+
    private String cantlotpend;
+   public void setCantlotpend(String property){
+       this.cantlotpend = property;
+   }
+
    private String codcom;
+   public void setCodcom(String property){
+       this.codcom = property;
+   }
+
    private String codimpue;
+   public void setCodimpue(String property){
+       this.codimpue = property;
+   }
+
    private String comenser;
+   public void setComenser(String property){
+       this.comenser = property;
+   }
+
    private String cost;
+   public void setCost(String property){
+       this.cost = property;
+   }
+
    private String costpro;
+   public void setCostpro(String property){
+       this.costpro = property;
+   }
+
    private String descad;
+   public void setDescad(String property){
+       this.descad = property;
+   }
+
    private String descrip;
+   public void setDescrip(String property){
+       this.descrip = property;
+   }
+
    private String descu;
+   public void setDescu(String property){
+       this.descu = property;
+   }
+
    private String flotvenc;
+   public void setFlotvenc(String property){
+       this.flotvenc = property;
+   }
+
    private String garan;
+   public void setGaran(String property){
+       this.garan = property;
+   }
+
    private String impo;
+   public void setImpo(String property){
+       this.impo = property;
+   }
+
    private String mon;
+   public void setMon(String property){
+       this.mon = property;
+   }
+
    private String prod;
+   public void setProd(String property){
+       this.prod = property;
+   }
+
    private String serprod;
+   public void setSerprod(String property){
+       this.serprod = property;
+   }
+
    private String tipcam;
+   public void setTipcam(String property){
+       this.tipcam = property;
+   }
+
    private String unid;
+   public void setUnid(String property){
+       this.unid = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
@@ -106,11 +181,6 @@ public class PartcomprssValidator extends IValidate{
            throw new PartcomprssValidatorsExceptions().getUnidException();
        }
 
-       final Partcomprs Partcomprs = (Partcomprs) RepositoryFactory.getInstance().getPartcomprssRepository().getByCode(code);
-       if(Partcomprs != null){            
-           throw new PartcomprssValidatorsExceptions().getModelExistsException();
-       }
-
        if(IInsertValidation!=null){
             final boolean response = IInsertValidation.validate();
             if(!response){
@@ -133,23 +203,4 @@ public class PartcomprssValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new PartcomprssValidatorsExceptions().getCodeException();
-       }
-
-       final Partcomprs Partcomprs = (Partcomprs) RepositoryFactory.getInstance().getPartcomprssRepository().getByCode(code);
-       if(Partcomprs == null){            
-           throw new PartcomprssValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new PartcomprssValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

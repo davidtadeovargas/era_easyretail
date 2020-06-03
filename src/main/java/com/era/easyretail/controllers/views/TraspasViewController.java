@@ -85,6 +85,10 @@ public class TraspasViewController extends TraspasJFrame{
 	}
     }
     
+    @Override
+    public void clearFields(){
+    }
+    
     private void jBMosTodActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	

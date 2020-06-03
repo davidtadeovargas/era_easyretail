@@ -6,9 +6,16 @@ import com.era.repositories.RepositoryFactory;
 
 public class GirosValidator extends IValidate{
 
-   private String code;
    private String descrip;
+   public void setDescrip(String property){
+       this.descrip = property;
+   }
+
    private String gir;
+   public void setGir(String property){
+       this.gir = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
@@ -19,11 +26,6 @@ public class GirosValidator extends IValidate{
 
        if(gir==null || gir.isEmpty()){
            throw new GirosValidatorsExceptions().getGirException();
-       }
-
-       final Giro Giro = (Giro) RepositoryFactory.getInstance().getGirosRepository().getByCode(code);
-       if(Giro != null){            
-           throw new GirosValidatorsExceptions().getModelExistsException();
        }
 
        if(IInsertValidation!=null){
@@ -48,23 +50,4 @@ public class GirosValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new GirosValidatorsExceptions().getCodeException();
-       }
-
-       final Giro Giro = (Giro) RepositoryFactory.getInstance().getGirosRepository().getByCode(code);
-       if(Giro == null){            
-           throw new GirosValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new GirosValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

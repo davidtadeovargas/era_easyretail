@@ -6,9 +6,16 @@ import com.era.repositories.RepositoryFactory;
 
 public class ZonasValidator extends IValidate{
 
-   private String code;
    private String cod;
+   public void setCod(String property){
+       this.cod = property;
+   }
+
    private String descrip;
+   public void setDescrip(String property){
+       this.descrip = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
@@ -19,11 +26,6 @@ public class ZonasValidator extends IValidate{
 
        if(descrip==null || descrip.isEmpty()){
            throw new ZonasValidatorsExceptions().getDescripException();
-       }
-
-       final Zona Zona = (Zona) RepositoryFactory.getInstance().getZonasRepository().getByCode(code);
-       if(Zona != null){            
-           throw new ZonasValidatorsExceptions().getModelExistsException();
        }
 
        if(IInsertValidation!=null){
@@ -48,23 +50,4 @@ public class ZonasValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new ZonasValidatorsExceptions().getCodeException();
-       }
-
-       final Zona Zona = (Zona) RepositoryFactory.getInstance().getZonasRepository().getByCode(code);
-       if(Zona == null){            
-           throw new ZonasValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new ZonasValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

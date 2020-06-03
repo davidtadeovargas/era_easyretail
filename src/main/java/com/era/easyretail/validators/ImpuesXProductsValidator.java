@@ -6,9 +6,16 @@ import com.era.repositories.RepositoryFactory;
 
 public class ImpuesXProductsValidator extends IValidate{
 
-   private String code;
    private String impue;
+   public void setImpue(String property){
+       this.impue = property;
+   }
+
    private String produ;
+   public void setProdu(String property){
+       this.produ = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
@@ -19,11 +26,6 @@ public class ImpuesXProductsValidator extends IValidate{
 
        if(produ==null || produ.isEmpty()){
            throw new ImpuesXProductsValidatorsExceptions().getProduException();
-       }
-
-       final ImpuesXProduct ImpuesXProduct = (ImpuesXProduct) RepositoryFactory.getInstance().getImpuesXProductsRepository().getByCode(code);
-       if(ImpuesXProduct != null){            
-           throw new ImpuesXProductsValidatorsExceptions().getModelExistsException();
        }
 
        if(IInsertValidation!=null){
@@ -48,23 +50,4 @@ public class ImpuesXProductsValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new ImpuesXProductsValidatorsExceptions().getCodeException();
-       }
-
-       final ImpuesXProduct ImpuesXProduct = (ImpuesXProduct) RepositoryFactory.getInstance().getImpuesXProductsRepository().getByCode(code);
-       if(ImpuesXProduct == null){            
-           throw new ImpuesXProductsValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new ImpuesXProductsValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

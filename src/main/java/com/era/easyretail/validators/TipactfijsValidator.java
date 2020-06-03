@@ -7,23 +7,25 @@ import com.era.repositories.RepositoryFactory;
 public class TipactfijsValidator extends IValidate{
 
    private String code;
+   public void setCode(String property){
+       this.code = property;
+   }
+
    private String descrip;
-   private String tip;
+   public void setDescrip(String property){
+       this.descrip = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
 
+       if(code==null || code.isEmpty()){
+           throw new TipactfijsValidatorsExceptions().getCodeException();
+       }
+
        if(descrip==null || descrip.isEmpty()){
            throw new TipactfijsValidatorsExceptions().getDescripException();
-       }
-
-       if(tip==null || tip.isEmpty()){
-           throw new TipactfijsValidatorsExceptions().getTipException();
-       }
-
-       final Tipactfij Tipactfij = (Tipactfij) RepositoryFactory.getInstance().getTipactfijsRepository().getByCode(code);
-       if(Tipactfij != null){            
-           throw new TipactfijsValidatorsExceptions().getModelExistsException();
        }
 
        if(IInsertValidation!=null){
@@ -48,23 +50,4 @@ public class TipactfijsValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new TipactfijsValidatorsExceptions().getCodeException();
-       }
-
-       final Tipactfij Tipactfij = (Tipactfij) RepositoryFactory.getInstance().getTipactfijsRepository().getByCode(code);
-       if(Tipactfij == null){            
-           throw new TipactfijsValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new TipactfijsValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

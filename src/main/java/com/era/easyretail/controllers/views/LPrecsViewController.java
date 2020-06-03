@@ -39,6 +39,10 @@ public class LPrecsViewController extends LPrecsJFrame {
         }
     }
     
+    @Override
+    public void clearFields(){            
+    }
+    
     private void jBGuarActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	

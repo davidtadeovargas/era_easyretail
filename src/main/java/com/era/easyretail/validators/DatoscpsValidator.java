@@ -6,19 +6,17 @@ import com.era.repositories.RepositoryFactory;
 
 public class DatoscpsValidator extends IValidate{
 
-   private String code;
    private String vta;
+   public void setVta(String property){
+       this.vta = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
 
        if(vta==null || vta.isEmpty()){
            throw new DatoscpsValidatorsExceptions().getVtaException();
-       }
-
-       final Datoscp Datoscp = (Datoscp) RepositoryFactory.getInstance().getDatoscpsRepository().getByCode(code);
-       if(Datoscp != null){            
-           throw new DatoscpsValidatorsExceptions().getModelExistsException();
        }
 
        if(IInsertValidation!=null){
@@ -43,23 +41,4 @@ public class DatoscpsValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new DatoscpsValidatorsExceptions().getCodeException();
-       }
-
-       final Datoscp Datoscp = (Datoscp) RepositoryFactory.getInstance().getDatoscpsRepository().getByCode(code);
-       if(Datoscp == null){            
-           throw new DatoscpsValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new DatoscpsValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

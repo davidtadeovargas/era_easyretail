@@ -13,7 +13,6 @@ import com.era.models.BasDats;
 import com.era.models.Confgral;
 import com.era.models.User;
 import com.era.repositories.RepositoryFactory;
-import com.era.utilities.FileChooserUtility;
 import com.era.utilities.UtilitiesFactory;
 import com.era.utilities.WinRegistry;
 import com.era.views.PrincipJFrame;
@@ -199,9 +198,6 @@ public class PrincipViewController extends PrincipJFrame {
             jMLotPed.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jMLotPedActionPerformed(evt);
             });
-            jMImpAlma.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jMImpAlmaActionPerformed(evt);
-            });
             jMConcepPags.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jMConcepPagsActionPerformed(evt);
             });
@@ -252,6 +248,9 @@ public class PrincipViewController extends PrincipJFrame {
             });
             jMenItImpres.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jMenItImpresActionPerformed(evt);
+            });
+            warehousesMenu.addActionListener((java.awt.event.ActionEvent evt) -> {
+                warehousesMenuActionPerformed(evt);
             });            
             
             onCloseWindowDoNothing();
@@ -266,7 +265,9 @@ public class PrincipViewController extends PrincipJFrame {
         }
     }
     
-    
+    private void warehousesMenuActionPerformed(java.awt.event.ActionEvent evt) {        
+        ViewControlersFactory.getSingleton().getAlmasViewController().setVisible();
+    }
     private void jMActivoActionPerformed(java.awt.event.ActionEvent evt) {        
         ViewControlersFactory.getSingleton().getActivosViewController().setVisible();
     }
@@ -275,6 +276,10 @@ public class PrincipViewController extends PrincipJFrame {
     }
     private void reportsMenuActionPerformed(java.awt.event.ActionEvent evt) {        
         ViewControlersFactory.getSingleton().getReportsViewController().setVisible();
+    }
+    
+    @Override
+    public void clearFields(){
     }
     
     private void jMenItEstacsActionPerformed(java.awt.event.ActionEvent evt) {        
@@ -1358,43 +1363,6 @@ public class PrincipViewController extends PrincipJFrame {
     }
     
     
-    private void jMImpAlmaActionPerformed(java.awt.event.ActionEvent evt) {                                          
-        
-        try{
-            
-            final FileChooserUtility FileChooserUtility = UtilitiesFactory.getSingleton().getFileChooserUtility();
-            FileChooserUtility.setPropertyTitle("fc_titles_search_excel_file");
-            FileChooserUtility.setIApproveOpption((String absolutePath, String fileName) -> {
-                
-                try{
-                    
-                    if(!fileName.endsWith("xlsx") && !fileName.endsWith("xls")){
-                        final ErrorOKDialog ErrorOKDialog = DialogsFactory.getSingleton().getErrorOKDialog(baseJFrame);
-                        ErrorOKDialog.setPropertyText("errors_not_excel_file");                    
-                        ErrorOKDialog.show();
-                        return;
-                    }
-                    
-                }catch (Exception ex) {
-                    LoggerUtility.getSingleton().logError(PrincipViewController.class, ex);
-                    try {
-                        DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
-                    } catch (Exception ex1) {
-                        Logger.getLogger(PrincipViewController.class.getName()).log(Level.SEVERE, null, ex1);
-                    }
-                }
-            });
-            FileChooserUtility.showSaveDialog(baseJFrame);
-            
-        }catch (Exception ex) {
-            LoggerUtility.getSingleton().logError(PrincipViewController.class, ex);
-            try {
-                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
-            } catch (Exception ex1) {               Logger.getLogger(PrincipViewController.class.getName()).log(Level.SEVERE, null, ex1);
-            }
-        }
-    }
-        
     private void jMLogConcepNotActionPerformed(java.awt.event.ActionEvent evt) {                                               
         
         /*Abre la forma para ver el log de tipo de activo fijo*/

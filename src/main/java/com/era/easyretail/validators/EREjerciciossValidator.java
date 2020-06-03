@@ -6,9 +6,16 @@ import com.era.repositories.RepositoryFactory;
 
 public class EREjerciciossValidator extends IValidate{
 
-   private String code;
    private String ejercicio;
+   public void setEjercicio(String property){
+       this.ejercicio = property;
+   }
+
    private String fechaInicio;
+   public void setFechaInicio(String property){
+       this.fechaInicio = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
@@ -19,11 +26,6 @@ public class EREjerciciossValidator extends IValidate{
 
        if(fechaInicio==null || fechaInicio.isEmpty()){
            throw new EREjerciciossValidatorsExceptions().getFechaInicioException();
-       }
-
-       final EREjercicios EREjercicios = (EREjercicios) RepositoryFactory.getInstance().getEREjerciciossRepository().getByCode(code);
-       if(EREjercicios != null){            
-           throw new EREjerciciossValidatorsExceptions().getModelExistsException();
        }
 
        if(IInsertValidation!=null){
@@ -48,23 +50,4 @@ public class EREjerciciossValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new EREjerciciossValidatorsExceptions().getCodeException();
-       }
-
-       final EREjercicios EREjercicios = (EREjercicios) RepositoryFactory.getInstance().getEREjerciciossRepository().getByCode(code);
-       if(EREjercicios == null){            
-           throw new EREjerciciossValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new EREjerciciossValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

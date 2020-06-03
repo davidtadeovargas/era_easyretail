@@ -52,6 +52,10 @@ public class KitsViewController extends KitsJFrame {
         }
     }
     
+    @Override
+    public void clearFields(){            
+    }
+    
     private void jBDelActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	

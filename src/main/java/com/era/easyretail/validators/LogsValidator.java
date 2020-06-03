@@ -6,11 +6,26 @@ import com.era.repositories.RepositoryFactory;
 
 public class LogsValidator extends IValidate{
 
-   private String code;
    private String accio;
-   private String cod;
+   public void setAccio(String property){
+       this.accio = property;
+   }
+
+   private String code;
+   public void setCode(String property){
+       this.code = property;
+   }
+
    private String descrip;
+   public void setDescrip(String property){
+       this.descrip = property;
+   }
+
    private String type;
+   public void setType(String property){
+       this.type = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
@@ -19,8 +34,8 @@ public class LogsValidator extends IValidate{
            throw new LogsValidatorsExceptions().getAccioException();
        }
 
-       if(cod==null || cod.isEmpty()){
-           throw new LogsValidatorsExceptions().getCodException();
+       if(code==null || code.isEmpty()){
+           throw new LogsValidatorsExceptions().getCodeException();
        }
 
        if(descrip==null || descrip.isEmpty()){
@@ -29,11 +44,6 @@ public class LogsValidator extends IValidate{
 
        if(type==null || type.isEmpty()){
            throw new LogsValidatorsExceptions().getTypeException();
-       }
-
-       final Log Log = (Log) RepositoryFactory.getInstance().getLogsRepository().getByCode(code);
-       if(Log != null){            
-           throw new LogsValidatorsExceptions().getModelExistsException();
        }
 
        if(IInsertValidation!=null){
@@ -58,23 +68,4 @@ public class LogsValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new LogsValidatorsExceptions().getCodeException();
-       }
-
-       final Log Log = (Log) RepositoryFactory.getInstance().getLogsRepository().getByCode(code);
-       if(Log == null){            
-           throw new LogsValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new LogsValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

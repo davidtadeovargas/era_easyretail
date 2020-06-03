@@ -7,17 +7,18 @@ import com.era.repositories.RepositoryFactory;
 public class MeasuresValidator extends IValidate{
 
    private String code;
-   private String cashNumber;
+   public void setCode(String property){
+       this.code = property;
+   }
+
    private String description;
-   private String station;
-   private String sucursal;
+   public void setDescription(String property){
+       this.description = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
-
-       if(cashNumber==null || cashNumber.isEmpty()){
-           throw new MeasuresValidatorsExceptions().getCashNumberException();
-       }
 
        if(code==null || code.isEmpty()){
            throw new MeasuresValidatorsExceptions().getCodeException();
@@ -25,19 +26,6 @@ public class MeasuresValidator extends IValidate{
 
        if(description==null || description.isEmpty()){
            throw new MeasuresValidatorsExceptions().getDescriptionException();
-       }
-
-       if(station==null || station.isEmpty()){
-           throw new MeasuresValidatorsExceptions().getStationException();
-       }
-
-       if(sucursal==null || sucursal.isEmpty()){
-           throw new MeasuresValidatorsExceptions().getSucursalException();
-       }
-
-       final Measure Measure = (Measure) RepositoryFactory.getInstance().getMeasuresRepository().getByCode(code);
-       if(Measure != null){            
-           throw new MeasuresValidatorsExceptions().getModelExistsException();
        }
 
        if(IInsertValidation!=null){
@@ -62,23 +50,4 @@ public class MeasuresValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new MeasuresValidatorsExceptions().getCodeException();
-       }
-
-       final Measure Measure = (Measure) RepositoryFactory.getInstance().getMeasuresRepository().getByCode(code);
-       if(Measure == null){            
-           throw new MeasuresValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new MeasuresValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

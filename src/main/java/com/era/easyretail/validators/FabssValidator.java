@@ -6,9 +6,16 @@ import com.era.repositories.RepositoryFactory;
 
 public class FabssValidator extends IValidate{
 
-   private String code;
    private String cod;
+   public void setCod(String property){
+       this.cod = property;
+   }
+
    private String descrip;
+   public void setDescrip(String property){
+       this.descrip = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
@@ -19,11 +26,6 @@ public class FabssValidator extends IValidate{
 
        if(descrip==null || descrip.isEmpty()){
            throw new FabssValidatorsExceptions().getDescripException();
-       }
-
-       final Fabs Fabs = (Fabs) RepositoryFactory.getInstance().getFabssRepository().getByCode(code);
-       if(Fabs != null){            
-           throw new FabssValidatorsExceptions().getModelExistsException();
        }
 
        if(IInsertValidation!=null){
@@ -48,23 +50,4 @@ public class FabssValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new FabssValidatorsExceptions().getCodeException();
-       }
-
-       final Fabs Fabs = (Fabs) RepositoryFactory.getInstance().getFabssRepository().getByCode(code);
-       if(Fabs == null){            
-           throw new FabssValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new FabssValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

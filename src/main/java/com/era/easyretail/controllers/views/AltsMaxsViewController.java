@@ -49,6 +49,10 @@ public class AltsMaxsViewController extends AltsMaxsJFrame {
         }
     }
     
+    @Override
+    public void clearFields(){            
+    }
+    
     private void jBVisActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	

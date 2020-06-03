@@ -6,15 +6,46 @@ import com.era.repositories.RepositoryFactory;
 
 public class AsientosContablessValidator extends IValidate{
 
-   private String code;
    private String concepto;
+   public void setConcepto(String property){
+       this.concepto = property;
+   }
+
    private String documento;
+   public void setDocumento(String property){
+       this.documento = property;
+   }
+
    private String fecha_alta;
+   public void setFecha_alta(String property){
+       this.fecha_alta = property;
+   }
+
    private String fecha_modificacion;
+   public void setFecha_modificacion(String property){
+       this.fecha_modificacion = property;
+   }
+
    private String frecuencia;
+   public void setFrecuencia(String property){
+       this.frecuencia = property;
+   }
+
    private String idSerie;
+   public void setIdSerie(String property){
+       this.idSerie = property;
+   }
+
    private String nombre;
+   public void setNombre(String property){
+       this.nombre = property;
+   }
+
    private String tipo;
+   public void setTipo(String property){
+       this.tipo = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
@@ -51,11 +82,6 @@ public class AsientosContablessValidator extends IValidate{
            throw new AsientosContablessValidatorsExceptions().getTipoException();
        }
 
-       final AsientosContables AsientosContables = (AsientosContables) RepositoryFactory.getInstance().getAsientosContablessRepository().getByCode(code);
-       if(AsientosContables != null){            
-           throw new AsientosContablessValidatorsExceptions().getModelExistsException();
-       }
-
        if(IInsertValidation!=null){
             final boolean response = IInsertValidation.validate();
             if(!response){
@@ -78,23 +104,4 @@ public class AsientosContablessValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new AsientosContablessValidatorsExceptions().getCodeException();
-       }
-
-       final AsientosContables AsientosContables = (AsientosContables) RepositoryFactory.getInstance().getAsientosContablessRepository().getByCode(code);
-       if(AsientosContables == null){            
-           throw new AsientosContablessValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new AsientosContablessValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

@@ -6,15 +6,46 @@ import com.era.repositories.RepositoryFactory;
 
 public class MovimientosAsientossValidator extends IValidate{
 
-   private String code;
    private String concepto;
+   public void setConcepto(String property){
+       this.concepto = property;
+   }
+
    private String cuenta;
+   public void setCuenta(String property){
+       this.cuenta = property;
+   }
+
    private String idAsiento;
+   public void setIdAsiento(String property){
+       this.idAsiento = property;
+   }
+
    private String importe;
+   public void setImporte(String property){
+       this.importe = property;
+   }
+
    private String numeroMovimiento;
+   public void setNumeroMovimiento(String property){
+       this.numeroMovimiento = property;
+   }
+
    private String referencia;
+   public void setReferencia(String property){
+       this.referencia = property;
+   }
+
    private String segmento_negocio;
+   public void setSegmento_negocio(String property){
+       this.segmento_negocio = property;
+   }
+
    private String tipo;
+   public void setTipo(String property){
+       this.tipo = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
@@ -51,11 +82,6 @@ public class MovimientosAsientossValidator extends IValidate{
            throw new MovimientosAsientossValidatorsExceptions().getTipoException();
        }
 
-       final MovimientosAsientos MovimientosAsientos = (MovimientosAsientos) RepositoryFactory.getInstance().getMovimientosAsientossRepository().getByCode(code);
-       if(MovimientosAsientos != null){            
-           throw new MovimientosAsientossValidatorsExceptions().getModelExistsException();
-       }
-
        if(IInsertValidation!=null){
             final boolean response = IInsertValidation.validate();
             if(!response){
@@ -78,23 +104,4 @@ public class MovimientosAsientossValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new MovimientosAsientossValidatorsExceptions().getCodeException();
-       }
-
-       final MovimientosAsientos MovimientosAsientos = (MovimientosAsientos) RepositoryFactory.getInstance().getMovimientosAsientossRepository().getByCode(code);
-       if(MovimientosAsientos == null){            
-           throw new MovimientosAsientossValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new MovimientosAsientossValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

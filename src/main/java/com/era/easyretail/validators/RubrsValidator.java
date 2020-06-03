@@ -7,23 +7,25 @@ import com.era.repositories.RepositoryFactory;
 public class RubrsValidator extends IValidate{
 
    private String code;
-   private String cod;
+   public void setCode(String property){
+       this.code = property;
+   }
+
    private String descrip;
+   public void setDescrip(String property){
+       this.descrip = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
 
-       if(cod==null || cod.isEmpty()){
-           throw new RubrsValidatorsExceptions().getCodException();
+       if(code==null || code.isEmpty()){
+           throw new RubrsValidatorsExceptions().getCodeException();
        }
 
        if(descrip==null || descrip.isEmpty()){
            throw new RubrsValidatorsExceptions().getDescripException();
-       }
-
-       final Rubr Rubr = (Rubr) RepositoryFactory.getInstance().getRubrsRepository().getByCode(code);
-       if(Rubr != null){            
-           throw new RubrsValidatorsExceptions().getModelExistsException();
        }
 
        if(IInsertValidation!=null){
@@ -48,23 +50,4 @@ public class RubrsValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new RubrsValidatorsExceptions().getCodeException();
-       }
-
-       final Rubr Rubr = (Rubr) RepositoryFactory.getInstance().getRubrsRepository().getByCode(code);
-       if(Rubr == null){            
-           throw new RubrsValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new RubrsValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

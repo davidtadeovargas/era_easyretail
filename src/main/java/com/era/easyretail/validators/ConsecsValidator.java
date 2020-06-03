@@ -6,21 +6,29 @@ import com.era.repositories.RepositoryFactory;
 
 public class ConsecsValidator extends IValidate{
 
-   private String code;
-   private String cashNumber;
    private String consec;
+   public void setConsec(String property){
+       this.consec = property;
+   }
+
    private String description;
+   public void setDescription(String property){
+       this.description = property;
+   }
+
    private String serie;
-   private String station;
-   private String sucursal;
+   public void setSerie(String property){
+       this.serie = property;
+   }
+
    private String type;
+   public void setType(String property){
+       this.type = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
-
-       if(cashNumber==null || cashNumber.isEmpty()){
-           throw new ConsecsValidatorsExceptions().getCashNumberException();
-       }
 
        if(consec==null || consec.isEmpty()){
            throw new ConsecsValidatorsExceptions().getConsecException();
@@ -34,21 +42,8 @@ public class ConsecsValidator extends IValidate{
            throw new ConsecsValidatorsExceptions().getSerieException();
        }
 
-       if(station==null || station.isEmpty()){
-           throw new ConsecsValidatorsExceptions().getStationException();
-       }
-
-       if(sucursal==null || sucursal.isEmpty()){
-           throw new ConsecsValidatorsExceptions().getSucursalException();
-       }
-
        if(type==null || type.isEmpty()){
            throw new ConsecsValidatorsExceptions().getTypeException();
-       }
-
-       final Consec Consec = (Consec) RepositoryFactory.getInstance().getConsecsRepository().getByCode(code);
-       if(Consec != null){            
-           throw new ConsecsValidatorsExceptions().getModelExistsException();
        }
 
        if(IInsertValidation!=null){
@@ -73,23 +68,4 @@ public class ConsecsValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new ConsecsValidatorsExceptions().getCodeException();
-       }
-
-       final Consec Consec = (Consec) RepositoryFactory.getInstance().getConsecsRepository().getByCode(code);
-       if(Consec == null){            
-           throw new ConsecsValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new ConsecsValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

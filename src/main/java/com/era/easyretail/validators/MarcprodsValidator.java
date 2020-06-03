@@ -6,9 +6,16 @@ import com.era.repositories.RepositoryFactory;
 
 public class MarcprodsValidator extends IValidate{
 
-   private String code;
    private String marc;
+   public void setMarc(String property){
+       this.marc = property;
+   }
+
    private String prod;
+   public void setProd(String property){
+       this.prod = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
@@ -19,11 +26,6 @@ public class MarcprodsValidator extends IValidate{
 
        if(prod==null || prod.isEmpty()){
            throw new MarcprodsValidatorsExceptions().getProdException();
-       }
-
-       final Marcprod Marcprod = (Marcprod) RepositoryFactory.getInstance().getMarcprodsRepository().getByCode(code);
-       if(Marcprod != null){            
-           throw new MarcprodsValidatorsExceptions().getModelExistsException();
        }
 
        if(IInsertValidation!=null){
@@ -48,23 +50,4 @@ public class MarcprodsValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new MarcprodsValidatorsExceptions().getCodeException();
-       }
-
-       final Marcprod Marcprod = (Marcprod) RepositoryFactory.getInstance().getMarcprodsRepository().getByCode(code);
-       if(Marcprod == null){            
-           throw new MarcprodsValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new MarcprodsValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

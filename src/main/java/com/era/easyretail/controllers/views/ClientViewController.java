@@ -56,6 +56,10 @@ public class ClientViewController extends ClientJFrame {
         }
     }
     
+    @Override
+    public void clearFields(){            
+    }
+    
     private void ActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	

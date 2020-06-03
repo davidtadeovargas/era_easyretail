@@ -24,28 +24,12 @@ public class ProductsValidatorsExceptions {
        return new Exception("Falta espeficiar codigo");
    }
 
-   public Exception getBranchOfficeException(){
-       return new Exception("Falta espeficiar BranchOffice");
-   }
-
-   public Exception getCodeProductException(){
-       return new Exception("Falta espeficiar CodeProduct");
-   }
-
    public Exception getDescriptionException(){
        return new Exception("Falta espeficiar Description");
    }
 
-   public Exception getEstationException(){
-       return new Exception("Falta espeficiar Estation");
-   }
-
    public Exception getKeySATException(){
        return new Exception("Falta espeficiar KeySAT");
-   }
-
-   public Exception getNumberCashException(){
-       return new Exception("Falta espeficiar NumberCash");
    }
 
 }

@@ -6,16 +6,51 @@ import com.era.repositories.RepositoryFactory;
 
 public class MoninvensValidator extends IValidate{
 
-   private String code;
    private String alma;
+   public void setAlma(String property){
+       this.alma = property;
+   }
+
    private String concep;
+   public void setConcep(String property){
+       this.concep = property;
+   }
+
    private String descrip;
+   public void setDescrip(String property){
+       this.descrip = property;
+   }
+
    private String emp;
+   public void setEmp(String property){
+       this.emp = property;
+   }
+
    private String entsal;
+   public void setEntsal(String property){
+       this.entsal = property;
+   }
+
    private String nodoc;
+   public void setNodoc(String property){
+       this.nodoc = property;
+   }
+
    private String noser;
+   public void setNoser(String property){
+       this.noser = property;
+   }
+
    private String prod;
+   public void setProd(String property){
+       this.prod = property;
+   }
+
    private String unid;
+   public void setUnid(String property){
+       this.unid = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
@@ -56,11 +91,6 @@ public class MoninvensValidator extends IValidate{
            throw new MoninvensValidatorsExceptions().getUnidException();
        }
 
-       final Moninven Moninven = (Moninven) RepositoryFactory.getInstance().getMoninvensRepository().getByCode(code);
-       if(Moninven != null){            
-           throw new MoninvensValidatorsExceptions().getModelExistsException();
-       }
-
        if(IInsertValidation!=null){
             final boolean response = IInsertValidation.validate();
             if(!response){
@@ -83,23 +113,4 @@ public class MoninvensValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new MoninvensValidatorsExceptions().getCodeException();
-       }
-
-       final Moninven Moninven = (Moninven) RepositoryFactory.getInstance().getMoninvensRepository().getByCode(code);
-       if(Moninven == null){            
-           throw new MoninvensValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new MoninvensValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

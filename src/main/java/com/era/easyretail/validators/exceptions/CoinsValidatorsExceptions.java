@@ -28,24 +28,12 @@ public class CoinsValidatorsExceptions {
        return new Exception("Falta espeficiar C_moneda");
    }
 
-   public Exception getCashNumberException(){
-       return new Exception("Falta espeficiar CashNumber");
-   }
-
    public Exception getDescriptionException(){
        return new Exception("Falta espeficiar Description");
    }
 
    public Exception getSimbolException(){
        return new Exception("Falta espeficiar Simbol");
-   }
-
-   public Exception getStationException(){
-       return new Exception("Falta espeficiar Station");
-   }
-
-   public Exception getSucursalException(){
-       return new Exception("Falta espeficiar Sucursal");
    }
 
 }

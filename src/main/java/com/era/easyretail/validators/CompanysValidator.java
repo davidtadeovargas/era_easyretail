@@ -6,10 +6,21 @@ import com.era.repositories.RepositoryFactory;
 
 public class CompanysValidator extends IValidate{
 
-   private String code;
    private String appPath;
+   public void setAppPath(String property){
+       this.appPath = property;
+   }
+
    private String companyCode;
+   public void setCompanyCode(String property){
+       this.companyCode = property;
+   }
+
    private String nom;
+   public void setNom(String property){
+       this.nom = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
@@ -24,11 +35,6 @@ public class CompanysValidator extends IValidate{
 
        if(nom==null || nom.isEmpty()){
            throw new CompanysValidatorsExceptions().getNomException();
-       }
-
-       final Company Company = (Company) RepositoryFactory.getInstance().getCompanysRepository().getByCode(code);
-       if(Company != null){            
-           throw new CompanysValidatorsExceptions().getModelExistsException();
        }
 
        if(IInsertValidation!=null){
@@ -53,23 +59,4 @@ public class CompanysValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new CompanysValidatorsExceptions().getCodeException();
-       }
-
-       final Company Company = (Company) RepositoryFactory.getInstance().getCompanysRepository().getByCode(code);
-       if(Company == null){            
-           throw new CompanysValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new CompanysValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

@@ -7,18 +7,16 @@ import com.era.repositories.RepositoryFactory;
 public class ServerSessionsValidator extends IValidate{
 
    private String code;
-   private String genericSerial;
+   public void setCode(String property){
+       this.code = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
 
-       if(genericSerial==null || genericSerial.isEmpty()){
-           throw new ServerSessionsValidatorsExceptions().getGenericSerialException();
-       }
-
-       final ServerSession ServerSession = (ServerSession) RepositoryFactory.getInstance().getServerSessionsRepository().getByCode(code);
-       if(ServerSession != null){            
-           throw new ServerSessionsValidatorsExceptions().getModelExistsException();
+       if(code==null || code.isEmpty()){
+           throw new ServerSessionsValidatorsExceptions().getCodeException();
        }
 
        if(IInsertValidation!=null){
@@ -43,23 +41,4 @@ public class ServerSessionsValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new ServerSessionsValidatorsExceptions().getCodeException();
-       }
-
-       final ServerSession ServerSession = (ServerSession) RepositoryFactory.getInstance().getServerSessionsRepository().getByCode(code);
-       if(ServerSession == null){            
-           throw new ServerSessionsValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new ServerSessionsValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

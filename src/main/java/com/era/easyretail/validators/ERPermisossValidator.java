@@ -6,111 +6,526 @@ import com.era.repositories.RepositoryFactory;
 
 public class ERPermisossValidator extends IValidate{
 
-   private String code;
    private String FKIdUsuario;
+   public void setFKIdUsuario(String property){
+       this.FKIdUsuario = property;
+   }
+
    private String otorgaPermisoCxc;
+   public void setOtorgaPermisoCxc(String property){
+       this.otorgaPermisoCxc = property;
+   }
+
    private String otorgaPermisosClientes;
+   public void setOtorgaPermisosClientes(String property){
+       this.otorgaPermisosClientes = property;
+   }
+
    private String otorgaPermisosCompras;
+   public void setOtorgaPermisosCompras(String property){
+       this.otorgaPermisosCompras = property;
+   }
+
    private String otorgaPermisosConfig;
+   public void setOtorgaPermisosConfig(String property){
+       this.otorgaPermisosConfig = property;
+   }
+
    private String otorgaPermisosCotiza;
+   public void setOtorgaPermisosCotiza(String property){
+       this.otorgaPermisosCotiza = property;
+   }
+
    private String otorgaPermisosInventario;
+   public void setOtorgaPermisosInventario(String property){
+       this.otorgaPermisosInventario = property;
+   }
+
    private String otorgaPermisosModulos;
+   public void setOtorgaPermisosModulos(String property){
+       this.otorgaPermisosModulos = property;
+   }
+
    private String otorgaPermisosPrevio;
+   public void setOtorgaPermisosPrevio(String property){
+       this.otorgaPermisosPrevio = property;
+   }
+
    private String otorgaPermisosProvee;
+   public void setOtorgaPermisosProvee(String property){
+       this.otorgaPermisosProvee = property;
+   }
+
    private String otorgaPermisosSistema;
+   public void setOtorgaPermisosSistema(String property){
+       this.otorgaPermisosSistema = property;
+   }
+
    private String otorgaPermisosVentas;
+   public void setOtorgaPermisosVentas(String property){
+       this.otorgaPermisosVentas = property;
+   }
+
    private String permisProductosBorrar;
+   public void setPermisProductosBorrar(String property){
+       this.permisProductosBorrar = property;
+   }
+
    private String permisProductosCargadoImagen;
+   public void setPermisProductosCargadoImagen(String property){
+       this.permisProductosCargadoImagen = property;
+   }
+
    private String permisProductosListaPrecio;
+   public void setPermisProductosListaPrecio(String property){
+       this.permisProductosListaPrecio = property;
+   }
+
    private String permisoActivarSistema;
+   public void setPermisoActivarSistema(String property){
+       this.permisoActivarSistema = property;
+   }
+
    private String permisoBaseDatos;
+   public void setPermisoBaseDatos(String property){
+       this.permisoBaseDatos = property;
+   }
+
    private String permisoBaseDatosArchivo;
+   public void setPermisoBaseDatosArchivo(String property){
+       this.permisoBaseDatosArchivo = property;
+   }
+
    private String permisoBaseDatosConexiones;
+   public void setPermisoBaseDatosConexiones(String property){
+       this.permisoBaseDatosConexiones = property;
+   }
+
    private String permisoCambiarIcono;
+   public void setPermisoCambiarIcono(String property){
+       this.permisoCambiarIcono = property;
+   }
+
    private String permisoCancelarPago;
+   public void setPermisoCancelarPago(String property){
+       this.permisoCancelarPago = property;
+   }
+
    private String permisoCatalogoGarantias;
+   public void setPermisoCatalogoGarantias(String property){
+       this.permisoCatalogoGarantias = property;
+   }
+
    private String permisoClaves;
+   public void setPermisoClaves(String property){
+       this.permisoClaves = property;
+   }
+
    private String permisoClientes;
+   public void setPermisoClientes(String property){
+       this.permisoClientes = property;
+   }
+
    private String permisoClientesBorrar;
+   public void setPermisoClientesBorrar(String property){
+       this.permisoClientesBorrar = property;
+   }
+
    private String permisoClientesEnviar;
+   public void setPermisoClientesEnviar(String property){
+       this.permisoClientesEnviar = property;
+   }
+
    private String permisoClientesModificar;
+   public void setPermisoClientesModificar(String property){
+       this.permisoClientesModificar = property;
+   }
+
    private String permisoClientesNuevo;
+   public void setPermisoClientesNuevo(String property){
+       this.permisoClientesNuevo = property;
+   }
+
    private String permisoClientesVer;
+   public void setPermisoClientesVer(String property){
+       this.permisoClientesVer = property;
+   }
+
    private String permisoCompras;
+   public void setPermisoCompras(String property){
+       this.permisoCompras = property;
+   }
+
    private String permisoComprasBorrarArchivo;
+   public void setPermisoComprasBorrarArchivo(String property){
+       this.permisoComprasBorrarArchivo = property;
+   }
+
    private String permisoComprasCancelar;
+   public void setPermisoComprasCancelar(String property){
+       this.permisoComprasCancelar = property;
+   }
+
    private String permisoComprasCargarArchivo;
+   public void setPermisoComprasCargarArchivo(String property){
+       this.permisoComprasCargarArchivo = property;
+   }
+
    private String permisoComprasDevolucion;
+   public void setPermisoComprasDevolucion(String property){
+       this.permisoComprasDevolucion = property;
+   }
+
    private String permisoComprasNotCredito;
+   public void setPermisoComprasNotCredito(String property){
+       this.permisoComprasNotCredito = property;
+   }
+
    private String permisoComprasNuevo;
+   public void setPermisoComprasNuevo(String property){
+       this.permisoComprasNuevo = property;
+   }
+
    private String permisoComprasParcial;
+   public void setPermisoComprasParcial(String property){
+       this.permisoComprasParcial = property;
+   }
+
    private String permisoComprasRecibirOrden;
+   public void setPermisoComprasRecibirOrden(String property){
+       this.permisoComprasRecibirOrden = property;
+   }
+
    private String permisoComprasVer;
+   public void setPermisoComprasVer(String property){
+       this.permisoComprasVer = property;
+   }
+
    private String permisoConceptosNC;
+   public void setPermisoConceptosNC(String property){
+       this.permisoConceptosNC = property;
+   }
+
    private String permisoConf;
+   public void setPermisoConf(String property){
+       this.permisoConf = property;
+   }
+
    private String permisoConfiguracionesGenerales;
+   public void setPermisoConfiguracionesGenerales(String property){
+       this.permisoConfiguracionesGenerales = property;
+   }
+
    private String permisoContabilidad;
+   public void setPermisoContabilidad(String property){
+       this.permisoContabilidad = property;
+   }
+
    private String permisoCorreos;
+   public void setPermisoCorreos(String property){
+       this.permisoCorreos = property;
+   }
+
    private String permisoCotiza;
+   public void setPermisoCotiza(String property){
+       this.permisoCotiza = property;
+   }
+
    private String permisoCotizaAbrir;
+   public void setPermisoCotizaAbrir(String property){
+       this.permisoCotizaAbrir = property;
+   }
+
    private String permisoCotizaCancelar;
+   public void setPermisoCotizaCancelar(String property){
+       this.permisoCotizaCancelar = property;
+   }
+
    private String permisoCotizaNueva;
+   public void setPermisoCotizaNueva(String property){
+       this.permisoCotizaNueva = property;
+   }
+
    private String permisoCotizaReenviar;
+   public void setPermisoCotizaReenviar(String property){
+       this.permisoCotizaReenviar = property;
+   }
+
    private String permisoCotizaVenta;
+   public void setPermisoCotizaVenta(String property){
+       this.permisoCotizaVenta = property;
+   }
+
    private String permisoCotizaVer;
+   public void setPermisoCotizaVer(String property){
+       this.permisoCotizaVer = property;
+   }
+
    private String permisoCxc;
+   public void setPermisoCxc(String property){
+       this.permisoCxc = property;
+   }
+
    private String permisoDatosEmpresa;
+   public void setPermisoDatosEmpresa(String property){
+       this.permisoDatosEmpresa = property;
+   }
+
    private String permisoGiros;
+   public void setPermisoGiros(String property){
+       this.permisoGiros = property;
+   }
+
    private String permisoImpresoras;
+   public void setPermisoImpresoras(String property){
+       this.permisoImpresoras = property;
+   }
+
    private String permisoImpuestos;
+   public void setPermisoImpuestos(String property){
+       this.permisoImpuestos = property;
+   }
+
    private String permisoInventario;
+   public void setPermisoInventario(String property){
+       this.permisoInventario = property;
+   }
+
    private String permisoMonedas;
+   public void setPermisoMonedas(String property){
+       this.permisoMonedas = property;
+   }
+
    private String permisoPagoNuevo;
+   public void setPermisoPagoNuevo(String property){
+       this.permisoPagoNuevo = property;
+   }
+
    private String permisoPrevio;
+   public void setPermisoPrevio(String property){
+       this.permisoPrevio = property;
+   }
+
    private String permisoPrevioAbrir;
+   public void setPermisoPrevioAbrir(String property){
+       this.permisoPrevioAbrir = property;
+   }
+
    private String permisoPrevioCancelar;
+   public void setPermisoPrevioCancelar(String property){
+       this.permisoPrevioCancelar = property;
+   }
+
    private String permisoPrevioCompra;
+   public void setPermisoPrevioCompra(String property){
+       this.permisoPrevioCompra = property;
+   }
+
    private String permisoPrevioNueva;
+   public void setPermisoPrevioNueva(String property){
+       this.permisoPrevioNueva = property;
+   }
+
    private String permisoPrevioSeries;
+   public void setPermisoPrevioSeries(String property){
+       this.permisoPrevioSeries = property;
+   }
+
    private String permisoPrevioVer;
+   public void setPermisoPrevioVer(String property){
+       this.permisoPrevioVer = property;
+   }
+
    private String permisoProductos;
+   public void setPermisoProductos(String property){
+       this.permisoProductos = property;
+   }
+
    private String permisoProductosModificar;
+   public void setPermisoProductosModificar(String property){
+       this.permisoProductosModificar = property;
+   }
+
    private String permisoProductosNuevo;
+   public void setPermisoProductosNuevo(String property){
+       this.permisoProductosNuevo = property;
+   }
+
    private String permisoProvee;
+   public void setPermisoProvee(String property){
+       this.permisoProvee = property;
+   }
+
    private String permisoProveeBorrar;
+   public void setPermisoProveeBorrar(String property){
+       this.permisoProveeBorrar = property;
+   }
+
    private String permisoProveeModificar;
+   public void setPermisoProveeModificar(String property){
+       this.permisoProveeModificar = property;
+   }
+
    private String permisoProveeNuevo;
+   public void setPermisoProveeNuevo(String property){
+       this.permisoProveeNuevo = property;
+   }
+
    private String permisoProveeVer;
+   public void setPermisoProveeVer(String property){
+       this.permisoProveeVer = property;
+   }
+
    private String permisoReparar;
+   public void setPermisoReparar(String property){
+       this.permisoReparar = property;
+   }
+
    private String permisoRepararRestaurar;
+   public void setPermisoRepararRestaurar(String property){
+       this.permisoRepararRestaurar = property;
+   }
+
    private String permisoReportes;
+   public void setPermisoReportes(String property){
+       this.permisoReportes = property;
+   }
+
    private String permisoReportesEstadistica;
+   public void setPermisoReportesEstadistica(String property){
+       this.permisoReportesEstadistica = property;
+   }
+
    private String permisoReportesLog;
+   public void setPermisoReportesLog(String property){
+       this.permisoReportesLog = property;
+   }
+
    private String permisoReportesRespaldos;
+   public void setPermisoReportesRespaldos(String property){
+       this.permisoReportesRespaldos = property;
+   }
+
    private String permisoReportesUsuarios;
+   public void setPermisoReportesUsuarios(String property){
+       this.permisoReportesUsuarios = property;
+   }
+
    private String permisoRevocacion;
+   public void setPermisoRevocacion(String property){
+       this.permisoRevocacion = property;
+   }
+
    private String permisoSeries;
+   public void setPermisoSeries(String property){
+       this.permisoSeries = property;
+   }
+
    private String permisoUsuarios;
+   public void setPermisoUsuarios(String property){
+       this.permisoUsuarios = property;
+   }
+
    private String permisoUsuariosConectados;
+   public void setPermisoUsuariosConectados(String property){
+       this.permisoUsuariosConectados = property;
+   }
+
    private String permisoUsuariosDefinir;
+   public void setPermisoUsuariosDefinir(String property){
+       this.permisoUsuariosDefinir = property;
+   }
+
    private String permisoUsuariosPermisos;
+   public void setPermisoUsuariosPermisos(String property){
+       this.permisoUsuariosPermisos = property;
+   }
+
    private String permisoVentas;
+   public void setPermisoVentas(String property){
+       this.permisoVentas = property;
+   }
+
    private String permisoVentasAcuse;
+   public void setPermisoVentasAcuse(String property){
+       this.permisoVentasAcuse = property;
+   }
+
    private String permisoVentasBorrarArchivo;
+   public void setPermisoVentasBorrarArchivo(String property){
+       this.permisoVentasBorrarArchivo = property;
+   }
+
    private String permisoVentasCancelar;
+   public void setPermisoVentasCancelar(String property){
+       this.permisoVentasCancelar = property;
+   }
+
    private String permisoVentasCargarArchivo;
+   public void setPermisoVentasCargarArchivo(String property){
+       this.permisoVentasCargarArchivo = property;
+   }
+
    private String permisoVentasComprobar;
+   public void setPermisoVentasComprobar(String property){
+       this.permisoVentasComprobar = property;
+   }
+
    private String permisoVentasDevolucion;
+   public void setPermisoVentasDevolucion(String property){
+       this.permisoVentasDevolucion = property;
+   }
+
    private String permisoVentasEntregar;
+   public void setPermisoVentasEntregar(String property){
+       this.permisoVentasEntregar = property;
+   }
+
    private String permisoVentasEnviar;
+   public void setPermisoVentasEnviar(String property){
+       this.permisoVentasEnviar = property;
+   }
+
    private String permisoVentasFacturar;
+   public void setPermisoVentasFacturar(String property){
+       this.permisoVentasFacturar = property;
+   }
+
    private String permisoVentasNotCredito;
+   public void setPermisoVentasNotCredito(String property){
+       this.permisoVentasNotCredito = property;
+   }
+
    private String permisoVentasNueva;
+   public void setPermisoVentasNueva(String property){
+       this.permisoVentasNueva = property;
+   }
+
    private String permisoVentasObtenerXml;
+   public void setPermisoVentasObtenerXml(String property){
+       this.permisoVentasObtenerXml = property;
+   }
+
    private String permisoVentasParcial;
+   public void setPermisoVentasParcial(String property){
+       this.permisoVentasParcial = property;
+   }
+
    private String permisoVentasTimbrar;
+   public void setPermisoVentasTimbrar(String property){
+       this.permisoVentasTimbrar = property;
+   }
+
    private String permisoVentasVer;
+   public void setPermisoVentasVer(String property){
+       this.permisoVentasVer = property;
+   }
+
    private String permisoZonas;
+   public void setPermisoZonas(String property){
+       this.permisoZonas = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
@@ -531,11 +946,6 @@ public class ERPermisossValidator extends IValidate{
            throw new ERPermisossValidatorsExceptions().getPermisoZonasException();
        }
 
-       final ERPermisos ERPermisos = (ERPermisos) RepositoryFactory.getInstance().getERPermisossRepository().getByCode(code);
-       if(ERPermisos != null){            
-           throw new ERPermisossValidatorsExceptions().getModelExistsException();
-       }
-
        if(IInsertValidation!=null){
             final boolean response = IInsertValidation.validate();
             if(!response){
@@ -558,23 +968,4 @@ public class ERPermisossValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new ERPermisossValidatorsExceptions().getCodeException();
-       }
-
-       final ERPermisos ERPermisos = (ERPermisos) RepositoryFactory.getInstance().getERPermisossRepository().getByCode(code);
-       if(ERPermisos == null){            
-           throw new ERPermisossValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new ERPermisossValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

@@ -6,9 +6,16 @@ import com.era.repositories.RepositoryFactory;
 
 public class ConceppagsValidator extends IValidate{
 
-   private String code;
    private String concep;
+   public void setConcep(String property){
+       this.concep = property;
+   }
+
    private String descrip;
+   public void setDescrip(String property){
+       this.descrip = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
@@ -19,11 +26,6 @@ public class ConceppagsValidator extends IValidate{
 
        if(descrip==null || descrip.isEmpty()){
            throw new ConceppagsValidatorsExceptions().getDescripException();
-       }
-
-       final Conceppag Conceppag = (Conceppag) RepositoryFactory.getInstance().getConceppagsRepository().getByCode(code);
-       if(Conceppag != null){            
-           throw new ConceppagsValidatorsExceptions().getModelExistsException();
        }
 
        if(IInsertValidation!=null){
@@ -48,23 +50,4 @@ public class ConceppagsValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new ConceppagsValidatorsExceptions().getCodeException();
-       }
-
-       final Conceppag Conceppag = (Conceppag) RepositoryFactory.getInstance().getConceppagsRepository().getByCode(code);
-       if(Conceppag == null){            
-           throw new ConceppagsValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new ConceppagsValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

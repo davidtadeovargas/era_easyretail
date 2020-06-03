@@ -6,16 +6,51 @@ import com.era.repositories.RepositoryFactory;
 
 public class TarssValidator extends IValidate{
 
-   private String code;
    private String cli;
+   public void setCli(String property){
+       this.cli = property;
+   }
+
    private String exter;
+   public void setExter(String property){
+       this.exter = property;
+   }
+
    private String factur;
+   public void setFactur(String property){
+       this.factur = property;
+   }
+
    private String factuya;
+   public void setFactuya(String property){
+       this.factuya = property;
+   }
+
    private String ffactu;
+   public void setFfactu(String property){
+       this.ffactu = property;
+   }
+
    private String loc;
+   public void setLoc(String property){
+       this.loc = property;
+   }
+
    private String pag;
+   public void setPag(String property){
+       this.pag = property;
+   }
+
    private String prepag;
+   public void setPrepag(String property){
+       this.prepag = property;
+   }
+
    private String tar;
+   public void setTar(String property){
+       this.tar = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
@@ -56,11 +91,6 @@ public class TarssValidator extends IValidate{
            throw new TarssValidatorsExceptions().getTarException();
        }
 
-       final Tars Tars = (Tars) RepositoryFactory.getInstance().getTarssRepository().getByCode(code);
-       if(Tars != null){            
-           throw new TarssValidatorsExceptions().getModelExistsException();
-       }
-
        if(IInsertValidation!=null){
             final boolean response = IInsertValidation.validate();
             if(!response){
@@ -83,23 +113,4 @@ public class TarssValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new TarssValidatorsExceptions().getCodeException();
-       }
-
-       final Tars Tars = (Tars) RepositoryFactory.getInstance().getTarssRepository().getByCode(code);
-       if(Tars == null){            
-           throw new TarssValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new TarssValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

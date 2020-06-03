@@ -6,23 +6,32 @@ import com.era.repositories.RepositoryFactory;
 
 public class CoinsValidator extends IValidate{
 
-   private String code;
    private String c_moneda;
-   private String cashNumber;
+   public void setC_moneda(String property){
+       this.c_moneda = property;
+   }
+
+   private String code;
+   public void setCode(String property){
+       this.code = property;
+   }
+
    private String description;
+   public void setDescription(String property){
+       this.description = property;
+   }
+
    private String simbol;
-   private String station;
-   private String sucursal;
+   public void setSimbol(String property){
+       this.simbol = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
 
        if(c_moneda==null || c_moneda.isEmpty()){
            throw new CoinsValidatorsExceptions().getC_monedaException();
-       }
-
-       if(cashNumber==null || cashNumber.isEmpty()){
-           throw new CoinsValidatorsExceptions().getCashNumberException();
        }
 
        if(code==null || code.isEmpty()){
@@ -35,19 +44,6 @@ public class CoinsValidator extends IValidate{
 
        if(simbol==null || simbol.isEmpty()){
            throw new CoinsValidatorsExceptions().getSimbolException();
-       }
-
-       if(station==null || station.isEmpty()){
-           throw new CoinsValidatorsExceptions().getStationException();
-       }
-
-       if(sucursal==null || sucursal.isEmpty()){
-           throw new CoinsValidatorsExceptions().getSucursalException();
-       }
-
-       final Coin Coin = (Coin) RepositoryFactory.getInstance().getCoinsRepository().getByCode(code);
-       if(Coin != null){            
-           throw new CoinsValidatorsExceptions().getModelExistsException();
        }
 
        if(IInsertValidation!=null){
@@ -72,23 +68,4 @@ public class CoinsValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new CoinsValidatorsExceptions().getCodeException();
-       }
-
-       final Coin Coin = (Coin) RepositoryFactory.getInstance().getCoinsRepository().getByCode(code);
-       if(Coin == null){            
-           throw new CoinsValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new CoinsValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

@@ -7,23 +7,25 @@ import com.era.repositories.RepositoryFactory;
 public class GaransValidator extends IValidate{
 
    private String code;
+   public void setCode(String property){
+       this.code = property;
+   }
+
    private String descrip;
-   private String gara;
+   public void setDescrip(String property){
+       this.descrip = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
 
+       if(code==null || code.isEmpty()){
+           throw new GaransValidatorsExceptions().getCodeException();
+       }
+
        if(descrip==null || descrip.isEmpty()){
            throw new GaransValidatorsExceptions().getDescripException();
-       }
-
-       if(gara==null || gara.isEmpty()){
-           throw new GaransValidatorsExceptions().getGaraException();
-       }
-
-       final Garan Garan = (Garan) RepositoryFactory.getInstance().getGaransRepository().getByCode(code);
-       if(Garan != null){            
-           throw new GaransValidatorsExceptions().getModelExistsException();
        }
 
        if(IInsertValidation!=null){
@@ -48,23 +50,4 @@ public class GaransValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new GaransValidatorsExceptions().getCodeException();
-       }
-
-       final Garan Garan = (Garan) RepositoryFactory.getInstance().getGaransRepository().getByCode(code);
-       if(Garan == null){            
-           throw new GaransValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new GaransValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

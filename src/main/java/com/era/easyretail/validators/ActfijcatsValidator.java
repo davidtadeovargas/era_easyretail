@@ -6,9 +6,16 @@ import com.era.repositories.RepositoryFactory;
 
 public class ActfijcatsValidator extends IValidate{
 
-   private String code;
    private String concep;
+   public void setConcep(String property){
+       this.concep = property;
+   }
+
    private String descrip;
+   public void setDescrip(String property){
+       this.descrip = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
@@ -19,11 +26,6 @@ public class ActfijcatsValidator extends IValidate{
 
        if(descrip==null || descrip.isEmpty()){
            throw new ActfijcatsValidatorsExceptions().getDescripException();
-       }
-
-       final Actfijcat Actfijcat = (Actfijcat) RepositoryFactory.getInstance().getActfijcatsRepository().getByCode(code);
-       if(Actfijcat != null){            
-           throw new ActfijcatsValidatorsExceptions().getModelExistsException();
        }
 
        if(IInsertValidation!=null){
@@ -48,23 +50,4 @@ public class ActfijcatsValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new ActfijcatsValidatorsExceptions().getCodeException();
-       }
-
-       final Actfijcat Actfijcat = (Actfijcat) RepositoryFactory.getInstance().getActfijcatsRepository().getByCode(code);
-       if(Actfijcat == null){            
-           throw new ActfijcatsValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new ActfijcatsValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

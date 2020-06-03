@@ -66,6 +66,10 @@ public class IngrInventViewController extends IngrInventJFrame
         }
     }
 
+    @Override
+    public void clearFields(){            
+    }
+    
     private void jButtonQuitarActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	

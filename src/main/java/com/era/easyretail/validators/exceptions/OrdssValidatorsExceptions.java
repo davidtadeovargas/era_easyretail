@@ -36,8 +36,4 @@ public class OrdssValidatorsExceptions {
        return new Exception("Falta espeficiar Prov");
    }
 
-   public Exception getProyException(){
-       return new Exception("Falta espeficiar Proy");
-   }
-
 }

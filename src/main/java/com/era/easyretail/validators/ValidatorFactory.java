@@ -67,40 +67,12 @@ public class ValidatorFactory {
        return new CFDIRelacionadosPagosValidator();
    }
 
-   public ClasempsValidator getClasempsValidator(){
-       return new ClasempsValidator();
-   }
-
    public ClasificacionsValidator getClasificacionsValidator(){
        return new ClasificacionsValidator();
    }
 
-   public ClasjeraclisValidator getClasjeraclisValidator(){
-       return new ClasjeraclisValidator();
-   }
-
-   public ClasjeraprodsValidator getClasjeraprodsValidator(){
-       return new ClasjeraprodsValidator();
-   }
-
-   public ClasjeraprovsValidator getClasjeraprovsValidator(){
-       return new ClasjeraprovsValidator();
-   }
-
-   public ClasprodsValidator getClasprodsValidator(){
-       return new ClasprodsValidator();
-   }
-
-   public ClasprovsValidator getClasprovsValidator(){
-       return new ClasprovsValidator();
-   }
-
    public CoinsValidator getCoinsValidator(){
        return new CoinsValidator();
-   }
-
-   public ColossValidator getColossValidator(){
-       return new ColossValidator();
    }
 
    public CompanysValidator getCompanysValidator(){
@@ -137,10 +109,6 @@ public class ValidatorFactory {
 
    public ConsecsValidator getConsecsValidator(){
        return new ConsecsValidator();
-   }
-
-   public ContrassValidator getContrassValidator(){
-       return new ContrassValidator();
    }
 
    public ControlexportarsValidator getControlexportarsValidator(){
@@ -207,10 +175,6 @@ public class ValidatorFactory {
        return new DatoscpsValidator();
    }
 
-   public DeliverAddressCustomersValidator getDeliverAddressCustomersValidator(){
-       return new DeliverAddressCustomersValidator();
-   }
-
    public DocumentOriginsValidator getDocumentOriginsValidator(){
        return new DocumentOriginsValidator();
    }
@@ -227,10 +191,6 @@ public class ValidatorFactory {
        return new DocumentosPagosValidator();
    }
 
-   public DomentclisValidator getDomentclisValidator(){
-       return new DomentclisValidator();
-   }
-
    public EREjerciciossValidator getEREjerciciossValidator(){
        return new EREjerciciossValidator();
    }
@@ -241,10 +201,6 @@ public class ValidatorFactory {
 
    public ERPermisossValidator getERPermisossValidator(){
        return new ERPermisossValidator();
-   }
-
-   public EstadiscorsValidator getEstadiscorsValidator(){
-       return new EstadiscorsValidator();
    }
 
    public ExistalmasValidator getExistalmasValidator(){
@@ -277,10 +233,6 @@ public class ValidatorFactory {
 
    public GirosValidator getGirosValidator(){
        return new GirosValidator();
-   }
-
-   public GralssValidator getGralssValidator(){
-       return new GralssValidator();
    }
 
    public HistAntiguedaddesaldosValidator getHistAntiguedaddesaldosValidator(){
@@ -387,10 +339,6 @@ public class ValidatorFactory {
        return new MovimientosPagossValidator();
    }
 
-   public MsjssValidator getMsjssValidator(){
-       return new MsjssValidator();
-   }
-
    public NewUsersValidator getNewUsersValidator(){
        return new NewUsersValidator();
    }
@@ -455,10 +403,6 @@ public class ValidatorFactory {
        return new PessValidator();
    }
 
-   public PetissValidator getPetissValidator(){
-       return new PetissValidator();
-   }
-
    public PrevcomprssValidator getPrevcomprssValidator(){
        return new PrevcomprssValidator();
    }
@@ -479,10 +423,6 @@ public class ValidatorFactory {
        return new RegistroemailsValidator();
    }
 
-   public RegistrossValidator getRegistrossValidator(){
-       return new RegistrossValidator();
-   }
-
    public ResplogsValidator getResplogsValidator(){
        return new ResplogsValidator();
    }
@@ -491,20 +431,12 @@ public class ValidatorFactory {
        return new ResponsablesValidator();
    }
 
-   public RespsValidator getRespsValidator(){
-       return new RespsValidator();
-   }
-
    public RFCValidator getRFCValidator(){
        return new RFCValidator();
    }
 
    public RubrsValidator getRubrsValidator(){
        return new RubrsValidator();
-   }
-
-   public RutssValidator getRutssValidator(){
-       return new RutssValidator();
    }
 
    public SalessValidator getSalessValidator(){
@@ -539,14 +471,6 @@ public class ValidatorFactory {
        return new SuppliersValidator();
    }
 
-   public TallcolosValidator getTallcolosValidator(){
-       return new TallcolosValidator();
-   }
-
-   public TallsValidator getTallsValidator(){
-       return new TallsValidator();
-   }
-
    public TarssValidator getTarssValidator(){
        return new TarssValidator();
    }
@@ -577,10 +501,6 @@ public class ValidatorFactory {
 
    public TraspassValidator getTraspassValidator(){
        return new TraspassValidator();
-   }
-
-   public UbiadsValidator getUbiadsValidator(){
-       return new UbiadsValidator();
    }
 
    public UnidsValidator getUnidsValidator(){

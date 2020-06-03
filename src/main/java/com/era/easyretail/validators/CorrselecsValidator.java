@@ -6,28 +6,111 @@ import com.era.repositories.RepositoryFactory;
 
 public class CorrselecsValidator extends IValidate{
 
-   private String code;
    private String actslenlog;
+   public void setActslenlog(String property){
+       this.actslenlog = property;
+   }
+
    private String asuncontra;
+   public void setAsuncontra(String property){
+       this.asuncontra = property;
+   }
+
    private String asuncot;
+   public void setAsuncot(String property){
+       this.asuncot = property;
+   }
+
    private String asunfac;
+   public void setAsunfac(String property){
+       this.asunfac = property;
+   }
+
    private String asunord;
+   public void setAsunord(String property){
+       this.asunord = property;
+   }
+
    private String asunrec1;
+   public void setAsunrec1(String property){
+       this.asunrec1 = property;
+   }
+
    private String asunrec2;
+   public void setAsunrec2(String property){
+       this.asunrec2 = property;
+   }
+
    private String asunrec3;
+   public void setAsunrec3(String property){
+       this.asunrec3 = property;
+   }
+
    private String corralter;
+   public void setCorralter(String property){
+       this.corralter = property;
+   }
+
    private String cuerpcontra;
+   public void setCuerpcontra(String property){
+       this.cuerpcontra = property;
+   }
+
    private String cuerpcot;
+   public void setCuerpcot(String property){
+       this.cuerpcot = property;
+   }
+
    private String cuerpfac;
+   public void setCuerpfac(String property){
+       this.cuerpfac = property;
+   }
+
    private String cuerpord;
+   public void setCuerpord(String property){
+       this.cuerpord = property;
+   }
+
    private String cuerprec1;
+   public void setCuerprec1(String property){
+       this.cuerprec1 = property;
+   }
+
    private String cuerprec2;
+   public void setCuerprec2(String property){
+       this.cuerprec2 = property;
+   }
+
    private String cuerprec3;
+   public void setCuerprec3(String property){
+       this.cuerprec3 = property;
+   }
+
    private String estacglo;
+   public void setEstacglo(String property){
+       this.estacglo = property;
+   }
+
    private String pass;
+   public void setPass(String property){
+       this.pass = property;
+   }
+
    private String portsmtp;
+   public void setPortsmtp(String property){
+       this.portsmtp = property;
+   }
+
    private String srvsmtpsal;
+   public void setSrvsmtpsal(String property){
+       this.srvsmtpsal = property;
+   }
+
    private String usr;
+   public void setUsr(String property){
+       this.usr = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
@@ -116,11 +199,6 @@ public class CorrselecsValidator extends IValidate{
            throw new CorrselecsValidatorsExceptions().getUsrException();
        }
 
-       final Corrselec Corrselec = (Corrselec) RepositoryFactory.getInstance().getCorrselecsRepository().getByCode(code);
-       if(Corrselec != null){            
-           throw new CorrselecsValidatorsExceptions().getModelExistsException();
-       }
-
        if(IInsertValidation!=null){
             final boolean response = IInsertValidation.validate();
             if(!response){
@@ -143,23 +221,4 @@ public class CorrselecsValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new CorrselecsValidatorsExceptions().getCodeException();
-       }
-
-       final Corrselec Corrselec = (Corrselec) RepositoryFactory.getInstance().getCorrselecsRepository().getByCode(code);
-       if(Corrselec == null){            
-           throw new CorrselecsValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new CorrselecsValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

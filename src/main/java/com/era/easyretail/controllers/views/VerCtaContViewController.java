@@ -51,6 +51,10 @@ public class VerCtaContViewController extends VerCtaContJFrame {
         }
     }
     
+    @Override
+    public void clearFields(){
+    }
+    
     private void jBPagActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	

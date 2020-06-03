@@ -66,6 +66,10 @@ public class PedidosViewController extends PedidosJFrame {
         }
     }
     
+    @Override
+    public void clearFields(){
+    }
+    
     private void jBBuscActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	

@@ -118,6 +118,10 @@ public class DBFileConnectionConfigurationController extends DBFileConnectionCon
         }
     }
 
+    @Override
+    public void clearFields(){            
+    }
+    
     public void setDBFileConnectionConfigurationType(DBFileConnectionConfigurationType DBFileConnectionConfigurationType) {
         this.DBFileConnectionConfigurationType = DBFileConnectionConfigurationType;
     }

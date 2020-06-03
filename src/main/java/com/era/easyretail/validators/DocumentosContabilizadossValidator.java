@@ -6,14 +6,41 @@ import com.era.repositories.RepositoryFactory;
 
 public class DocumentosContabilizadossValidator extends IValidate{
 
-   private String code;
    private String documento_id;
+   public void setDocumento_id(String property){
+       this.documento_id = property;
+   }
+
    private String fecha_poliza;
+   public void setFecha_poliza(String property){
+       this.fecha_poliza = property;
+   }
+
    private String folio;
+   public void setFolio(String property){
+       this.folio = property;
+   }
+
    private String numero_poliza;
+   public void setNumero_poliza(String property){
+       this.numero_poliza = property;
+   }
+
    private String serie;
+   public void setSerie(String property){
+       this.serie = property;
+   }
+
    private String tipo_documento;
+   public void setTipo_documento(String property){
+       this.tipo_documento = property;
+   }
+
    private String tipo_poliza;
+   public void setTipo_poliza(String property){
+       this.tipo_poliza = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
@@ -46,11 +73,6 @@ public class DocumentosContabilizadossValidator extends IValidate{
            throw new DocumentosContabilizadossValidatorsExceptions().getTipo_polizaException();
        }
 
-       final DocumentosContabilizados DocumentosContabilizados = (DocumentosContabilizados) RepositoryFactory.getInstance().getDocumentosContabilizadossRepository().getByCode(code);
-       if(DocumentosContabilizados != null){            
-           throw new DocumentosContabilizadossValidatorsExceptions().getModelExistsException();
-       }
-
        if(IInsertValidation!=null){
             final boolean response = IInsertValidation.validate();
             if(!response){
@@ -73,23 +95,4 @@ public class DocumentosContabilizadossValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new DocumentosContabilizadossValidatorsExceptions().getCodeException();
-       }
-
-       final DocumentosContabilizados DocumentosContabilizados = (DocumentosContabilizados) RepositoryFactory.getInstance().getDocumentosContabilizadossRepository().getByCode(code);
-       if(DocumentosContabilizados == null){            
-           throw new DocumentosContabilizadossValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new DocumentosContabilizadossValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

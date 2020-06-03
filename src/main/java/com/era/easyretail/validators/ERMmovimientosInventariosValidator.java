@@ -6,12 +6,31 @@ import com.era.repositories.RepositoryFactory;
 
 public class ERMmovimientosInventariosValidator extends IValidate{
 
-   private String code;
    private String fechaMovimiento;
+   public void setFechaMovimiento(String property){
+       this.fechaMovimiento = property;
+   }
+
    private String idAlmacen;
+   public void setIdAlmacen(String property){
+       this.idAlmacen = property;
+   }
+
    private String idMovtoComercial;
+   public void setIdMovtoComercial(String property){
+       this.idMovtoComercial = property;
+   }
+
    private String idProducto;
+   public void setIdProducto(String property){
+       this.idProducto = property;
+   }
+
    private String timestamp;
+   public void setTimestamp(String property){
+       this.timestamp = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
@@ -36,11 +55,6 @@ public class ERMmovimientosInventariosValidator extends IValidate{
            throw new ERMmovimientosInventariosValidatorsExceptions().getTimestampException();
        }
 
-       final ERMmovimientosInventario ERMmovimientosInventario = (ERMmovimientosInventario) RepositoryFactory.getInstance().getERMmovimientosInventariosRepository().getByCode(code);
-       if(ERMmovimientosInventario != null){            
-           throw new ERMmovimientosInventariosValidatorsExceptions().getModelExistsException();
-       }
-
        if(IInsertValidation!=null){
             final boolean response = IInsertValidation.validate();
             if(!response){
@@ -63,23 +77,4 @@ public class ERMmovimientosInventariosValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new ERMmovimientosInventariosValidatorsExceptions().getCodeException();
-       }
-
-       final ERMmovimientosInventario ERMmovimientosInventario = (ERMmovimientosInventario) RepositoryFactory.getInstance().getERMmovimientosInventariosRepository().getByCode(code);
-       if(ERMmovimientosInventario == null){            
-           throw new ERMmovimientosInventariosValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new ERMmovimientosInventariosValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

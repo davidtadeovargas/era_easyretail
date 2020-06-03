@@ -57,6 +57,10 @@ public class FormPagoViewController extends FormPagoJFrame {
         }
     }
     
+    @Override
+    public void clearFields(){            
+    }
+    
     private void jBClienteActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	

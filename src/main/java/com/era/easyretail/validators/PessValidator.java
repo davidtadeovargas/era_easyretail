@@ -7,23 +7,25 @@ import com.era.repositories.RepositoryFactory;
 public class PessValidator extends IValidate{
 
    private String code;
-   private String cod;
+   public void setCode(String property){
+       this.code = property;
+   }
+
    private String descrip;
+   public void setDescrip(String property){
+       this.descrip = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
 
-       if(cod==null || cod.isEmpty()){
-           throw new PessValidatorsExceptions().getCodException();
+       if(code==null || code.isEmpty()){
+           throw new PessValidatorsExceptions().getCodeException();
        }
 
        if(descrip==null || descrip.isEmpty()){
            throw new PessValidatorsExceptions().getDescripException();
-       }
-
-       final Pes Pes = (Pes) RepositoryFactory.getInstance().getPessRepository().getByCode(code);
-       if(Pes != null){            
-           throw new PessValidatorsExceptions().getModelExistsException();
        }
 
        if(IInsertValidation!=null){
@@ -48,23 +50,4 @@ public class PessValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new PessValidatorsExceptions().getCodeException();
-       }
-
-       final Pes Pes = (Pes) RepositoryFactory.getInstance().getPessRepository().getByCode(code);
-       if(Pes == null){            
-           throw new PessValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new PessValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

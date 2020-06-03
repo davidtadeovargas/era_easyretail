@@ -6,9 +6,16 @@ import com.era.repositories.RepositoryFactory;
 
 public class ImpuestosXComprasValidator extends IValidate{
 
-   private String code;
    private String fvenc;
+   public void setFvenc(String property){
+       this.fvenc = property;
+   }
+
    private String total;
+   public void setTotal(String property){
+       this.total = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
@@ -19,11 +26,6 @@ public class ImpuestosXComprasValidator extends IValidate{
 
        if(total==null || total.isEmpty()){
            throw new ImpuestosXComprasValidatorsExceptions().getTotalException();
-       }
-
-       final ImpuestosXCompra ImpuestosXCompra = (ImpuestosXCompra) RepositoryFactory.getInstance().getImpuestosXComprasRepository().getByCode(code);
-       if(ImpuestosXCompra != null){            
-           throw new ImpuestosXComprasValidatorsExceptions().getModelExistsException();
        }
 
        if(IInsertValidation!=null){
@@ -48,23 +50,4 @@ public class ImpuestosXComprasValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new ImpuestosXComprasValidatorsExceptions().getCodeException();
-       }
-
-       final ImpuestosXCompra ImpuestosXCompra = (ImpuestosXCompra) RepositoryFactory.getInstance().getImpuestosXComprasRepository().getByCode(code);
-       if(ImpuestosXCompra == null){            
-           throw new ImpuestosXComprasValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new ImpuestosXComprasValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

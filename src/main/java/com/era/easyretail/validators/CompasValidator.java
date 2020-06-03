@@ -6,9 +6,16 @@ import com.era.repositories.RepositoryFactory;
 
 public class CompasValidator extends IValidate{
 
-   private String code;
    private String compa;
+   public void setCompa(String property){
+       this.compa = property;
+   }
+
    private String prod;
+   public void setProd(String property){
+       this.prod = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
@@ -19,11 +26,6 @@ public class CompasValidator extends IValidate{
 
        if(prod==null || prod.isEmpty()){
            throw new CompasValidatorsExceptions().getProdException();
-       }
-
-       final Compa Compa = (Compa) RepositoryFactory.getInstance().getCompasRepository().getByCode(code);
-       if(Compa != null){            
-           throw new CompasValidatorsExceptions().getModelExistsException();
        }
 
        if(IInsertValidation!=null){
@@ -48,23 +50,4 @@ public class CompasValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new CompasValidatorsExceptions().getCodeException();
-       }
-
-       final Compa Compa = (Compa) RepositoryFactory.getInstance().getCompasRepository().getByCode(code);
-       if(Compa == null){            
-           throw new CompasValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new CompasValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

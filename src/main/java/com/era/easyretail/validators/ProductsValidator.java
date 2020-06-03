@@ -7,43 +7,34 @@ import com.era.repositories.RepositoryFactory;
 public class ProductsValidator extends IValidate{
 
    private String code;
-   private String branchOffice;
-   private String codeProduct;
+   public void setCode(String property){
+       this.code = property;
+   }
+
    private String description;
-   private String estation;
+   public void setDescription(String property){
+       this.description = property;
+   }
+
    private String keySAT;
-   private String numberCash;
+   public void setKeySAT(String property){
+       this.keySAT = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
 
-       if(branchOffice==null || branchOffice.isEmpty()){
-           throw new ProductsValidatorsExceptions().getBranchOfficeException();
-       }
-
-       if(codeProduct==null || codeProduct.isEmpty()){
-           throw new ProductsValidatorsExceptions().getCodeProductException();
+       if(code==null || code.isEmpty()){
+           throw new ProductsValidatorsExceptions().getCodeException();
        }
 
        if(description==null || description.isEmpty()){
            throw new ProductsValidatorsExceptions().getDescriptionException();
        }
 
-       if(estation==null || estation.isEmpty()){
-           throw new ProductsValidatorsExceptions().getEstationException();
-       }
-
        if(keySAT==null || keySAT.isEmpty()){
            throw new ProductsValidatorsExceptions().getKeySATException();
-       }
-
-       if(numberCash==null || numberCash.isEmpty()){
-           throw new ProductsValidatorsExceptions().getNumberCashException();
-       }
-
-       final Product Product = (Product) RepositoryFactory.getInstance().getProductsRepository().getByCode(code);
-       if(Product != null){            
-           throw new ProductsValidatorsExceptions().getModelExistsException();
        }
 
        if(IInsertValidation!=null){
@@ -68,23 +59,4 @@ public class ProductsValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new ProductsValidatorsExceptions().getCodeException();
-       }
-
-       final Product Product = (Product) RepositoryFactory.getInstance().getProductsRepository().getByCode(code);
-       if(Product == null){            
-           throw new ProductsValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new ProductsValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

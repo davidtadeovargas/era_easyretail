@@ -52,6 +52,10 @@ public class ClientsViewController extends ClientsJFrame {
         }
     }
     
+    @Override
+    public void clearFields(){            
+    }
+    
     private void jBBuscActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	

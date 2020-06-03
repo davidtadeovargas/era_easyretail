@@ -6,9 +6,16 @@ import com.era.repositories.RepositoryFactory;
 
 public class LugssValidator extends IValidate{
 
-   private String code;
    private String cod;
+   public void setCod(String property){
+       this.cod = property;
+   }
+
    private String descrip;
+   public void setDescrip(String property){
+       this.descrip = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
@@ -19,11 +26,6 @@ public class LugssValidator extends IValidate{
 
        if(descrip==null || descrip.isEmpty()){
            throw new LugssValidatorsExceptions().getDescripException();
-       }
-
-       final Lugs Lugs = (Lugs) RepositoryFactory.getInstance().getLugssRepository().getByCode(code);
-       if(Lugs != null){            
-           throw new LugssValidatorsExceptions().getModelExistsException();
        }
 
        if(IInsertValidation!=null){
@@ -48,23 +50,4 @@ public class LugssValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new LugssValidatorsExceptions().getCodeException();
-       }
-
-       final Lugs Lugs = (Lugs) RepositoryFactory.getInstance().getLugssRepository().getByCode(code);
-       if(Lugs == null){            
-           throw new LugssValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new LugssValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

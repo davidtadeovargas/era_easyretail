@@ -6,13 +6,36 @@ import com.era.repositories.RepositoryFactory;
 
 public class CorreoTerminalsValidator extends IValidate{
 
-   private String code;
    private String contra;
+   public void setContra(String property){
+       this.contra = property;
+   }
+
    private String correo;
+   public void setCorreo(String property){
+       this.correo = property;
+   }
+
    private String correoA;
+   public void setCorreoA(String property){
+       this.correoA = property;
+   }
+
    private String direccionserver;
+   public void setDireccionserver(String property){
+       this.direccionserver = property;
+   }
+
    private String muestracomo;
+   public void setMuestracomo(String property){
+       this.muestracomo = property;
+   }
+
    private String puerto;
+   public void setPuerto(String property){
+       this.puerto = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
@@ -41,11 +64,6 @@ public class CorreoTerminalsValidator extends IValidate{
            throw new CorreoTerminalsValidatorsExceptions().getPuertoException();
        }
 
-       final CorreoTerminal CorreoTerminal = (CorreoTerminal) RepositoryFactory.getInstance().getCorreoTerminalsRepository().getByCode(code);
-       if(CorreoTerminal != null){            
-           throw new CorreoTerminalsValidatorsExceptions().getModelExistsException();
-       }
-
        if(IInsertValidation!=null){
             final boolean response = IInsertValidation.validate();
             if(!response){
@@ -68,23 +86,4 @@ public class CorreoTerminalsValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new CorreoTerminalsValidatorsExceptions().getCodeException();
-       }
-
-       final CorreoTerminal CorreoTerminal = (CorreoTerminal) RepositoryFactory.getInstance().getCorreoTerminalsRepository().getByCode(code);
-       if(CorreoTerminal == null){            
-           throw new CorreoTerminalsValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new CorreoTerminalsValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

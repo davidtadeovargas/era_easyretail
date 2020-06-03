@@ -6,9 +6,16 @@ import com.era.repositories.RepositoryFactory;
 
 public class AduanasValidator extends IValidate{
 
-   private String code;
    private String codigo;
+   public void setCodigo(String property){
+       this.codigo = property;
+   }
+
    private String descripcion;
+   public void setDescripcion(String property){
+       this.descripcion = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
@@ -19,11 +26,6 @@ public class AduanasValidator extends IValidate{
 
        if(descripcion==null || descripcion.isEmpty()){
            throw new AduanasValidatorsExceptions().getDescripcionException();
-       }
-
-       final Aduana Aduana = (Aduana) RepositoryFactory.getInstance().getAduanasRepository().getByCode(code);
-       if(Aduana != null){            
-           throw new AduanasValidatorsExceptions().getModelExistsException();
        }
 
        if(IInsertValidation!=null){
@@ -48,23 +50,4 @@ public class AduanasValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new AduanasValidatorsExceptions().getCodeException();
-       }
-
-       final Aduana Aduana = (Aduana) RepositoryFactory.getInstance().getAduanasRepository().getByCode(code);
-       if(Aduana == null){            
-           throw new AduanasValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new AduanasValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

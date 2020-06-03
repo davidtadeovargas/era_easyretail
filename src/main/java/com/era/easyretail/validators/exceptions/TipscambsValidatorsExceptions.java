@@ -24,8 +24,4 @@ public class TipscambsValidatorsExceptions {
        return new Exception("Falta espeficiar codigo");
    }
 
-   public Exception getMonException(){
-       return new Exception("Falta espeficiar Mon");
-   }
-
 }

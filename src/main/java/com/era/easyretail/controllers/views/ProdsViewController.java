@@ -103,6 +103,10 @@ public class ProdsViewController extends ProdsJFrame {
         }
     }
     
+    @Override
+    public void clearFields(){
+    }
+    
     private void jBProdActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	

@@ -53,6 +53,10 @@ public class ActivosViewController extends ActivosJFrame {
         }
     }
 
+    @Override
+    public void clearFields(){            
+    }
+    
     private void jBSerActionPerformed(java.awt.event.ActionEvent evt) {
 
 	try{            	

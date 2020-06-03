@@ -57,6 +57,10 @@ public class MonsViewController extends MonsJFrame {
         }
     }
     
+    @Override
+    public void clearFields(){
+    }
+    
     private void jBClaveSatActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	

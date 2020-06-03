@@ -95,6 +95,10 @@ public class ImpresViewController extends ImpresJFrame {
         }
     }
     
+    @Override
+    public void clearFields(){            
+    }
+    
     private void jBMosTActionPerformed(java.awt.event.ActionEvent evt) {                                        
         
         try{

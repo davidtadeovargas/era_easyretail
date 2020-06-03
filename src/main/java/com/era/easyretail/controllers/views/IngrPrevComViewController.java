@@ -75,6 +75,10 @@ public class IngrPrevComViewController extends IngrPrevComJFrame {
         }
     }
     
+    @Override
+    public void clearFields(){            
+    }
+    
     private void jBDelActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	

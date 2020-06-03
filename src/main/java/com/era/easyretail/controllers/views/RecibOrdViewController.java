@@ -46,6 +46,10 @@ public class RecibOrdViewController extends RecibOrdJFrame{
         }
     }
     
+    @Override
+    public void clearFields(){
+    }
+    
     private void jBCargActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	

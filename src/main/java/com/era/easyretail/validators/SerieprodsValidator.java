@@ -6,11 +6,26 @@ import com.era.repositories.RepositoryFactory;
 
 public class SerieprodsValidator extends IValidate{
 
-   private String code;
    private String alma;
+   public void setAlma(String property){
+       this.alma = property;
+   }
+
    private String comen;
+   public void setComen(String property){
+       this.comen = property;
+   }
+
    private String prod;
+   public void setProd(String property){
+       this.prod = property;
+   }
+
    private String ser;
+   public void setSer(String property){
+       this.ser = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
@@ -29,11 +44,6 @@ public class SerieprodsValidator extends IValidate{
 
        if(ser==null || ser.isEmpty()){
            throw new SerieprodsValidatorsExceptions().getSerException();
-       }
-
-       final Serieprod Serieprod = (Serieprod) RepositoryFactory.getInstance().getSerieprodsRepository().getByCode(code);
-       if(Serieprod != null){            
-           throw new SerieprodsValidatorsExceptions().getModelExistsException();
        }
 
        if(IInsertValidation!=null){
@@ -58,23 +68,4 @@ public class SerieprodsValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new SerieprodsValidatorsExceptions().getCodeException();
-       }
-
-       final Serieprod Serieprod = (Serieprod) RepositoryFactory.getInstance().getSerieprodsRepository().getByCode(code);
-       if(Serieprod == null){            
-           throw new SerieprodsValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new SerieprodsValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

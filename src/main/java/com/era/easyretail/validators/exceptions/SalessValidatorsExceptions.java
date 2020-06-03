@@ -28,10 +28,6 @@ public class SalessValidatorsExceptions {
        return new Exception("Falta espeficiar Account");
    }
 
-   public Exception getCashNumberException(){
-       return new Exception("Falta espeficiar CashNumber");
-   }
-
    public Exception getCertsatException(){
        return new Exception("Falta espeficiar Certsat");
    }
@@ -58,10 +54,6 @@ public class SalessValidatorsExceptions {
 
    public Exception getDocumentTypeException(){
        return new Exception("Falta espeficiar DocumentType");
-   }
-
-   public Exception getEditedDateException(){
-       return new Exception("Falta espeficiar EditedDate");
    }
 
    public Exception getEmisionDateException(){
@@ -124,20 +116,12 @@ public class SalessValidatorsExceptions {
        return new Exception("Falta espeficiar Serie");
    }
 
-   public Exception getStationException(){
-       return new Exception("Falta espeficiar Station");
-   }
-
    public Exception getSubramoException(){
        return new Exception("Falta espeficiar Subramo");
    }
 
    public Exception getSubtotalException(){
        return new Exception("Falta espeficiar Subtotal");
-   }
-
-   public Exception getSucursalException(){
-       return new Exception("Falta espeficiar Sucursal");
    }
 
    public Exception getTaxException(){

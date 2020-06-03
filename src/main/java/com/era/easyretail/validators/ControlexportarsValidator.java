@@ -6,10 +6,21 @@ import com.era.repositories.RepositoryFactory;
 
 public class ControlexportarsValidator extends IValidate{
 
-   private String code;
    private String id_ultimaVentaExpo;
+   public void setId_ultimaVentaExpo(String property){
+       this.id_ultimaVentaExpo = property;
+   }
+
    private String id_ultimapartidaExpo;
+   public void setId_ultimapartidaExpo(String property){
+       this.id_ultimapartidaExpo = property;
+   }
+
    private String tipo;
+   public void setTipo(String property){
+       this.tipo = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
@@ -24,11 +35,6 @@ public class ControlexportarsValidator extends IValidate{
 
        if(tipo==null || tipo.isEmpty()){
            throw new ControlexportarsValidatorsExceptions().getTipoException();
-       }
-
-       final Controlexportar Controlexportar = (Controlexportar) RepositoryFactory.getInstance().getControlexportarsRepository().getByCode(code);
-       if(Controlexportar != null){            
-           throw new ControlexportarsValidatorsExceptions().getModelExistsException();
        }
 
        if(IInsertValidation!=null){
@@ -53,23 +59,4 @@ public class ControlexportarsValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new ControlexportarsValidatorsExceptions().getCodeException();
-       }
-
-       final Controlexportar Controlexportar = (Controlexportar) RepositoryFactory.getInstance().getControlexportarsRepository().getByCode(code);
-       if(Controlexportar == null){            
-           throw new ControlexportarsValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new ControlexportarsValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

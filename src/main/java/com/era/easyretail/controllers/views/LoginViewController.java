@@ -96,6 +96,10 @@ public class LoginViewController extends LoginJFrame {
         }
     }
 
+    @Override
+    public void clearFields(){            
+    }
+    
     public void setLoginTypeEmpresa(LoginTypeEmpresa LoginTypeEmpresa) {
         this.LoginTypeEmpresa = LoginTypeEmpresa;
     }

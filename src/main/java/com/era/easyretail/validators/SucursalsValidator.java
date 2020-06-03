@@ -6,29 +6,35 @@ import com.era.repositories.RepositoryFactory;
 
 public class SucursalsValidator extends IValidate{
 
-   private String code;
-   private String cod;
    private String codZona;
+   public void setCodZona(String property){
+       this.codZona = property;
+   }
+
+   private String code;
+   public void setCode(String property){
+       this.code = property;
+   }
+
    private String descrip;
+   public void setDescrip(String property){
+       this.descrip = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
-
-       if(cod==null || cod.isEmpty()){
-           throw new SucursalsValidatorsExceptions().getCodException();
-       }
 
        if(codZona==null || codZona.isEmpty()){
            throw new SucursalsValidatorsExceptions().getCodZonaException();
        }
 
-       if(descrip==null || descrip.isEmpty()){
-           throw new SucursalsValidatorsExceptions().getDescripException();
+       if(code==null || code.isEmpty()){
+           throw new SucursalsValidatorsExceptions().getCodeException();
        }
 
-       final Sucursal Sucursal = (Sucursal) RepositoryFactory.getInstance().getSucursalsRepository().getByCode(code);
-       if(Sucursal != null){            
-           throw new SucursalsValidatorsExceptions().getModelExistsException();
+       if(descrip==null || descrip.isEmpty()){
+           throw new SucursalsValidatorsExceptions().getDescripException();
        }
 
        if(IInsertValidation!=null){
@@ -53,23 +59,4 @@ public class SucursalsValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new SucursalsValidatorsExceptions().getCodeException();
-       }
-
-       final Sucursal Sucursal = (Sucursal) RepositoryFactory.getInstance().getSucursalsRepository().getByCode(code);
-       if(Sucursal == null){            
-           throw new SucursalsValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new SucursalsValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

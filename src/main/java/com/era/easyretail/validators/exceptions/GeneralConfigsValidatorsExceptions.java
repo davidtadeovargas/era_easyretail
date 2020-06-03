@@ -24,10 +24,6 @@ public class GeneralConfigsValidatorsExceptions {
        return new Exception("Falta espeficiar codigo");
    }
 
-   public Exception getCashNumberException(){
-       return new Exception("Falta espeficiar CashNumber");
-   }
-
    public Exception getCasificationException(){
        return new Exception("Falta espeficiar Casification");
    }
@@ -42,14 +38,6 @@ public class GeneralConfigsValidatorsExceptions {
 
    public Exception getNumextException(){
        return new Exception("Falta espeficiar Numext");
-   }
-
-   public Exception getStationException(){
-       return new Exception("Falta espeficiar Station");
-   }
-
-   public Exception getSucursalException(){
-       return new Exception("Falta espeficiar Sucursal");
    }
 
    public Exception getValueException(){

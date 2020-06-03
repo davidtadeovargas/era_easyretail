@@ -7,18 +7,23 @@ import com.era.repositories.RepositoryFactory;
 public class WarehousesValidator extends IValidate{
 
    private String code;
-   private String cashNumber;
+   public void setCode(String property){
+       this.code = property;
+   }
+
    private String description;
-   private String responsible;
-   private String station;
-   private String sucursal;
+   public void setDescription(String property){
+       this.description = property;
+   }
+
+   private String responsable;
+   public void setResponsable(String property){
+       this.responsable = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
-
-       if(cashNumber==null || cashNumber.isEmpty()){
-           throw new WarehousesValidatorsExceptions().getCashNumberException();
-       }
 
        if(code==null || code.isEmpty()){
            throw new WarehousesValidatorsExceptions().getCodeException();
@@ -28,21 +33,8 @@ public class WarehousesValidator extends IValidate{
            throw new WarehousesValidatorsExceptions().getDescriptionException();
        }
 
-       if(responsible==null || responsible.isEmpty()){
-           throw new WarehousesValidatorsExceptions().getResponsibleException();
-       }
-
-       if(station==null || station.isEmpty()){
-           throw new WarehousesValidatorsExceptions().getStationException();
-       }
-
-       if(sucursal==null || sucursal.isEmpty()){
-           throw new WarehousesValidatorsExceptions().getSucursalException();
-       }
-
-       final Warehouse Warehouse = (Warehouse) RepositoryFactory.getInstance().getWarehousesRepository().getByCode(code);
-       if(Warehouse != null){            
-           throw new WarehousesValidatorsExceptions().getModelExistsException();
+       if(responsable==null || responsable.isEmpty()){
+           throw new WarehousesValidatorsExceptions().getResponsableException();
        }
 
        if(IInsertValidation!=null){
@@ -67,23 +59,4 @@ public class WarehousesValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new WarehousesValidatorsExceptions().getCodeException();
-       }
-
-       final Warehouse Warehouse = (Warehouse) RepositoryFactory.getInstance().getWarehousesRepository().getByCode(code);
-       if(Warehouse == null){            
-           throw new WarehousesValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new WarehousesValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

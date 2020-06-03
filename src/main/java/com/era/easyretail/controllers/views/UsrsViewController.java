@@ -128,6 +128,10 @@ public class UsrsViewController extends UsrsJFrame {
         }
     }
     
+    @Override
+    public void clearFields(){
+    }
+    
     private void jBVeActionPerformed(java.awt.event.ActionEvent evt) {
         
         try{

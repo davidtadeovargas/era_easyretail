@@ -56,6 +56,10 @@ public class MaxsMinsViewController extends MaxsMinsJFrame {
         }
     }
     
+    @Override
+    public void clearFields(){
+    }
+    
     private void jBBus3jBVisActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	

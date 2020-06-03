@@ -13,19 +13,14 @@ public abstract class IValidate {
     
     protected IInsertValidation IInsertValidation;
     protected IUpdateValidation IUpdateValidation;
-    protected IDeleteValidation IDeleteValidation;
     
     public abstract void validateInsert() throws Exception;
-    public abstract void validateUpdate() throws Exception;
-    public abstract void validateDelete() throws Exception;
+    public abstract void validateUpdate() throws Exception;    
     
     public interface IInsertValidation{
         public boolean validate();
     }
     public interface IUpdateValidation{
-        public boolean validate();
-    }
-    public interface IDeleteValidation{
         public boolean validate();
     }
 }

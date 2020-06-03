@@ -39,6 +39,10 @@ public class SelCorrViewController extends SelCorrJFrame {
         }
     }
     
+    @Override
+    public void clearFields(){
+    }
+    
     private void jBEnviActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	

@@ -36,10 +36,6 @@ public class TraspassValidatorsExceptions {
        return new Exception("Falta espeficiar Concep");
    }
 
-   public Exception getProdException(){
-       return new Exception("Falta espeficiar Prod");
-   }
-
    public Exception getUnidException(){
        return new Exception("Falta espeficiar Unid");
    }

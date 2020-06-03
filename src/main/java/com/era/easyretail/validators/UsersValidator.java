@@ -7,11 +7,35 @@ import com.era.repositories.RepositoryFactory;
 public class UsersValidator extends IValidate{
 
    private String code;
+   public void setCode(String property){
+       this.code = property;
+   }
+
    private String cort;
+   public void setCort(String property){
+       this.cort = property;
+   }
+
    private String disccount;
+   public void setDisccount(String property){
+       this.disccount = property;
+   }
+
    private String m52;
+   public void setM52(String property){
+       this.m52 = property;
+   }
+
    private String password;
+   public void setPassword(String property){
+       this.password = property;
+   }
+
    private String userOfsalesOfPoint;
+   public void setUserOfsalesOfPoint(String property){
+       this.userOfsalesOfPoint = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
@@ -40,11 +64,6 @@ public class UsersValidator extends IValidate{
            throw new UsersValidatorsExceptions().getUserOfsalesOfPointException();
        }
 
-       final User User = (User) RepositoryFactory.getInstance().getUsersRepository().getByCode(code);
-       if(User != null){            
-           throw new UsersValidatorsExceptions().getModelExistsException();
-       }
-
        if(IInsertValidation!=null){
             final boolean response = IInsertValidation.validate();
             if(!response){
@@ -67,23 +86,4 @@ public class UsersValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new UsersValidatorsExceptions().getCodeException();
-       }
-
-       final User User = (User) RepositoryFactory.getInstance().getUsersRepository().getByCode(code);
-       if(User == null){            
-           throw new UsersValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new UsersValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

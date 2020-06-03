@@ -24,10 +24,6 @@ public class PessValidatorsExceptions {
        return new Exception("Falta espeficiar codigo");
    }
 
-   public Exception getCodException(){
-       return new Exception("Falta espeficiar Cod");
-   }
-
    public Exception getDescripException(){
        return new Exception("Falta espeficiar Descrip");
    }

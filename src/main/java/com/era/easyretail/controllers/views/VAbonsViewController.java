@@ -39,6 +39,10 @@ public class VAbonsViewController extends VAbonsJFrame {
         }
     }
     
+    @Override
+    public void clearFields(){
+    }
+    
     private void jBSalActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	

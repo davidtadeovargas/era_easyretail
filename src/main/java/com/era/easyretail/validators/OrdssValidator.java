@@ -6,11 +6,21 @@ import com.era.repositories.RepositoryFactory;
 
 public class OrdssValidator extends IValidate{
 
-   private String code;
    private String eje;
+   public void setEje(String property){
+       this.eje = property;
+   }
+
    private String fent;
+   public void setFent(String property){
+       this.fent = property;
+   }
+
    private String prov;
-   private String proy;
+   public void setProv(String property){
+       this.prov = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
@@ -25,15 +35,6 @@ public class OrdssValidator extends IValidate{
 
        if(prov==null || prov.isEmpty()){
            throw new OrdssValidatorsExceptions().getProvException();
-       }
-
-       if(proy==null || proy.isEmpty()){
-           throw new OrdssValidatorsExceptions().getProyException();
-       }
-
-       final Ords Ords = (Ords) RepositoryFactory.getInstance().getOrdssRepository().getByCode(code);
-       if(Ords != null){            
-           throw new OrdssValidatorsExceptions().getModelExistsException();
        }
 
        if(IInsertValidation!=null){
@@ -58,23 +59,4 @@ public class OrdssValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new OrdssValidatorsExceptions().getCodeException();
-       }
-
-       final Ords Ords = (Ords) RepositoryFactory.getInstance().getOrdssRepository().getByCode(code);
-       if(Ords == null){            
-           throw new OrdssValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new OrdssValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

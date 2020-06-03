@@ -45,6 +45,10 @@ public class FacturarTicketsViewController extends FacturarTicketsJFrame {
         }
     }
     
+    @Override
+    public void clearFields(){            
+    }
+    
     private void jBtnFacturarActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	

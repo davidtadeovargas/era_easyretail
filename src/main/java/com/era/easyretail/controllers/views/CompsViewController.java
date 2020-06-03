@@ -52,6 +52,10 @@ public class CompsViewController extends CompsJFrame {
         }
     }
     
+    @Override
+    public void clearFields(){            
+    }
+    
     private void jBNewActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	

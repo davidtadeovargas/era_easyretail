@@ -6,15 +6,9 @@ import com.era.repositories.RepositoryFactory;
 
 public class UsoCFDIsValidator extends IValidate{
 
-   private String code;
 
    @Override
    public void validateInsert() throws Exception {
-
-       final UsoCFDI UsoCFDI = (UsoCFDI) RepositoryFactory.getInstance().getUsoCFDIsRepository().getByCode(code);
-       if(UsoCFDI != null){            
-           throw new UsoCFDIsValidatorsExceptions().getModelExistsException();
-       }
 
        if(IInsertValidation!=null){
             final boolean response = IInsertValidation.validate();
@@ -38,23 +32,4 @@ public class UsoCFDIsValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new UsoCFDIsValidatorsExceptions().getCodeException();
-       }
-
-       final UsoCFDI UsoCFDI = (UsoCFDI) RepositoryFactory.getInstance().getUsoCFDIsRepository().getByCode(code);
-       if(UsoCFDI == null){            
-           throw new UsoCFDIsValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new UsoCFDIsValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

@@ -6,15 +6,46 @@ import com.era.repositories.RepositoryFactory;
 
 public class FlujsValidator extends IValidate{
 
-   private String code;
    private String concep;
+   public void setConcep(String property){
+       this.concep = property;
+   }
+
    private String ing_eg;
+   public void setIng_eg(String property){
+       this.ing_eg = property;
+   }
+
    private String modd;
+   public void setModd(String property){
+       this.modd = property;
+   }
+
    private String mon;
+   public void setMon(String property){
+       this.mon = property;
+   }
+
    private String ncortz;
+   public void setNcortz(String property){
+       this.ncortz = property;
+   }
+
    private String norefer;
+   public void setNorefer(String property){
+       this.norefer = property;
+   }
+
    private String tipdoc;
+   public void setTipdoc(String property){
+       this.tipdoc = property;
+   }
+
    private String vta;
+   public void setVta(String property){
+       this.vta = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
@@ -51,11 +82,6 @@ public class FlujsValidator extends IValidate{
            throw new FlujsValidatorsExceptions().getVtaException();
        }
 
-       final Fluj Fluj = (Fluj) RepositoryFactory.getInstance().getFlujsRepository().getByCode(code);
-       if(Fluj != null){            
-           throw new FlujsValidatorsExceptions().getModelExistsException();
-       }
-
        if(IInsertValidation!=null){
             final boolean response = IInsertValidation.validate();
             if(!response){
@@ -78,23 +104,4 @@ public class FlujsValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new FlujsValidatorsExceptions().getCodeException();
-       }
-
-       final Fluj Fluj = (Fluj) RepositoryFactory.getInstance().getFlujsRepository().getByCode(code);
-       if(Fluj == null){            
-           throw new FlujsValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new FlujsValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

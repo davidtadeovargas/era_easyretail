@@ -75,6 +75,10 @@ public class CotsViewController extends CotsJFrame {
         }
     }
     
+    @Override
+    public void clearFields(){            
+    }
+    
     private void jBGenPDFActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	

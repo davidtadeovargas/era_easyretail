@@ -66,6 +66,10 @@ public class CxcViewController extends CxcJFrame {
         }
     }
     
+    @Override
+    public void clearFields(){            
+    }
+    
     private void ActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	

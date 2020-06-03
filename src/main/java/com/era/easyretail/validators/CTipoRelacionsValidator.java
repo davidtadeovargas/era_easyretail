@@ -6,19 +6,17 @@ import com.era.repositories.RepositoryFactory;
 
 public class CTipoRelacionsValidator extends IValidate{
 
-   private String code;
    private String description;
+   public void setDescription(String property){
+       this.description = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
 
        if(description==null || description.isEmpty()){
            throw new CTipoRelacionsValidatorsExceptions().getDescriptionException();
-       }
-
-       final CTipoRelacion CTipoRelacion = (CTipoRelacion) RepositoryFactory.getInstance().getCTipoRelacionsRepository().getByCode(code);
-       if(CTipoRelacion != null){            
-           throw new CTipoRelacionsValidatorsExceptions().getModelExistsException();
        }
 
        if(IInsertValidation!=null){
@@ -43,23 +41,4 @@ public class CTipoRelacionsValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new CTipoRelacionsValidatorsExceptions().getCodeException();
-       }
-
-       final CTipoRelacion CTipoRelacion = (CTipoRelacion) RepositoryFactory.getInstance().getCTipoRelacionsRepository().getByCode(code);
-       if(CTipoRelacion == null){            
-           throw new CTipoRelacionsValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new CTipoRelacionsValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

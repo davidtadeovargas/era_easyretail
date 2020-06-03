@@ -24,16 +24,4 @@ public class PaymentsValidatorsExceptions {
        return new Exception("Falta espeficiar codigo");
    }
 
-   public Exception getCashNumberException(){
-       return new Exception("Falta espeficiar CashNumber");
-   }
-
-   public Exception getStationException(){
-       return new Exception("Falta espeficiar Station");
-   }
-
-   public Exception getSucursalException(){
-       return new Exception("Falta espeficiar Sucursal");
-   }
-
 }

@@ -7,23 +7,25 @@ import com.era.repositories.RepositoryFactory;
 public class PaymentFormsValidator extends IValidate{
 
    private String code;
+   public void setCode(String property){
+       this.code = property;
+   }
+
    private String description;
-   private String paymentForm;
+   public void setDescription(String property){
+       this.description = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
 
+       if(code==null || code.isEmpty()){
+           throw new PaymentFormsValidatorsExceptions().getCodeException();
+       }
+
        if(description==null || description.isEmpty()){
            throw new PaymentFormsValidatorsExceptions().getDescriptionException();
-       }
-
-       if(paymentForm==null || paymentForm.isEmpty()){
-           throw new PaymentFormsValidatorsExceptions().getPaymentFormException();
-       }
-
-       final PaymentForm PaymentForm = (PaymentForm) RepositoryFactory.getInstance().getPaymentFormsRepository().getByCode(code);
-       if(PaymentForm != null){            
-           throw new PaymentFormsValidatorsExceptions().getModelExistsException();
        }
 
        if(IInsertValidation!=null){
@@ -48,23 +50,4 @@ public class PaymentFormsValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new PaymentFormsValidatorsExceptions().getCodeException();
-       }
-
-       final PaymentForm PaymentForm = (PaymentForm) RepositoryFactory.getInstance().getPaymentFormsRepository().getByCode(code);
-       if(PaymentForm == null){            
-           throw new PaymentFormsValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new PaymentFormsValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

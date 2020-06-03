@@ -6,32 +6,131 @@ import com.era.repositories.RepositoryFactory;
 
 public class PedidosPartssValidator extends IValidate{
 
-   private String code;
    private String alma;
+   public void setAlma(String property){
+       this.alma = property;
+   }
+
    private String cant;
+   public void setCant(String property){
+       this.cant = property;
+   }
+
    private String codimpue;
+   public void setCodimpue(String property){
+       this.codimpue = property;
+   }
+
    private String comenser;
+   public void setComenser(String property){
+       this.comenser = property;
+   }
+
    private String desc_1;
+   public void setDesc_1(String property){
+       this.desc_1 = property;
+   }
+
    private String desc_2;
+   public void setDesc_2(String property){
+       this.desc_2 = property;
+   }
+
    private String desc_3;
+   public void setDesc_3(String property){
+       this.desc_3 = property;
+   }
+
    private String desc_4;
+   public void setDesc_4(String property){
+       this.desc_4 = property;
+   }
+
    private String desc_5;
+   public void setDesc_5(String property){
+       this.desc_5 = property;
+   }
+
    private String descrip;
+   public void setDescrip(String property){
+       this.descrip = property;
+   }
+
    private String fcadu;
+   public void setFcadu(String property){
+       this.fcadu = property;
+   }
+
    private String impo;
+   public void setImpo(String property){
+       this.impo = property;
+   }
+
    private String impo_2;
+   public void setImpo_2(String property){
+       this.impo_2 = property;
+   }
+
    private String impueimpo;
+   public void setImpueimpo(String property){
+       this.impueimpo = property;
+   }
+
    private String impueimpo_2;
+   public void setImpueimpo_2(String property){
+       this.impueimpo_2 = property;
+   }
+
    private String impueval;
+   public void setImpueval(String property){
+       this.impueval = property;
+   }
+
    private String mon;
+   public void setMon(String property){
+       this.mon = property;
+   }
+
    private String pedidoID;
+   public void setPedidoID(String property){
+       this.pedidoID = property;
+   }
+
    private String pre;
+   public void setPre(String property){
+       this.pre = property;
+   }
+
    private String pre_2;
+   public void setPre_2(String property){
+       this.pre_2 = property;
+   }
+
    private String prod;
+   public void setProd(String property){
+       this.prod = property;
+   }
+
    private String recibidas;
+   public void setRecibidas(String property){
+       this.recibidas = property;
+   }
+
    private String serprod;
+   public void setSerprod(String property){
+       this.serprod = property;
+   }
+
    private String tipcam;
+   public void setTipcam(String property){
+       this.tipcam = property;
+   }
+
    private String unid;
+   public void setUnid(String property){
+       this.unid = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
@@ -136,11 +235,6 @@ public class PedidosPartssValidator extends IValidate{
            throw new PedidosPartssValidatorsExceptions().getUnidException();
        }
 
-       final PedidosParts PedidosParts = (PedidosParts) RepositoryFactory.getInstance().getPedidosPartssRepository().getByCode(code);
-       if(PedidosParts != null){            
-           throw new PedidosPartssValidatorsExceptions().getModelExistsException();
-       }
-
        if(IInsertValidation!=null){
             final boolean response = IInsertValidation.validate();
             if(!response){
@@ -163,23 +257,4 @@ public class PedidosPartssValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new PedidosPartssValidatorsExceptions().getCodeException();
-       }
-
-       final PedidosParts PedidosParts = (PedidosParts) RepositoryFactory.getInstance().getPedidosPartssRepository().getByCode(code);
-       if(PedidosParts == null){            
-           throw new PedidosPartssValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new PedidosPartssValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

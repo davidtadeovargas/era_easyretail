@@ -60,6 +60,10 @@ public class LoginOtraViewController extends LoginOtraJFrame {
         }
     }
 
+    @Override
+    public void clearFields(){            
+    }
+    
     public void setLoginType(LoginType LoginType) {
         this.LoginType = LoginType;                
     }        

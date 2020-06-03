@@ -6,9 +6,16 @@ import com.era.repositories.RepositoryFactory;
 
 public class CAduanasValidator extends IValidate{
 
-   private String code;
    private String c_Aduana;
+   public void setC_Aduana(String property){
+       this.c_Aduana = property;
+   }
+
    private String description;
+   public void setDescription(String property){
+       this.description = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
@@ -19,11 +26,6 @@ public class CAduanasValidator extends IValidate{
 
        if(description==null || description.isEmpty()){
            throw new CAduanasValidatorsExceptions().getDescriptionException();
-       }
-
-       final CAduana CAduana = (CAduana) RepositoryFactory.getInstance().getCAduanasRepository().getByCode(code);
-       if(CAduana != null){            
-           throw new CAduanasValidatorsExceptions().getModelExistsException();
        }
 
        if(IInsertValidation!=null){
@@ -48,23 +50,4 @@ public class CAduanasValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new CAduanasValidatorsExceptions().getCodeException();
-       }
-
-       final CAduana CAduana = (CAduana) RepositoryFactory.getInstance().getCAduanasRepository().getByCode(code);
-       if(CAduana == null){            
-           throw new CAduanasValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new CAduanasValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

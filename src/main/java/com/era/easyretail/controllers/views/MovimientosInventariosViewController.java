@@ -45,6 +45,10 @@ public class MovimientosInventariosViewController extends MovimientosInventarios
         }
     }
     
+    @Override
+    public void clearFields(){
+    }
+    
     private void jBBuscActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	

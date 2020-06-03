@@ -6,21 +6,76 @@ import com.era.repositories.RepositoryFactory;
 
 public class ActfijsValidator extends IValidate{
 
-   private String code;
    private String alma;
+   public void setAlma(String property){
+       this.alma = property;
+   }
+
    private String ctadedu;
+   public void setCtadedu(String property){
+       this.ctadedu = property;
+   }
+
    private String ctadepre;
+   public void setCtadepre(String property){
+       this.ctadepre = property;
+   }
+
    private String ctagast;
+   public void setCtagast(String property){
+       this.ctagast = property;
+   }
+
    private String descrip;
+   public void setDescrip(String property){
+       this.descrip = property;
+   }
+
    private String estadusr;
+   public void setEstadusr(String property){
+       this.estadusr = property;
+   }
+
    private String fadquisreal;
+   public void setFadquisreal(String property){
+       this.fadquisreal = property;
+   }
+
    private String fadquisusr;
+   public void setFadquisusr(String property){
+       this.fadquisusr = property;
+   }
+
    private String fbaj;
+   public void setFbaj(String property){
+       this.fbaj = property;
+   }
+
    private String fbajdep;
+   public void setFbajdep(String property){
+       this.fbajdep = property;
+   }
+
    private String ffindep;
+   public void setFfindep(String property){
+       this.ffindep = property;
+   }
+
    private String finidep;
+   public void setFinidep(String property){
+       this.finidep = property;
+   }
+
    private String prod;
+   public void setProd(String property){
+       this.prod = property;
+   }
+
    private String tipact;
+   public void setTipact(String property){
+       this.tipact = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
@@ -81,11 +136,6 @@ public class ActfijsValidator extends IValidate{
            throw new ActfijsValidatorsExceptions().getTipactException();
        }
 
-       final Actfij Actfij = (Actfij) RepositoryFactory.getInstance().getActfijsRepository().getByCode(code);
-       if(Actfij != null){            
-           throw new ActfijsValidatorsExceptions().getModelExistsException();
-       }
-
        if(IInsertValidation!=null){
             final boolean response = IInsertValidation.validate();
             if(!response){
@@ -108,23 +158,4 @@ public class ActfijsValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new ActfijsValidatorsExceptions().getCodeException();
-       }
-
-       final Actfij Actfij = (Actfij) RepositoryFactory.getInstance().getActfijsRepository().getByCode(code);
-       if(Actfij == null){            
-           throw new ActfijsValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new ActfijsValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

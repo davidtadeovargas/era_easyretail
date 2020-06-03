@@ -6,15 +6,9 @@ import com.era.repositories.RepositoryFactory;
 
 public class CortessValidator extends IValidate{
 
-   private String code;
 
    @Override
    public void validateInsert() throws Exception {
-
-       final Cortes Cortes = (Cortes) RepositoryFactory.getInstance().getCortessRepository().getByCode(code);
-       if(Cortes != null){            
-           throw new CortessValidatorsExceptions().getModelExistsException();
-       }
 
        if(IInsertValidation!=null){
             final boolean response = IInsertValidation.validate();
@@ -38,23 +32,4 @@ public class CortessValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new CortessValidatorsExceptions().getCodeException();
-       }
-
-       final Cortes Cortes = (Cortes) RepositoryFactory.getInstance().getCortessRepository().getByCode(code);
-       if(Cortes == null){            
-           throw new CortessValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new CortessValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

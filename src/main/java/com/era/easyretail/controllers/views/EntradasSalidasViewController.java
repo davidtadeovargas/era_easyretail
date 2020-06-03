@@ -64,6 +64,10 @@ public class EntradasSalidasViewController extends EntradasSalidasJFrame {
         }
     }
     
+    @Override
+    public void clearFields(){            
+    }
+    
     private void btnEntradaActionPerformed(java.awt.event.ActionEvent evt) {
 
 	try{            	

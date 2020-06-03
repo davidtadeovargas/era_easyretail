@@ -7,19 +7,31 @@ import com.era.repositories.RepositoryFactory;
 public class SeriesValidator extends IValidate{
 
    private String code;
-   private String cashNumber;
+   public void setCode(String property){
+       this.code = property;
+   }
+
    private String consecutive;
+   public void setConsecutive(String property){
+       this.consecutive = property;
+   }
+
    private String description;
-   private String estation;
-   private String serie;
-   private String sucursal;
+   public void setDescription(String property){
+       this.description = property;
+   }
+
    private String type;
+   public void setType(String property){
+       this.type = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
 
-       if(cashNumber==null || cashNumber.isEmpty()){
-           throw new SeriesValidatorsExceptions().getCashNumberException();
+       if(code==null || code.isEmpty()){
+           throw new SeriesValidatorsExceptions().getCodeException();
        }
 
        if(consecutive==null || consecutive.isEmpty()){
@@ -30,25 +42,8 @@ public class SeriesValidator extends IValidate{
            throw new SeriesValidatorsExceptions().getDescriptionException();
        }
 
-       if(estation==null || estation.isEmpty()){
-           throw new SeriesValidatorsExceptions().getEstationException();
-       }
-
-       if(serie==null || serie.isEmpty()){
-           throw new SeriesValidatorsExceptions().getSerieException();
-       }
-
-       if(sucursal==null || sucursal.isEmpty()){
-           throw new SeriesValidatorsExceptions().getSucursalException();
-       }
-
        if(type==null || type.isEmpty()){
            throw new SeriesValidatorsExceptions().getTypeException();
-       }
-
-       final Serie Serie = (Serie) RepositoryFactory.getInstance().getSeriesRepository().getByCode(code);
-       if(Serie != null){            
-           throw new SeriesValidatorsExceptions().getModelExistsException();
        }
 
        if(IInsertValidation!=null){
@@ -73,23 +68,4 @@ public class SeriesValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new SeriesValidatorsExceptions().getCodeException();
-       }
-
-       final Serie Serie = (Serie) RepositoryFactory.getInstance().getSeriesRepository().getByCode(code);
-       if(Serie == null){            
-           throw new SeriesValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new SeriesValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

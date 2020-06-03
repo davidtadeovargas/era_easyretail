@@ -7,18 +7,16 @@ import com.era.repositories.RepositoryFactory;
 public class TipscambsValidator extends IValidate{
 
    private String code;
-   private String mon;
+   public void setCode(String property){
+       this.code = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
 
-       if(mon==null || mon.isEmpty()){
-           throw new TipscambsValidatorsExceptions().getMonException();
-       }
-
-       final Tipscamb Tipscamb = (Tipscamb) RepositoryFactory.getInstance().getTipscambsRepository().getByCode(code);
-       if(Tipscamb != null){            
-           throw new TipscambsValidatorsExceptions().getModelExistsException();
+       if(code==null || code.isEmpty()){
+           throw new TipscambsValidatorsExceptions().getCodeException();
        }
 
        if(IInsertValidation!=null){
@@ -43,23 +41,4 @@ public class TipscambsValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new TipscambsValidatorsExceptions().getCodeException();
-       }
-
-       final Tipscamb Tipscamb = (Tipscamb) RepositoryFactory.getInstance().getTipscambsRepository().getByCode(code);
-       if(Tipscamb == null){            
-           throw new TipscambsValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new TipscambsValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

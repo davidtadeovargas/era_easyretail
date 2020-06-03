@@ -97,6 +97,10 @@ public class ComprViewController extends ComprJFrame {
         }
     }
     
+    @Override
+    public void clearFields(){            
+    }
+    
     private void jBCanActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	

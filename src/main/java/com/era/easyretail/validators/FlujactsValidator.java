@@ -6,10 +6,21 @@ import com.era.repositories.RepositoryFactory;
 
 public class FlujactsValidator extends IValidate{
 
-   private String code;
    private String tit;
+   public void setTit(String property){
+       this.tit = property;
+   }
+
    private String usrenvi;
+   public void setUsrenvi(String property){
+       this.usrenvi = property;
+   }
+
    private String usrrecib;
+   public void setUsrrecib(String property){
+       this.usrrecib = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
@@ -24,11 +35,6 @@ public class FlujactsValidator extends IValidate{
 
        if(usrrecib==null || usrrecib.isEmpty()){
            throw new FlujactsValidatorsExceptions().getUsrrecibException();
-       }
-
-       final Flujact Flujact = (Flujact) RepositoryFactory.getInstance().getFlujactsRepository().getByCode(code);
-       if(Flujact != null){            
-           throw new FlujactsValidatorsExceptions().getModelExistsException();
        }
 
        if(IInsertValidation!=null){
@@ -53,23 +59,4 @@ public class FlujactsValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new FlujactsValidatorsExceptions().getCodeException();
-       }
-
-       final Flujact Flujact = (Flujact) RepositoryFactory.getInstance().getFlujactsRepository().getByCode(code);
-       if(Flujact == null){            
-           throw new FlujactsValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new FlujactsValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

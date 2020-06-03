@@ -70,6 +70,10 @@ public class IngrComViewController extends IngrComJFrame {
         }
     }
     
+    @Override
+    public void clearFields(){            
+    }
+    
     private void jBGuarActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	

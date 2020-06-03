@@ -244,7 +244,7 @@ public class Start {
                 License1.setRemainingDays(ComputerLicenseDataModel.getRemainingDays());
                 RepositoryFactory.getInstance().getLicensesRepository().addLicense(License1);
                 final ServerSession ServerSession = new ServerSession();
-                ServerSession.setGenericSerial(ComputerLicenseDataModel.getGenericSerial());
+                ServerSession.setCode(ComputerLicenseDataModel.getGenericSerial());
                 RepositoryFactory.getInstance().getServerSessionsRepository().addServerSession(ServerSession);
                 LoggerUtility.getSingleton().logInfo(Start.class, "Licenciamiento: Channel updated " + ComputerLicenseDataModel.getChannel());
 

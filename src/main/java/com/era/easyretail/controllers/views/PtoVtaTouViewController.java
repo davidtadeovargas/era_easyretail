@@ -78,6 +78,10 @@ public class PtoVtaTouViewController extends PtoVtaTouJFrame {
         }
     }
     
+    @Override
+    public void clearFields(){
+    }
+    
     private void jBNewVtaActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	

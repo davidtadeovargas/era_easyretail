@@ -6,9 +6,16 @@ import com.era.repositories.RepositoryFactory;
 
 public class ClasificacionsValidator extends IValidate{
 
-   private String code;
    private String cod;
+   public void setCod(String property){
+       this.cod = property;
+   }
+
    private String descrip;
+   public void setDescrip(String property){
+       this.descrip = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
@@ -19,11 +26,6 @@ public class ClasificacionsValidator extends IValidate{
 
        if(descrip==null || descrip.isEmpty()){
            throw new ClasificacionsValidatorsExceptions().getDescripException();
-       }
-
-       final Clasificacion Clasificacion = (Clasificacion) RepositoryFactory.getInstance().getClasificacionsRepository().getByCode(code);
-       if(Clasificacion != null){            
-           throw new ClasificacionsValidatorsExceptions().getModelExistsException();
        }
 
        if(IInsertValidation!=null){
@@ -48,23 +50,4 @@ public class ClasificacionsValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new ClasificacionsValidatorsExceptions().getCodeException();
-       }
-
-       final Clasificacion Clasificacion = (Clasificacion) RepositoryFactory.getInstance().getClasificacionsRepository().getByCode(code);
-       if(Clasificacion == null){            
-           throw new ClasificacionsValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new ClasificacionsValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

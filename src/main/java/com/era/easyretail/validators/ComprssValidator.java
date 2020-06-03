@@ -6,25 +6,96 @@ import com.era.repositories.RepositoryFactory;
 
 public class ComprssValidator extends IValidate{
 
-   private String code;
    private String codcomp;
+   public void setCodcomp(String property){
+       this.codcomp = property;
+   }
+
    private String estado;
+   public void setEstado(String property){
+       this.estado = property;
+   }
+
    private String fdoc;
+   public void setFdoc(String property){
+       this.fdoc = property;
+   }
+
    private String fvenc;
+   public void setFvenc(String property){
+       this.fvenc = property;
+   }
+
    private String impue;
+   public void setImpue(String property){
+       this.impue = property;
+   }
+
    private String monedaID;
+   public void setMonedaID(String property){
+       this.monedaID = property;
+   }
+
    private String motiv;
+   public void setMotiv(String property){
+       this.motiv = property;
+   }
+
    private String nodoc;
+   public void setNodoc(String property){
+       this.nodoc = property;
+   }
+
    private String nomprov;
+   public void setNomprov(String property){
+       this.nomprov = property;
+   }
+
    private String noser;
+   public void setNoser(String property){
+       this.noser = property;
+   }
+
    private String prov;
+   public void setProv(String property){
+       this.prov = property;
+   }
+
    private String ser;
+   public void setSer(String property){
+       this.ser = property;
+   }
+
    private String subtot;
+   public void setSubtot(String property){
+       this.subtot = property;
+   }
+
    private String tipcam;
+   public void setTipcam(String property){
+       this.tipcam = property;
+   }
+
    private String tipcamnac;
+   public void setTipcamnac(String property){
+       this.tipcamnac = property;
+   }
+
    private String tot;
+   public void setTot(String property){
+       this.tot = property;
+   }
+
    private String total_retencion;
+   public void setTotal_retencion(String property){
+       this.total_retencion = property;
+   }
+
    private String total_traslado;
+   public void setTotal_traslado(String property){
+       this.total_traslado = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
@@ -101,11 +172,6 @@ public class ComprssValidator extends IValidate{
            throw new ComprssValidatorsExceptions().getTotal_trasladoException();
        }
 
-       final Comprs Comprs = (Comprs) RepositoryFactory.getInstance().getComprssRepository().getByCode(code);
-       if(Comprs != null){            
-           throw new ComprssValidatorsExceptions().getModelExistsException();
-       }
-
        if(IInsertValidation!=null){
             final boolean response = IInsertValidation.validate();
             if(!response){
@@ -128,23 +194,4 @@ public class ComprssValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new ComprssValidatorsExceptions().getCodeException();
-       }
-
-       final Comprs Comprs = (Comprs) RepositoryFactory.getInstance().getComprssRepository().getByCode(code);
-       if(Comprs == null){            
-           throw new ComprssValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new ComprssValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

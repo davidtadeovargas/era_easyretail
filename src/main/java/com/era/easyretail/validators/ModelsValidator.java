@@ -7,23 +7,25 @@ import com.era.repositories.RepositoryFactory;
 public class ModelsValidator extends IValidate{
 
    private String code;
-   private String cod;
+   public void setCode(String property){
+       this.code = property;
+   }
+
    private String descrip;
+   public void setDescrip(String property){
+       this.descrip = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
 
-       if(cod==null || cod.isEmpty()){
-           throw new ModelsValidatorsExceptions().getCodException();
+       if(code==null || code.isEmpty()){
+           throw new ModelsValidatorsExceptions().getCodeException();
        }
 
        if(descrip==null || descrip.isEmpty()){
            throw new ModelsValidatorsExceptions().getDescripException();
-       }
-
-       final Model Model = (Model) RepositoryFactory.getInstance().getModelsRepository().getByCode(code);
-       if(Model != null){            
-           throw new ModelsValidatorsExceptions().getModelExistsException();
        }
 
        if(IInsertValidation!=null){
@@ -48,23 +50,4 @@ public class ModelsValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new ModelsValidatorsExceptions().getCodeException();
-       }
-
-       final Model Model = (Model) RepositoryFactory.getInstance().getModelsRepository().getByCode(code);
-       if(Model == null){            
-           throw new ModelsValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new ModelsValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

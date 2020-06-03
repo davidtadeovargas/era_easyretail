@@ -6,9 +6,16 @@ import com.era.repositories.RepositoryFactory;
 
 public class PartflujactsValidator extends IValidate{
 
-   private String code;
    private String idfluj;
+   public void setIdfluj(String property){
+       this.idfluj = property;
+   }
+
    private String segui;
+   public void setSegui(String property){
+       this.segui = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
@@ -19,11 +26,6 @@ public class PartflujactsValidator extends IValidate{
 
        if(segui==null || segui.isEmpty()){
            throw new PartflujactsValidatorsExceptions().getSeguiException();
-       }
-
-       final Partflujact Partflujact = (Partflujact) RepositoryFactory.getInstance().getPartflujactsRepository().getByCode(code);
-       if(Partflujact != null){            
-           throw new PartflujactsValidatorsExceptions().getModelExistsException();
        }
 
        if(IInsertValidation!=null){
@@ -48,23 +50,4 @@ public class PartflujactsValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new PartflujactsValidatorsExceptions().getCodeException();
-       }
-
-       final Partflujact Partflujact = (Partflujact) RepositoryFactory.getInstance().getPartflujactsRepository().getByCode(code);
-       if(Partflujact == null){            
-           throw new PartflujactsValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new PartflujactsValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

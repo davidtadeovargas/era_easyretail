@@ -28,8 +28,4 @@ public class PaymentFormsValidatorsExceptions {
        return new Exception("Falta espeficiar Description");
    }
 
-   public Exception getPaymentFormException(){
-       return new Exception("Falta espeficiar PaymentForm");
-   }
-
 }

@@ -6,22 +6,34 @@ import com.era.repositories.RepositoryFactory;
 
 public class GeneralConfigsValidator extends IValidate{
 
-   private String code;
-   private String cashNumber;
    private String casification;
+   public void setCasification(String property){
+       this.casification = property;
+   }
+
    private String configuration;
+   public void setConfiguration(String property){
+       this.configuration = property;
+   }
+
    private String extra;
+   public void setExtra(String property){
+       this.extra = property;
+   }
+
    private String numext;
-   private String station;
-   private String sucursal;
+   public void setNumext(String property){
+       this.numext = property;
+   }
+
    private String value;
+   public void setValue(String property){
+       this.value = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
-
-       if(cashNumber==null || cashNumber.isEmpty()){
-           throw new GeneralConfigsValidatorsExceptions().getCashNumberException();
-       }
 
        if(casification==null || casification.isEmpty()){
            throw new GeneralConfigsValidatorsExceptions().getCasificationException();
@@ -39,21 +51,8 @@ public class GeneralConfigsValidator extends IValidate{
            throw new GeneralConfigsValidatorsExceptions().getNumextException();
        }
 
-       if(station==null || station.isEmpty()){
-           throw new GeneralConfigsValidatorsExceptions().getStationException();
-       }
-
-       if(sucursal==null || sucursal.isEmpty()){
-           throw new GeneralConfigsValidatorsExceptions().getSucursalException();
-       }
-
        if(value==null || value.isEmpty()){
            throw new GeneralConfigsValidatorsExceptions().getValueException();
-       }
-
-       final GeneralConfig GeneralConfig = (GeneralConfig) RepositoryFactory.getInstance().getGeneralConfigsRepository().getByCode(code);
-       if(GeneralConfig != null){            
-           throw new GeneralConfigsValidatorsExceptions().getModelExistsException();
        }
 
        if(IInsertValidation!=null){
@@ -78,23 +77,4 @@ public class GeneralConfigsValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new GeneralConfigsValidatorsExceptions().getCodeException();
-       }
-
-       final GeneralConfig GeneralConfig = (GeneralConfig) RepositoryFactory.getInstance().getGeneralConfigsRepository().getByCode(code);
-       if(GeneralConfig == null){            
-           throw new GeneralConfigsValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new GeneralConfigsValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

@@ -7,8 +7,20 @@ import com.era.repositories.RepositoryFactory;
 public class CCoinsValidator extends IValidate{
 
    private String code;
+   public void setCode(String property){
+       this.code = property;
+   }
+
    private String initVigencyDate;
+   public void setInitVigencyDate(String property){
+       this.initVigencyDate = property;
+   }
+
    private String variationPorcent;
+   public void setVariationPorcent(String property){
+       this.variationPorcent = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
@@ -23,11 +35,6 @@ public class CCoinsValidator extends IValidate{
 
        if(variationPorcent==null || variationPorcent.isEmpty()){
            throw new CCoinsValidatorsExceptions().getVariationPorcentException();
-       }
-
-       final CCoin CCoin = (CCoin) RepositoryFactory.getInstance().getCCoinsRepository().getByCode(code);
-       if(CCoin != null){            
-           throw new CCoinsValidatorsExceptions().getModelExistsException();
        }
 
        if(IInsertValidation!=null){
@@ -52,23 +59,4 @@ public class CCoinsValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new CCoinsValidatorsExceptions().getCodeException();
-       }
-
-       final CCoin CCoin = (CCoin) RepositoryFactory.getInstance().getCCoinsRepository().getByCode(code);
-       if(CCoin == null){            
-           throw new CCoinsValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new CCoinsValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

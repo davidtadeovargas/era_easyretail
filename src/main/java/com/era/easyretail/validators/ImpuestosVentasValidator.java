@@ -6,11 +6,26 @@ import com.era.repositories.RepositoryFactory;
 
 public class ImpuestosVentasValidator extends IValidate{
 
-   private String code;
    private String fvenc;
+   public void setFvenc(String property){
+       this.fvenc = property;
+   }
+
    private String impuesto;
+   public void setImpuesto(String property){
+       this.impuesto = property;
+   }
+
    private String retencion;
+   public void setRetencion(String property){
+       this.retencion = property;
+   }
+
    private String total;
+   public void setTotal(String property){
+       this.total = property;
+   }
+
 
    @Override
    public void validateInsert() throws Exception {
@@ -29,11 +44,6 @@ public class ImpuestosVentasValidator extends IValidate{
 
        if(total==null || total.isEmpty()){
            throw new ImpuestosVentasValidatorsExceptions().getTotalException();
-       }
-
-       final ImpuestosVenta ImpuestosVenta = (ImpuestosVenta) RepositoryFactory.getInstance().getImpuestosVentasRepository().getByCode(code);
-       if(ImpuestosVenta != null){            
-           throw new ImpuestosVentasValidatorsExceptions().getModelExistsException();
        }
 
        if(IInsertValidation!=null){
@@ -58,23 +68,4 @@ public class ImpuestosVentasValidator extends IValidate{
        }
    }
 
-   @Override
-   public void validateDelete() throws Exception {
-
-       if(code==null || code.isEmpty()){
-           throw new ImpuestosVentasValidatorsExceptions().getCodeException();
-       }
-
-       final ImpuestosVenta ImpuestosVenta = (ImpuestosVenta) RepositoryFactory.getInstance().getImpuestosVentasRepository().getByCode(code);
-       if(ImpuestosVenta == null){            
-           throw new ImpuestosVentasValidatorsExceptions().getModelNotExistsException();
-       }
-
-       if(IDeleteValidation!=null){
-           final boolean response = IDeleteValidation.validate();
-           if(!response){
-               throw new ImpuestosVentasValidatorsExceptions().getCustomVaidationNotPassedException();
-           }
-       }
-    }
 }

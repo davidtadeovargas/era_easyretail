@@ -37,6 +37,10 @@ public class CatalogoMonedaViewController extends CatalogoMonedaJFrame {
         }
     }
     
+    @Override
+    public void clearFields(){            
+    }
+    
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	

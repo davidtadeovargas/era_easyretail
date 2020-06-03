@@ -24,10 +24,6 @@ public class SucursalsValidatorsExceptions {
        return new Exception("Falta espeficiar codigo");
    }
 
-   public Exception getCodException(){
-       return new Exception("Falta espeficiar Cod");
-   }
-
    public Exception getCodZonaException(){
        return new Exception("Falta espeficiar CodZona");
    }
