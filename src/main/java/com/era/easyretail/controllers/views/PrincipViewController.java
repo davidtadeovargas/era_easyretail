@@ -12,9 +12,15 @@ import com.era.logger.LoggerUtility;
 import com.era.models.BasDats;
 import com.era.models.Confgral;
 import com.era.models.User;
+import com.era.models.Warehouse;
 import com.era.repositories.RepositoryFactory;
+import com.era.utilities.FileChooserUtility;
 import com.era.utilities.UtilitiesFactory;
 import com.era.utilities.WinRegistry;
+import com.era.utilities.excel.WarehouseExistencesWorkbook;
+import com.era.utilities.excel.Workbook;
+import com.era.utilities.excel.rows.models.WarehouseExistencesExcelRowModel;
+import com.era.utilities.exceptions.InvalidFileExtensionException;
 import com.era.views.PrincipJFrame;
 import com.era.views.dialogs.DialogsFactory;
 import com.era.views.dialogs.ErrorOKDialog;
@@ -251,6 +257,9 @@ public class PrincipViewController extends PrincipJFrame {
             });
             warehousesMenu.addActionListener((java.awt.event.ActionEvent evt) -> {
                 warehousesMenuActionPerformed(evt);
+            });
+            jMImpExistAlm.addActionListener((java.awt.event.ActionEvent evt) -> {
+                jMImpExistAlmActionPerformed(evt);
             });            
             
             onCloseWindowDoNothing();
@@ -265,6 +274,118 @@ public class PrincipViewController extends PrincipJFrame {
         }
     }
     
+    private void loadWarehousesExistencesFromExcel(String absolutePath, String fileName){
+        
+        try{
+            
+            //Question if really continue
+            DialogsFactory.getSingleton().showQuestionContinueDialog(baseJFrame, (JFrame jFrame) -> {
+            
+                try{
+                    
+                    //Load the warehouses existences
+                    final WarehouseExistencesWorkbook WarehouseExistencesWorkbook = new WarehouseExistencesWorkbook();
+                    WarehouseExistencesWorkbook.setFilePath(absolutePath + "\\" + fileName);
+                    WarehouseExistencesWorkbook.setOnFinish(() -> {
+                        
+                        try{
+                            
+                            //Announce success to the user
+                            DialogsFactory.getSingleton().showOKOperationCompletedCallbackDialog(jFrame, null);
+                        
+                        }catch (Exception ex) {
+                            LoggerUtility.getSingleton().logError(PrincipViewController.class, ex);
+                            try {
+                                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+                            } catch (Exception ex1) {
+                                Logger.getLogger(PrincipViewController.class.getName()).log(Level.SEVERE, null, ex1);
+                            }
+                        }
+                    });
+                    WarehouseExistencesWorkbook.setOnCellRender((Object CellModel) -> {
+                        try{
+
+                            //Cast model
+                            final WarehouseExistencesExcelRowModel WarehouseExistencesExcelRowModel = (WarehouseExistencesExcelRowModel)CellModel;
+
+                            //Get values
+                            final String warehouseCode = WarehouseExistencesExcelRowModel.getWarehouseCode();
+                            final String productCode = WarehouseExistencesExcelRowModel.getProductCode();
+                            final double existence = WarehouseExistencesExcelRowModel.getExistence();
+
+                            //If the warehouse doesnt existe create it
+                            Warehouse Warehouse = (Warehouse)RepositoryFactory.getInstance().getWarehousesRepository().getByCode(warehouseCode);
+                            if(Warehouse==null){
+                                Warehouse = new Warehouse();
+                                Warehouse.setCode(warehouseCode);
+                                Warehouse.setDescription("");
+                                Warehouse.setResponsable("SUP");
+                                RepositoryFactory.getInstance().getWarehousesRepository().save(Warehouse);
+                            }
+
+                            //Update the warehouse existences
+                            RepositoryFactory.getInstance().getExistalmasRepository().updateExistences(warehouseCode, productCode, existence);
+                            
+                        }catch (Exception ex) {
+                            LoggerUtility.getSingleton().logError(PrincipViewController.class, ex);
+                            try {
+                                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+                            } catch (Exception ex1) {
+                                Logger.getLogger(PrincipViewController.class.getName()).log(Level.SEVERE, null, ex1);
+                            }
+                        }
+                    });
+                    WarehouseExistencesWorkbook.load();
+
+                }catch (Exception ex) {
+                    LoggerUtility.getSingleton().logError(PrincipViewController.class, ex);
+                    try {
+                        DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+                    } catch (Exception ex1) {
+                        Logger.getLogger(PrincipViewController.class.getName()).log(Level.SEVERE, null, ex1);
+                    }
+                }
+            });
+            
+        }catch (Exception ex) {
+            LoggerUtility.getSingleton().logError(PrincipViewController.class, ex);
+            try {
+                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+            } catch (Exception ex1) {
+                Logger.getLogger(PrincipViewController.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+        }
+    }
+    
+    private void jMImpExistAlmActionPerformed(java.awt.event.ActionEvent evt) {        
+        
+        try{
+         
+            try{
+             
+                //Ask for the excel file path
+                final FileChooserUtility FileChooserUtility = UtilitiesFactory.getSingleton().getFileChooserUtility();
+                FileChooserUtility.addValidExtension("xlsx");
+                FileChooserUtility.addValidExtension("xls");            
+                FileChooserUtility.setIApproveOpption((String absolutePath, String fileName) -> {
+                    loadWarehousesExistencesFromExcel(absolutePath,fileName);
+                });
+                FileChooserUtility.showSaveDialog(baseJFrame);
+            
+            }catch(InvalidFileExtensionException InvalidFileExtensionException){
+                DialogsFactory.getSingleton().showErrorOKCallbackDialog(baseJFrame, "errors_invalid_file_extension", null);
+            }
+            
+        }catch (Exception ex) {
+            LoggerUtility.getSingleton().logError(PrincipViewController.class, ex);
+            try {
+                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+            } catch (Exception ex1) {
+                Logger.getLogger(PrincipViewController.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+        }
+        
+    }
     private void warehousesMenuActionPerformed(java.awt.event.ActionEvent evt) {        
         ViewControlersFactory.getSingleton().getAlmasViewController().setVisible();
     }
