@@ -20,7 +20,6 @@ import com.era.utilities.FileChooserUtility;
 import com.era.utilities.UtilitiesFactory;
 import com.era.utilities.WinRegistry;
 import com.era.utilities.excel.WarehouseExistencesWorkbook;
-import com.era.utilities.excel.Workbook;
 import com.era.utilities.excel.rows.models.WarehouseExistencesExcelRowModel;
 import com.era.utilities.exceptions.InvalidFileExtensionException;
 import com.era.views.PrincipJFrame;
@@ -287,7 +286,6 @@ public class PrincipViewController extends PrincipJFrame {
                     
                     final BaseSwingWorker BaseSwingWorker = new BaseSwingWorker();
                     BaseSwingWorker.setShowLoading(baseJFrame);
-                    BaseSwingWorker.setBlockComponents(false);
                     BaseSwingWorker.setISwingWorkerActions(new ISwingWorkerActions(){
 
                         @Override
