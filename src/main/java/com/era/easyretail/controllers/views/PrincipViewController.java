@@ -8,6 +8,8 @@ package com.era.easyretail.controllers.views;
 import com.era.easyretail.enums.DBFileConnectionConfigurationType;
 import com.era.easyretail.enums.LoginType;
 import com.era.easyretail.enums.LoginTypeEmpresa;
+import com.era.easyretail.swingworkers.BaseSwingWorker;
+import com.era.easyretail.swingworkers.ISwingWorkerActions;
 import com.era.logger.LoggerUtility;
 import com.era.models.BasDats;
 import com.era.models.Confgral;
@@ -283,59 +285,95 @@ public class PrincipViewController extends PrincipJFrame {
             
                 try{
                     
-                    //Load the warehouses existences
-                    final WarehouseExistencesWorkbook WarehouseExistencesWorkbook = new WarehouseExistencesWorkbook();
-                    WarehouseExistencesWorkbook.setFilePath(absolutePath + "\\" + fileName);
-                    WarehouseExistencesWorkbook.setOnFinish(() -> {
-                        
-                        try{
+                    final BaseSwingWorker BaseSwingWorker = new BaseSwingWorker();
+                    BaseSwingWorker.setShowLoading(baseJFrame);
+                    BaseSwingWorker.setBlockComponents(false);
+                    BaseSwingWorker.setISwingWorkerActions(new ISwingWorkerActions(){
+
+                        @Override
+                        public void before() {
                             
-                            //Announce success to the user
-                            DialogsFactory.getSingleton().showOKOperationCompletedCallbackDialog(jFrame, null);
-                        
-                        }catch (Exception ex) {
-                            LoggerUtility.getSingleton().logError(PrincipViewController.class, ex);
-                            try {
-                                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
-                            } catch (Exception ex1) {
-                                Logger.getLogger(PrincipViewController.class.getName()).log(Level.SEVERE, null, ex1);
+                        }
+
+                        @Override
+                        public Object doinbackground() {
+                            
+                            try{
+                                
+                                //Load the warehouses existences
+                                final WarehouseExistencesWorkbook WarehouseExistencesWorkbook = new WarehouseExistencesWorkbook();
+                                WarehouseExistencesWorkbook.setFilePath(absolutePath + "\\" + fileName);                    
+                                WarehouseExistencesWorkbook.setOnFinish(() -> {
+
+                                    
+                                });
+                                WarehouseExistencesWorkbook.setOnCellRender((Object CellModel) -> {
+                                    try{
+
+                                        //Cast model
+                                        final WarehouseExistencesExcelRowModel WarehouseExistencesExcelRowModel = (WarehouseExistencesExcelRowModel)CellModel;
+
+                                        //Get values
+                                        final String warehouseCode = WarehouseExistencesExcelRowModel.getWarehouseCode();
+                                        final String productCode = WarehouseExistencesExcelRowModel.getProductCode();
+                                        final double existence = WarehouseExistencesExcelRowModel.getExistence();
+
+                                        //If the warehouse doesnt existe create it
+                                        Warehouse Warehouse = (Warehouse)RepositoryFactory.getInstance().getWarehousesRepository().getByCode(warehouseCode);
+                                        if(Warehouse==null){
+                                            Warehouse = new Warehouse();
+                                            Warehouse.setCode(warehouseCode);
+                                            Warehouse.setDescription("");
+                                            Warehouse.setResponsable("SUP");
+                                            RepositoryFactory.getInstance().getWarehousesRepository().save(Warehouse);
+                                        }
+
+                                        //Update the warehouse existences
+                                        RepositoryFactory.getInstance().getExistalmasRepository().updateExistences(warehouseCode, productCode, existence);
+
+                                    }catch (Exception ex) {
+                                        LoggerUtility.getSingleton().logError(PrincipViewController.class, ex);
+                                        try {
+                                            DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+                                        } catch (Exception ex1) {
+                                            Logger.getLogger(PrincipViewController.class.getName()).log(Level.SEVERE, null, ex1);
+                                        }
+                                    }
+                                });
+                                WarehouseExistencesWorkbook.load();
+
+                            }catch (Exception ex) {
+                                LoggerUtility.getSingleton().logError(PrincipViewController.class, ex);
+                                try {
+                                    DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+                                } catch (Exception ex1) {
+                                    Logger.getLogger(PrincipViewController.class.getName()).log(Level.SEVERE, null, ex1);
+                                }
+                            }
+                            
+                            return null;
+                        }
+
+                        @Override
+                        public void after(Object Object) {
+                            
+                            try{
+
+                                //Announce success to the user
+                                DialogsFactory.getSingleton().showOKOperationCompletedCallbackDialog(jFrame, null);
+
+                            }catch (Exception ex) {
+                                LoggerUtility.getSingleton().logError(PrincipViewController.class, ex);
+                                try {
+                                    DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+                                } catch (Exception ex1) {
+                                    Logger.getLogger(PrincipViewController.class.getName()).log(Level.SEVERE, null, ex1);
+                                }
                             }
                         }
+                        
                     });
-                    WarehouseExistencesWorkbook.setOnCellRender((Object CellModel) -> {
-                        try{
-
-                            //Cast model
-                            final WarehouseExistencesExcelRowModel WarehouseExistencesExcelRowModel = (WarehouseExistencesExcelRowModel)CellModel;
-
-                            //Get values
-                            final String warehouseCode = WarehouseExistencesExcelRowModel.getWarehouseCode();
-                            final String productCode = WarehouseExistencesExcelRowModel.getProductCode();
-                            final double existence = WarehouseExistencesExcelRowModel.getExistence();
-
-                            //If the warehouse doesnt existe create it
-                            Warehouse Warehouse = (Warehouse)RepositoryFactory.getInstance().getWarehousesRepository().getByCode(warehouseCode);
-                            if(Warehouse==null){
-                                Warehouse = new Warehouse();
-                                Warehouse.setCode(warehouseCode);
-                                Warehouse.setDescription("");
-                                Warehouse.setResponsable("SUP");
-                                RepositoryFactory.getInstance().getWarehousesRepository().save(Warehouse);
-                            }
-
-                            //Update the warehouse existences
-                            RepositoryFactory.getInstance().getExistalmasRepository().updateExistences(warehouseCode, productCode, existence);
-                            
-                        }catch (Exception ex) {
-                            LoggerUtility.getSingleton().logError(PrincipViewController.class, ex);
-                            try {
-                                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
-                            } catch (Exception ex1) {
-                                Logger.getLogger(PrincipViewController.class.getName()).log(Level.SEVERE, null, ex1);
-                            }
-                        }
-                    });
-                    WarehouseExistencesWorkbook.load();
+                    BaseSwingWorker.execute();
 
                 }catch (Exception ex) {
                     LoggerUtility.getSingleton().logError(PrincipViewController.class, ex);

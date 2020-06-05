@@ -20,6 +20,7 @@ public class BaseSwingWorker extends SwingWorker {
     
     protected ISwingWorkerActions ISwingWorkerActions;
     private boolean showLoading;
+    private boolean blockComponents = true;
     private BaseJFrame BaseJFrame;
 
     @Override
@@ -34,8 +35,11 @@ public class BaseSwingWorker extends SwingWorker {
                 
                 if(showLoading){
                     
-                    //Disable all the jframe components
-                    BaseJFrame.getJComponentUtils().disableAllComponents(BaseJFrame);
+                    if(blockComponents){
+                        
+                        //Disable all the jframe components
+                        BaseJFrame.getJComponentUtils().disableAllComponents(BaseJFrame);
+                    }
 
                     //Show the loading database window
                     final LoadingWaitJFrame LoadingWaitJFrame = ViewsFactory.getSingleton().getLoadingWaitJFrame();
@@ -51,6 +55,11 @@ public class BaseSwingWorker extends SwingWorker {
         
         return Object;
     }
+
+    public void setBlockComponents(boolean blockComponents) {
+        this.blockComponents = blockComponents;
+    }
+    
 
     public void setShowLoading(final BaseJFrame BaseJFrame) {
         this.showLoading = true;
@@ -68,8 +77,11 @@ public class BaseSwingWorker extends SwingWorker {
                 
             if(showLoading){
                 
-                //Enable all the jframe components
-                BaseJFrame.getJComponentUtils().enableAllComponents(BaseJFrame);
+                if(blockComponents){
+                    
+                    //Enable all the jframe components
+                    BaseJFrame.getJComponentUtils().enableAllComponents(BaseJFrame);
+                }                
                     
                 //Hide the loading database window
                 final LoadingWaitJFrame LoadingWaitJFrame = ViewsFactory.getSingleton().getLoadingWaitJFrame();
