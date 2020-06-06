@@ -70,6 +70,10 @@ public class PrevCompViewController extends PrevCompJFrame {
         }
     }
     
+    @Override
+    public void loadModelInFields(Object ObjectModel) throws  Exception {        
+    }
+    
     private void jBNewActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	

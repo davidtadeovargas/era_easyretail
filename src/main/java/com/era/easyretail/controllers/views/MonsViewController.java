@@ -58,6 +58,10 @@ public class MonsViewController extends MonsJFrame {
     }
     
     @Override
+    public void loadModelInFields(Object ObjectModel) throws  Exception {        
+    }
+    
+    @Override
     public void clearFields(){
     }
     

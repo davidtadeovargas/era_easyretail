@@ -121,6 +121,10 @@ public class NewVtaViewController extends NewVtaJFrame {
     public void clearFields(){
     }
     
+    @Override
+    public void loadModelInFields(Object ObjectModel) throws  Exception {        
+    }
+    
     private void jBGuarActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	

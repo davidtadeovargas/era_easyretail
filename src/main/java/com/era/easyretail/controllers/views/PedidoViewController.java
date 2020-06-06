@@ -79,6 +79,10 @@ public class PedidoViewController extends PedidoJFrame {
     public void clearFields(){
     }
     
+    @Override
+    public void loadModelInFields(Object ObjectModel) throws  Exception {        
+    }
+    
     private void jButtonSalirActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	

@@ -59,6 +59,10 @@ public class SalidaEntradaViewController extends SalidaEntradaJFrame {
     public void clearFields(){
     }
     
+    @Override
+    public void loadModelInFields(Object ObjectModel) throws  Exception {        
+    }
+    
     private void jBtnActivoActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	

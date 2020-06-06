@@ -70,6 +70,10 @@ public class TraspasViewController extends TraspasJFrame{
         }
     }
     
+    @Override
+    public void loadModelInFields(Object ObjectModel) throws  Exception {        
+    }
+    
     private void jBPrec1ActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	

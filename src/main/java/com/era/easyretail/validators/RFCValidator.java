@@ -14,7 +14,7 @@ import org.apache.commons.lang3.math.NumberUtils;
 public class RFCValidator {
 
     private String RFC;
-    private boolean moral;    
+    private boolean moral;
     private final String genericRFC = "XAXX010101000";
     
     
@@ -37,7 +37,7 @@ public class RFCValidator {
         RFC = RFC.toUpperCase().trim();
         
         if(isRFCGeneric()){
-            throw new Exception("El RFC es genérico");
+            throw new Exception("errors_rfc_validator_1");
         }
         
         //If length is valid continue
@@ -45,22 +45,22 @@ public class RFCValidator {
 
             //Validation
             if(NumberUtils.isDigits(RFC.substring(0, 1)) || NumberUtils.isDigits(RFC.substring(1, 2)) || NumberUtils.isDigits(RFC.substring(2, 3))){                
-                throw new Exception("Los primeros 3 caracteres del RFC deben ser letras.");
+                throw new Exception("errors_rfc_validator_2");
             }
 
             //Validation
             if(Integer.parseInt(RFC.substring(5, 7)) > 12){
-                throw new Exception("Los dígitos 6 y 7 del mes del RFC no deben ser mayor a 12");
+                throw new Exception("errors_rfc_validator_3");
             }
 
             //Validate
             if(Integer.parseInt(RFC.substring(7, 9)) > 31){
-                throw new Exception("Los dígitos 8 y 9 del día no deben ser mayores a 31");
+                throw new Exception("errors_rfc_validator_4");
             }
         }
         //Else invalid inital length
         else{
-            throw new Exception("La longitud debe ser de 12 dítigos para persona moral");
+            throw new Exception("errors_rfc_validator_5");
         }
         
         //Al is fine with the moral
@@ -73,7 +73,7 @@ public class RFCValidator {
         RFC = RFC.toUpperCase().trim();
         
         if(isRFCGeneric()){
-            throw new Exception("El RFC es genérico");
+            throw new Exception("errors_rfc_validator_1");
         }
         
         if(RFC.length()==13) {
@@ -83,19 +83,19 @@ public class RFCValidator {
             }
 
             if(!NumberUtils.isDigits(RFC.substring(5, 6)) || !NumberUtils.isDigits(RFC.substring(6, 7)) || !NumberUtils.isDigits(RFC.substring(7, 8)) || !NumberUtils.isDigits(RFC.substring(8, 9)) || !NumberUtils.isDigits(RFC.substring(9, 10))){                
-                throw new Exception("Los dígitos del 5 al 10 deben ser numéricos");
+                throw new Exception("errors_rfc_validator_7");
             }                                    
 
             if(Integer.parseInt(RFC.substring(6, 8)) > 12){
-                throw new Exception("Los dígitos 7 y 8 del mes del RFC no deben ser mayor a 12");
+                throw new Exception("errors_rfc_validator_8");
             }
 
             if(Integer.parseInt(RFC.substring(8, 10)) > 31){
-                throw new Exception("Los dígitos 9 y 10 del día no deben ser mayores a 31");
+                throw new Exception("errors_rfc_validator_9");
             }
         }
         else{
-            throw new Exception("La longitud debe ser de 13 dítigos para persona física");
+            throw new Exception("errors_rfc_validator_10");
         }
         
         //All was good

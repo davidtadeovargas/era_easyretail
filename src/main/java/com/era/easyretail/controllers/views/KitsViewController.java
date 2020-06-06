@@ -56,6 +56,10 @@ public class KitsViewController extends KitsJFrame {
     public void clearFields(){            
     }
     
+    @Override
+    public void loadModelInFields(Object ObjectModel) throws  Exception {        
+    }
+    
     private void jBDelActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	

@@ -50,6 +50,10 @@ public class DevPVtaPtoViewController extends DevPVtaPtoJFrame {
     }
     
     @Override
+    public void loadModelInFields(Object ObjectModel) throws  Exception {        
+    }
+    
+    @Override
     public void clearFields(){            
     }
     

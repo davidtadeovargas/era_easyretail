@@ -55,6 +55,10 @@ public class Impuestos_X_productos_nuevoViewController extends Impuestos_X_produ
     public void clearFields(){            
     }
     
+    @Override
+    public void loadModelInFields(Object ObjectModel) throws  Exception {        
+    }
+    
     private void jBTodActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	

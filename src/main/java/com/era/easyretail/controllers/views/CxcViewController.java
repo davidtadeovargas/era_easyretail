@@ -70,6 +70,10 @@ public class CxcViewController extends CxcJFrame {
     public void clearFields(){            
     }
     
+    @Override
+    public void loadModelInFields(Object ObjectModel) throws  Exception {        
+    }
+    
     private void ActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	

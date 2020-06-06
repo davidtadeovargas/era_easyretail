@@ -41,6 +41,10 @@ public class ReportsViewController extends ReportsJFrame {
     }    
 
     @Override
+    public void loadModelInFields(Object ObjectModel) throws  Exception {        
+    }
+    
+    @Override
     public void clearFields(){
     }
     

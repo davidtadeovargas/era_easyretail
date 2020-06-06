@@ -16,6 +16,10 @@ public class CompanysValidatorsExceptions {
        return new Exception("El registro no paso las validaciones");
    }
 
+   public Exception getRFCVaidationException(){
+       return new Exception("El RFC no paso las validaciones");
+   }
+   
    public Exception getModelNotExistsException(){
        return new Exception("El registro no existe");
    }

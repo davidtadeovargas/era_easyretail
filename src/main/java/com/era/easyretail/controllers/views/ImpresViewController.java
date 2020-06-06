@@ -99,6 +99,10 @@ public class ImpresViewController extends ImpresJFrame {
     public void clearFields(){            
     }
     
+    @Override
+    public void loadModelInFields(Object ObjectModel) throws  Exception {        
+    }
+    
     private void jBMosTActionPerformed(java.awt.event.ActionEvent evt) {                                        
         
         try{

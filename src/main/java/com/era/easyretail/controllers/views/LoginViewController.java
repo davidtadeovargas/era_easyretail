@@ -96,6 +96,11 @@ public class LoginViewController extends LoginJFrame {
         }
     }
 
+    
+    @Override
+    public void loadModelInFields(Object ObjectModel) throws  Exception {        
+    }
+    
     @Override
     public void clearFields(){            
     }

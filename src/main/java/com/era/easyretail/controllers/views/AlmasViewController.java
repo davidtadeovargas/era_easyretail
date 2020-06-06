@@ -118,6 +118,10 @@ public class AlmasViewController extends AlmasJFrame {
 	}
     }
     
+    @Override
+    public void loadModelInFields(Object ObjectModel) throws  Exception {        
+    }
+    
     private void saveOrUpdate(final boolean save) {
         
         try{            	

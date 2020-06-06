@@ -70,6 +70,10 @@ public class PedidosViewController extends PedidosJFrame {
     public void clearFields(){
     }
     
+    @Override
+    public void loadModelInFields(Object ObjectModel) throws  Exception {        
+    }
+    
     private void jBBuscActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	

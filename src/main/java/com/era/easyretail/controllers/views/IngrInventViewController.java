@@ -70,6 +70,10 @@ public class IngrInventViewController extends IngrInventJFrame
     public void clearFields(){            
     }
     
+    @Override
+    public void loadModelInFields(Object ObjectModel) throws  Exception {        
+    }
+    
     private void jButtonQuitarActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	

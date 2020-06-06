@@ -52,6 +52,10 @@ public class SectoresViewController extends SectoresJFrame {
     }
     
     @Override
+    public void loadModelInFields(Object ObjectModel) throws  Exception {        
+    }
+    
+    @Override
     public void clearFields(){
     }
     

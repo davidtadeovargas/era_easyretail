@@ -38,6 +38,10 @@ public class CatalogoMonedaViewController extends CatalogoMonedaJFrame {
     }
     
     @Override
+    public void loadModelInFields(Object ObjectModel) throws  Exception {        
+    }
+    
+    @Override
     public void clearFields(){            
     }
     

@@ -88,7 +88,13 @@ public class SearchViewController extends SearchJFrame {
         labelLoading.setVisible(false);
                 
         jTab = new SearchCommonJTable();
+        
+        this.BaseJTable = jTab;
                 
+    }
+    
+    @Override
+    public void loadModelInFields(Object ObjectModel) throws  Exception {        
     }
     
     @Override
@@ -450,9 +456,9 @@ public class SearchViewController extends SearchJFrame {
         switch(SearchCommonTypeEnum){
 
             case CUSTOMERS:
-                jTab.addShowColumn(TableHeaderFactory.getSigleton().getCompaniesTableHeader().getCOMPANY_CODE());
-                jTab.addShowColumn(TableHeaderFactory.getSigleton().getCompaniesTableHeader().getCOMPANY());
-                jTab.addShowColumn(TableHeaderFactory.getSigleton().getCompaniesTableHeader().getEMAIL());
+                jTab.addShowColumn(TableHeaderFactory.getSigleton().getCompanysTableHeader().getCOMPANYCODE());
+                jTab.addShowColumn(TableHeaderFactory.getSigleton().getCompanysTableHeader().getNOM());
+                jTab.addShowColumn(TableHeaderFactory.getSigleton().getCompanysTableHeader().getCO1());
                 break;
 
             case BASDATS:
@@ -522,6 +528,9 @@ public class SearchViewController extends SearchJFrame {
                 break;
 
             case SALES_MAN:
+                jTab.addShowColumn(TableHeaderFactory.getSigleton().getUsersTableHeader().getCODE());
+                jTab.addShowColumn(TableHeaderFactory.getSigleton().getUsersTableHeader().getNAME());
+                jTab.addShowColumn(TableHeaderFactory.getSigleton().getUsersTableHeader().getEMAIL());
                 break;
 
             case MODELS:
@@ -567,12 +576,18 @@ public class SearchViewController extends SearchJFrame {
                 break;
 
             case CPS:
+                jTab.addShowColumn(TableHeaderFactory.getSigleton().getCCodigoPostalsTableHeader().getC_CODIGO_POSTAL());
+                jTab.addShowColumn(TableHeaderFactory.getSigleton().getCCodigoPostalsTableHeader().getC_MUNICIPIO());
+                jTab.addShowColumn(TableHeaderFactory.getSigleton().getCCodigoPostalsTableHeader().getC_ESTADO());
                 break;
 
             case EXPEDITION_PLACE:
                 break;
 
             case COUNTRIES:
+                jTab.addShowColumn(TableHeaderFactory.getSigleton().getCCountriesTableHeader().getC_PAIS());
+                jTab.addShowColumn(TableHeaderFactory.getSigleton().getCCountriesTableHeader().getDESCRIPTION());
+                jTab.addShowColumn(TableHeaderFactory.getSigleton().getCCountriesTableHeader().getAGRUPACIONES());                                
                 break;                   
 
             case SECTORS:               

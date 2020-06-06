@@ -66,7 +66,7 @@ public class UsrsViewController extends UsrsJFrame {
             this.BaseJTable.addShowColumn(TableHeaderFactory.getSigleton().getUsersTableHeader().getROWNUMBER());
             this.BaseJTable.addShowColumn(TableHeaderFactory.getSigleton().getUsersTableHeader().getCODE());
             this.BaseJTable.addShowColumn(TableHeaderFactory.getSigleton().getUsersTableHeader().getNAME());
-            this.BaseJTable.loadAllItemsInTable();            
+            this.BaseJTable.loadAllItemsInTable();
             
             //When the table is selected
             jTab.setITableRowSelected((ListSelectionEvent lse, Object Object) -> {
@@ -130,6 +130,10 @@ public class UsrsViewController extends UsrsJFrame {
     
     @Override
     public void clearFields(){
+    }
+    
+    @Override
+    public void loadModelInFields(Object ObjectModel) throws  Exception {        
     }
     
     private void jBVeActionPerformed(java.awt.event.ActionEvent evt) {

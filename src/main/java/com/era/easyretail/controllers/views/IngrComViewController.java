@@ -74,6 +74,10 @@ public class IngrComViewController extends IngrComJFrame {
     public void clearFields(){            
     }
     
+    @Override
+    public void loadModelInFields(Object ObjectModel) throws  Exception {        
+    }
+    
     private void jBGuarActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	

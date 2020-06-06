@@ -49,6 +49,10 @@ public class VOrdsViewController extends VOrdsJFrame {
     public void clearFields(){
     }
     
+    @Override
+    public void loadModelInFields(Object ObjectModel) throws  Exception {        
+    }
+    
     private void jBActuaActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	

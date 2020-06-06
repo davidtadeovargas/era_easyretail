@@ -160,6 +160,10 @@ public class VtasViewController extends VtasJFrame {
     public void clearFields(){
     }
     
+    @Override
+    public void loadModelInFields(Object ObjectModel) throws  Exception {        
+    }
+    
     private void jBAbrNotCredActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	

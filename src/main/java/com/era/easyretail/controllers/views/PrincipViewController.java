@@ -275,6 +275,10 @@ public class PrincipViewController extends PrincipJFrame {
         }
     }
     
+    @Override
+    public void loadModelInFields(Object ObjectModel) throws  Exception {        
+    }
+    
     private void loadWarehousesExistencesFromExcel(String absolutePath, String fileName){
         
         try{

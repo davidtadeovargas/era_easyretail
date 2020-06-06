@@ -43,6 +43,10 @@ public class VAbonsViewController extends VAbonsJFrame {
     public void clearFields(){
     }
     
+    @Override
+    public void loadModelInFields(Object ObjectModel) throws  Exception {        
+    }
+    
     private void jBSalActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	

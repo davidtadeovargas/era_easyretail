@@ -49,6 +49,10 @@ public class SalidaViewController extends SalidaJFrame {
     }
     
     @Override
+    public void loadModelInFields(Object ObjectModel) throws  Exception {        
+    }
+    
+    @Override
     public void clearFields(){
     }
     

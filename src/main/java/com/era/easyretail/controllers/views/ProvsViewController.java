@@ -43,6 +43,10 @@ public class ProvsViewController extends ProvsJFrame {
     }
     
     @Override
+    public void loadModelInFields(Object ObjectModel) throws  Exception {        
+    }
+    
+    @Override
     public void clearFields(){
     }
     

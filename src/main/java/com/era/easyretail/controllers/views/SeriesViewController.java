@@ -52,6 +52,10 @@ public class SeriesViewController extends SeriesJFrame {
     public void clearFields(){
     }
     
+    @Override
+    public void loadModelInFields(Object ObjectModel) throws  Exception {        
+    }
+    
     private void jBMostTActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	

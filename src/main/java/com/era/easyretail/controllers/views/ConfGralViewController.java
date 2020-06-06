@@ -124,6 +124,10 @@ public class ConfGralViewController extends ConfGralJFrame {
     }
     
     @Override
+    public void loadModelInFields(Object ObjectModel) throws  Exception {        
+    }
+    
+    @Override
     public void clearFields(){            
     }
     

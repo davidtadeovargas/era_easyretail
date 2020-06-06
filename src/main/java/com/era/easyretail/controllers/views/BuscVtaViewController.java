@@ -41,6 +41,10 @@ public class BuscVtaViewController extends BuscVtaJFrame {
     }
     
     @Override
+    public void loadModelInFields(Object ObjectModel) throws  Exception {        
+    }
+    
+    @Override
     public void clearFields(){            
     }
     

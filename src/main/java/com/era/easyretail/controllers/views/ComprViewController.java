@@ -98,6 +98,10 @@ public class ComprViewController extends ComprJFrame {
     }
     
     @Override
+    public void loadModelInFields(Object ObjectModel) throws  Exception {        
+    }
+    
+    @Override
     public void clearFields(){            
     }
     

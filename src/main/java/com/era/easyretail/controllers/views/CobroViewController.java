@@ -55,6 +55,10 @@ public class CobroViewController extends CobroJFrame {
     public void clearFields(){            
     }
     
+    @Override
+    public void loadModelInFields(Object ObjectModel) throws  Exception {        
+    }
+    
     private void jBCobActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	

@@ -64,6 +64,10 @@ public class OptPtoVtaViewController extends OptPtoVtaJFrame {
     public void clearFields(){
     }
     
+    @Override
+    public void loadModelInFields(Object ObjectModel) throws  Exception {        
+    }
+    
     private void jBSalActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	

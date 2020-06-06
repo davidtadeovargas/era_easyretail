@@ -202,6 +202,10 @@ public class EmpresasViewController extends EmpresasJFrame {
         }
     }
       
+    @Override
+    public void loadModelInFields(Object ObjectModel) throws  Exception {        
+    }
+    
     private void buttonSearchExpeditionPlaceClicked(ActionEvent e){
      
         try{

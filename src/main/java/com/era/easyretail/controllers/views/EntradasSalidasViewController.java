@@ -65,6 +65,10 @@ public class EntradasSalidasViewController extends EntradasSalidasJFrame {
     }
     
     @Override
+    public void loadModelInFields(Object ObjectModel) throws  Exception {        
+    }
+    
+    @Override
     public void clearFields(){            
     }
     

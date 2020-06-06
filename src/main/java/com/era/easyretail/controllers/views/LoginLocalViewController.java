@@ -62,6 +62,10 @@ public class LoginLocalViewController extends LoginLicenseJFrame {
     public void clearFields(){            
     }
     
+    @Override
+    public void loadModelInFields(Object ObjectModel) throws  Exception {        
+    }
+    
     private void loginButtonClicked(){
         
         //Validate all the validator model errors and show messages acordly
