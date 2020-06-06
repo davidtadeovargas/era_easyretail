@@ -22,7 +22,10 @@ import javax.swing.JFrame;
 import com.era.easyretail.validators.RFCValidator;
 import com.era.easyretail.validators.EmailValidator;
 import com.era.easyretail.validators.WebsitelValidator;
+import com.era.models.CCodigopostal;
+import com.era.models.CCountry;
 import com.era.models.PaymentForm;
+import com.era.models.UsoCFDI;
 /**
  *
  * @author PC
@@ -136,8 +139,7 @@ public class ClientViewController extends ClientJFrame {
         jTNoInt.setText(Company.getNoint());
         jTNoExt.setText(Company.getNoext());
         jTDCred.setText(Company.getDiacred());
-        jTLimCred.setText(String.valueOf(Company.getLimtcred()));
-        jComFormPag.setSelectedItem(Company.getMetpag());
+        jTLimCred.setText(String.valueOf(Company.getLimtcred()));        
         jTCta.setText(Company.getCta());
         jComList.setSelectedItem(String.valueOf(Company.getList()));        
         jCBloq.setSelected(Company.isBloq());
@@ -152,9 +154,16 @@ public class ClientViewController extends ClientJFrame {
         NumberFormat n = NumberFormat.getCurrencyInstance(Locale.US);
         double dCant = Double.parseDouble(sDepGar);                
         sDepGar = n.format(dCant);        
-
-        //final UsoCFDI UsoCFDI = (UsoCFDI)RepositoryFactory.getInstance().getUsoCFDIsRepository().getByCode(Company.getCompanyCode());
-        //jComUsoCfdi.setSelectedItem(UsoCFDI.getCode());
+        
+        final String usoCFI = Company.getUsocfdi();
+        final UsoCFDI UsoCFDI = (UsoCFDI)RepositoryFactory.getInstance().getUsoCFDIsRepository().getByCode(usoCFI);
+        if(UsoCFDI != null){
+            jComUsoCfdi.selectByObject(UsoCFDI);            
+        }
+        final PaymentForm PaymentForm = (PaymentForm)RepositoryFactory.getInstance().getPaymentFormsRepository().getByCode(Company.getMetpag());
+        if(PaymentForm != null){
+            jComFormPag.selectByObject(PaymentForm);
+        }
     }
     
     @Override
@@ -289,32 +298,19 @@ public class ClientViewController extends ClientJFrame {
                 return;
             }
             
-            //Validate that the customer exists before continue
-            if(this.CompanyGlobal != null){
+            //New customer
+            if(this.CompanyGlobal == null){
                 
+                //Validate that the customer doesnt exists before continue
                 final Company Company = RepositoryFactory.getInstance().getCompanysRepository().getCustomerByCode(companyCode);
-                if(Company == null){
-                    DialogsFactory.getSingleton().showErrorOKRecordNotExistsCallbackDialog(baseJFrame, (JFrame jFrame) -> {
+                if(Company != null){
+                    DialogsFactory.getSingleton().showErrorRecordExistsOKDialog(baseJFrame, (JFrame jFrame) -> {
                         jTCodCli.requestFocus();
                     });
                     return;
                 }
-            }
-                        
-            //Get the salesman code
-            final String salesmanCode = jTVend.getText().trim();
-            
-            //Validate if apply that the sales person exists before continue
-            if(!salesmanCode.isEmpty()){
-                final User User = (User)RepositoryFactory.getInstance().getUsersRepository().getByCode(salesmanCode);
-                if(User == null){
-                    DialogsFactory.getSingleton().showErrorOKRecordNotExistsCallbackDialog(baseJFrame, (JFrame jFrame) -> {
-                        jTVend.requestFocus();
-                    });
-                    return;
-                }
-            }
-            
+            }            
+                  
             //Validate that the RFC be valid
             try{
 
@@ -333,14 +329,14 @@ public class ClientViewController extends ClientJFrame {
                 });
                 return;
             }
-
+            
             //Validate that the RFC doesnt exists
             Company Company_;                
-            if(this.CompanyGlobal != null){
+            if(this.CompanyGlobal != null){ //Update 
                 Company_ = RepositoryFactory.getInstance().getCompanysRepository().rfcExists(RFC, this.CompanyGlobal.getRFC());
             }
-            else{
-                Company_ = RepositoryFactory.getInstance().getCompanysRepository().rfcExists(RFC, RFC);
+            else{ //New
+                Company_ = RepositoryFactory.getInstance().getCompanysRepository().rfcExists(RFC);
             }
             if(Company_ != null){
                 DialogsFactory.getSingleton().showErrorOKCallbackDialog(baseJFrame, "errors_rfc_exists", (JFrame jFrame) -> {
@@ -348,7 +344,35 @@ public class ClientViewController extends ClientJFrame {
                 });
                 return;
             }
+            
+            //Get the salesman code
+            final String salesmanCode = jTVend.getText().trim();
+            
+            //Validate if apply that the sales person exists before continue
+            if(!salesmanCode.isEmpty()){
+                final User User = (User)RepositoryFactory.getInstance().getUsersRepository().getByCode(salesmanCode);
+                if(User == null){
+                    DialogsFactory.getSingleton().showErrorOKRecordNotExistsCallbackDialog(baseJFrame, (JFrame jFrame) -> {
+                        jTVend.requestFocus();
+                    });
+                    return;
+                }
+            }
                         
+            //Get the country code
+            final String countryCode = jTPai.getText().trim();
+            
+            //Validate if apply that the country code exists before continue
+            if(!countryCode.isEmpty()){
+                final CCountry CCountry = (CCountry)RepositoryFactory.getInstance().getCCountriesRepository().getByCode(countryCode);
+                if(CCountry == null){
+                    DialogsFactory.getSingleton().showErrorOKRecordNotExistsCallbackDialog(baseJFrame, (JFrame jFrame) -> {
+                        jTPai.requestFocus();
+                    });
+                    return;
+                }
+            }
+            
             //Get emails
             final String email = jTCo1.getText().trim();
             final String email2 = jTCo2.getText().trim();
@@ -400,6 +424,21 @@ public class ClientViewController extends ClientJFrame {
                 }catch(Exception e){
                     DialogsFactory.getSingleton().showErrorOKCallbackDialog(baseJFrame, e.getMessage(), (JFrame jFrame) -> {
                         jTPag1.grabFocus();
+                    });
+                    return;
+                }
+            }
+            
+            //Get web page
+            final String cp = jTCP.getText().trim();
+            
+            //If defined CP validate that exists
+            if(!cp.isEmpty()){
+                
+                final CCodigopostal CCodigopostal = RepositoryFactory.getInstance().getCCodigoPostalRepository().getByPostalCode(cp);
+                if(CCodigopostal == null){
+                    DialogsFactory.getSingleton().showErrorOKRecordNotExistsCallbackDialog(baseJFrame, (JFrame jFrame) -> {
+                        jTCP.requestFocus();
                     });
                     return;
                 }
@@ -460,39 +499,46 @@ public class ClientViewController extends ClientJFrame {
                     else{
                         Company = CompanyGlobal;
                     }
-                           
-                    Company.setCompanyCode(jTCodCli.getText().trim());
-                    Company.setNom(jTRazSoc.getText());
-                    Company.setTel(jTTel.getText());                    
+                     
+                    //Get selected object
+                    final UsoCFDI UsoCFDI = (UsoCFDI)jComUsoCfdi.getSelectedObject();
+                    String usoCFDI = "";
+                    if(UsoCFDI != null){
+                        usoCFDI = UsoCFDI.getCode();
+                    }
+                            
+                    Company.setCompanyCode(companyCode);
+                    Company.setNom(companyName);                    
+                    Company.setTel(jTTel.getText());
+                    Company.setUsocfdi(usoCFDI);
                     Company.setBanc(jTBanc.getText());
                     Company.setCtapred(jTCtaPred.getText());
-                    Company.setCta(jTClavBanc.getText());        
+                    Company.setClavbanc(jTClavBanc.getText());
                     Company.setBloqlimcred((sBloqCred.equals("1")));
                     Company.setCtaconta(jTCtaConta.getText());
-                    Company.setCel(jTCel.getText().replace("'", "''"));
-                    Company.setExten(jTExten.getText().replace("'", "''"));
-                    Company.setTelper1(jTTelPer1.getText().replace("'", "''"));
-                    Company.setLada(jTLada.getText().replace("'", "''"));
-                    Company.setVend(jTVend.getText().replace("'", "''"));
-                    Company.setCalle(jTCall.getText().replace("'", "''"));                    
-                    Company.setCol(jTCol.getText().replace("'", "''"));
-                    Company.setCP(jTCP.getText().replace("'", "''"));
-                    Company.setCiu(jTCiu.getText().replace("'", "''"));
-                    Company.setEstad(jTEstad.getText().replace("'", "''"));
-                    Company.setPai(jTPai.getText().replace("'", "''"));
-                    Company.setRFC(jTRFC.getText().replace("'", "''"));
+                    Company.setCel(jTCel.getText());
+                    Company.setExten(jTExten.getText());
+                    Company.setTelper1(jTTelPer1.getText());
+                    Company.setLada(jTLada.getText());
+                    Company.setVend(salesmanCode);
+                    Company.setCalle(jTCall.getText());                    
+                    Company.setCol(jTCol.getText());
+                    Company.setCP(cp);
+                    Company.setCiu(jTCiu.getText());
+                    Company.setEstad(jTEstad.getText());
+                    Company.setPai(countryCode);
+                    Company.setRFC(RFC);
                     Company.setDescu(Float.parseFloat(sDesc));
-                    Company.setCo1(jTCo1.getText().replace("'", "''"));
-                    Company.setCo2(jTCo2.getText().replace("'", "''"));
-                    Company.setPagweb1(jTPag1.getText().replace("'", "''"));
-                    Company.setCurp(jTCURP.getText().replace("'", "''"));
-                    Company.setExten(jTNoExt.getText().replace("'", "''"));
-                    Company.setNoint(jTNoInt.getText().replace("'", "''"));
+                    Company.setCo1(email);
+                    Company.setCo2(email2);
+                    Company.setPagweb1(webpage);
+                    Company.setCurp(jTCURP.getText());
+                    Company.setExten(jTNoExt.getText());
+                    Company.setNoint(jTNoInt.getText());
                     Company.setDiacred(sDiaCred);                    
                     Company.setLimtcred(Float.parseFloat(sLimCred));
                     Company.setBloq(sBloq.equals("1"));
                     Company.setPers(sPers);
-                    Company.setUsocfdi("");
                     Company.setMetpag(PaymentForm.getCode());
                     Company.setCta(sCta);
                     Company.setList(Integer.parseInt(sList));

@@ -13,3 +13,4 @@ target/classes/com/era/easyretail/controllers/views/EmpresasViewController$1.cla
 target/classes/com/era/easyretail/controllers/views/PrincipViewController$1.class
 target/classes/com/era/easyretail/controllers/views/PrincipViewController.class
 log.log
+*.class
