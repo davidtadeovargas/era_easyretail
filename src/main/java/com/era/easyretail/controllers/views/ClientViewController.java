@@ -39,7 +39,7 @@ public class ClientViewController extends ClientJFrame {
         
         try{
             
-            this.getRootPane().setDefaultButton(jBGuar);            
+            this.getRootPane().setDefaultButton(jBGuar);
             
             jTRazSoc.grabFocus();
           
@@ -170,21 +170,6 @@ public class ClientViewController extends ClientJFrame {
     public void clearFields(){
     }
     
-    private void ActionPerformed(java.awt.event.ActionEvent evt) {                                             
-
-	try{            	
-            
-	}
-	catch (Exception ex) {
-            LoggerUtility.getSingleton().logError(ClientViewController.class, ex);
-            try {
-                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
-            } catch (Exception ex1) {
-                Logger.getLogger(ClientViewController.class.getName()).log(Level.SEVERE, null, ex1);
-            }
-	}
-    }
-    
     private void jBPaisActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	
@@ -259,7 +244,7 @@ public class ClientViewController extends ClientJFrame {
             
             //Question if continue
             DialogsFactory.getSingleton().showQuestionExitDialog(baseJFrame, (JFrame jFrame) -> {
-                dispose();                
+                dispose();
             });
 	}
 	catch (Exception ex) {
@@ -489,7 +474,7 @@ public class ClientViewController extends ClientJFrame {
                         sBloqCred = "1";
 
                     //Get the selected payment method            
-                    PaymentForm PaymentForm = jComFormPag.getSelectedObject();
+                    PaymentForm PaymentForm = (PaymentForm)jComFormPag.getSelectedObject();
             
                     //If edit or new customer
                     Company Company;

@@ -143,7 +143,7 @@ public class SearchViewController extends SearchJFrame {
             switch(SearchCommonTypeEnum){
 
                 case CUSTOMERS:
-                    list = RepositoryManager_.getCompanysRepository().getAll();                    
+                    list = RepositoryManager_.getCompanysRepository().getAll();
                     break;
                     
                 case BASDATS:
@@ -543,9 +543,15 @@ public class SearchViewController extends SearchJFrame {
                 break;
 
             case ZONES:
+                jTab.addShowColumn(TableHeaderFactory.getSigleton().getZonasTableHeader().getCOD());
+                jTab.addShowColumn(TableHeaderFactory.getSigleton().getZonasTableHeader().getDESCRIP());
+                jTab.addShowColumn(TableHeaderFactory.getSigleton().getZonasTableHeader().getESTAC());
                 break;
 
             case GIROS:
+                jTab.addShowColumn(TableHeaderFactory.getSigleton().getGirosTableHeader().getGIR());
+                jTab.addShowColumn(TableHeaderFactory.getSigleton().getZonasTableHeader().getDESCRIP());
+                jTab.addShowColumn(TableHeaderFactory.getSigleton().getZonasTableHeader().getESTAC());
                 break;
 
             case PRODDS_SERIE:
