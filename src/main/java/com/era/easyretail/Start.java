@@ -18,6 +18,7 @@ import com.era.easyretail.controllers.views.ViewControlersFactory;
 import com.era.easyretail.enums.DBFileConnectionConfigurationType;
 import com.era.httpclient.subscriber.HttpClientErrorSubscriberInterface;
 import com.era.logger.LoggerUtility;
+import com.era.models.BasDats;
 import com.era.models.License;
 import com.era.models.ServerSession;
 import com.era.repositories.utils.HibernateUtil;
@@ -26,6 +27,7 @@ import com.era.utilities.UtilitiesFactory;
 import com.era.utilities.WinRegistry;
 import com.era.views.ViewsFactory;
 import com.era.views.dialogs.DialogsFactory;
+import com.era.views.dialogs.ErrorDialogJFrame.OnOkButtonActionPerformed;
 import java.awt.event.ActionEvent;
 
 //Initialization of the system
@@ -60,7 +62,7 @@ public class Start {
             try{
                     
                 //Show the error dialog and exit system when user press ok
-                DialogsFactory.getSingleton().getErrorDialogByTextJFrame(e.getMessage(), (ActionEvent evt) -> {                    
+                DialogsFactory.getSingleton().showErrorDialogByTextJFrame(e.getMessage(), (ActionEvent evt) -> {                    
                     System.exit(-1);
                 });
 
@@ -93,12 +95,11 @@ public class Start {
         HibernateUtil.getSingleton().setHibernateConfigModelDbEmpresas(HibernateConfigModel_);
 
         //Check if the main database exists
-        boolean result = MysqlScriptsUtil.getInstance().existsDB(HibernateConfigModel_.getDatabase(), HibernateConfigModel_.getUser(), HibernateConfigModel_.getPassword(), HibernateConfigModel_.getInstance(), HibernateConfigModel_.getPort());                
+        boolean result = MysqlScriptsUtil.getInstance().existsDB(HibernateConfigModel_.getDatabase(), HibernateConfigModel_.getUser(), HibernateConfigModel_.getPassword(), HibernateConfigModel_.getInstance(), HibernateConfigModel_.getPort());
         
-        UtilitiesFactory.getSingleton().getImagesUtility().init(System.getProperty("user.dir"));
-                
         //Init the UtilityManager with the current app path
         UtilitiesFactory.getSingleton().getImagesUtility().init(System.getProperty("user.dir"));
+            
         
         if(!result) {//Else database not exists                
             dbempresasNotExists();
@@ -161,21 +162,57 @@ public class Start {
         UtilitiesFactory.getSingleton().getSessionUtility().getUser().setSucu("INICIAL");
         UtilitiesFactory.getSingleton().getSessionUtility().getUser().setEstac("INICIAL");
         
+        //Get the db test name
+        final BasDats BasDats = RepositoryFactory.getInstance().getBasDatssRepository().getDBTest();
+        
+        //Check if the dabase test exists really in the database
+        boolean testDbExists = false;
+        if(BasDats != null){
+            
+            //Get the test db name
+            final String testDbName = BasDats.getBd();
+            
+            //Ghet the hibernate config file
+            final HibernateConfigModel HibernateConfigModel_ = HibernateUtil.getSingleton().getHibernateConfigModelCurrent();
+            
+            //Verify that the test dabase exist
+            testDbExists = MysqlScriptsUtil.getInstance().existsDB(testDbName, HibernateConfigModel_.getUser(), HibernateConfigModel_.getPassword(), HibernateConfigModel_.getInstance(), HibernateConfigModel_.getPort());
+            
+            if(!testDbExists){
+                DialogsFactory.getSingleton().showErrorDialogByIdTextJFrame("errors_dbtest_not_exists_sintax", (ActionEvent evt) -> {
+                    showLoginLocalWindow();
+                });
+            }
+            else{
+                validateIfShowLoginOrContinue();
+            }
+        }
+        else{
+            validateIfShowLoginOrContinue();
+        }
+    }
+    
+    private static void validateIfShowLoginOrContinue() throws Exception {
+        
         License License = RepositoryFactory.getInstance().getLicensesRepository().getLicense();
 
-        if(License==null){
-
-            LoggerUtility.getSingleton().logInfo(Start.class, "Licenciamiento: No existe información de licenciamiento");
-
-            LoggerUtility.getSingleton().logInfo(Start.class, "Licenciamiento: Mostrando pantalla de login de licenciamiento");
-
-            //Show the license login form to create again all the license info
-            final LoginLocalViewController LoginLocalViewController = new LoginLocalViewController();                    
-            LoginLocalViewController.setVisible(true);
+        if(License.getPassword()==null){
+            showLoginLocalWindow();
         }
         else{
             getLicenseInformationFromServer();
         }
+    }
+    
+    private static void showLoginLocalWindow(){
+        
+        LoggerUtility.getSingleton().logInfo(Start.class, "Licenciamiento: No existe información de licenciamiento");
+
+        LoggerUtility.getSingleton().logInfo(Start.class, "Licenciamiento: Mostrando pantalla de login de licenciamiento");
+
+        //Show the license login form to create again all the license info
+        final LoginLocalViewController LoginLocalViewController = new LoginLocalViewController();                    
+        LoginLocalViewController.setVisible(true);
     }
     
     private static void getLicenseInformationFromServer() throws Exception {
@@ -194,7 +231,7 @@ public class Start {
                 try{
                     
                     //Show the error dialog and exit system when user press ok
-                    DialogsFactory.getSingleton().getErrorDialogByIdTextJFrame("errors_failed_connection_to_ws", (ActionEvent evt) -> {                    
+                    DialogsFactory.getSingleton().showErrorDialogByIdTextJFrame("errors_failed_connection_to_ws", (ActionEvent evt) -> {                    
                         System.exit(-1);
                     });
 

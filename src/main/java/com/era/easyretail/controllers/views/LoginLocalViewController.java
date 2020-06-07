@@ -246,7 +246,7 @@ public class LoginLocalViewController extends LoginLicenseJFrame {
 
             LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Se actualizo la serie en el registro de windows");
         }
-
+        
         final BasDats CompanyTest = ComputerLicenseDataModel.getTestCompanyDataModel().getCompanyTestDataModel();
         
         final String user = jTextFieldUser.getText().trim();
@@ -254,13 +254,22 @@ public class LoginLocalViewController extends LoginLicenseJFrame {
         
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Saving basdats info into database");
         
-        final BasDats BasDats = new BasDats();
-        BasDats.setCodemp(CompanyTest.getCodemp());
-        BasDats.setBd(CompanyTest.getBd());
-        BasDats.setNom(CompanyTest.getNom());
-                
-        //Save the basdats record
-        RepositoryFactory.getInstance().getBasDatssRepository().save(BasDats);                  
+        //Get the db test
+        BasDats BasDats = RepositoryFactory.getInstance().getBasDatssRepository().getDBTest();
+        
+        //If there is not previus basdats record
+        if(BasDats==null){
+            
+            //Create the model
+            BasDats = new BasDats();
+            BasDats.setCodemp(CompanyTest.getCodemp());
+            BasDats.setBd(CompanyTest.getBd());
+            BasDats.setNom(CompanyTest.getNom());
+            BasDats.setTest(true);
+
+            //Save in the basdats record
+            RepositoryFactory.getInstance().getBasDatssRepository().save(BasDats);
+        }
 
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Finished");
         
