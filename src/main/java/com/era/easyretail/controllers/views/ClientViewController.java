@@ -50,6 +50,8 @@ public class ClientViewController extends ClientJFrame {
             this.JComponentUtils.onKeyTypedToMayus(jTCodCli);
             this.JComponentUtils.onKeyTypedToMayus(jTRFC);
             
+            this.JComponentUtils.onlyDecimals(jTDesc);            
+            
             jBGuar.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jBGuarActionPerformed(evt);
             });
