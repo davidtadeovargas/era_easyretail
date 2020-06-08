@@ -27,6 +27,7 @@ import com.era.utilities.excel.WarehouseExistencesWorkbook;
 import com.era.utilities.excel.rows.models.CustomerExcelRowModel;
 import com.era.utilities.excel.rows.models.SupplierExcelRowModel;
 import com.era.utilities.excel.rows.models.WarehouseExistencesExcelRowModel;
+import com.era.utilities.exceptions.FilenameDontMatchException;
 import com.era.utilities.exceptions.InvalidFileExtensionException;
 import com.era.views.PrincipJFrame;
 import com.era.views.dialogs.DialogsFactory;
@@ -448,6 +449,7 @@ public class PrincipViewController extends PrincipJFrame {
                                         //Get values
                                         final String companyCode = CustomerExcelRowModel.getCompanyCode();
                                         final String name = CustomerExcelRowModel.getName();
+                                        final String RFC = CustomerExcelRowModel.getRfc();
                                         final String phone = CustomerExcelRowModel.getPhone();
                                         final String lada = CustomerExcelRowModel.getLada();
                                         final String cellphone = CustomerExcelRowModel.getCellphone();
@@ -471,7 +473,8 @@ public class PrincipViewController extends PrincipJFrame {
                                             Company = new Company();
                                             Company.setCompanyCode(companyCode);
                                         }                                        
-                                                                                
+                                               
+                                        Company.setRFC(RFC);
                                         Company.setNom(name);
                                         Company.setTel(phone);
                                         Company.setLada(lada);
@@ -728,14 +731,18 @@ public class PrincipViewController extends PrincipJFrame {
                 //Ask for the excel file path
                 final FileChooserUtility FileChooserUtility = UtilitiesFactory.getSingleton().getFileChooserUtility();
                 FileChooserUtility.addValidExtension("xlsx");
-                FileChooserUtility.addValidExtension("xls");            
+                FileChooserUtility.addValidExtension("xls");
+                FileChooserUtility.setFileNameMatch("Catalogo de clientes.xlsx");
                 FileChooserUtility.setIApproveOpption((String absolutePath, String fileName) -> {
                     loadCustomersFromExcel(absolutePath,fileName);
                 });
                 FileChooserUtility.showSaveDialog(baseJFrame);
-            
+                            
             }catch(InvalidFileExtensionException InvalidFileExtensionException){
                 DialogsFactory.getSingleton().showErrorOKCallbackDialog(baseJFrame, "errors_invalid_file_extension", null);
+            }
+            catch(FilenameDontMatchException FilenameDontMatchException){
+                DialogsFactory.getSingleton().showErrorOKCallbackDialog(baseJFrame, FilenameDontMatchException.getMessage(), null);
             }
                         
         }catch (Exception ex) {
@@ -757,7 +764,8 @@ public class PrincipViewController extends PrincipJFrame {
                 //Ask for the excel file path
                 final FileChooserUtility FileChooserUtility = UtilitiesFactory.getSingleton().getFileChooserUtility();
                 FileChooserUtility.addValidExtension("xlsx");
-                FileChooserUtility.addValidExtension("xls");            
+                FileChooserUtility.addValidExtension("xls");
+                FileChooserUtility.setFileNameMatch(com.era.easyretail.Constants.FILENAME_EXCEL_IMPORT_SUPPLIERS);
                 FileChooserUtility.setIApproveOpption((String absolutePath, String fileName) -> {
                     loadSuppliersFromExcel(absolutePath,fileName);
                 });
@@ -765,6 +773,9 @@ public class PrincipViewController extends PrincipJFrame {
             
             }catch(InvalidFileExtensionException InvalidFileExtensionException){
                 DialogsFactory.getSingleton().showErrorOKCallbackDialog(baseJFrame, "errors_invalid_file_extension", null);
+            }
+            catch(FilenameDontMatchException FilenameDontMatchException){
+                DialogsFactory.getSingleton().showErrorOKCallbackDialog(baseJFrame, FilenameDontMatchException.getMessage(), null);
             }
                         
         }catch (Exception ex) {

@@ -18,9 +18,11 @@ import com.era.models.Serie;
 import com.era.models.Supplier;
 import com.era.models.Zona;
 import com.era.repositories.RepositoryFactory;
+import com.era.utilities.UtilitiesFactory;
 import com.era.views.ProvJFrame;
 import com.era.views.comboboxes.SeriesCombobox;
 import com.era.views.dialogs.DialogsFactory;
+import java.awt.event.MouseEvent;
 import java.text.NumberFormat;
 import java.util.List;
 import java.util.Locale;
@@ -55,7 +57,59 @@ public class ProvViewController extends ProvJFrame {
             jBZon.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jBZonActionPerformed(evt);
             });
+            
+            this.JComponentUtils.limitCharacters(jTClavBanc, 16);
+            
+            this.addMouseListenerClicked(jLCorreo1, (MouseEvent evt) -> {
+                try{
+                    
+                    final String emailTo = jLCorreo1.getText().trim();
+                    UtilitiesFactory.getSingleton().getDesktopUtility().openEmailTo(emailTo);
+                
+                }catch (Exception ex) {
+                    LoggerUtility.getSingleton().logError(ProvViewController.class, ex);
+                    try {
+                        DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+                    } catch (Exception ex1) {
+                        Logger.getLogger(ProvViewController.class.getName()).log(Level.SEVERE, null, ex1);
+                    }
+                }
+            });
+            
+            this.addMouseListenerClicked(jLCorreo2, (MouseEvent evt) -> {
+                try{
+                    
+                    final String emailTo = jLCorreo2.getText().trim();
+                    UtilitiesFactory.getSingleton().getDesktopUtility().openEmailTo(emailTo);
+                
+                }catch (Exception ex) {
+                    LoggerUtility.getSingleton().logError(ProvViewController.class, ex);
+                    try {
+                        DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+                    } catch (Exception ex1) {
+                        Logger.getLogger(ProvViewController.class.getName()).log(Level.SEVERE, null, ex1);
+                    }
+                }
+            });
                         
+            this.addMouseListenerClicked(jLPag1, (MouseEvent evt) -> {
+                try{
+                    
+                    final String url = jLPag1.getText().trim();
+                    UtilitiesFactory.getSingleton().getDesktopUtility().openURL(url);
+                
+                }catch (Exception ex) {
+                    LoggerUtility.getSingleton().logError(ProvViewController.class, ex);
+                    try {
+                        DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+                    } catch (Exception ex1) {
+                        Logger.getLogger(ProvViewController.class.getName()).log(Level.SEVERE, null, ex1);
+                    }
+                }
+            });
+            
+            this.JComponentUtils.moneyFormat(jTLimiCred);
+            
             this.getRootPane().setDefaultButton(jBGuar);
             
             jTNomb.grabFocus();
@@ -406,11 +460,11 @@ public class ProvViewController extends ProvJFrame {
                     String sLimCred = jTLimiCred.getText();
 
                     if(sLimCred.compareTo("")==0)
-                        sLimCred    = "0";
+                        sLimCred = "0";
 
-                    sLimCred        = sLimCred.replace("$", "");
+                    sLimCred = sLimCred.replace("$", "");
 
-                    sLimCred        = sLimCred.replace(",", "");
+                    sLimCred = sLimCred.replace(",", "");
 
                     String  sOtrMon;
                     if(jCOtraMon.isSelected())

@@ -26,6 +26,8 @@ import com.era.models.CCodigopostal;
 import com.era.models.CCountry;
 import com.era.models.PaymentForm;
 import com.era.models.UsoCFDI;
+import com.era.views.dialogs.ErrorDialogJFrame;
+import java.awt.event.ActionEvent;
 /**
  *
  * @author PC
@@ -43,9 +45,13 @@ public class ClientViewController extends ClientJFrame {
             
             jTRazSoc.grabFocus();
           
+            this.JComponentUtils.moneyFormat(jTLimCred);
+            
             this.JComponentUtils.onlyNumbers(jTCta);            
             this.JComponentUtils.onlyNumbers(jTClavBanc);
 
+            this.JComponentUtils.limitCharacters(jTClavBanc, 16);
+            
             this.JComponentUtils.onKeyTypedToMayus(jTRazSoc);
             this.JComponentUtils.onKeyTypedToMayus(jTCodCli);
             this.JComponentUtils.onKeyTypedToMayus(jTRFC);
@@ -428,6 +434,19 @@ public class ClientViewController extends ClientJFrame {
                         jTCP.requestFocus();
                     });
                     return;
+                }
+            }
+            
+            //Get the record
+            final String clabeBank = jTClavBanc.getText().trim();
+            
+            //Validate that the bank clabe be into limits size
+            if(!clabeBank.isEmpty()){
+                if(clabeBank.length()!=16){                    
+                    DialogsFactory.getSingleton().showErrorOKCallbackDialog(baseJFrame,"errors_clabe_not_in_correct_size", (JFrame jFrame) -> {
+                        jTClavBanc.grabFocus();
+                    });
+                    return;                    
                 }
             }
             
