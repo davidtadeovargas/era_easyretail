@@ -15,14 +15,17 @@ import com.era.models.BasDats;
 import com.era.models.Company;
 import com.era.models.Confgral;
 import com.era.models.User;
+import com.era.models.Supplier;
 import com.era.models.Warehouse;
 import com.era.repositories.RepositoryFactory;
 import com.era.utilities.FileChooserUtility;
 import com.era.utilities.UtilitiesFactory;
 import com.era.utilities.WinRegistry;
 import com.era.utilities.excel.CustomersWorkbook;
+import com.era.utilities.excel.SuppliersWorkbook;
 import com.era.utilities.excel.WarehouseExistencesWorkbook;
 import com.era.utilities.excel.rows.models.CustomerExcelRowModel;
+import com.era.utilities.excel.rows.models.SupplierExcelRowModel;
 import com.era.utilities.excel.rows.models.WarehouseExistencesExcelRowModel;
 import com.era.utilities.exceptions.InvalidFileExtensionException;
 import com.era.views.PrincipJFrame;
@@ -195,6 +198,9 @@ public class PrincipViewController extends PrincipJFrame {
             });
             jMAcerc.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jMAcercActionPerformed(evt);
+            });
+            jMImpProvs.addActionListener((java.awt.event.ActionEvent evt) -> {
+                jMImpProvsActionPerformed(evt);
             });
             addWindowListener(new java.awt.event.WindowAdapter() {
                 @Override
@@ -556,6 +562,163 @@ public class PrincipViewController extends PrincipJFrame {
         }
     }
     
+    private void loadSuppliersFromExcel(String absolutePath, String fileName){
+        
+        try{
+            
+            //Question if really continue
+            DialogsFactory.getSingleton().showQuestionContinueDialog(baseJFrame, (JFrame jFrame) -> {
+            
+                try{
+                    
+                    final BaseSwingWorker BaseSwingWorker = new BaseSwingWorker();
+                    BaseSwingWorker.setShowLoading(baseJFrame);
+                    BaseSwingWorker.setISwingWorkerActions(new ISwingWorkerActions(){
+
+                        @Override
+                        public void before() {
+                            
+                        }
+
+                        @Override
+                        public Object doinbackground() {
+                            
+                            try{
+                                
+                                //Load the warehouses existences
+                                final SuppliersWorkbook SuppliersWorkbook = new SuppliersWorkbook();
+                                SuppliersWorkbook.setFilePath(absolutePath + "\\" + fileName);                    
+                                SuppliersWorkbook.setOnFinish(() -> {
+
+                                    
+                                });
+                                SuppliersWorkbook.setOnCellRender((Object CellModel) -> {
+                                    try{
+
+                                        //Cast model
+                                        final SupplierExcelRowModel SupplierExcelRowModel = (SupplierExcelRowModel)CellModel;
+
+                                        //Get values
+                                        final String supplierCode = SupplierExcelRowModel.getCode();
+                                        final String serie = SupplierExcelRowModel.getSerie();
+                                        final String name = SupplierExcelRowModel.getName();
+                                        final String phone = SupplierExcelRowModel.getPhone();
+                                        final String RFC = SupplierExcelRowModel.getRfc();
+                                        final String lada = SupplierExcelRowModel.getLada();
+                                        final String cellphone = SupplierExcelRowModel.getCellphone();
+                                        final String email = SupplierExcelRowModel.getEmail();
+                                        final String city = SupplierExcelRowModel.getCity();
+                                        final String estate = SupplierExcelRowModel.getEstate();
+                                        final String country = SupplierExcelRowModel.getCountry();
+                                        final String street = SupplierExcelRowModel.getStreet();
+                                        final String colony = SupplierExcelRowModel.getColony();
+                                        final String interiorNumber = SupplierExcelRowModel.getInteriorNumber();
+                                        final String externalNumber = SupplierExcelRowModel.getExternalNumber();
+                                        final String webpage = SupplierExcelRowModel.getWebpage();
+                                        final String observations = SupplierExcelRowModel.getObservations();
+
+                                        //Get the customer from the db
+                                        Supplier Supplier = (Supplier)RepositoryFactory.getInstance().getSuppliersRepository().getByCode(supplierCode);
+                                        
+                                        boolean newSupplier = false;
+                                        if(Supplier==null){
+                                            newSupplier = true;
+                                            Supplier = new Supplier();
+                                            Supplier.setCode(supplierCode);
+                                            Supplier.setSerie(serie);
+                                        }                                        
+                                                
+                                        Supplier.setRfc(RFC);
+                                        Supplier.setName(name);
+                                        Supplier.setPhone(phone);
+                                        Supplier.setLada(lada);
+                                        Supplier.setCelphone(cellphone);
+                                        Supplier.setEmail1(email);
+                                        Supplier.setCity(city);
+                                        Supplier.setEstate(estate);
+                                        Supplier.setCountry(country);
+                                        Supplier.setStreet(street);
+                                        Supplier.setColony(colony);
+                                        Supplier.setInteriorNumber(interiorNumber);
+                                        Supplier.setExternalNumber(externalNumber);
+                                        Supplier.setWebpage1(webpage);
+                                        Supplier.setObservations(observations);
+                                        
+                                        if(newSupplier){
+                                            
+                                            //Save the new record
+                                            RepositoryFactory.getInstance().getSuppliersRepository().save(Supplier);
+                                        }
+                                        else{
+                                            
+                                            //Update the existing record
+                                            RepositoryFactory.getInstance().getSuppliersRepository().update(Supplier);
+                                        }                                       
+
+                                    }catch (Exception ex) {
+                                        LoggerUtility.getSingleton().logError(PrincipViewController.class, ex);
+                                        try {
+                                            DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+                                        } catch (Exception ex1) {
+                                            Logger.getLogger(PrincipViewController.class.getName()).log(Level.SEVERE, null, ex1);
+                                        }
+                                    }
+                                });
+                                SuppliersWorkbook.load();
+
+                            }catch (Exception ex) {
+                                LoggerUtility.getSingleton().logError(PrincipViewController.class, ex);
+                                try {
+                                    DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+                                } catch (Exception ex1) {
+                                    Logger.getLogger(PrincipViewController.class.getName()).log(Level.SEVERE, null, ex1);
+                                }
+                            }
+                            
+                            return null;
+                        }
+
+                        @Override
+                        public void after(Object Object) {
+                            
+                            try{
+
+                                //Announce success to the user
+                                DialogsFactory.getSingleton().showOKOperationCompletedCallbackDialog(jFrame, null);
+
+                            }catch (Exception ex) {
+                                LoggerUtility.getSingleton().logError(PrincipViewController.class, ex);
+                                try {
+                                    DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+                                } catch (Exception ex1) {
+                                    Logger.getLogger(PrincipViewController.class.getName()).log(Level.SEVERE, null, ex1);
+                                }
+                            }
+                        }
+                        
+                    });
+                    BaseSwingWorker.execute();
+
+                }catch (Exception ex) {
+                    LoggerUtility.getSingleton().logError(PrincipViewController.class, ex);
+                    try {
+                        DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+                    } catch (Exception ex1) {
+                        Logger.getLogger(PrincipViewController.class.getName()).log(Level.SEVERE, null, ex1);
+                    }
+                }
+            });
+            
+        }catch (Exception ex) {
+            LoggerUtility.getSingleton().logError(PrincipViewController.class, ex);
+            try {
+                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+            } catch (Exception ex1) {
+                Logger.getLogger(PrincipViewController.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+        }
+    }
+    
     private void jMImpCliensActionPerformed(java.awt.event.ActionEvent evt) {        
 
         try{
@@ -568,6 +731,35 @@ public class PrincipViewController extends PrincipJFrame {
                 FileChooserUtility.addValidExtension("xls");            
                 FileChooserUtility.setIApproveOpption((String absolutePath, String fileName) -> {
                     loadCustomersFromExcel(absolutePath,fileName);
+                });
+                FileChooserUtility.showSaveDialog(baseJFrame);
+            
+            }catch(InvalidFileExtensionException InvalidFileExtensionException){
+                DialogsFactory.getSingleton().showErrorOKCallbackDialog(baseJFrame, "errors_invalid_file_extension", null);
+            }
+                        
+        }catch (Exception ex) {
+            LoggerUtility.getSingleton().logError(PrincipViewController.class, ex);
+            try {
+                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+            } catch (Exception ex1) {
+                Logger.getLogger(PrincipViewController.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+        }
+    }
+    
+    private void jMImpProvsActionPerformed(java.awt.event.ActionEvent evt) {        
+
+        try{
+            
+            try{
+             
+                //Ask for the excel file path
+                final FileChooserUtility FileChooserUtility = UtilitiesFactory.getSingleton().getFileChooserUtility();
+                FileChooserUtility.addValidExtension("xlsx");
+                FileChooserUtility.addValidExtension("xls");            
+                FileChooserUtility.setIApproveOpption((String absolutePath, String fileName) -> {
+                    loadSuppliersFromExcel(absolutePath,fileName);
                 });
                 FileChooserUtility.showSaveDialog(baseJFrame);
             
