@@ -63,7 +63,9 @@ public class ProvViewController extends ProvJFrame {
             this.JComponentUtils.onlyNumbers(jTCP);            
             this.JComponentUtils.onlyNumbers(jTDCred);
             this.JComponentUtils.onlyNumbers(jTClavBanc);
-
+            
+            this.JComponentUtils.onlyDecimals(jTDesc);
+                    
             this.JComponentUtils.onKeyTypedToMayus(jTRFC);
             this.JComponentUtils.onKeyTypedToMayus(jTNomb);
             this.JComponentUtils.onKeyTypedToMayus(jTCiu);
@@ -109,6 +111,7 @@ public class ProvViewController extends ProvJFrame {
         String sLimCred = n.format(dCant);
 
         /*Coloca todas las lecturas en los campos de edición*/                
+        jTProv.setText(SupplierGlobal.getCode());
         jTNomb.setText(SupplierGlobal.getName());
         jTTel.setText(SupplierGlobal.getPhone());
         jTCall.setText(SupplierGlobal.getStreet());
@@ -162,7 +165,11 @@ public class ProvViewController extends ProvJFrame {
         else
             jCOrdOtrMon.setSelected(false);
         
-        jComSer.setSelectedItem(this.SupplierGlobal.getSerie());
+        final String serie = this.SupplierGlobal.getSerie();
+        final Serie Serie = (Serie)RepositoryFactory.getInstance().getSeriesRepository().getBySerie(serie);
+        if(Serie != null){
+            jComSer.selectByObject(Serie);
+        }
     }
     
     @Override
