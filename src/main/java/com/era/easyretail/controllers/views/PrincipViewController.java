@@ -12,6 +12,7 @@ import com.era.easyretail.swingworkers.BaseSwingWorker;
 import com.era.easyretail.swingworkers.ISwingWorkerActions;
 import com.era.logger.LoggerUtility;
 import com.era.models.BasDats;
+import com.era.models.Company;
 import com.era.models.Confgral;
 import com.era.models.User;
 import com.era.models.Warehouse;
@@ -19,7 +20,9 @@ import com.era.repositories.RepositoryFactory;
 import com.era.utilities.FileChooserUtility;
 import com.era.utilities.UtilitiesFactory;
 import com.era.utilities.WinRegistry;
+import com.era.utilities.excel.CustomersWorkbook;
 import com.era.utilities.excel.WarehouseExistencesWorkbook;
+import com.era.utilities.excel.rows.models.CustomerExcelRowModel;
 import com.era.utilities.excel.rows.models.WarehouseExistencesExcelRowModel;
 import com.era.utilities.exceptions.InvalidFileExtensionException;
 import com.era.views.PrincipJFrame;
@@ -261,8 +264,11 @@ public class PrincipViewController extends PrincipJFrame {
             });
             jMImpExistAlm.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jMImpExistAlmActionPerformed(evt);
-            });            
-            
+            });
+            jMImpCliens.addActionListener((java.awt.event.ActionEvent evt) -> {
+                jMImpCliensActionPerformed(evt);
+            });
+                        
             onCloseWindowDoNothing();
             
         }catch (Exception ex) {
@@ -278,7 +284,7 @@ public class PrincipViewController extends PrincipJFrame {
     @Override
     public void loadModelInFields(Object ObjectModel) throws  Exception {        
     }
-    
+            
     private void loadWarehousesExistencesFromExcel(String absolutePath, String fileName){
         
         try{
@@ -387,6 +393,188 @@ public class PrincipViewController extends PrincipJFrame {
                 }
             });
             
+        }catch (Exception ex) {
+            LoggerUtility.getSingleton().logError(PrincipViewController.class, ex);
+            try {
+                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+            } catch (Exception ex1) {
+                Logger.getLogger(PrincipViewController.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+        }
+    }
+    
+    private void loadCustomersFromExcel(String absolutePath, String fileName){
+        
+        try{
+            
+            //Question if really continue
+            DialogsFactory.getSingleton().showQuestionContinueDialog(baseJFrame, (JFrame jFrame) -> {
+            
+                try{
+                    
+                    final BaseSwingWorker BaseSwingWorker = new BaseSwingWorker();
+                    BaseSwingWorker.setShowLoading(baseJFrame);
+                    BaseSwingWorker.setISwingWorkerActions(new ISwingWorkerActions(){
+
+                        @Override
+                        public void before() {
+                            
+                        }
+
+                        @Override
+                        public Object doinbackground() {
+                            
+                            try{
+                                
+                                //Load the warehouses existences
+                                final CustomersWorkbook CustomersWorkbook = new CustomersWorkbook();
+                                CustomersWorkbook.setFilePath(absolutePath + "\\" + fileName);                    
+                                CustomersWorkbook.setOnFinish(() -> {
+
+                                    
+                                });
+                                CustomersWorkbook.setOnCellRender((Object CellModel) -> {
+                                    try{
+
+                                        //Cast model
+                                        final CustomerExcelRowModel CustomerExcelRowModel = (CustomerExcelRowModel)CellModel;
+
+                                        //Get values
+                                        final String companyCode = CustomerExcelRowModel.getCompanyCode();
+                                        final String name = CustomerExcelRowModel.getName();
+                                        final String phone = CustomerExcelRowModel.getPhone();
+                                        final String lada = CustomerExcelRowModel.getLada();
+                                        final String cellphone = CustomerExcelRowModel.getCellphone();
+                                        final String email = CustomerExcelRowModel.getEmail();
+                                        final String city = CustomerExcelRowModel.getCity();
+                                        final String estate = CustomerExcelRowModel.getEstate();
+                                        final String country = CustomerExcelRowModel.getCountry();
+                                        final String street = CustomerExcelRowModel.getStreet();
+                                        final String colony = CustomerExcelRowModel.getColony();
+                                        final String interiorNumber = CustomerExcelRowModel.getInteriorNumber();
+                                        final String externalNumber = CustomerExcelRowModel.getExternalNumber();
+                                        final String webpage = CustomerExcelRowModel.getWebpage();
+                                        final String observations = CustomerExcelRowModel.getObservations();
+
+                                        //Get the customer from the db
+                                        Company Company = RepositoryFactory.getInstance().getCompanysRepository().getCustomerByCode(companyCode);
+                                        
+                                        boolean newCompany = false;
+                                        if(Company==null){
+                                            newCompany = true;
+                                            Company = new Company();
+                                            Company.setCompanyCode(companyCode);
+                                        }                                        
+                                                                                
+                                        Company.setNom(name);
+                                        Company.setTel(phone);
+                                        Company.setLada(lada);
+                                        Company.setCel(cellphone);
+                                        Company.setCo1(email);
+                                        Company.setCiu(city);
+                                        Company.setEstad(estate);
+                                        Company.setPai(country);
+                                        Company.setCalle(street);
+                                        Company.setCol(colony);
+                                        Company.setNoint(interiorNumber);
+                                        Company.setNoext(externalNumber);
+                                        Company.setPagweb1(webpage);
+                                        Company.setObserv(observations);
+                                        
+                                        if(newCompany){
+                                            
+                                            //Save the new comany
+                                            RepositoryFactory.getInstance().getCompanysRepository().save(Company);
+                                        }
+                                        else{
+                                            
+                                            //Update the existing company
+                                            RepositoryFactory.getInstance().getCompanysRepository().update(Company);
+                                        }                                       
+
+                                    }catch (Exception ex) {
+                                        LoggerUtility.getSingleton().logError(PrincipViewController.class, ex);
+                                        try {
+                                            DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+                                        } catch (Exception ex1) {
+                                            Logger.getLogger(PrincipViewController.class.getName()).log(Level.SEVERE, null, ex1);
+                                        }
+                                    }
+                                });
+                                CustomersWorkbook.load();
+
+                            }catch (Exception ex) {
+                                LoggerUtility.getSingleton().logError(PrincipViewController.class, ex);
+                                try {
+                                    DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+                                } catch (Exception ex1) {
+                                    Logger.getLogger(PrincipViewController.class.getName()).log(Level.SEVERE, null, ex1);
+                                }
+                            }
+                            
+                            return null;
+                        }
+
+                        @Override
+                        public void after(Object Object) {
+                            
+                            try{
+
+                                //Announce success to the user
+                                DialogsFactory.getSingleton().showOKOperationCompletedCallbackDialog(jFrame, null);
+
+                            }catch (Exception ex) {
+                                LoggerUtility.getSingleton().logError(PrincipViewController.class, ex);
+                                try {
+                                    DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+                                } catch (Exception ex1) {
+                                    Logger.getLogger(PrincipViewController.class.getName()).log(Level.SEVERE, null, ex1);
+                                }
+                            }
+                        }
+                        
+                    });
+                    BaseSwingWorker.execute();
+
+                }catch (Exception ex) {
+                    LoggerUtility.getSingleton().logError(PrincipViewController.class, ex);
+                    try {
+                        DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+                    } catch (Exception ex1) {
+                        Logger.getLogger(PrincipViewController.class.getName()).log(Level.SEVERE, null, ex1);
+                    }
+                }
+            });
+            
+        }catch (Exception ex) {
+            LoggerUtility.getSingleton().logError(PrincipViewController.class, ex);
+            try {
+                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+            } catch (Exception ex1) {
+                Logger.getLogger(PrincipViewController.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+        }
+    }
+    
+    private void jMImpCliensActionPerformed(java.awt.event.ActionEvent evt) {        
+
+        try{
+            
+            try{
+             
+                //Ask for the excel file path
+                final FileChooserUtility FileChooserUtility = UtilitiesFactory.getSingleton().getFileChooserUtility();
+                FileChooserUtility.addValidExtension("xlsx");
+                FileChooserUtility.addValidExtension("xls");            
+                FileChooserUtility.setIApproveOpption((String absolutePath, String fileName) -> {
+                    loadCustomersFromExcel(absolutePath,fileName);
+                });
+                FileChooserUtility.showSaveDialog(baseJFrame);
+            
+            }catch(InvalidFileExtensionException InvalidFileExtensionException){
+                DialogsFactory.getSingleton().showErrorOKCallbackDialog(baseJFrame, "errors_invalid_file_extension", null);
+            }
+                        
         }catch (Exception ex) {
             LoggerUtility.getSingleton().logError(PrincipViewController.class, ex);
             try {
