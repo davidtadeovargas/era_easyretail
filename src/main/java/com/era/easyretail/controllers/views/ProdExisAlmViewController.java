@@ -6,8 +6,11 @@
 package com.era.easyretail.controllers.views;
 
 import com.era.logger.LoggerUtility;
+import com.era.models.Existalma;
+import com.era.repositories.RepositoryFactory;
 import com.era.views.ProdExisAlmJFrame;
 import com.era.views.dialogs.DialogsFactory;
+import com.era.views.tables.headers.TableHeaderFactory;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -18,14 +21,30 @@ import java.util.logging.Logger;
  */
 public class ProdExisAlmViewController extends ProdExisAlmJFrame {
     
+    private String productCode;
+    
+    
     public ProdExisAlmViewController() {
         super("window_title_exisalma");
         
         try{
             
-            jBSal.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jBSalActionPerformed(evt);
-            });            
+            this.disposeButton(jBSal);
+            
+            //If product not null            
+            if(productCode!=null){
+                
+                //Get all the warehouses existences for that product
+                final List<Existalma> existences = RepositoryFactory.getInstance().getExistalmasRepository().getAllWarehousesExistencesByProduct(productCode);
+                
+                //Load the items in table
+                this.BaseJTable = this.jTab;
+                this.jTab.addShowColumn(TableHeaderFactory.getSigleton().getExistalmasTableHeader().getROWNUMBER());
+                this.jTab.addShowColumn(TableHeaderFactory.getSigleton().getExistalmasTableHeader().getALMA());
+                this.jTab.addShowColumn(TableHeaderFactory.getSigleton().getExistalmasTableHeader().getDESCRIPTION());
+                this.jTab.addShowColumn(TableHeaderFactory.getSigleton().getExistalmasTableHeader().getEXIST());
+                this.jTab.initTable(existences);
+            }
             
         }catch (Exception ex) {
             LoggerUtility.getSingleton().logError(ProdExisAlmViewController.class, ex);
@@ -37,6 +56,10 @@ public class ProdExisAlmViewController extends ProdExisAlmJFrame {
         }
     }
 
+    public void setProductCode(String productCode) {
+        this.productCode = productCode;
+    }   
+    
     @Override
     public void clearFields(){
     }
@@ -44,22 +67,7 @@ public class ProdExisAlmViewController extends ProdExisAlmJFrame {
     @Override
     public void loadModelInFields(Object ObjectModel) throws  Exception {        
     }
-    
-    private void jBSalActionPerformed(java.awt.event.ActionEvent evt) {                                             
-
-	try{            	
-            
-	}
-	catch (Exception ex) {
-		LoggerUtility.getSingleton().logError(PrincipViewController.class, ex);
-		try {
-			DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
-		} catch (Exception ex1) {
-			Logger.getLogger(PrincipViewController.class.getName()).log(Level.SEVERE, null, ex1);
-		}
-	}
-    }
-    
+        
     @Override
     public List<?> getItemsToLoadInTable() throws Exception {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.

@@ -82,7 +82,7 @@ public class SearchViewController extends SearchJFrame {
             imageIcon = scaleImage(imageIcon,100,100);            
             labelLoading.setIcon(imageIcon);
         } else {
-            System.err.println("Couldn't find file: ");            
+            System.err.println("Couldn't find file: ");
         }
         labelLoading.setPreferredSize(new Dimension(70,50));
         labelLoading.setVisible(false);
@@ -141,7 +141,18 @@ public class SearchViewController extends SearchJFrame {
             long count;
                     
             switch(SearchCommonTypeEnum){
-
+                
+                case CLAVES_PROD_SAT:
+                    
+                    list = RepositoryManager_.getCClaveprodservsRepository().getAllByPage(0);
+                    count = RepositoryManager_.getCClaveprodservsRepository().getCount();
+                    jTab.setCount(count);
+                    jTab.setPagination(list.size());
+                    
+                    showPaginationLabel();
+                                                            
+                    break;
+                    
                 case CUSTOMERS:
                     list = RepositoryManager_.getCompanysRepository().getAll();
                     break;
@@ -155,7 +166,14 @@ public class SearchViewController extends SearchJFrame {
                     break;
 
                 case SUPPLIERS:
-                    list = RepositoryManager_.getSuppliersRepository().getAll();
+                    
+                    list = RepositoryManager_.getSuppliersRepository().getAllByPage(0);
+                    count = RepositoryManager_.getSuppliersRepository().getCount();
+                    jTab.setCount(count);
+                    jTab.setPagination(list.size());
+                    
+                    showPaginationLabel();
+                                        
                     break;
 
                case USERS:
@@ -352,27 +370,40 @@ public class SearchViewController extends SearchJFrame {
             case CPS:
             case COUNTRIES:
             case EXPEDITION_PLACE:
+            case CLAVES_PROD_SAT:
+            case SUPPLIERS:
                 
                 jTab.setPrevRowIndex(initialIndex);
                 
                 List<?> rows = new ArrayList<>();
                 
+                final int previusIndex = jTab.getPrevRowIndex();
+                
                 //Get the specific list type
                 switch(SearchCommonTypeEnum){
                     case CPS:
-                        rows = RepositoryFactory.getInstance().getCCodigoPostalRepository().getAllByPage(jTab.getPrevRowIndex());
+                        rows = RepositoryFactory.getInstance().getCCodigoPostalRepository().getAllByPage(previusIndex);
                         break;
                     
                     case COUNTRIES:
-                        rows = RepositoryFactory.getInstance().getCCountriesRepository().getAllByPage(jTab.getPrevRowIndex());
+                        rows = RepositoryFactory.getInstance().getCCountriesRepository().getAllByPage(previusIndex);
                         break;
                         
                     case EXPEDITION_PLACE:
-                        rows = RepositoryFactory.getInstance().getCCodigoPostalRepository().getAllByPageExpeditionPlace(jTab.getPrevRowIndex());
+                        rows = RepositoryFactory.getInstance().getCCodigoPostalRepository().getAllByPageExpeditionPlace(previusIndex);
+                        break;
+                    
+                    case CLAVES_PROD_SAT:
+                        rows = RepositoryFactory.getInstance().getCClaveprodservsRepository().getAllByPage(previusIndex);
+                        break;
+                        
+                    case SUPPLIERS:
+                        rows = RepositoryFactory.getInstance().getSuppliersRepository().getAllByPage(previusIndex);
                         break;
                 }
                           
-                jTab.setLastRowIndex(jTab.getPrevRowIndex() + rows.size());
+                final int lastRowIndex = previusIndex + rows.size();
+                jTab.setLastRowIndex(lastRowIndex);
                 
                 showPaginationLabel();
                 
@@ -471,8 +502,18 @@ public class SearchViewController extends SearchJFrame {
                 break;
 
             case SUPPLIERS:
+                jTab.addShowColumn(TableHeaderFactory.getSigleton().getSuppliersTableHeader().getCODE());
+                jTab.addShowColumn(TableHeaderFactory.getSigleton().getSuppliersTableHeader().getNAME());
+                jTab.addShowColumn(TableHeaderFactory.getSigleton().getSuppliersTableHeader().getRFC());
                 break;
-
+                
+                
+            case CLAVES_PROD_SAT:
+                jTab.addShowColumn(TableHeaderFactory.getSigleton().getCClaveprodservsTableHeader().getC_CLAVEPRODSERV());
+                jTab.addShowColumn(TableHeaderFactory.getSigleton().getCClaveprodservsTableHeader().getDESCRIPTION());
+                jTab.addShowColumn(TableHeaderFactory.getSigleton().getCClaveprodservsTableHeader().getENDVIGENCYDATE());
+                break;
+                
            case USERS:
                 jTab.addShowColumn(TableHeaderFactory.getSigleton().getUsersTableHeader().getCODE());
                 jTab.addShowColumn(TableHeaderFactory.getSigleton().getUsersTableHeader().getNAME());

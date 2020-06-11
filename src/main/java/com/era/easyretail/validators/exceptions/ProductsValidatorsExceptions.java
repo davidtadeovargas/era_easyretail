@@ -21,13 +21,17 @@ public class ProductsValidatorsExceptions {
    }
 
    public Exception getCodeException(){
-       return new Exception("Falta espeficiar codigo");
+       return new Exception("Falta espeficiar el código");
    }
 
    public Exception getDescriptionException(){
-       return new Exception("Falta espeficiar Description");
+       return new Exception("Falta espeficiar la descripción");
    }
 
+   public Exception getNameException(){
+       return new Exception("Falta espeficiar el nombre");
+   }
+   
    public Exception getKeySATException(){
        return new Exception("Falta espeficiar KeySAT");
    }

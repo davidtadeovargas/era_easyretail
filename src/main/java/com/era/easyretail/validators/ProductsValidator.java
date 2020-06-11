@@ -1,8 +1,6 @@
 package com.era.easyretail.validators;
 
 import com.era.easyretail.validators.exceptions.ProductsValidatorsExceptions;
-import com.era.models.Product;
-import com.era.repositories.RepositoryFactory;
 
 public class ProductsValidator extends IValidate{
 
@@ -11,6 +9,11 @@ public class ProductsValidator extends IValidate{
        this.code = property;
    }
 
+   private String name;
+   public void setName(String property){
+       this.name = property;
+   }
+   
    private String description;
    public void setDescription(String property){
        this.description = property;
@@ -29,6 +32,10 @@ public class ProductsValidator extends IValidate{
            throw new ProductsValidatorsExceptions().getCodeException();
        }
 
+       if(name==null || name.isEmpty()){
+           throw new ProductsValidatorsExceptions().getNameException();
+       }
+       
        if(description==null || description.isEmpty()){
            throw new ProductsValidatorsExceptions().getDescriptionException();
        }

@@ -8,14 +8,23 @@ package com.era.easyretail.controllers.views;
 import com.era.views.Impuestos_X_productos_nuevoJFrame;
 import java.util.List;
 import com.era.logger.LoggerUtility;
+import com.era.models.Tax;
 import com.era.views.dialogs.DialogsFactory;
+import com.era.views.tables.headers.TableHeaderFactory;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFrame;
 /**
  *
  * @author PC
  */
 public class Impuestos_X_productos_nuevoViewController extends Impuestos_X_productos_nuevoJFrame {
+    
+    private List<Tax> taxes = new ArrayList<>();
+    private CloseWindow CloseWindow;
+    
+    
     
     public Impuestos_X_productos_nuevoViewController() {
         super("window_title_impxproduct");
@@ -25,21 +34,24 @@ public class Impuestos_X_productos_nuevoViewController extends Impuestos_X_produ
             jBDel.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jBDelActionPerformed(evt);
             });
-            jBSal.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jBSalActionPerformed(evt);
-            });
             jBNew.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jBNewActionPerformed(evt);
             });
-            jBBusc.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jBBuscActionPerformed(evt);
-            });
-            jBMostTodViat.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jBMostTodViatActionPerformed(evt);
-            });
-            jBTod.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jBTodActionPerformed(evt);
-            });
+            jBSal.addActionListener((java.awt.event.ActionEvent evt) -> {
+                jBSalActionPerformed(evt);
+            });            
+            
+            this.disposeButton(jBNew);
+            
+            //Init the table with the items
+            this.jTab.addShowColumn(TableHeaderFactory.getSigleton().getImpuesXProductsTableHeader().getROWNUMBER());
+            this.jTab.addShowColumn(TableHeaderFactory.getSigleton().getImpuesXProductsTableHeader().getPRODU());
+            this.jTab.addShowColumn(TableHeaderFactory.getSigleton().getImpuesXProductsTableHeader().getIMPUE());
+            this.jTab.addShowColumn(TableHeaderFactory.getSigleton().getImpuesXProductsTableHeader().getVALUE());
+            this.jTab.initTable(taxes);
+            
+            //Load the taxes combobox
+            this.jComImp.loadItems();
             
         }catch (Exception ex) {
             LoggerUtility.getSingleton().logError(Impuestos_X_productos_nuevoViewController.class, ex);
@@ -59,12 +71,29 @@ public class Impuestos_X_productos_nuevoViewController extends Impuestos_X_produ
     public void loadModelInFields(Object ObjectModel) throws  Exception {        
     }
     
-    private void jBTodActionPerformed(java.awt.event.ActionEvent evt) {                                             
+    public interface CloseWindow {
+        public void onClose(List<Tax> taxes);
+    }
 
-	try{            	
+    public void setCloseWindow(CloseWindow CloseWindow) {
+        this.CloseWindow = CloseWindow;
+    }        
+    
+    private void jBSalActionPerformed(java.awt.event.ActionEvent evt) {
+        
+        try{
             
-	}
-	catch (Exception ex) {
+            //Get all the taxes from the table
+            final List<Tax> itemsTable = (List<Tax>)this.jTab.getAllItemsInTable();
+            
+            if(CloseWindow!=null){
+                CloseWindow.onClose(itemsTable);
+            }
+            
+            //Close the window
+            dispose();
+            
+        }catch (Exception ex) {
             LoggerUtility.getSingleton().logError(Impuestos_X_productos_nuevoViewController.class, ex);
             try {
                 DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
@@ -74,55 +103,31 @@ public class Impuestos_X_productos_nuevoViewController extends Impuestos_X_produ
 	}
     }
     
-    private void jBMostTodViatActionPerformed(java.awt.event.ActionEvent evt) {                                             
+    private void jBNewActionPerformed(java.awt.event.ActionEvent evt) {
 
 	try{            	
             
-	}
-	catch (Exception ex) {
-            LoggerUtility.getSingleton().logError(Impuestos_X_productos_nuevoViewController.class, ex);
-            try {
-                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
-            } catch (Exception ex1) {
-                Logger.getLogger(Impuestos_X_productos_nuevoViewController.class.getName()).log(Level.SEVERE, null, ex1);
+            //First select tax before continue
+            if(!this.jComImp.isSelectedObject()){
+                DialogsFactory.getSingleton().showErrorOKNoSelectionCallbackDialog(baseJFrame, (JFrame jFrame) -> {
+                    jComImp.grabFocus();
+                });
+                return;
             }
-	}
-    }
-    
-    private void jBBuscActionPerformed(java.awt.event.ActionEvent evt) {                                             
-
-	try{            	
             
-	}
-	catch (Exception ex) {
-            LoggerUtility.getSingleton().logError(Impuestos_X_productos_nuevoViewController.class, ex);
-            try {
-                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
-            } catch (Exception ex1) {
-                Logger.getLogger(Impuestos_X_productos_nuevoViewController.class.getName()).log(Level.SEVERE, null, ex1);
+            //Get the selected tax
+            final Tax Tax = (Tax)this.jComImp.getSelectedObject();
+            
+            //Chec that the tax is not already in the table
+            if(jTab.objectExists(Tax)){
+                DialogsFactory.getSingleton().showErrorRecordExistsOKDialog(baseJFrame, (JFrame jFrame) -> {
+                    jComImp.grabFocus();
+                });
+                return;
             }
-	}
-    }
-    
-    private void jBNewActionPerformed(java.awt.event.ActionEvent evt) {                                             
-
-	try{            	
             
-	}
-	catch (Exception ex) {
-            LoggerUtility.getSingleton().logError(Impuestos_X_productos_nuevoViewController.class, ex);
-            try {
-                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
-            } catch (Exception ex1) {
-                Logger.getLogger(Impuestos_X_productos_nuevoViewController.class.getName()).log(Level.SEVERE, null, ex1);
-            }
-	}
-    }
-    
-    private void jBSalActionPerformed(java.awt.event.ActionEvent evt) {                                             
-
-	try{            	
-            
+            //Add the tax to the table
+            this.jTab.addObject(Tax);
 	}
 	catch (Exception ex) {
             LoggerUtility.getSingleton().logError(Impuestos_X_productos_nuevoViewController.class, ex);
@@ -138,6 +143,19 @@ public class Impuestos_X_productos_nuevoViewController extends Impuestos_X_produ
 
 	try{            	
             
+            //First select item
+            if(!this.jTab.isRowSelected()){
+                DialogsFactory.getSingleton().showErrorOKNoSelectionCallbackDialog(baseJFrame, (JFrame jFrame) -> {
+                    jTab.grabFocus();
+                });
+                return;
+            }
+            
+            //Get the selected object
+            final Tax Tax = (Tax)this.jTab.getRowSelected();
+            
+            //Delete the selected object
+            this.jTab.deleteObject(Tax);
 	}
 	catch (Exception ex) {
             LoggerUtility.getSingleton().logError(Impuestos_X_productos_nuevoViewController.class, ex);
@@ -148,6 +166,11 @@ public class Impuestos_X_productos_nuevoViewController extends Impuestos_X_produ
             }
 	}
     }
+
+    public void setTaxes(List<Tax> taxes) {
+        this.taxes = taxes;
+    }
+    
     
     @Override
     public List<?> getItemsToLoadInTable() throws Exception {

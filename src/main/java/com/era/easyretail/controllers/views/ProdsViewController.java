@@ -5,12 +5,32 @@
  */
 package com.era.easyretail.controllers.views;
 
+import com.era.datamodels.enums.SearchCommonTypeEnum;
+import com.era.easyretail.validators.ProductsValidator;
 import com.era.logger.LoggerUtility;
+import com.era.models.Anaqs;
+import com.era.models.CClaveprodserv;
+import com.era.models.Line;
+import com.era.models.Lugs;
+import com.era.models.Meds;
+import com.era.models.Product;
+import com.era.models.Tax;
+import com.era.models.Unid;
+import com.era.repositories.RepositoryFactory;
+import com.era.utilities.UtilitiesFactory;
+import com.era.utilities.filechooser.FTecnicaFileChooserUtility;
+import com.era.utilities.filechooser.ImageFileChooserUtility;
 import com.era.views.ProdsJFrame;
 import com.era.views.dialogs.DialogsFactory;
+import com.era.views.dialogs.ErrorOKDialog;
+import com.era.views.tables.headers.TableHeaderFactory;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.event.ListSelectionEvent;
 
 /**
  *
@@ -18,22 +38,14 @@ import java.util.logging.Logger;
  */
 public class ProdsViewController extends ProdsJFrame {
     
+    private List<Tax> taxesGlobal = new ArrayList<>();
+    
     public ProdsViewController() {
         super("window_title_prods");
         
-        try{
-            
-            jBProd.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jBProdActionPerformed(evt);
-            });
-            jBConsecU.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jBConsecUActionPerformed(evt);
-            });
-            jBGen.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jBGenActionPerformed(evt);
-            });
-            jBTab1.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jBTab1ActionPerformed(evt);
+        try{            
+            jBMosT.addActionListener((java.awt.event.ActionEvent evt) -> {
+                jBMosTActionPerformed(evt);
             });
             jBGuar.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jBGuarActionPerformed(evt);
@@ -53,14 +65,14 @@ public class ProdsViewController extends ProdsJFrame {
             jBSal.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jBSalActionPerformed(evt);
             });
-            jBPart.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jBPartActionPerformed(evt);
+            jBClaveSat.addActionListener((java.awt.event.ActionEvent evt) -> {
+                jBClaveSatActionPerformed(evt);
+            });            
+            jBBusc2.addActionListener((java.awt.event.ActionEvent evt) -> {
+                jBBusc2ActionPerformed(evt);
             });
-            jBCompa.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jBCompaActionPerformed(evt);
-            });
-            jBMasSer.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jBMasSerActionPerformed(evt);
+            jBBusc.addActionListener((java.awt.event.ActionEvent evt) -> {
+                jBBuscActionPerformed(evt);
             });
             button_impuestos.addActionListener((java.awt.event.ActionEvent evt) -> {
                 button_impuestosActionPerformed(evt);
@@ -73,9 +85,6 @@ public class ProdsViewController extends ProdsJFrame {
             });
             jBVeGran.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jBVeGranActionPerformed(evt);
-            });
-            jBPrec.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jBPrecActionPerformed(evt);
             });
             jBExisAlma.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jBExisAlmaActionPerformed(evt);
@@ -93,6 +102,47 @@ public class ProdsViewController extends ProdsJFrame {
                 jBCompsActionPerformed(evt);
             });
             
+            //Disable the save button
+            jBGuar.setEnabled(false);
+                
+            //Init table
+            this.BaseJTable = jTab;
+            jTab.addShowColumn(TableHeaderFactory.getSigleton().getProductsTableHeader().getROWNUMBER());
+            jTab.addShowColumn(TableHeaderFactory.getSigleton().getProductsTableHeader().getCODE());
+            jTab.addShowColumn(TableHeaderFactory.getSigleton().getProductsTableHeader().getDESCRIPTION());
+            jTab.setITableRowSelected((ListSelectionEvent lse, Object Object) -> {
+                
+                try{
+                    
+                    //Cast the model
+                    final Product Product = (Product)Object;
+
+                    //Enable the save button
+                    jBGuar.setEnabled(true);
+
+                    //Load all the values in fields
+                    loadModelInFields(Product);
+                    
+                }catch (Exception ex) {
+                    LoggerUtility.getSingleton().logError(ProdsViewController.class, ex);
+                    try {
+                        DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+                    } catch (Exception ex1) {
+                        Logger.getLogger(ProdsViewController.class.getName()).log(Level.SEVERE, null, ex1);
+                    }
+                }
+            });
+            
+            //Load all the table items
+            this.jTab.loadAllItemsInTable();
+            
+            //Load all the comboboxes
+            jComLin.loadItems();
+            jComMeds.loadItems();
+            jComUni.loadItems();
+            jComAna.loadItems();
+            jComLug.loadItems();
+            
         }catch (Exception ex) {
             LoggerUtility.getSingleton().logError(ProdsViewController.class, ex);
             try {
@@ -102,20 +152,126 @@ public class ProdsViewController extends ProdsJFrame {
             }
         }
     }
-    
+
     @Override
-    public void loadModelInFields(Object ObjectModel) throws  Exception {        
+    public void loadModelInFields(Object ObjectModel) throws  Exception {
+        
+        //Cast the model
+        final Product Product_ = (Product)ObjectModel;
+        
+        //Fill all the fields
+        jTProd.setText(Product_.getCode());
+        jTProd.setEnabled(false);
+        jTADescrip.setText(Product_.getDescription());
+        jTExist.setText(String.valueOf(Product_.getExistence()));
+        jTAInfor.setText(Product_.getInformation());
+        jTMin.setText(String.valueOf(Product_.getMinimun()));
+        jTCodProv.setText(Product_.getProviderOptional1());
+        jTMax.setText(String.valueOf(Product_.getMaximum()));
+        jTNom.setText(Product_.getName());
+        jTClaveSat.setText(Product_.getKeySAT());
+        
+        //Select in comboboxes
+        final Line Line = (Line)RepositoryFactory.getInstance().getLinesRepository().getByCode(Product_.getCodeLine());
+        if(Line != null){
+            jComLin.selectByObject(Line);
+        }        
+        final Meds Meds = (Meds)RepositoryFactory.getInstance().getMedssRepository().getByCode(Product_.getCodeMeasure());
+        if(Meds!=null){
+            jComMeds.selectObject(Meds);
+        }            
+        final Unid Unid = (Unid)RepositoryFactory.getInstance().getUnidsRepository().getByCode(Product_.getUnit());
+        if(Unid!=null){
+            jComUni.selectByObject(Unid);
+        }            
+        final Anaqs Anaqs = (Anaqs)RepositoryFactory.getInstance().getAnaqssRepository().getByCode(Product_.getShelf());
+        if(Anaqs!=null){
+            jComAna.selectByObject(Anaqs);
+        }            
+        final Lugs Lugs = (Lugs)RepositoryFactory.getInstance().getLugssRepository().getByCode(Product_.getPlace());
+        if(Lugs!=null){
+            jComLug.selectByObject(Lugs);
+        }            
+        
+        //Check if the image product exists
+        final boolean imageExists = UtilitiesFactory.getSingleton().getImagesUtility().productImageExists(Product_.getCode());
+        
+        //If exists
+        if(imageExists){
+            
+            //Load the image        
+            final String imagePath = UtilitiesFactory.getSingleton().getImagesUtility().getProductImagePath(Product_.getCode());
+            
+            //Load the image in control
+            jLImg.setIcon(new ImageIcon(imagePath));
+            jLImg.setVisible(true);
+        }
+        else{
+            jLImg.setVisible(false);
+        }
+        
+        //Check or uncheck         
+        jCInvent.setSelected(Product_.getIventory());
+        jCPed.setSelected(Product_.isLotPediment());
+        jCComp.setSelected(Product_.getCompound());
+        jCEsParaVent.setSelected(Product_.getIsForSale());
+        jCNoSolMaxMin.setSelected(Product_.getAskMaxMin());
+        jCBajCost.setSelected(Product_.getLowerCost());
+        jCNoSer.setSelected(Product_.isAskSerie());
+                
+        jBComps.setEnabled(Product_.getCompound());
+        
+        //Get the genera existence for the product
+        final float generalExistence = RepositoryFactory.getInstance().getExistalmasRepository().getGeneralExistenceFromProduct(Product_.getCode());
+        jTExist.setText(String.valueOf(generalExistence));
     }
     
     @Override
     public void clearFields(){
+        
+        jTProd.setText("");
+        jTADescrip.setText("");
+        jTExist.setText("");
+        jTAInfor.setText("");
+        jTMin.setText("1");
+        jTCodProv.setText("");
+        jTMax.setText("2");
+        jTNom.setText("");
+        jTClaveSat.setText("");
+        
+        jLImg.setVisible(false);
+        
+        //Reset comboboxes
+        jComLin.clearSelection();
+        jComMeds.clearSelection();
+        jComUni.clearSelection();
+        jComAna.clearSelection();
+        jComLug.clearSelection();
+        
+        jCInvent.setSelected(true);
+        jCPed.setSelected(false);
+        jCComp.setSelected(false);
+        jCEsParaVent.setSelected(true);
+        jCNoSolMaxMin.setSelected(false);
+        jCBajCost.setSelected(false);
+        jCNoSer.setSelected(false);
+                
+        jBComps.setEnabled(false);
     }
-    
-    private void jBProdActionPerformed(java.awt.event.ActionEvent evt) {                                             
+        
+    private void jBClaveSatActionPerformed(java.awt.event.ActionEvent evt) {
 
 	try{            	
             
-            
+            //Search warehouse
+            final SearchViewController SearchViewController = new SearchViewController();
+            SearchViewController.setSEARCH_TYPE(SearchCommonTypeEnum.CLAVES_PROD_SAT);
+            SearchViewController.setButtonAceptClicked(() -> {
+
+                final String claveCode = SearchViewController.getCod();
+                jTClaveSat.setText(claveCode);
+            });
+            SearchViewController.setVisible();
 	}
 	catch (Exception ex) {
             LoggerUtility.getSingleton().logError(ProdsViewController.class, ex);
@@ -127,11 +283,61 @@ public class ProdsViewController extends ProdsJFrame {
 	}
     }
     
-    private void jBConsecUActionPerformed(java.awt.event.ActionEvent evt) {                                             
+    private void jBBusc2ActionPerformed(java.awt.event.ActionEvent evt) {
 
 	try{            	
             
+            //Search warehouse
+            final SearchViewController SearchViewController = new SearchViewController();
+            SearchViewController.setSEARCH_TYPE(SearchCommonTypeEnum.SUPPLIERS);
+            SearchViewController.setButtonAceptClicked(() -> {
+
+                final String supplierCode = SearchViewController.getCod();
+                jTCodProv.setText(supplierCode);
+            });
+            SearchViewController.setVisible();
+	}
+	catch (Exception ex) {
+            LoggerUtility.getSingleton().logError(ProdsViewController.class, ex);
+            try {
+                    DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+            } catch (Exception ex1) {
+                    Logger.getLogger(ProdsViewController.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+	}
+    }
+        
+    private void jBBuscActionPerformed(java.awt.event.ActionEvent evt) {
+
+	try{            	
             
+            //Get the value to search
+            final String search = jTBusc.getText().trim();
+            
+            //If nothing to search so return
+            if(search.isEmpty()){
+                return;
+            }
+            
+            //Search all the ocurrences
+            this.jTab.getByLikeEncabezados(search);
+	}
+	catch (Exception ex) {
+            LoggerUtility.getSingleton().logError(ProdsViewController.class, ex);
+            try {
+                    DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+            } catch (Exception ex1) {
+                    Logger.getLogger(ProdsViewController.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+	}
+    }
+        
+    private void jBMosTActionPerformed(java.awt.event.ActionEvent evt) {
+
+	try{            	
+            
+            //Load all the users
+            this.jTab.loadAllItemsInTable();
 	}
 	catch (Exception ex) {
             LoggerUtility.getSingleton().logError(ProdsViewController.class, ex);
@@ -143,43 +349,137 @@ public class ProdsViewController extends ProdsJFrame {
 	}
     }
     
-    private void jBGenActionPerformed(java.awt.event.ActionEvent evt) {                                             
+    private void saveOrUpdate(final boolean save) throws Exception {
+        
+        //Get primary values
+        final String productCode = jTProd.getText().trim();
+        final String description = jTADescrip.getText().trim();
+        final String name = jTNom.getText().trim();
+        final String satKey = jTClaveSat.getText().trim();                        
 
-	try{            	
+        try{
             
+            //Validate all the needed fields are filled
+            final ProductsValidator ProductsValidator = new ProductsValidator();
+            ProductsValidator.setCode(productCode);
+            ProductsValidator.setName(name);
+            ProductsValidator.setDescription(description);
+            ProductsValidator.setKeySAT(productCode);
             
-	}
-	catch (Exception ex) {
-            LoggerUtility.getSingleton().logError(ProdsViewController.class, ex);
-            try {
-                    DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
-            } catch (Exception ex1) {
-                    Logger.getLogger(ProdsViewController.class.getName()).log(Level.SEVERE, null, ex1);
+            if(save){
+                ProductsValidator.validateInsert();
             }
-	}
-    }
-    
-    private void jBTab1ActionPerformed(java.awt.event.ActionEvent evt) {                                             
+            else{
+                ProductsValidator.validateUpdate();
+            }
+            
+        }catch(Exception e){
+            final ErrorOKDialog ErrorOKDialog = DialogsFactory.getSingleton().getErrorOKDialog(baseJFrame);
+            ErrorOKDialog.setText(e.getMessage());
+            ErrorOKDialog.show();
+            return;
+        }
+        
+        //If it is for new 
+        if(save){
+            
+            //Get the product
+            final Product Product = (Product)RepositoryFactory.getInstance().getProductsRepository().getProductByCode(productCode);
+            
+            //If exists
+            if(Product != null){
+                DialogsFactory.getSingleton().showErrorRecordExistsOKDialog(baseJFrame, (JFrame jFrame) -> {
+                    jTProd.grabFocus();
+                });
+                return;
+            }
+        }
+        
+        //If it is not empty
+        if(!satKey.isEmpty()){
 
-	try{            	
-            
-            
-	}
-	catch (Exception ex) {
-            LoggerUtility.getSingleton().logError(ProdsViewController.class, ex);
-            try {
-                    DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
-            } catch (Exception ex1) {
-                    Logger.getLogger(ProdsViewController.class.getName()).log(Level.SEVERE, null, ex1);
+            //Get the model obect
+            final CClaveprodserv CClaveprodserv = (CClaveprodserv)RepositoryFactory.getInstance().getCClaveprodservsRepository().getByCode(satKey);
+
+            //If it doesnt exists
+            if(CClaveprodserv==null){
+                DialogsFactory.getSingleton().showErrorOKRecordNotExistsCallbackDialog(baseJFrame, (JFrame jFrame) -> {
+                    jTClaveSat.grabFocus();
+                });
+                return;
             }
-	}
+        }
+
+        //Question if continue
+        DialogsFactory.getSingleton().showQuestionContinueDialog(baseJFrame, (JFrame jFrame) -> {
+
+            try{
+
+                //Get all the values from fields
+                final String information = jTAInfor.getText().trim();
+                final String minimum = jTMin.getText().trim();
+                final String maximum = jTMin.getText().trim();                    
+                final boolean isForSale = jCEsParaVent.isSelected();
+                final boolean askForMinAndMax = jCNoSolMaxMin.isSelected();
+                final boolean sellUnderCost = jCBajCost.isSelected();
+                final boolean isService = jCServ.isSelected();
+                final boolean isInventarable = jCInvent.isSelected();
+                final boolean showXml = jCMostrarXml.isSelected();
+                final boolean askSerie = jCNoSer.isSelected();
+                final boolean isPediment = jCPed.isSelected();
+                final boolean isKit = jCComp.isSelected();                                        
+
+                //Create the model
+                Product Product;
+                if(save){
+                    Product = new Product();
+                    Product.setCode(productCode);
+                }
+                else{
+                 
+                    //Get the product from db
+                    Product = (Product)RepositoryFactory.getInstance().getProductsRepository().getByCode(productCode);
+                }
+                Product.setDescription(description);
+                Product.setName(name);
+                Product.setKeySAT(satKey);
+                Product.setInformation(information);
+                Product.setMinimun(Integer.valueOf(minimum));
+                Product.setMaximum(Integer.valueOf(maximum));
+                Product.setIsForSale(isForSale);
+                Product.setAskMaxMin(askForMinAndMax);
+                Product.setLowerCost(sellUnderCost);
+                Product.setService(isService);
+                Product.setIventory(isInventarable);
+                Product.setAskSerie(askSerie);
+                Product.setPediment(isPediment);
+                Product.setCompound(isKit);
+
+                //Save the product and taxes of the product
+                RepositoryFactory.getInstance().getProductsRepository().addOrUpdateProduct(Product, taxesGlobal);
+
+                //Reload the table                
+                jTab.loadAllItemsInTable();
+                    
+                //Announce the user of success
+                DialogsFactory.getSingleton().showOKOperationCompletedCallbackDialog(jFrame, (JFrame jFrame1) -> {
+                });
+
+            }catch (Exception ex) {
+                LoggerUtility.getSingleton().logError(ProdsViewController.class, ex);
+                try {
+                        DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+                } catch (Exception ex1) {
+                        Logger.getLogger(ProdsViewController.class.getName()).log(Level.SEVERE, null, ex1);
+                }
+            }
+        });
     }
     
     private void jBGuarActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	
-            
-            
+            saveOrUpdate(false);
 	}
 	catch (Exception ex) {
             LoggerUtility.getSingleton().logError(ProdsViewController.class, ex);
@@ -193,9 +493,8 @@ public class ProdsViewController extends ProdsJFrame {
     
     private void jBNewActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
-	try{            	
-            
-            
+	try{
+            saveOrUpdate(true);
 	}
 	catch (Exception ex) {
             LoggerUtility.getSingleton().logError(ProdsViewController.class, ex);
@@ -210,8 +509,43 @@ public class ProdsViewController extends ProdsJFrame {
     private void jBDelActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	
+                                    
+            //Select first
+            if(!jTab.isRowSelected()){
+                
+                DialogsFactory.getSingleton().showErrorOKNoSelectionCallbackDialog(baseJFrame, (JFrame jFrame) -> {
+                    jTProd.grabFocus();
+                });
+                return;
+            }
             
+            //Get the product code
+            final Product Product_ = (Product)jTab.getRowSelected();
+            final String productCode = Product_.getCode();
             
+            //Question if continue
+            DialogsFactory.getSingleton().showQuestionContinueDialog(baseJFrame, (JFrame jFrame) -> {
+                
+                try{
+                    
+                    //Delete the product from the database
+                    RepositoryFactory.getInstance().getProductsRepository().deleteProductByCode(productCode);
+                    
+                        //Reload the table
+                        jTab.loadAllItemsInTable();
+                    
+                    //Annoucne the user of the success
+                    DialogsFactory.getSingleton().showOKOperationCompletedCallbackDialog(jFrame, null);                    
+                    
+                }catch (Exception ex) {
+                    LoggerUtility.getSingleton().logError(ProdsViewController.class, ex);
+                    try {
+                            DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+                    } catch (Exception ex1) {
+                            Logger.getLogger(ProdsViewController.class.getName()).log(Level.SEVERE, null, ex1);
+                    }
+                }
+            });
 	}
 	catch (Exception ex) {
             LoggerUtility.getSingleton().logError(ProdsViewController.class, ex);
@@ -242,8 +576,13 @@ public class ProdsViewController extends ProdsJFrame {
     private void jBLimActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	
+            this.clearFields();
             
+            //Enable the save button
+            jBGuar.setEnabled(false);
             
+            //Enable product code field
+            jTProd.setEnabled(true);
 	}
 	catch (Exception ex) {
             LoggerUtility.getSingleton().logError(ProdsViewController.class, ex);
@@ -259,55 +598,9 @@ public class ProdsViewController extends ProdsJFrame {
 
 	try{            	
             
-            
-	}
-	catch (Exception ex) {
-            LoggerUtility.getSingleton().logError(ProdsViewController.class, ex);
-            try {
-                    DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
-            } catch (Exception ex1) {
-                    Logger.getLogger(ProdsViewController.class.getName()).log(Level.SEVERE, null, ex1);
-            }
-	}
-    }
-    
-    private void jBPartActionPerformed(java.awt.event.ActionEvent evt) {                                             
-
-	try{            	
-            
-            
-	}
-	catch (Exception ex) {
-            LoggerUtility.getSingleton().logError(ProdsViewController.class, ex);
-            try {
-                    DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
-            } catch (Exception ex1) {
-                    Logger.getLogger(ProdsViewController.class.getName()).log(Level.SEVERE, null, ex1);
-            }
-	}
-    }
-    
-    private void jBCompaActionPerformed(java.awt.event.ActionEvent evt) {                                             
-
-	try{            	
-            
-            
-	}
-	catch (Exception ex) {
-            LoggerUtility.getSingleton().logError(ProdsViewController.class, ex);
-            try {
-                    DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
-            } catch (Exception ex1) {
-                    Logger.getLogger(ProdsViewController.class.getName()).log(Level.SEVERE, null, ex1);
-            }
-	}
-    }
-    
-    private void jBMasSerActionPerformed(java.awt.event.ActionEvent evt) {                                             
-
-	try{            	
-            
-            
+            DialogsFactory.getSingleton().showQuestionContinueDialog(baseJFrame, (JFrame jFrame) -> {
+                dispose();
+            });
 	}
 	catch (Exception ex) {
             LoggerUtility.getSingleton().logError(ProdsViewController.class, ex);
@@ -323,7 +616,39 @@ public class ProdsViewController extends ProdsJFrame {
 
 	try{            	
             
+            //Get the product code
+            final String productCode = jTProd.getText().trim();
             
+            //Select first
+            if(!jTab.isRowSelected() && productCode.isEmpty()){
+                
+                DialogsFactory.getSingleton().showErrorOKNoSelectionCallbackDialog(baseJFrame, (JFrame jFrame) -> {
+                    jTProd.grabFocus();
+                });
+                return;
+            }
+            
+            //Get the product
+            final Product Product_ = (Product)RepositoryFactory.getInstance().getProductsRepository().getByCode(productCode);
+            
+            //Get the view controller
+            final Impuestos_X_productos_nuevoViewController Impuestos_X_productos_nuevoViewController = ViewControlersFactory.getSingleton().getImpuestos_X_productos_nuevoViewController();
+            
+            //If product exists
+            if(Product_!=null){
+                
+                //Get all the product taxes
+                final List<Tax> taxes = RepositoryFactory.getInstance().getImpuesXProductRepository().getProductTaxes(productCode);
+                
+                //Set the taxes list to the controller
+                Impuestos_X_productos_nuevoViewController.setTaxes(taxes);
+            }
+            
+            //Show the window
+            Impuestos_X_productos_nuevoViewController.setCloseWindow((List<Tax> taxes) -> {
+                taxesGlobal = taxes; 
+            });
+            Impuestos_X_productos_nuevoViewController.setVisible();
 	}
 	catch (Exception ex) {
             LoggerUtility.getSingleton().logError(ProdsViewController.class, ex);
@@ -339,7 +664,62 @@ public class ProdsViewController extends ProdsJFrame {
 
 	try{            	
             
+            //First select a product or set a profuct code
+            if(!jTab.isRowSelected() && jTProd.getText().trim().isEmpty()){
+                DialogsFactory.getSingleton().showErrorOKNoSelectionCallbackDialog(baseJFrame, (JFrame jFrame) -> {
+                    jTProd.grabFocus();
+                });
+                return;
+            }
             
+            //Get the producto code
+            String productCode;
+            if(jTab.isRowSelected()){
+                Product Product_ = (Product)jTab.getRowSelected();
+                productCode = Product_.getCode();
+            }
+            else {
+                productCode = jTProd.getText().trim();
+            }
+            
+            //Get the product from db
+            final Product Product_ = RepositoryFactory.getInstance().getProductsRepository().getProductByCode(productCode);
+            
+            //If the product doesnt exist
+            if(Product_ == null){
+                DialogsFactory.getSingleton().showErrorOKCallbackDialog(baseJFrame, "errors_first_product_exists_to_save_image", (JFrame jFrame) -> {
+                    jTProd.grabFocus();
+                });
+                return;
+            }
+            
+            final ImageFileChooserUtility ImageFileChooserUtility = UtilitiesFactory.getSingleton().getImageFileChooserUtility();
+            ImageFileChooserUtility.setIApproveOpption((String absolutePath, String fileName) -> {
+                
+                try{
+                    
+                    //Create the final path
+                    final String finalPath = absolutePath + "\\" + fileName;
+
+                    //Save the image 
+                    UtilitiesFactory.getSingleton().getImagesUtility().saveProductImage(productCode, finalPath);
+
+                    jLImg.setIcon(new ImageIcon(finalPath));
+                    jLImg.setVisible(true);
+                    
+                    //Announce the user
+                    DialogsFactory.getSingleton().showOKOperationCompletedCallbackDialog(baseJFrame, null);
+                    
+                }catch (Exception ex) {
+                    LoggerUtility.getSingleton().logError(ProdsViewController.class, ex);
+                    try {
+                            DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+                    } catch (Exception ex1) {
+                            Logger.getLogger(ProdsViewController.class.getName()).log(Level.SEVERE, null, ex1);
+                    }
+                }
+            });
+            ImageFileChooserUtility.showSaveDialog(baseJFrame);
 	}
 	catch (Exception ex) {
             LoggerUtility.getSingleton().logError(ProdsViewController.class, ex);
@@ -355,7 +735,56 @@ public class ProdsViewController extends ProdsJFrame {
 
 	try{            	
             
+            //First select a product or set a profuct code
+            if(!jTab.isRowSelected() && jTProd.getText().trim().isEmpty()){
+                DialogsFactory.getSingleton().showErrorOKNoSelectionCallbackDialog(baseJFrame, (JFrame jFrame) -> {
+                    jTProd.grabFocus();
+                });
+                return;
+            }
             
+            //Get the producto code
+            String productCode;
+            if(jTab.isRowSelected()){
+                Product Product_ = (Product)jTab.getRowSelected();
+                productCode = Product_.getCode();
+            }
+            else {
+                productCode = jTProd.getText().trim();
+            }
+            
+            //Get the product from db
+            final Product Product_ = RepositoryFactory.getInstance().getProductsRepository().getProductByCode(productCode);
+            
+            //If the product doesnt exist
+            if(Product_ == null){
+                DialogsFactory.getSingleton().showErrorOKCallbackDialog(baseJFrame, "errors_first_product_exists_to_delete_image", (JFrame jFrame) -> {
+                    jTProd.grabFocus();
+                });
+                return;
+            }
+            
+            //Question if continue
+            DialogsFactory.getSingleton().showQuestionContinueDialog(baseJFrame, (JFrame jFrame) -> {
+               
+                try{
+                    
+                    //Delete the product image                    
+                    UtilitiesFactory.getSingleton().getImagesUtility().deleteProductImage(productCode);
+
+                    jLImg.setVisible(false);
+
+                    DialogsFactory.getSingleton().showOKOperationCompletedCallbackDialog(jFrame, null);
+                }
+                catch (Exception ex) {
+                    LoggerUtility.getSingleton().logError(ProdsViewController.class, ex);
+                    try {
+                            DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+                    } catch (Exception ex1) {
+                            Logger.getLogger(ProdsViewController.class.getName()).log(Level.SEVERE, null, ex1);
+                    }
+                }
+            });
 	}
 	catch (Exception ex) {
             LoggerUtility.getSingleton().logError(ProdsViewController.class, ex);
@@ -371,22 +800,40 @@ public class ProdsViewController extends ProdsJFrame {
 
 	try{            	
             
-            
-	}
-	catch (Exception ex) {
-            LoggerUtility.getSingleton().logError(ProdsViewController.class, ex);
-            try {
-                    DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
-            } catch (Exception ex1) {
-                    Logger.getLogger(ProdsViewController.class.getName()).log(Level.SEVERE, null, ex1);
+            //First select a product or set a profuct code
+            if(!jTab.isRowSelected() && jTProd.getText().trim().isEmpty()){
+                DialogsFactory.getSingleton().showErrorOKNoSelectionCallbackDialog(baseJFrame, (JFrame jFrame) -> {
+                    jTProd.grabFocus();
+                });
+                return;
             }
-	}
-    }
-    
-    private void jBPrecActionPerformed(java.awt.event.ActionEvent evt) {                                             
-
-	try{            	
-            ViewControlersFactory.getSingleton().getLPrecsViewController().setVisible();
+            
+            //Get the producto code
+            String productCode;
+            if(jTab.isRowSelected()){
+                Product Product_ = (Product)jTab.getRowSelected();
+                productCode = Product_.getCode();
+            }
+            else {
+                productCode = jTProd.getText().trim();
+            }
+            
+            //Get the product from db
+            final Product Product_ = RepositoryFactory.getInstance().getProductsRepository().getProductByCode(productCode);
+            
+            //If the product doesnt exist
+            if(Product_ == null){
+                DialogsFactory.getSingleton().showErrorOKCallbackDialog(baseJFrame, "errors_first_product_exists_to_view_image", (JFrame jFrame) -> {
+                    jTProd.grabFocus();
+                });
+                return;
+            }
+            
+            //Get the product image path
+            final String productImagePath = UtilitiesFactory.getSingleton().getImagesUtility().getProductImagePath(productCode);
+            
+            //Open the image
+            UtilitiesFactory.getSingleton().getDesktopUtility().open(productImagePath);
 	}
 	catch (Exception ex) {
             LoggerUtility.getSingleton().logError(ProdsViewController.class, ex);
@@ -400,8 +847,41 @@ public class ProdsViewController extends ProdsJFrame {
     
     private void jBExisAlmaActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
-	try{            	    
-            ViewControlersFactory.getSingleton().getProdExisAlmViewController().setVisible();
+	try{
+            
+            //First select a product or set a profuct code
+            if(!jTab.isRowSelected() && jTProd.getText().trim().isEmpty()){
+                DialogsFactory.getSingleton().showErrorOKNoSelectionCallbackDialog(baseJFrame, (JFrame jFrame) -> {
+                    jTProd.grabFocus();
+                });
+                return;
+            }
+            
+            //Get the producto code
+            String productCode;
+            if(jTab.isRowSelected()){
+                Product Product_ = (Product)jTab.getRowSelected();
+                productCode = Product_.getCode();
+            }
+            else {
+                productCode = jTProd.getText().trim();
+            }
+            
+            //Get the product from db
+            final Product Product_ = RepositoryFactory.getInstance().getProductsRepository().getProductByCode(productCode);
+            
+            //If the product doesnt exist
+            if(Product_ == null){
+                DialogsFactory.getSingleton().showErrorRecordNotExistsOKDialog(baseJFrame, (JFrame jFrame) -> {
+                    jTProd.grabFocus();
+                });
+                return;
+            }
+            
+            //Show the screen of warehouses existences
+            final ProdExisAlmViewController ProdExisAlmViewController = ViewControlersFactory.getSingleton().getProdExisAlmViewController();
+            ProdExisAlmViewController.setProductCode(productCode);
+            ProdExisAlmViewController.setVisible();
 	}
 	catch (Exception ex) {
             LoggerUtility.getSingleton().logError(ProdsViewController.class, ex);
@@ -417,7 +897,60 @@ public class ProdsViewController extends ProdsJFrame {
 
 	try{            	
             
+            //First select a product or set a profuct code
+            if(!jTab.isRowSelected() && jTProd.getText().trim().isEmpty()){
+                DialogsFactory.getSingleton().showErrorOKNoSelectionCallbackDialog(baseJFrame, (JFrame jFrame) -> {
+                    jTProd.grabFocus();
+                });
+                return;
+            }
             
+            //Get the producto code
+            String productCode;
+            if(jTab.isRowSelected()){
+                Product Product_ = (Product)jTab.getRowSelected();
+                productCode = Product_.getCode();
+            }
+            else {
+                productCode = jTProd.getText().trim();
+            }
+            
+            //Get the product from db
+            final Product Product_ = RepositoryFactory.getInstance().getProductsRepository().getProductByCode(productCode);
+            
+            //If the product doesnt exist
+            if(Product_ == null){
+                DialogsFactory.getSingleton().showErrorOKCallbackDialog(baseJFrame, "errors_first_product_exists_to_view_image", (JFrame jFrame) -> {
+                    jTProd.grabFocus();
+                });
+                return;
+            }
+            
+            //Search the technical product file
+            final FTecnicaFileChooserUtility FTecnicaFileChooserUtility = UtilitiesFactory.getSingleton().getFTecnicaFileChooserUtility();
+            FTecnicaFileChooserUtility.setIApproveOpption((String absolutePath, String fileName) -> {
+                
+                try{
+                    
+                    //Create the final path
+                    final String finalPath = absolutePath + "\\" + fileName;
+
+                    //Save the technical product file
+                    UtilitiesFactory.getSingleton().getImagesUtility().saveFTecnicaProduct(productCode, finalPath);
+                    
+                    //Announce the user
+                    DialogsFactory.getSingleton().showOKOperationCompletedCallbackDialog(baseJFrame, null);
+                    
+                }catch (Exception ex) {
+                    LoggerUtility.getSingleton().logError(ProdsViewController.class, ex);
+                    try {
+                            DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+                    } catch (Exception ex1) {
+                            Logger.getLogger(ProdsViewController.class.getName()).log(Level.SEVERE, null, ex1);
+                    }
+                }
+            });
+            FTecnicaFileChooserUtility.showSaveDialog(baseJFrame);
 	}
 	catch (Exception ex) {
             LoggerUtility.getSingleton().logError(ProdsViewController.class, ex);
@@ -433,7 +966,50 @@ public class ProdsViewController extends ProdsJFrame {
 
 	try{            	
             
+            //First select a product or set a profuct code
+            if(!jTab.isRowSelected() && jTProd.getText().trim().isEmpty()){
+                DialogsFactory.getSingleton().showErrorOKNoSelectionCallbackDialog(baseJFrame, (JFrame jFrame) -> {
+                    jTProd.grabFocus();
+                });
+                return;
+            }
             
+            //Get the producto code
+            String productCode;
+            if(jTab.isRowSelected()){
+                Product Product_ = (Product)jTab.getRowSelected();
+                productCode = Product_.getCode();
+            }
+            else {
+                productCode = jTProd.getText().trim();
+            }
+            
+            //Get the product from db
+            final Product Product_ = RepositoryFactory.getInstance().getProductsRepository().getProductByCode(productCode);
+            
+            //If the product doesnt exist
+            if(Product_ == null){
+                DialogsFactory.getSingleton().showErrorOKCallbackDialog(baseJFrame, "errors_first_product_exists_to_view_image", (JFrame jFrame) -> {
+                    jTProd.grabFocus();
+                });
+                return;
+            }
+            
+            //Get if technical product file exists or not
+            final boolean ftechinicalExists = UtilitiesFactory.getSingleton().getImagesUtility().FTechnicalProductExists(productCode);
+                                    
+            //If not exists announce to the user
+            if(!ftechinicalExists){                
+                DialogsFactory.getSingleton().showErrorFileNotExistsOKDialog(baseJFrame, (JFrame jFrame) -> {                    
+                });
+                return;
+            }
+            
+            //Delete the technical product file
+            UtilitiesFactory.getSingleton().getImagesUtility().deleteFTechnicalProduct(productCode);
+            
+            //Announce the user of success
+            DialogsFactory.getSingleton().showOKOperationCompletedCallbackDialog(baseJFrame, null);
 	}
 	catch (Exception ex) {
             LoggerUtility.getSingleton().logError(ProdsViewController.class, ex);
@@ -449,7 +1025,50 @@ public class ProdsViewController extends ProdsJFrame {
 
 	try{            	
             
+            //First select a product or set a profuct code
+            if(!jTab.isRowSelected() && jTProd.getText().trim().isEmpty()){
+                DialogsFactory.getSingleton().showErrorOKNoSelectionCallbackDialog(baseJFrame, (JFrame jFrame) -> {
+                    jTProd.grabFocus();
+                });
+                return;
+            }
             
+            //Get the producto code
+            String productCode;
+            if(jTab.isRowSelected()){
+                Product Product_ = (Product)jTab.getRowSelected();
+                productCode = Product_.getCode();
+            }
+            else {
+                productCode = jTProd.getText().trim();
+            }
+            
+            //Get the product from db
+            final Product Product_ = RepositoryFactory.getInstance().getProductsRepository().getProductByCode(productCode);
+            
+            //If the product doesnt exist
+            if(Product_ == null){
+                DialogsFactory.getSingleton().showErrorOKCallbackDialog(baseJFrame, "errors_first_product_exists_to_view_image", (JFrame jFrame) -> {
+                    jTProd.grabFocus();
+                });
+                return;
+            }
+            
+            //Get if technical product file exists or not
+            final boolean ftechinicalExists = UtilitiesFactory.getSingleton().getImagesUtility().FTechnicalProductExists(productCode);
+                                    
+            //If not exists announce to the user
+            if(!ftechinicalExists){                
+                DialogsFactory.getSingleton().showErrorFileNotExistsOKDialog(baseJFrame, (JFrame jFrame) -> {                    
+                });
+                return;
+            }
+            
+            //Get the technical file path
+            final String pathToFile = UtilitiesFactory.getSingleton().getImagesUtility().getFTecnicalProductPath(productCode);
+            
+            //Open the file
+            UtilitiesFactory.getSingleton().getDesktopUtility().open(pathToFile);
 	}
 	catch (Exception ex) {
             LoggerUtility.getSingleton().logError(ProdsViewController.class, ex);
@@ -463,7 +1082,7 @@ public class ProdsViewController extends ProdsJFrame {
     
     private void jBCompsActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
-	try{            	
+	try{
             
             
 	}
