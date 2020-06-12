@@ -10,11 +10,12 @@ import com.era.easyretail.validators.ProductsValidator;
 import com.era.logger.LoggerUtility;
 import com.era.models.Anaqs;
 import com.era.models.CClaveprodserv;
+import com.era.models.ImpuesXProduct;
 import com.era.models.Line;
 import com.era.models.Lugs;
 import com.era.models.Meds;
 import com.era.models.Product;
-import com.era.models.Tax;
+import com.era.models.Supplier;
 import com.era.models.Unid;
 import com.era.repositories.RepositoryFactory;
 import com.era.utilities.UtilitiesFactory;
@@ -38,7 +39,7 @@ import javax.swing.event.ListSelectionEvent;
  */
 public class ProdsViewController extends ProdsJFrame {
     
-    private List<Tax> taxesGlobal = new ArrayList<>();
+    private List<ImpuesXProduct> taxesGlobal = new ArrayList<>();
     
     public ProdsViewController() {
         super("window_title_prods");
@@ -239,6 +240,7 @@ public class ProdsViewController extends ProdsJFrame {
         jTNom.setText("");
         jTClaveSat.setText("");
         
+        taxesGlobal = new ArrayList<>(); 
         jLImg.setVisible(false);
         
         //Reset comboboxes
@@ -410,6 +412,16 @@ public class ProdsViewController extends ProdsJFrame {
             }
         }
 
+        //Validate that the supplier exists
+        final String supplier = jTCodProv.getText().trim();                
+        final Supplier Supplier = (Supplier)RepositoryFactory.getInstance().getSuppliersRepository().getByCode(supplier);                
+        if(Supplier==null){
+            DialogsFactory.getSingleton().showErrorOKRecordNotExistsCallbackDialog(baseJFrame, (JFrame jFrame) -> {
+                    jTCodProv.grabFocus();
+                });
+                return;
+        }
+        
         //Question if continue
         DialogsFactory.getSingleton().showQuestionContinueDialog(baseJFrame, (JFrame jFrame) -> {
 
@@ -432,14 +444,14 @@ public class ProdsViewController extends ProdsJFrame {
                 //Create the model
                 Product Product;
                 if(save){
-                    Product = new Product();
-                    Product.setCode(productCode);
+                    Product = new Product();                    
                 }
                 else{
                  
                     //Get the product from db
                     Product = (Product)RepositoryFactory.getInstance().getProductsRepository().getByCode(productCode);
                 }
+                Product.setCode(productCode);
                 Product.setDescription(description);
                 Product.setName(name);
                 Product.setKeySAT(satKey);
@@ -449,6 +461,7 @@ public class ProdsViewController extends ProdsJFrame {
                 Product.setIsForSale(isForSale);
                 Product.setAskMaxMin(askForMinAndMax);
                 Product.setLowerCost(sellUnderCost);
+                Product.setProviderOptional1(supplier);
                 Product.setService(isService);
                 Product.setIventory(isInventarable);
                 Product.setAskSerie(askSerie);
@@ -616,39 +629,46 @@ public class ProdsViewController extends ProdsJFrame {
 
 	try{            	
             
-            //Get the product code
-            final String productCode = jTProd.getText().trim();
-            
-            //Select first
-            if(!jTab.isRowSelected() && productCode.isEmpty()){
-                
+            //First select a product or set a profuct code
+            if(!jTab.isRowSelected() && jTProd.getText().trim().isEmpty()){
                 DialogsFactory.getSingleton().showErrorOKNoSelectionCallbackDialog(baseJFrame, (JFrame jFrame) -> {
                     jTProd.grabFocus();
                 });
                 return;
             }
             
-            //Get the product
-            final Product Product_ = (Product)RepositoryFactory.getInstance().getProductsRepository().getByCode(productCode);
-            
-            //Get the view controller
-            final Impuestos_X_productos_nuevoViewController Impuestos_X_productos_nuevoViewController = ViewControlersFactory.getSingleton().getImpuestos_X_productos_nuevoViewController();
-            
-            //If product exists
-            if(Product_!=null){
-                
-                //Get all the product taxes
-                final List<Tax> taxes = RepositoryFactory.getInstance().getImpuesXProductRepository().getProductTaxes(productCode);
-                
-                //Set the taxes list to the controller
-                Impuestos_X_productos_nuevoViewController.setTaxes(taxes);
+            //Get the producto code
+            String productCode;
+            if(jTab.isRowSelected()){
+                Product Product_ = (Product)jTab.getRowSelected();
+                productCode = Product_.getCode();
+            }
+            else {
+                productCode = jTProd.getText().trim();
             }
             
-            //Show the window
-            Impuestos_X_productos_nuevoViewController.setCloseWindow((List<Tax> taxes) -> {
+            //Get the product from db
+            final Product Product_ = RepositoryFactory.getInstance().getProductsRepository().getProductByCode(productCode);
+            
+            //If the product doesnt exist
+            if(Product_ == null){
+                DialogsFactory.getSingleton().showErrorOKCallbackDialog(baseJFrame, "errors_first_product_exists_to_save_image", (JFrame jFrame) -> {
+                    jTProd.grabFocus();
+                });
+                return;
+            }
+            
+            //Get all the product taxes
+            taxesGlobal = RepositoryFactory.getInstance().getImpuesXProductRepository().getAllByProd(productCode);
+                
+            //Show the taxes producto window
+            final Impuestos_X_productos_nuevoViewController Impuestos_X_productos_nuevoViewController = ViewControlersFactory.getSingleton().getImpuestos_X_productos_nuevoViewController();
+            Impuestos_X_productos_nuevoViewController.setProductCode(productCode);
+            Impuestos_X_productos_nuevoViewController.setTaxes(taxesGlobal);
+            Impuestos_X_productos_nuevoViewController.setCloseWindow((List<ImpuesXProduct> taxes) -> {
                 taxesGlobal = taxes; 
             });
-            Impuestos_X_productos_nuevoViewController.setVisible();
+            Impuestos_X_productos_nuevoViewController.setVisible();                        
 	}
 	catch (Exception ex) {
             LoggerUtility.getSingleton().logError(ProdsViewController.class, ex);

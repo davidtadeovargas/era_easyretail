@@ -14,6 +14,7 @@ import com.era.logger.LoggerUtility;
 import com.era.models.BasDats;
 import com.era.models.Company;
 import com.era.models.Confgral;
+import com.era.models.Product;
 import com.era.models.User;
 import com.era.models.Supplier;
 import com.era.models.Warehouse;
@@ -21,13 +22,16 @@ import com.era.repositories.RepositoryFactory;
 import com.era.utilities.UtilitiesFactory;
 import com.era.utilities.WinRegistry;
 import com.era.utilities.excel.CustomersWorkbook;
+import com.era.utilities.excel.ProductsWorkbook;
 import com.era.utilities.excel.SuppliersWorkbook;
 import com.era.utilities.excel.WarehouseExistencesWorkbook;
 import com.era.utilities.excel.rows.models.CustomerExcelRowModel;
 import com.era.utilities.excel.rows.models.SupplierExcelRowModel;
 import com.era.utilities.excel.rows.models.WarehouseExistencesExcelRowModel;
+import com.era.utilities.excel.rows.models.ProductExcelRowModel;
 import com.era.utilities.exceptions.FilenameDontMatchException;
 import com.era.utilities.exceptions.InvalidFileExtensionException;
+import com.era.utilities.filechooser.ExcelFileChooserUtility;
 import com.era.utilities.filechooser.FileChooserUtility;
 import com.era.views.PrincipJFrame;
 import com.era.views.dialogs.DialogsFactory;
@@ -77,6 +81,9 @@ public class PrincipViewController extends PrincipJFrame {
             jMenIt4.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jMenIt4ActionPerformed(evt);
             });
+            jMInvenImpo.addActionListener((java.awt.event.ActionEvent evt) -> {
+                jMInvenImpoActionPerformed(evt);
+            });            
             jMMClien.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jMMClienActionPerformed(evt);
             });
@@ -356,6 +363,138 @@ public class PrincipViewController extends PrincipJFrame {
                                     }
                                 });
                                 WarehouseExistencesWorkbook.load();
+
+                            }catch (Exception ex) {
+                                LoggerUtility.getSingleton().logError(PrincipViewController.class, ex);
+                                try {
+                                    DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+                                } catch (Exception ex1) {
+                                    Logger.getLogger(PrincipViewController.class.getName()).log(Level.SEVERE, null, ex1);
+                                }
+                            }
+                            
+                            return null;
+                        }
+
+                        @Override
+                        public void after(Object Object) {
+                            
+                            try{
+
+                                //Announce success to the user
+                                DialogsFactory.getSingleton().showOKOperationCompletedCallbackDialog(jFrame, null);
+
+                            }catch (Exception ex) {
+                                LoggerUtility.getSingleton().logError(PrincipViewController.class, ex);
+                                try {
+                                    DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+                                } catch (Exception ex1) {
+                                    Logger.getLogger(PrincipViewController.class.getName()).log(Level.SEVERE, null, ex1);
+                                }
+                            }
+                        }
+                        
+                    });
+                    BaseSwingWorker.execute();
+
+                }catch (Exception ex) {
+                    LoggerUtility.getSingleton().logError(PrincipViewController.class, ex);
+                    try {
+                        DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+                    } catch (Exception ex1) {
+                        Logger.getLogger(PrincipViewController.class.getName()).log(Level.SEVERE, null, ex1);
+                    }
+                }
+            });
+            
+        }catch (Exception ex) {
+            LoggerUtility.getSingleton().logError(PrincipViewController.class, ex);
+            try {
+                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+            } catch (Exception ex1) {
+                Logger.getLogger(PrincipViewController.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+        }
+    }
+    
+    private void loadProductsFromExcel(String absolutePath, String fileName){
+        
+        try{
+            
+            //Question if really continue
+            DialogsFactory.getSingleton().showQuestionContinueDialog(baseJFrame, (JFrame jFrame) -> {
+            
+                try{
+                    
+                    final BaseSwingWorker BaseSwingWorker = new BaseSwingWorker();
+                    BaseSwingWorker.setShowLoading(baseJFrame);
+                    BaseSwingWorker.setISwingWorkerActions(new ISwingWorkerActions(){
+
+                        @Override
+                        public void before() {
+                            
+                        }
+
+                        @Override
+                        public Object doinbackground() {
+                            
+                            try{
+                                
+                                //Load the warehouses existences
+                                final ProductsWorkbook ProductsWorkbook = new ProductsWorkbook();
+                                ProductsWorkbook.setFilePath(absolutePath + "\\" + fileName);                    
+                                ProductsWorkbook.setOnFinish(() -> {
+
+                                    
+                                });
+                                ProductsWorkbook.setOnCellRender((Object CellModel) -> {
+                                    try{
+
+                                        //Cast model
+                                        final ProductExcelRowModel ProductExcelRowModel = (ProductExcelRowModel)CellModel;
+
+                                        //Get values
+                                        final String code = ProductExcelRowModel.getCode();
+                                        final String description = ProductExcelRowModel.getDescription();
+                                        final String nombre = ProductExcelRowModel.getNombre();
+                                        final String satCode = ProductExcelRowModel.getSatCode();
+                                        final String information = ProductExcelRowModel.getInformation();
+
+                                        //Get the product
+                                        Product Product = (Product)RepositoryFactory.getInstance().getProductsRepository().getByCode(code);
+                                        
+                                        //If doesnt exist create instance
+                                        boolean newOne = false;
+                                        if(Product==null){
+                                            Product = new Product();
+                                            newOne = true;
+                                        }
+
+                                        //Create the model
+                                        Product.setCode(code);
+                                        Product.setDescription(description);
+                                        Product.setName(nombre);
+                                        Product.setKeySAT(satCode);
+                                        Product.setInformation(information);
+
+                                        //If not exists save it
+                                        if(newOne){
+                                            RepositoryFactory.getInstance().getProductsRepository().save(Product);
+                                        }
+                                        else{ //Update it
+                                            RepositoryFactory.getInstance().getProductsRepository().update(Product);
+                                        }
+
+                                    }catch (Exception ex) {
+                                        LoggerUtility.getSingleton().logError(PrincipViewController.class, ex);
+                                        try {
+                                            DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+                                        } catch (Exception ex1) {
+                                            Logger.getLogger(PrincipViewController.class.getName()).log(Level.SEVERE, null, ex1);
+                                        }
+                                    }
+                                });
+                                ProductsWorkbook.load();
 
                             }catch (Exception ex) {
                                 LoggerUtility.getSingleton().logError(PrincipViewController.class, ex);
@@ -765,7 +904,7 @@ public class PrincipViewController extends PrincipJFrame {
                 final FileChooserUtility FileChooserUtility = UtilitiesFactory.getSingleton().getFileChooserUtility();
                 FileChooserUtility.addValidExtension("xlsx");
                 FileChooserUtility.addValidExtension("xls");
-                FileChooserUtility.setFileNameMatch(com.era.easyretail.Constants.FILENAME_EXCEL_IMPORT_SUPPLIERS);
+                FileChooserUtility.setFileNameMatch(com.era.Constants.FILENAME_EXCEL_IMPORT_SUPPLIERS);
                 FileChooserUtility.setIApproveOpption((String absolutePath, String fileName) -> {
                     loadSuppliersFromExcel(absolutePath,fileName);
                 });
@@ -848,7 +987,35 @@ public class PrincipViewController extends PrincipJFrame {
         //c.getObj().setVisible(true);
         
     }
-    
+        
+    private void jMInvenImpoActionPerformed(java.awt.event.ActionEvent evt) {                                         
+        
+        try{
+         
+            try{
+             
+                //Ask for the excel file path
+                final ExcelFileChooserUtility ExcelFileChooserUtility = UtilitiesFactory.getSingleton().getExcelFileChooserUtility();
+                ExcelFileChooserUtility.setFileNameMatch(com.era.Constants.FILENAME_EXCEL_IMPORT_PRODUCTS);
+                ExcelFileChooserUtility.setIApproveOpption((String absolutePath, String fileName) -> {
+                    loadProductsFromExcel(absolutePath,fileName);
+                });
+                ExcelFileChooserUtility.showSaveDialog(baseJFrame);
+            
+            }catch(InvalidFileExtensionException InvalidFileExtensionException){
+                DialogsFactory.getSingleton().showErrorOKCallbackDialog(baseJFrame, "errors_invalid_file_extension", null);
+            }
+            
+        }catch (Exception ex) {
+            LoggerUtility.getSingleton().logError(PrincipViewController.class, ex);
+            try {
+                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+            } catch (Exception ex1) {
+                Logger.getLogger(PrincipViewController.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+        }
+    }
+            
     private void jMMClienActionPerformed(java.awt.event.ActionEvent evt) {                                         
         ViewControlersFactory.getSingleton().getClientsViewController().setVisible();
     }

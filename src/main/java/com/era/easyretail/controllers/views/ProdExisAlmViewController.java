@@ -31,20 +31,12 @@ public class ProdExisAlmViewController extends ProdExisAlmJFrame {
             
             this.disposeButton(jBSal);
             
-            //If product not null            
-            if(productCode!=null){
-                
-                //Get all the warehouses existences for that product
-                final List<Existalma> existences = RepositoryFactory.getInstance().getExistalmasRepository().getAllWarehousesExistencesByProduct(productCode);
-                
-                //Load the items in table
-                this.BaseJTable = this.jTab;
-                this.jTab.addShowColumn(TableHeaderFactory.getSigleton().getExistalmasTableHeader().getROWNUMBER());
-                this.jTab.addShowColumn(TableHeaderFactory.getSigleton().getExistalmasTableHeader().getALMA());
-                this.jTab.addShowColumn(TableHeaderFactory.getSigleton().getExistalmasTableHeader().getDESCRIPTION());
-                this.jTab.addShowColumn(TableHeaderFactory.getSigleton().getExistalmasTableHeader().getEXIST());
-                this.jTab.initTable(existences);
-            }
+            //Init the table
+            this.BaseJTable = this.jTab;
+            this.jTab.addShowColumn(TableHeaderFactory.getSigleton().getExistalmasTableHeader().getROWNUMBER());
+            this.jTab.addShowColumn(TableHeaderFactory.getSigleton().getExistalmasTableHeader().getALMA());
+            this.jTab.addShowColumn(TableHeaderFactory.getSigleton().getExistalmasTableHeader().getDESCRIPTION());
+            this.jTab.addShowColumn(TableHeaderFactory.getSigleton().getExistalmasTableHeader().getEXIST());
             
         }catch (Exception ex) {
             LoggerUtility.getSingleton().logError(ProdExisAlmViewController.class, ex);
@@ -56,8 +48,16 @@ public class ProdExisAlmViewController extends ProdExisAlmJFrame {
         }
     }
 
-    public void setProductCode(String productCode) {
+    public void setProductCode(String productCode) throws Exception {
+        
+        //Save the producto code globally
         this.productCode = productCode;
+        
+        //Get all the warehouses existences for that product
+        final List<Existalma> existences = RepositoryFactory.getInstance().getExistalmasRepository().getAllWarehousesExistencesByProduct(productCode);
+        
+        //Reload the table
+        this.jTab.initTable(existences);
     }   
     
     @Override

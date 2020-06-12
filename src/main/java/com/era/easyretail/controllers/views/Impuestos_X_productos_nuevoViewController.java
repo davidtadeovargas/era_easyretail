@@ -8,6 +8,7 @@ package com.era.easyretail.controllers.views;
 import com.era.views.Impuestos_X_productos_nuevoJFrame;
 import java.util.List;
 import com.era.logger.LoggerUtility;
+import com.era.models.ImpuesXProduct;
 import com.era.models.Tax;
 import com.era.views.dialogs.DialogsFactory;
 import com.era.views.tables.headers.TableHeaderFactory;
@@ -21,7 +22,8 @@ import javax.swing.JFrame;
  */
 public class Impuestos_X_productos_nuevoViewController extends Impuestos_X_productos_nuevoJFrame {
     
-    private List<Tax> taxes = new ArrayList<>();
+    private List<ImpuesXProduct> taxes = new ArrayList<>();
+    private String productCode;
     private CloseWindow CloseWindow;
     
     
@@ -41,7 +43,7 @@ public class Impuestos_X_productos_nuevoViewController extends Impuestos_X_produ
                 jBSalActionPerformed(evt);
             });            
             
-            this.disposeButton(jBNew);
+            this.disposeButton(jBSal);
             
             //Init the table with the items
             this.jTab.addShowColumn(TableHeaderFactory.getSigleton().getImpuesXProductsTableHeader().getROWNUMBER());
@@ -62,7 +64,11 @@ public class Impuestos_X_productos_nuevoViewController extends Impuestos_X_produ
             }
         }
     }
-    
+
+    public void setProductCode(String productCode) {
+        this.productCode = productCode;
+    }
+        
     @Override
     public void clearFields(){            
     }
@@ -72,7 +78,7 @@ public class Impuestos_X_productos_nuevoViewController extends Impuestos_X_produ
     }
     
     public interface CloseWindow {
-        public void onClose(List<Tax> taxes);
+        public void onClose(List<ImpuesXProduct> taxes);
     }
 
     public void setCloseWindow(CloseWindow CloseWindow) {
@@ -84,7 +90,7 @@ public class Impuestos_X_productos_nuevoViewController extends Impuestos_X_produ
         try{
             
             //Get all the taxes from the table
-            final List<Tax> itemsTable = (List<Tax>)this.jTab.getAllItemsInTable();
+            final List<ImpuesXProduct> itemsTable = (List<ImpuesXProduct>)this.jTab.getAllItemsInTable();
             
             if(CloseWindow!=null){
                 CloseWindow.onClose(itemsTable);
@@ -107,19 +113,24 @@ public class Impuestos_X_productos_nuevoViewController extends Impuestos_X_produ
 
 	try{            	
             
+            //Get the selected taxe
+            final Tax Tax = (Tax)this.jComImp.getSelectedObject();
+            
             //First select tax before continue
-            if(!this.jComImp.isSelectedObject()){
+            if(Tax.getCode().compareTo("")==0){
                 DialogsFactory.getSingleton().showErrorOKNoSelectionCallbackDialog(baseJFrame, (JFrame jFrame) -> {
                     jComImp.grabFocus();
                 });
                 return;
             }
             
-            //Get the selected tax
-            final Tax Tax = (Tax)this.jComImp.getSelectedObject();
+            //Create the temporal model
+            final ImpuesXProduct ImpuesXProduct = new ImpuesXProduct();
+            ImpuesXProduct.setCode(productCode);
+            ImpuesXProduct.setImpue(Tax.getCode());
             
             //Chec that the tax is not already in the table
-            if(jTab.objectExists(Tax)){
+            if(jTab.objectExists(ImpuesXProduct)){
                 DialogsFactory.getSingleton().showErrorRecordExistsOKDialog(baseJFrame, (JFrame jFrame) -> {
                     jComImp.grabFocus();
                 });
@@ -127,7 +138,8 @@ public class Impuestos_X_productos_nuevoViewController extends Impuestos_X_produ
             }
             
             //Add the tax to the table
-            this.jTab.addObject(Tax);
+            this.jTab.addObject(ImpuesXProduct);
+            
 	}
 	catch (Exception ex) {
             LoggerUtility.getSingleton().logError(Impuestos_X_productos_nuevoViewController.class, ex);
@@ -152,10 +164,10 @@ public class Impuestos_X_productos_nuevoViewController extends Impuestos_X_produ
             }
             
             //Get the selected object
-            final Tax Tax = (Tax)this.jTab.getRowSelected();
+            final ImpuesXProduct ImpuesXProduct = (ImpuesXProduct)this.jTab.getRowSelected();
             
             //Delete the selected object
-            this.jTab.deleteObject(Tax);
+            this.jTab.deleteObject(ImpuesXProduct);
 	}
 	catch (Exception ex) {
             LoggerUtility.getSingleton().logError(Impuestos_X_productos_nuevoViewController.class, ex);
@@ -167,8 +179,10 @@ public class Impuestos_X_productos_nuevoViewController extends Impuestos_X_produ
 	}
     }
 
-    public void setTaxes(List<Tax> taxes) {
-        this.taxes = taxes;
+    public void setTaxes(List<ImpuesXProduct> taxes) {
+        
+        //Load the taxes in the table
+        jTab.initTable(taxes);
     }
     
     
