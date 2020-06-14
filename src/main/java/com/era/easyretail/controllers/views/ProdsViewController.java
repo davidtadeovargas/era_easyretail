@@ -5,6 +5,7 @@
  */
 package com.era.easyretail.controllers.views;
 
+import com.era.datamodels.LPrecsDatamodel;
 import com.era.datamodels.enums.SearchCommonTypeEnum;
 import com.era.easyretail.validators.ProductsValidator;
 import com.era.logger.LoggerUtility;
@@ -40,11 +41,15 @@ import javax.swing.event.ListSelectionEvent;
 public class ProdsViewController extends ProdsJFrame {
     
     private List<ImpuesXProduct> taxesGlobal = new ArrayList<>();
-    
+    private LPrecsDatamodel LPrecsDatamodel;
+            
     public ProdsViewController() {
         super("window_title_prods");
         
         try{            
+            lprecsButton.addActionListener((java.awt.event.ActionEvent evt) -> {
+                lprecsButtonActionPerformed(evt);
+            });
             jBMosT.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jBMosTActionPerformed(evt);
             });
@@ -123,6 +128,8 @@ public class ProdsViewController extends ProdsJFrame {
 
                     //Load all the values in fields
                     loadModelInFields(Product);
+                    
+                    LPrecsDatamodel = null;
                     
                 }catch (Exception ex) {
                     LoggerUtility.getSingleton().logError(ProdsViewController.class, ex);
@@ -260,7 +267,92 @@ public class ProdsViewController extends ProdsJFrame {
                 
         jBComps.setEnabled(false);
     }
+            
+    private void lprecsButtonActionPerformed(java.awt.event.ActionEvent evt) {
         
+        try{
+            
+            //First select a product or set a profuct code
+            if(!jTab.isRowSelected() && jTProd.getText().trim().isEmpty()){
+                DialogsFactory.getSingleton().showErrorOKNoSelectionCallbackDialog(baseJFrame, (JFrame jFrame) -> {
+                    jTProd.grabFocus();
+                });
+                return;
+            }
+            
+            //Get the producto code
+            String productCode;
+            if(jTab.isRowSelected()){
+                Product Product_ = (Product)jTab.getRowSelected();
+                productCode = Product_.getCode();
+            }
+            else {
+                productCode = jTProd.getText().trim();
+            }
+            
+            //Get the product from db
+            final Product Product_ = RepositoryFactory.getInstance().getProductsRepository().getProductByCode(productCode);
+            
+            //If the product doesnt exist
+            if(Product_ == null){
+                DialogsFactory.getSingleton().showErrorOKCallbackDialog(baseJFrame, "errors_first_product_exists_to_save_image", (JFrame jFrame) -> {
+                    jTProd.grabFocus();
+                });
+                return;
+            }
+            
+            //Create quantities
+            if(LPrecsDatamodel==null){
+                LPrecsDatamodel = new LPrecsDatamodel();
+                LPrecsDatamodel.setPriceList1(String.valueOf(Product_.getPriceList1()));
+                LPrecsDatamodel.setPriceList2(String.valueOf(Product_.getPriceList2()));
+                LPrecsDatamodel.setPriceList3(String.valueOf(Product_.getPriceList3()));
+                LPrecsDatamodel.setPriceList4(String.valueOf(Product_.getPriceList4()));
+                LPrecsDatamodel.setPriceList5(String.valueOf(Product_.getPriceList5()));
+                LPrecsDatamodel.setPriceList6(String.valueOf(Product_.getPriceList6()));
+                LPrecsDatamodel.setPriceList7(String.valueOf(Product_.getPriceList7()));
+                LPrecsDatamodel.setPriceList8(String.valueOf(Product_.getPriceList8()));
+                LPrecsDatamodel.setPriceList9(String.valueOf(Product_.getPriceList9()));
+                LPrecsDatamodel.setPriceList10(String.valueOf(Product_.getPriceList10()));
+                LPrecsDatamodel.setUtility1(String.valueOf(Product_.getUtility1()));
+                LPrecsDatamodel.setUtility2(String.valueOf(Product_.getUtility2()));
+                LPrecsDatamodel.setUtility3(String.valueOf(Product_.getUtility3()));
+                LPrecsDatamodel.setUtility4(String.valueOf(Product_.getUtility4()));
+                LPrecsDatamodel.setUtility5(String.valueOf(Product_.getUtility5()));
+                LPrecsDatamodel.setUtility6(String.valueOf(Product_.getUtility6()));
+                LPrecsDatamodel.setUtility7(String.valueOf(Product_.getUtility7()));
+                LPrecsDatamodel.setUtility8(String.valueOf(Product_.getUtility8()));
+                LPrecsDatamodel.setUtility9(String.valueOf(Product_.getUtility9()));
+                LPrecsDatamodel.setUtility10(String.valueOf(Product_.getUtility10()));
+                LPrecsDatamodel.setUtilSales1(String.valueOf(Product_.getUtilSales1()));
+                LPrecsDatamodel.setUtilSales2(String.valueOf(Product_.getUtilSales2()));
+                LPrecsDatamodel.setUtilSales3(String.valueOf(Product_.getUtilSales3()));
+                LPrecsDatamodel.setUtilSales4(String.valueOf(Product_.getUtilSales4()));
+                LPrecsDatamodel.setUtilSales5(String.valueOf(Product_.getUtilSales5()));
+                LPrecsDatamodel.setUtilSales6(String.valueOf(Product_.getUtilSales6()));
+                LPrecsDatamodel.setUtilSales7(String.valueOf(Product_.getUtilSales7()));
+                LPrecsDatamodel.setUtilSales8(String.valueOf(Product_.getUtilSales8()));
+                LPrecsDatamodel.setUtilSales9(String.valueOf(Product_.getUtilSales9()));
+                LPrecsDatamodel.setUtilSales10(String.valueOf(Product_.getUtilSales10()));
+            }
+            
+            final LPrecsViewController LPrecsViewController = ViewControlersFactory.getSingleton().getLPrecsViewController();
+            LPrecsViewController.setLPrecsDatamodel(LPrecsDatamodel);
+            LPrecsViewController.setOnResult((LPrecsDatamodel LPrecsDatamodel_) -> {                
+                LPrecsDatamodel = LPrecsDatamodel_;
+            });
+            LPrecsViewController.setVisible();
+            
+        }catch (Exception ex) {
+            LoggerUtility.getSingleton().logError(ProdsViewController.class, ex);
+            try {
+                    DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+            } catch (Exception ex1) {
+                    Logger.getLogger(ProdsViewController.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+	}
+    }
+    
     private void jBClaveSatActionPerformed(java.awt.event.ActionEvent evt) {
 
 	try{            	
@@ -439,7 +531,7 @@ public class ProdsViewController extends ProdsJFrame {
                 final boolean showXml = jCMostrarXml.isSelected();
                 final boolean askSerie = jCNoSer.isSelected();
                 final boolean isPediment = jCPed.isSelected();
-                final boolean isKit = jCComp.isSelected();                                        
+                final boolean isKit = jCComp.isSelected();
 
                 //Create the model
                 Product Product;
@@ -468,6 +560,42 @@ public class ProdsViewController extends ProdsJFrame {
                 Product.setPediment(isPediment);
                 Product.setCompound(isKit);
 
+                //If any modification in price lists
+                if(LPrecsDatamodel != null){
+                    
+                    Product.setPriceList1(Float.valueOf(LPrecsDatamodel.getPriceList1()));
+                    Product.setPriceList2(Float.valueOf(LPrecsDatamodel.getPriceList2()));
+                    Product.setPriceList3(Float.valueOf(LPrecsDatamodel.getPriceList3()));
+                    Product.setPriceList4(Float.valueOf(LPrecsDatamodel.getPriceList4()));
+                    Product.setPriceList5(Float.valueOf(LPrecsDatamodel.getPriceList5()));
+                    Product.setPriceList6(Float.valueOf(LPrecsDatamodel.getPriceList6()));
+                    Product.setPriceList7(Float.valueOf(LPrecsDatamodel.getPriceList7()));
+                    Product.setPriceList8(Float.valueOf(LPrecsDatamodel.getPriceList8()));
+                    Product.setPriceList9(Float.valueOf(LPrecsDatamodel.getPriceList9()));
+                    Product.setPriceList10(Float.valueOf(LPrecsDatamodel.getPriceList10()));
+                    
+                    Product.setUtility1(Float.valueOf(LPrecsDatamodel.getUtility1()));
+                    Product.setUtility2(Float.valueOf(LPrecsDatamodel.getUtility2()));
+                    Product.setUtility3(Float.valueOf(LPrecsDatamodel.getUtility3()));
+                    Product.setUtility4(Float.valueOf(LPrecsDatamodel.getUtility4()));
+                    Product.setUtility5(Float.valueOf(LPrecsDatamodel.getUtility5()));
+                    Product.setUtility6(Float.valueOf(LPrecsDatamodel.getUtility6()));
+                    Product.setUtility7(Float.valueOf(LPrecsDatamodel.getUtility7()));
+                    Product.setUtility8(Float.valueOf(LPrecsDatamodel.getUtility8()));
+                    Product.setUtility9(Float.valueOf(LPrecsDatamodel.getUtility9()));
+                    Product.setUtility10(Float.valueOf(LPrecsDatamodel.getUtility10()));
+                    
+                    Product.setUtilSales1(Float.valueOf(LPrecsDatamodel.getUtilSales1()));
+                    Product.setUtilSales2(Float.valueOf(LPrecsDatamodel.getUtilSales2()));
+                    Product.setUtilSales3(Float.valueOf(LPrecsDatamodel.getUtilSales3()));
+                    Product.setUtilSales4(Float.valueOf(LPrecsDatamodel.getUtilSales4()));
+                    Product.setUtilSales5(Float.valueOf(LPrecsDatamodel.getUtilSales5()));
+                    Product.setUtilSales6(Float.valueOf(LPrecsDatamodel.getUtilSales6()));
+                    Product.setUtilSales7(Float.valueOf(LPrecsDatamodel.getUtilSales7()));
+                    Product.setUtilSales8(Float.valueOf(LPrecsDatamodel.getUtilSales8()));
+                    Product.setUtilSales9(Float.valueOf(LPrecsDatamodel.getUtilSales9()));
+                    Product.setUtilSales10(Float.valueOf(LPrecsDatamodel.getUtilSales10()));
+                }
                 //Save the product and taxes of the product
                 RepositoryFactory.getInstance().getProductsRepository().addOrUpdateProduct(Product, taxesGlobal);
 
