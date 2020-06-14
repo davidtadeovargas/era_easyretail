@@ -141,8 +141,8 @@ public class ProdsViewController extends ProdsJFrame {
                 }
             });
             
-            //Load all the table items
-            this.jTab.loadAllItemsInTable();
+            //Load all the table items with pagination
+            this.jTab.initTableWithPagination();
             
             //Load all the comboboxes
             jComLin.loadItems();
@@ -505,13 +505,15 @@ public class ProdsViewController extends ProdsJFrame {
         }
 
         //Validate that the supplier exists
-        final String supplier = jTCodProv.getText().trim();                
-        final Supplier Supplier = (Supplier)RepositoryFactory.getInstance().getSuppliersRepository().getByCode(supplier);                
-        if(Supplier==null){
-            DialogsFactory.getSingleton().showErrorOKRecordNotExistsCallbackDialog(baseJFrame, (JFrame jFrame) -> {
-                    jTCodProv.grabFocus();
-                });
-                return;
+        final String supplier = jTCodProv.getText().trim();
+        if(!supplier.isEmpty()){
+            final Supplier Supplier = (Supplier)RepositoryFactory.getInstance().getSuppliersRepository().getByCode(supplier);                
+            if(Supplier==null){
+                DialogsFactory.getSingleton().showErrorOKRecordNotExistsCallbackDialog(baseJFrame, (JFrame jFrame) -> {
+                        jTCodProv.grabFocus();
+                    });
+                    return;
+            }
         }
         
         //Question if continue
@@ -557,7 +559,7 @@ public class ProdsViewController extends ProdsJFrame {
                 Product.setService(isService);
                 Product.setIventory(isInventarable);
                 Product.setAskSerie(askSerie);
-                Product.setPediment(isPediment);
+                Product.setLotPediment(isPediment);
                 Product.setCompound(isKit);
 
                 //If any modification in price lists

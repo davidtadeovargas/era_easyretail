@@ -5,7 +5,9 @@
  */
 package com.era.easyretail.controllers.views;
 
+import com.era.logger.LoggerUtility;
 import com.era.views.RegisterWebsiteJFrame;
+import com.era.views.dialogs.DialogsFactory;
 import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
@@ -13,6 +15,8 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -31,14 +35,17 @@ public class RegisterWebsiteViewController extends RegisterWebsiteJFrame {
             
             try {
                 Desktop.getDesktop().browse(new URL("http://easyretail.com.mx/").toURI());
-            } catch (URISyntaxException | IOException e) {
-                e.printStackTrace();
+            } catch (Exception ex) {
+                LoggerUtility.getSingleton().logError(UsrsViewController.class, ex);
+                try {
+                    DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+                } catch (Exception ex1) {
+                    Logger.getLogger(RegisterWebsiteViewController.class.getName()).log(Level.SEVERE, null, ex1);
+                }
             }
         });
         
-        this.setOnOKButtonClicked((ActionEvent ae) -> {
-            dispose();
-        });
+        this.disposeButton(OKjButton);
     }
     
     @Override

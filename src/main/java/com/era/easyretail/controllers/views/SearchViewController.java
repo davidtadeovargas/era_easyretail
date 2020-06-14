@@ -18,14 +18,12 @@ import com.era.views.tables.headers.TableHeaderFactory;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
 
 /**
  *
@@ -142,17 +140,6 @@ public class SearchViewController extends SearchJFrame {
                     
             switch(SearchCommonTypeEnum){
                 
-                case CLAVES_PROD_SAT:
-                    
-                    list = RepositoryManager_.getCClaveprodservsRepository().getAllByPage(0);
-                    count = RepositoryManager_.getCClaveprodservsRepository().getCount();
-                    jTab.setCount(count);
-                    jTab.setPagination(list.size());
-                    
-                    showPaginationLabel();
-                                                            
-                    break;
-                    
                 case CUSTOMERS:
                     list = RepositoryManager_.getCompanysRepository().getAll();
                     break;
@@ -165,46 +152,35 @@ public class SearchViewController extends SearchJFrame {
                     list = RepositoryManager_.getProductsRepository().getAll();
                     break;
 
-                case SUPPLIERS:
-                    
-                    list = RepositoryManager_.getSuppliersRepository().getAllByPage(0);
-                    count = RepositoryManager_.getSuppliersRepository().getCount();
-                    jTab.setCount(count);
-                    jTab.setPagination(list.size());
-                    
-                    showPaginationLabel();
-                                        
-                    break;
-
-               case USERS:
+                case USERS:
                     list = RepositoryManager_.getUsersRepository().getAll();
                     break;
 
-               case KITS:
+                case KITS:
                     list = RepositoryManager_.getKitssRepository().getAll();
                     break;
 
-               case CONCEPTS:
+                case CONCEPTS:
                     list = RepositoryManager_.getConcepnotsRepository().getAll();
                     break;
 
-               case PAYMENT_TYPES:
+                case PAYMENT_TYPES:
                     list = RepositoryManager_.getPaymentFormsRepository().getAll();
                     break;
 
-               case COINS:
+                case COINS:
                     list = RepositoryManager_.getCoinsRepository().getAll();
                     break;
 
-               case WAREHOUSES:
+                case WAREHOUSES:
                     list = RepositoryManager_.getWarehousesRepository().getAll();
                     break;
 
-               case CLASSIFICATIONS:
+                case CLASSIFICATIONS:
                     list = RepositoryManager_.getClasificacionsRepository().getAll();
                     break;
 
-               case SUPPLIERS_CLASIFICATION:
+                case SUPPLIERS_CLASIFICATION:
                     list = RepositoryManager_.getSuppliersRepository().getAll();
                     break;
 
@@ -304,39 +280,6 @@ public class SearchViewController extends SearchJFrame {
                     list = RepositoryManager_.getSeriesRepository().getAllSerieEMP();
                     break;
 
-                case CPS:
-                    
-                    list = RepositoryManager_.getCCodigoPostalRepository().getAllByPage(0);
-                    count = RepositoryManager_.getCCodigoPostalRepository().getCount();
-                    jTab.setCount(count);
-                    jTab.setPagination(list.size());
-                    
-                    showPaginationLabel();
-                    
-                    break;
-                
-                case EXPEDITION_PLACE:
-                    
-                    list = RepositoryManager_.getCCodigoPostalRepository().getAllByPageExpeditionPlace(0);
-                    count = RepositoryManager_.getCCodigoPostalRepository().getCount();
-                    jTab.setCount(count);
-                    jTab.setPagination(list.size());
-                    
-                    showPaginationLabel();
-                    
-                    break;
-                    
-                case COUNTRIES:
-                    
-                    list = RepositoryManager_.getCCountriesRepository().getAllByPage(0);
-                    count = RepositoryManager_.getCCountriesRepository().getCount();
-                    jTab.setCount(count);
-                    jTab.setPagination(list.size());
-                    
-                    showPaginationLabel();
-                    
-                    break;                   
-                    
                 case SECTORS:
                    list = RepositoryManager_.getSectoressRepository().getAll();
                    break;
@@ -346,9 +289,7 @@ public class SearchViewController extends SearchJFrame {
                    break;
             }
             
-            if(list!=null){                
-                initTable(list);
-            }                
+            initTable(list);
             
         }catch(Exception e){
             LoggerUtility.getSingleton().logError(SearchViewController.class, e);
@@ -362,64 +303,6 @@ public class SearchViewController extends SearchJFrame {
         labelPaginacion.setText(Properties.getProperty("visible_records") + " " + jTab.getLastRowIndex() + " " + Properties.getProperty("visible_records_visibles") + " " + jTab.getPagination() + " " + Properties.getProperty("visible_records_of") + " " + jTab.getCount());
     }
     
-    private void loadDataByPage(final int initialIndex) throws Exception {
-        
-        //Review if is paginable
-        switch(SearchCommonTypeEnum){
-
-            case CPS:
-            case COUNTRIES:
-            case EXPEDITION_PLACE:
-            case CLAVES_PROD_SAT:
-            case SUPPLIERS:
-                
-                jTab.setPrevRowIndex(initialIndex);
-                
-                List<?> rows = new ArrayList<>();
-                
-                final int previusIndex = jTab.getPrevRowIndex();
-                
-                //Get the specific list type
-                switch(SearchCommonTypeEnum){
-                    case CPS:
-                        rows = RepositoryFactory.getInstance().getCCodigoPostalRepository().getAllByPage(previusIndex);
-                        break;
-                    
-                    case COUNTRIES:
-                        rows = RepositoryFactory.getInstance().getCCountriesRepository().getAllByPage(previusIndex);
-                        break;
-                        
-                    case EXPEDITION_PLACE:
-                        rows = RepositoryFactory.getInstance().getCCodigoPostalRepository().getAllByPageExpeditionPlace(previusIndex);
-                        break;
-                    
-                    case CLAVES_PROD_SAT:
-                        rows = RepositoryFactory.getInstance().getCClaveprodservsRepository().getAllByPage(previusIndex);
-                        break;
-                        
-                    case SUPPLIERS:
-                        rows = RepositoryFactory.getInstance().getSuppliersRepository().getAllByPage(previusIndex);
-                        break;
-                }
-                          
-                final int lastRowIndex = previusIndex + rows.size();
-                jTab.setLastRowIndex(lastRowIndex);
-                
-                showPaginationLabel();
-                
-                if(jTab!=null){
-                    jTab.clearRows();
-                }
-                
-                jTab.addRows(rows);
-
-                break;
-                
-            default:
-                break;
-        }
-    }
-    
     private void initTable(final List<?> items) throws Exception {
                 
         jTab.setSearchCommonTypeEnum(SearchCommonTypeEnum);        
@@ -430,60 +313,24 @@ public class SearchViewController extends SearchJFrame {
         jTab.getJScrollPane().setPreferredSize(new Dimension(70,150));
         jPanelTable.add(jTab.getJScrollPane());        
         jTab.setScrollAtStartWhenEnd(true);
-        jTab.setOnScrollMinimum(() -> {
-            try{
-                
-                SwingUtilities.invokeLater(() -> {
-                    labelLoading.setVisible(true);
-                });
-
-                loadDataByPage(jTab.getLastRowIndex());
-                
-                SwingUtilities.invokeLater(() -> {
-                    labelLoading.setVisible(false);
-                });
-                
-            }catch(Exception e){
-            
-                LoggerUtility.getSingleton().logError(SearchViewController.class, e);
-
-                try {
-                    final ErrorOKDialog ErrorOKDialog = DialogsFactory.getSingleton().getErrorOKDialog(baseJFrame);
-                    ErrorOKDialog.show();
-                } catch (Exception ex) {
-                    Logger.getLogger(SearchViewController.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        });
-        jTab.setOnScrollBottom(() -> {
-            try{
-                
-                SwingUtilities.invokeLater(() -> {
-                    labelLoading.setVisible(true);
-                });
-                
-                loadDataByPage(jTab.getPrevRowIndex() - jTab.getPagination());
-                
-                SwingUtilities.invokeLater(() -> {
-                    labelLoading.setVisible(false);
-                });
-                
-            }catch(Exception e){
-            
-                LoggerUtility.getSingleton().logError(SearchViewController.class, e);
-
-                try {
-                    final ErrorOKDialog ErrorOKDialog = DialogsFactory.getSingleton().getErrorOKDialog(baseJFrame);
-                    ErrorOKDialog.show();
-                } catch (Exception ex) {
-                    Logger.getLogger(SearchViewController.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }            
-        });
         jTab.setJTableEnterKeyPressed((int selectedRow) -> {
             jBCarg.doClick();
         });
         this.BaseJTable = jTab;
+        
+        //Determine if pagination or not
+        boolean usePagination = false;
+        switch(SearchCommonTypeEnum){
+            case CPS:
+            case COUNTRIES:
+            case EXPEDITION_PLACE:
+            case CLAVES_PROD_SAT:
+            case SUPPLIERS:
+                usePagination = true;
+                break;
+        }
+        
+        //Init the columns table
         switch(SearchCommonTypeEnum){
 
             case CUSTOMERS:
@@ -634,7 +481,7 @@ public class SearchViewController extends SearchJFrame {
             case COUNTRIES:
                 jTab.addShowColumn(TableHeaderFactory.getSigleton().getCCountriesTableHeader().getC_PAIS());
                 jTab.addShowColumn(TableHeaderFactory.getSigleton().getCCountriesTableHeader().getDESCRIPTION());
-                jTab.addShowColumn(TableHeaderFactory.getSigleton().getCCountriesTableHeader().getAGRUPACIONES());                                
+                jTab.addShowColumn(TableHeaderFactory.getSigleton().getCCountriesTableHeader().getAGRUPACIONES());                
                 break;                   
 
             case SECTORS:               
@@ -644,7 +491,40 @@ public class SearchViewController extends SearchJFrame {
                break;
         }
         
-        this.loadAllItemsInTable();
+        //Load based on pagination or normal
+        if(usePagination){
+         
+            switch(SearchCommonTypeEnum){
+
+                case CPS:
+                    this.jTab.setRepository(RepositoryFactory.getInstance().getCCodigoPostalRepository());
+                    break;
+
+                case COUNTRIES:
+                    this.jTab.setRepository(RepositoryFactory.getInstance().getCCountriesRepository());
+                    break;
+
+                case EXPEDITION_PLACE:
+                    this.jTab.setRepository(RepositoryFactory.getInstance().getCCodigoPostalRepository());
+                    break;
+
+                case CLAVES_PROD_SAT:
+                    this.jTab.setRepository(RepositoryFactory.getInstance().getCClaveprodservsRepository());
+                    break;
+
+                case SUPPLIERS:                                
+                    this.jTab.setRepository(RepositoryFactory.getInstance().getSuppliersRepository());
+                    break;
+
+            }
+            
+            this.jTab.initTableWithPagination();
+            
+            showPaginationLabel();
+        }
+        else{
+            this.loadAllItemsInTable();
+        }
         
         this.pack();
     }
