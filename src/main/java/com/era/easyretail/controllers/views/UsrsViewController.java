@@ -63,6 +63,7 @@ public class UsrsViewController extends UsrsJFrame {
             this.JComponentUtils.onlyNumbers(jTCP);
             
             //Get all the users and load them in table            
+            this.BaseJTable = jTab;
             this.BaseJTable.addShowColumn(TableHeaderFactory.getSigleton().getUsersTableHeader().getROWNUMBER());
             this.BaseJTable.addShowColumn(TableHeaderFactory.getSigleton().getUsersTableHeader().getCODE());
             this.BaseJTable.addShowColumn(TableHeaderFactory.getSigleton().getUsersTableHeader().getNAME());

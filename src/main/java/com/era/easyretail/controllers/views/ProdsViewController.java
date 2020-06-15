@@ -12,6 +12,7 @@ import com.era.logger.LoggerUtility;
 import com.era.models.Anaqs;
 import com.era.models.CClaveprodserv;
 import com.era.models.ImpuesXProduct;
+import com.era.models.Kits;
 import com.era.models.Line;
 import com.era.models.Lugs;
 import com.era.models.Meds;
@@ -41,6 +42,7 @@ import javax.swing.event.ListSelectionEvent;
 public class ProdsViewController extends ProdsJFrame {
     
     private List<ImpuesXProduct> taxesGlobal = new ArrayList<>();
+    private List<Kits> kits;
     private LPrecsDatamodel LPrecsDatamodel;
             
     public ProdsViewController() {
@@ -599,7 +601,7 @@ public class ProdsViewController extends ProdsJFrame {
                     Product.setUtilSales10(Float.valueOf(LPrecsDatamodel.getUtilSales10()));
                 }
                 //Save the product and taxes of the product
-                RepositoryFactory.getInstance().getProductsRepository().addOrUpdateProduct(Product, taxesGlobal);
+                RepositoryFactory.getInstance().getProductsRepository().addOrUpdateProduct(Product, taxesGlobal, kits);
 
                 //Reload the table                
                 jTab.loadAllItemsInTable();
@@ -674,8 +676,8 @@ public class ProdsViewController extends ProdsJFrame {
                     //Delete the product from the database
                     RepositoryFactory.getInstance().getProductsRepository().deleteProductByCode(productCode);
                     
-                        //Reload the table
-                        jTab.loadAllItemsInTable();
+                    //Reload the table
+                    jTab.loadAllItemsInTable();
                     
                     //Annoucne the user of the success
                     DialogsFactory.getSingleton().showOKOperationCompletedCallbackDialog(jFrame, null);                    
@@ -1232,8 +1234,58 @@ public class ProdsViewController extends ProdsJFrame {
     
     private void jBCompsActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
-	try{
+	try{            
             
+            //First select a product or set a profuct code
+            if(!jTab.isRowSelected() && jTProd.getText().trim().isEmpty()){
+                DialogsFactory.getSingleton().showErrorOKNoSelectionCallbackDialog(baseJFrame, (JFrame jFrame) -> {
+                    jTProd.grabFocus();
+                });
+                return;
+            }
+            
+            //Get the producto code
+            String productCode;
+            if(jTab.isRowSelected()){
+                Product Product_ = (Product)jTab.getRowSelected();
+                productCode = Product_.getCode();
+            }
+            else {
+                productCode = jTProd.getText().trim();
+            }
+            
+            //Get the product from db
+            final Product Product_ = RepositoryFactory.getInstance().getProductsRepository().getProductByCode(productCode);
+            
+            //If the product doesnt exist
+            if(Product_ == null){
+                DialogsFactory.getSingleton().showErrorOKCallbackDialog(baseJFrame, "errors_first_product_exists_to_view_image", (JFrame jFrame) -> {
+                    jTProd.grabFocus();
+                });
+                return;
+            }
+            
+            //If the product is not a kit can not continue
+            if(!Product_.getCompound()){                
+                DialogsFactory.getSingleton().showErrorOKCallbackDialog(baseJFrame, "errors_product_not_kit", (JFrame jFrame) -> {
+                });
+                return;
+            }
+                 
+            //If not already init
+            if(kits==null){
+                
+                //Get all the componentes of the kit
+                kits = RepositoryFactory.getInstance().getKitssRepository().getComponentsByKit(productCode);
+            }
+            
+            //Open the kits screen            
+            final CompsViewController CompsViewController = ViewControlersFactory.getSingleton().getCompsViewController();
+            CompsViewController.setOnResult((List<Kits> kits_) -> {
+                kits = kits_;                
+            });
+            CompsViewController.init(kits, productCode, Product_.getDescription());
+            CompsViewController.setVisible();
             
 	}
 	catch (Exception ex) {
