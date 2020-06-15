@@ -517,10 +517,27 @@ public class SearchViewController extends SearchJFrame {
                     break;
 
             }
+                                    
+            this.jTab.setOnScrollsChanges(() -> {
+                
+                try{
+                    
+                    //Show the pagination label
+                    showPaginationLabel();
+                    
+                }catch(Exception e){
             
+                    LoggerUtility.getSingleton().logError(SearchViewController.class, e);
+
+                    try {
+                        final ErrorOKDialog ErrorOKDialog = DialogsFactory.getSingleton().getErrorOKDialog(baseJFrame);
+                        ErrorOKDialog.show();
+                    } catch (Exception ex) {
+                        Logger.getLogger(SearchViewController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            });
             this.jTab.initTableWithPagination();
-            
-            showPaginationLabel();
         }
         else{
             this.loadAllItemsInTable();
