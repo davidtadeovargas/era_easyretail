@@ -148,10 +148,6 @@ public class SearchViewController extends SearchJFrame {
                     list = RepositoryManager_.getBasDatssRepository().getAll();
                     break;
 
-                case PRODUCTS:
-                    list = RepositoryManager_.getProductsRepository().getAll();
-                    break;
-
                 case USERS:
                     list = RepositoryManager_.getUsersRepository().getAll();
                     break;
@@ -325,7 +321,8 @@ public class SearchViewController extends SearchJFrame {
             case COUNTRIES:
             case EXPEDITION_PLACE:
             case CLAVES_PROD_SAT:
-            case SUPPLIERS:
+            case PRODUCTS:
+            case SUPPLIERS:                
                 usePagination = true;
                 break;
         }
@@ -515,8 +512,12 @@ public class SearchViewController extends SearchJFrame {
                     this.jTab.setRepository(RepositoryFactory.getInstance().getCClaveprodservsRepository());
                     break;
 
-                case SUPPLIERS:                                
+                case SUPPLIERS:
                     this.jTab.setRepository(RepositoryFactory.getInstance().getSuppliersRepository());
+                    break;
+                    
+                case PRODUCTS:
+                    this.jTab.setRepository(RepositoryFactory.getInstance().getProductsRepository());
                     break;
 
             }

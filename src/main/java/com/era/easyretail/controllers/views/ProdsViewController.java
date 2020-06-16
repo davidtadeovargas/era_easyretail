@@ -133,6 +133,8 @@ public class ProdsViewController extends ProdsJFrame {
                     
                     LPrecsDatamodel = null;
                     
+                    kits = null;
+                    
                 }catch (Exception ex) {
                     LoggerUtility.getSingleton().logError(ProdsViewController.class, ex);
                     try {
@@ -600,6 +602,7 @@ public class ProdsViewController extends ProdsJFrame {
                     Product.setUtilSales9(Float.valueOf(LPrecsDatamodel.getUtilSales9()));
                     Product.setUtilSales10(Float.valueOf(LPrecsDatamodel.getUtilSales10()));
                 }
+                
                 //Save the product and taxes of the product
                 RepositoryFactory.getInstance().getProductsRepository().addOrUpdateProduct(Product, taxesGlobal, kits);
 
