@@ -72,6 +72,15 @@ public class CompsViewController extends CompsJFrame {
         this.OnResult = OnResult;
     }
 
+    public void initOnlyForView(List<Kits> kits, final String kitCode, final String kitDescription) {
+        
+        //Init 
+        init(kits, kitCode, kitDescription);
+        
+        //Set all the read componentes
+        this.setReadOnly(true);
+    }
+    
     public void init(List<Kits> kits, final String kitCode, final String kitDescription) {
         
         //Save globally

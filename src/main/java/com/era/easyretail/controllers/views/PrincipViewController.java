@@ -14,6 +14,7 @@ import com.era.logger.LoggerUtility;
 import com.era.models.BasDats;
 import com.era.models.Company;
 import com.era.models.Confgral;
+import com.era.models.Kits;
 import com.era.models.Product;
 import com.era.models.User;
 import com.era.models.Supplier;
@@ -22,10 +23,12 @@ import com.era.repositories.RepositoryFactory;
 import com.era.utilities.UtilitiesFactory;
 import com.era.utilities.WinRegistry;
 import com.era.utilities.excel.CustomersWorkbook;
+import com.era.utilities.excel.KitsWorkbook;
 import com.era.utilities.excel.ProductsWorkbook;
 import com.era.utilities.excel.SuppliersWorkbook;
 import com.era.utilities.excel.WarehouseExistencesWorkbook;
 import com.era.utilities.excel.rows.models.CustomerExcelRowModel;
+import com.era.utilities.excel.rows.models.KitExcelRowModel;
 import com.era.utilities.excel.rows.models.SupplierExcelRowModel;
 import com.era.utilities.excel.rows.models.WarehouseExistencesExcelRowModel;
 import com.era.utilities.excel.rows.models.ProductExcelRowModel;
@@ -77,7 +80,10 @@ public class PrincipViewController extends PrincipJFrame {
             final BasDats BasDats = UtilitiesFactory.getSingleton().getSessionUtility().getBasDats();
             final User User = UtilitiesFactory.getSingleton().getSessionUtility().getUser();
             final String userLoggedTime = UtilitiesFactory.getSingleton().getSessionUtility().getUserLoggedTime();
-
+            
+            importKitsMenItem.addActionListener((java.awt.event.ActionEvent evt) -> {
+                importKitsMenItemActionPerformed(evt);
+            });
             jMenIt4.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jMenIt4ActionPerformed(evt);
             });
@@ -363,6 +369,138 @@ public class PrincipViewController extends PrincipJFrame {
                                     }
                                 });
                                 WarehouseExistencesWorkbook.load();
+
+                            }catch (Exception ex) {
+                                LoggerUtility.getSingleton().logError(PrincipViewController.class, ex);
+                                try {
+                                    DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+                                } catch (Exception ex1) {
+                                    Logger.getLogger(PrincipViewController.class.getName()).log(Level.SEVERE, null, ex1);
+                                }
+                            }
+                            
+                            return null;
+                        }
+
+                        @Override
+                        public void after(Object Object) {
+                            
+                            try{
+
+                                //Announce success to the user
+                                DialogsFactory.getSingleton().showOKOperationCompletedCallbackDialog(jFrame, null);
+
+                            }catch (Exception ex) {
+                                LoggerUtility.getSingleton().logError(PrincipViewController.class, ex);
+                                try {
+                                    DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+                                } catch (Exception ex1) {
+                                    Logger.getLogger(PrincipViewController.class.getName()).log(Level.SEVERE, null, ex1);
+                                }
+                            }
+                        }
+                        
+                    });
+                    BaseSwingWorker.execute();
+
+                }catch (Exception ex) {
+                    LoggerUtility.getSingleton().logError(PrincipViewController.class, ex);
+                    try {
+                        DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+                    } catch (Exception ex1) {
+                        Logger.getLogger(PrincipViewController.class.getName()).log(Level.SEVERE, null, ex1);
+                    }
+                }
+            });
+            
+        }catch (Exception ex) {
+            LoggerUtility.getSingleton().logError(PrincipViewController.class, ex);
+            try {
+                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+            } catch (Exception ex1) {
+                Logger.getLogger(PrincipViewController.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+        }
+    }
+    
+    private void loadKitsFromExcel(String absolutePath, String fileName){
+        
+        try{
+            
+            //Question if really continue
+            DialogsFactory.getSingleton().showQuestionContinueDialog(baseJFrame, (JFrame jFrame) -> {
+            
+                try{
+                    
+                    final BaseSwingWorker BaseSwingWorker = new BaseSwingWorker();
+                    BaseSwingWorker.setShowLoading(baseJFrame);
+                    BaseSwingWorker.setISwingWorkerActions(new ISwingWorkerActions(){
+
+                        @Override
+                        public void before() {
+                            
+                        }
+
+                        @Override
+                        public Object doinbackground() {
+                            
+                            try{
+                                
+                                //Load the kits
+                                final KitsWorkbook KitsWorkbook = new KitsWorkbook();
+                                KitsWorkbook.setFilePath(absolutePath + "\\" + fileName);                    
+                                KitsWorkbook.setOnFinish(() -> {
+                                });
+                                KitsWorkbook.setOnCellRender((Object CellModel) -> {
+                                    try{
+
+                                        //Cast model
+                                        final KitExcelRowModel KitExcelRowModel = (KitExcelRowModel)CellModel;
+
+                                        //Get values
+                                        final String kitCode = KitExcelRowModel.getKitCode();
+                                        final String productCode = KitExcelRowModel.getProductCode();
+                                        final String cant = KitExcelRowModel.getCant();
+
+                                        //If the kit doesnt exists
+                                        Product Product = (Product)RepositoryFactory.getInstance().getProductsRepository().getByCode(kitCode);
+                                        if(Product==null){
+                                            return;
+                                        }
+                                        
+                                        //If the product doesnt exists
+                                        Product = (Product)RepositoryFactory.getInstance().getProductsRepository().getByCode(productCode);
+                                        if(Product==null){
+                                            return;
+                                        }
+                                        
+                                        //If the record exists
+                                        Kits Kits = (Kits)RepositoryFactory.getInstance().getKitssRepository().getByKitAndComponent(kitCode, productCode);
+                                        if(Kits==null){
+                                            Kits = new Kits();
+                                            Kits.setCode(kitCode);
+                                            Kits.setProd(productCode);
+                                            Kits.setCant(Float.valueOf(cant));
+                                            RepositoryFactory.getInstance().getKitssRepository().save(Kits);
+                                            
+                                            //Update the product that contains a kit
+                                            RepositoryFactory.getInstance().getProductsRepository().updateProductAsKit(kitCode);
+                                        }
+                                        else{
+                                            Kits.setCant(Float.valueOf(cant));
+                                            RepositoryFactory.getInstance().getKitssRepository().update(Kits);
+                                        }
+
+                                    }catch (Exception ex) {
+                                        LoggerUtility.getSingleton().logError(PrincipViewController.class, ex);
+                                        try {
+                                            DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+                                        } catch (Exception ex1) {
+                                            Logger.getLogger(PrincipViewController.class.getName()).log(Level.SEVERE, null, ex1);
+                                        }
+                                    }
+                                });
+                                KitsWorkbook.load();
 
                             }catch (Exception ex) {
                                 LoggerUtility.getSingleton().logError(PrincipViewController.class, ex);
@@ -976,10 +1114,39 @@ public class PrincipViewController extends PrincipJFrame {
     private void jMenItEstacsActionPerformed(java.awt.event.ActionEvent evt) {        
         ViewControlersFactory.getSingleton().getUsrsViewController().setVisible();
     }
+       
+    private void importKitsMenItemActionPerformed(java.awt.event.ActionEvent evt) {                                        
+    
+        try{
+         
+            try{
+             
+                //Ask for the excel file path
+                final ExcelFileChooserUtility ExcelFileChooserUtility = UtilitiesFactory.getSingleton().getExcelFileChooserUtility();
+                ExcelFileChooserUtility.setFileNameMatch(com.era.Constants.FILENAME_EXCEL_IMPORT_KITS);
+                ExcelFileChooserUtility.setIApproveOpption((String absolutePath, String fileName) -> {
+                    loadKitsFromExcel(absolutePath,fileName);
+                });
+                ExcelFileChooserUtility.showSaveDialog(baseJFrame);
+            
+            }catch(InvalidFileExtensionException InvalidFileExtensionException){
+                DialogsFactory.getSingleton().showErrorOKCallbackDialog(baseJFrame, "errors_invalid_file_extension", null);
+            }
+            
+        }catch (Exception ex) {
+            LoggerUtility.getSingleton().logError(PrincipViewController.class, ex);
+            try {
+                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+            } catch (Exception ex1) {
+                Logger.getLogger(PrincipViewController.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+        }
+    }
     
     private void jMenIt4ActionPerformed(java.awt.event.ActionEvent evt) {                                        
         ViewControlersFactory.getSingleton().getCorrElecsViewController().setVisible();
-    }    
+    }
+    
     private void jMenItCambClavSegActionPerformed(java.awt.event.ActionEvent evt) {                                                  
                
         /*Mostrar el gráfico de cambiar clave de seguridad 1*/

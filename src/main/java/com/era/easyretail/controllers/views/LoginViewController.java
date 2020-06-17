@@ -117,7 +117,7 @@ public class LoginViewController extends LoginJFrame {
             SearchViewController.setSEARCH_TYPE(SearchCommonTypeEnum.BASDATS);
             SearchViewController.setButtonAceptClicked(() -> {
 
-                companyCode = SearchViewController.getCod();
+                companyCode = SearchViewController.getOthers();
                 final String companyName = SearchViewController.getDescrip();
 
                 jTEmp.setText(companyName);

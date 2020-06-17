@@ -25,9 +25,6 @@ public class BajsMinViewController extends BajsMinJFrame {
             
             jTBusc.grabFocus();
             
-            jBVis.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jBVisActionPerformed(evt);
-            });
             jBActua.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jBActuaActionPerformed(evt);
             });
@@ -57,21 +54,6 @@ public class BajsMinViewController extends BajsMinJFrame {
     
     @Override
     public void clearFields(){            
-    }
-    
-    private void jBVisActionPerformed(java.awt.event.ActionEvent evt) {                                             
-
-	try{            	
-            
-	}
-	catch (Exception ex) {
-            LoggerUtility.getSingleton().logError(BajsMinViewController.class, ex);
-            try {
-                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
-            } catch (Exception ex1) {
-                Logger.getLogger(BajsMinViewController.class.getName()).log(Level.SEVERE, null, ex1);
-            }
-	}
     }
     
     private void jBActuaActionPerformed(java.awt.event.ActionEvent evt) {                                             
