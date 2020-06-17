@@ -528,7 +528,7 @@ public class ProdsViewController extends ProdsJFrame {
                 //Get all the values from fields
                 final String information = jTAInfor.getText().trim();
                 final String minimum = jTMin.getText().trim();
-                final String maximum = jTMin.getText().trim();                    
+                final String maximum = jTMax.getText().trim();                    
                 final boolean isForSale = jCEsParaVent.isSelected();
                 final boolean askForMinAndMax = jCNoSolMaxMin.isSelected();
                 final boolean sellUnderCost = jCBajCost.isSelected();
@@ -549,6 +549,7 @@ public class ProdsViewController extends ProdsJFrame {
                     //Get the product from db
                     Product = (Product)RepositoryFactory.getInstance().getProductsRepository().getByCode(productCode);
                 }
+                
                 Product.setCode(productCode);
                 Product.setDescription(description);
                 Product.setName(name);
