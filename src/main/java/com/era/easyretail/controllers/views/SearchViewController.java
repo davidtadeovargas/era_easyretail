@@ -157,7 +157,7 @@ public class SearchViewController extends SearchJFrame {
                     break;
 
                 case CONCEPTS:
-                    list = RepositoryManager_.getConcepnotsRepository().getAll();
+                    list = RepositoryManager_.getConcepssRepository().getAll();
                     break;
 
                 case PAYMENT_TYPES:
@@ -375,6 +375,9 @@ public class SearchViewController extends SearchJFrame {
                 break;
 
            case CONCEPTS:
+                jTab.addShowColumn(TableHeaderFactory.getSigleton().getConcepssTableHeader().getCONCEP());
+                jTab.addShowColumn(TableHeaderFactory.getSigleton().getConcepssTableHeader().getDESCRIP());
+                jTab.addShowColumn(TableHeaderFactory.getSigleton().getConcepssTableHeader().getFALT());
                 break;
 
            case PAYMENT_TYPES:

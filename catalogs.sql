@@ -28,26 +28,26 @@ INSERT INTO emps(cod,cashCustomer,codclas,nom,RFC,descu,deposit,otramon,otramonc
 
 
 /*!40000 ALTER TABLE `conceps` DISABLE KEYS */;
-INSERT INTO conceps(concep,descrip,estac,sucu,nocaj,falt,fmod) VALUES('AIN','AJUSTE POR INVENTARIO','INICIAL','INICIAL','INICIAL',now(),now());
-INSERT INTO conceps(concep,descrip,estac,sucu,nocaj,falt,fmod) VALUES('MER','MERMA','INICIAL','INICIAL','INICIAL',now(),now());
-INSERT INTO conceps(concep,descrip,estac,sucu,nocaj,falt,fmod) VALUES('ROB','ROBO','INICIAL','INICIAL','INICIAL',now(),now());
-INSERT INTO conceps(concep,descrip,estac,sucu,nocaj,falt,fmod) VALUES('MAL','MALESTADO','INICIAL','INICIAL','INICIAL',now(),now());
-INSERT INTO conceps(concep,descrip,estac,sucu,nocaj,falt,fmod) VALUES('COM','COMPRA','INICIAL','INICIAL','INICIAL',now(),now());
-INSERT INTO conceps(concep,descrip,estac,sucu,nocaj,falt,fmod) VALUES('CAD','CADUCO','INICIAL','INICIAL','INICIAL',now(),now());
-INSERT INTO conceps(concep,descrip,estac,sucu,nocaj,falt,fmod) VALUES('ROT','ROTO','INICIAL','INICIAL','INICIAL',now(),now());
-INSERT INTO conceps(concep,descrip,estac,sucu,nocaj,falt,fmod) VALUES('DEF','DEFECTUOSO','INICIAL','INICIAL','INICIAL',now(),now());
-INSERT INTO conceps(concep,descrip,estac,sucu,nocaj,falt,fmod) VALUES('MOJ','MOJADO','INICIAL','INICIAL','INICIAL',now(),now());
-INSERT INTO conceps(concep,descrip,estac,sucu,nocaj,falt,fmod) VALUES('SINC','SIN CAJA','INICIAL','INICIAL','INICIAL',now(),now());
-INSERT INTO conceps(concep,descrip,estac,sucu,nocaj,falt,fmod) VALUES('PROMO','PROMOCIÓN','INICIAL','INICIAL','INICIAL',now(),now());
-INSERT INTO conceps(concep,descrip,estac,sucu,nocaj,falt,fmod) VALUES('CORTE','CORTESÍA','INICIAL','INICIAL','INICIAL',now(),now());
-INSERT INTO conceps(concep,descrip,estac,sucu,nocaj,falt,fmod) VALUES('OFER','OFERTA','INICIAL','INICIAL','INICIAL',now(),now());
-INSERT INTO conceps(concep,descrip,estac,sucu,nocaj,falt,fmod) VALUES('NOFUN','NO FUNCIONA','INICIAL','INICIAL','INICIAL',now(),now());
-INSERT INTO conceps(concep,descrip,estac,sucu,nocaj,falt,fmod) VALUES('SALG','SALIDA GENERICA','INICIAL','INICIAL','INICIAL',now(),now());
-INSERT INTO conceps(concep,descrip,estac,sucu,nocaj,falt,fmod) VALUES('ENTG','ENTRADA GENERICA','INICIAL','INICIAL','INICIAL',now(),now());
-INSERT INTO conceps(concep,descrip,estac,sucu,nocaj,falt,fmod) VALUES('MERMA','MERMA A GRANEL','INICIAL','INICIAL','INICIAL',now(),now());
-INSERT INTO conceps(concep,descrip,estac,sucu,nocaj,falt,fmod) VALUES('PROR','PRORATEO','INICIAL','INICIAL','INICIAL',now(),now());
-INSERT INTO conceps(concep,descrip,estac,sucu,nocaj,falt,fmod) VALUES('DONA','DONACIONES','INICIAL','INICIAL','INICIAL',now(),now());
-INSERT INTO conceps(concep,descrip,estac,sucu,nocaj,falt,fmod) VALUES('TRAS','TRASPASO','INICIAL','INICIAL','INICIAL',now(),now());
+INSERT INTO conceps(code,descrip,estac,sucu,nocaj,falt,fmod) VALUES('AIN','AJUSTE POR INVENTARIO','INICIAL','INICIAL','INICIAL',now(),now());
+INSERT INTO conceps(code,descrip,estac,sucu,nocaj,falt,fmod) VALUES('MER','MERMA','INICIAL','INICIAL','INICIAL',now(),now());
+INSERT INTO conceps(code,descrip,estac,sucu,nocaj,falt,fmod) VALUES('ROB','ROBO','INICIAL','INICIAL','INICIAL',now(),now());
+INSERT INTO conceps(code,descrip,estac,sucu,nocaj,falt,fmod) VALUES('MAL','MALESTADO','INICIAL','INICIAL','INICIAL',now(),now());
+INSERT INTO conceps(code,descrip,estac,sucu,nocaj,falt,fmod) VALUES('COM','COMPRA','INICIAL','INICIAL','INICIAL',now(),now());
+INSERT INTO conceps(code,descrip,estac,sucu,nocaj,falt,fmod) VALUES('CAD','CADUCO','INICIAL','INICIAL','INICIAL',now(),now());
+INSERT INTO conceps(code,descrip,estac,sucu,nocaj,falt,fmod) VALUES('ROT','ROTO','INICIAL','INICIAL','INICIAL',now(),now());
+INSERT INTO conceps(code,descrip,estac,sucu,nocaj,falt,fmod) VALUES('DEF','DEFECTUOSO','INICIAL','INICIAL','INICIAL',now(),now());
+INSERT INTO conceps(code,descrip,estac,sucu,nocaj,falt,fmod) VALUES('MOJ','MOJADO','INICIAL','INICIAL','INICIAL',now(),now());
+INSERT INTO conceps(code,descrip,estac,sucu,nocaj,falt,fmod) VALUES('SINC','SIN CAJA','INICIAL','INICIAL','INICIAL',now(),now());
+INSERT INTO conceps(code,descrip,estac,sucu,nocaj,falt,fmod) VALUES('PROMO','PROMOCIÓN','INICIAL','INICIAL','INICIAL',now(),now());
+INSERT INTO conceps(code,descrip,estac,sucu,nocaj,falt,fmod) VALUES('CORTE','CORTESÍA','INICIAL','INICIAL','INICIAL',now(),now());
+INSERT INTO conceps(code,descrip,estac,sucu,nocaj,falt,fmod) VALUES('OFER','OFERTA','INICIAL','INICIAL','INICIAL',now(),now());
+INSERT INTO conceps(code,descrip,estac,sucu,nocaj,falt,fmod) VALUES('NOFUN','NO FUNCIONA','INICIAL','INICIAL','INICIAL',now(),now());
+INSERT INTO conceps(code,descrip,estac,sucu,nocaj,falt,fmod) VALUES('SALG','SALIDA GENERICA','INICIAL','INICIAL','INICIAL',now(),now());
+INSERT INTO conceps(code,descrip,estac,sucu,nocaj,falt,fmod) VALUES('ENTG','ENTRADA GENERICA','INICIAL','INICIAL','INICIAL',now(),now());
+INSERT INTO conceps(code,descrip,estac,sucu,nocaj,falt,fmod) VALUES('MERMA','MERMA A GRANEL','INICIAL','INICIAL','INICIAL',now(),now());
+INSERT INTO conceps(code,descrip,estac,sucu,nocaj,falt,fmod) VALUES('PROR','PRORATEO','INICIAL','INICIAL','INICIAL',now(),now());
+INSERT INTO conceps(code,descrip,estac,sucu,nocaj,falt,fmod) VALUES('DONA','DONACIONES','INICIAL','INICIAL','INICIAL',now(),now());
+INSERT INTO conceps(code,descrip,estac,sucu,nocaj,falt,fmod) VALUES('TRAS','TRASPASO','INICIAL','INICIAL','INICIAL',now(),now());
 /*!40000 ALTER TABLE `conceps` ENABLE KEYS */;
 
 /*!40000 ALTER TABLE `confgral` DISABLE KEYS */;

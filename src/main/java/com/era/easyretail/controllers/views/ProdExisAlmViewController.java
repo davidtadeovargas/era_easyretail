@@ -21,9 +21,6 @@ import java.util.logging.Logger;
  */
 public class ProdExisAlmViewController extends ProdExisAlmJFrame {
     
-    private String productCode;
-    
-    
     public ProdExisAlmViewController() {
         super("window_title_exisalma");
         
@@ -49,9 +46,6 @@ public class ProdExisAlmViewController extends ProdExisAlmJFrame {
     }
 
     public void setProductCode(String productCode) throws Exception {
-        
-        //Save the producto code globally
-        this.productCode = productCode;
         
         //Get all the warehouses existences for that product
         final List<Existalma> existences = RepositoryFactory.getInstance().getExistalmasRepository().getAllWarehousesExistencesByProduct(productCode);
