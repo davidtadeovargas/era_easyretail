@@ -168,6 +168,10 @@ public class SearchViewController extends SearchJFrame {
                     list = RepositoryManager_.getCoinsRepository().getAll();
                     break;
 
+                case CCOINS:
+                    list = RepositoryManager_.getCCoinsRepository().getAll();
+                    break;
+                    
                 case WAREHOUSES:
                     list = RepositoryManager_.getWarehousesRepository().getAll();
                     break;
@@ -377,8 +381,17 @@ public class SearchViewController extends SearchJFrame {
                 break;
 
            case COINS:
+                jTab.addShowColumn(TableHeaderFactory.getSigleton().getCoinsTableHeader().getCODE());
+                jTab.addShowColumn(TableHeaderFactory.getSigleton().getCoinsTableHeader().getDESCRIPTION());
+                jTab.addShowColumn(TableHeaderFactory.getSigleton().getCoinsTableHeader().getC_MONEDA());
                 break;
-
+               
+           case CCOINS:
+                jTab.addShowColumn(TableHeaderFactory.getSigleton().getCCoinsTableHeader().getCODE());
+                jTab.addShowColumn(TableHeaderFactory.getSigleton().getCCoinsTableHeader().getDESCRIPTION());
+                jTab.addShowColumn(TableHeaderFactory.getSigleton().getCCoinsTableHeader().getDECIMALS());
+                break;
+               
            case WAREHOUSES:
                 break;
 

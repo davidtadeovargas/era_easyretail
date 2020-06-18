@@ -16,7 +16,6 @@ import com.era.views.ImpsJFrame;
 import com.era.views.Impuestos_X_productos_nuevoJFrame;
 import com.era.views.LotPedCatJFrame;
 import com.era.views.MaxsMinsJFrame;
-import com.era.views.MonsJFrame;
 import com.era.views.ProdSerJFrame;
 import com.era.views.ProdsJFrame;
 import com.era.views.ProvsJFrame;
@@ -58,8 +57,7 @@ public class ViewControlersFactory {
     private ProvsJFrame ProvsJFrame;
     private ProdsJFrame ProdsJFrame;
     private ActivosViewController ActivosViewController;
-    private ProdSerJFrame ProdSerJFrame;
-    private MonsJFrame MonsJFrame;
+    private ProdSerJFrame ProdSerJFrame;    
     private MaxsMinsJFrame MaxsMinsJFrame;
     private CorrElecsViewController CorrElecsViewController;
     private LotPedCatJFrame LotPedCatJFrame;
@@ -168,6 +166,10 @@ public class ViewControlersFactory {
     public PremiumViewController getPremiumViewController(){
         PremiumViewController = new PremiumViewController();
         return PremiumViewController;
+    }
+    
+    public TipCamViewController getTipCamViewController(){
+        return new TipCamViewController();
     }
     
     public LoadingViewController getCreatingDatabaseWaitViewController(){
