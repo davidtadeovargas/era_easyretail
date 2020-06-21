@@ -1397,7 +1397,6 @@ public class PrincipViewController extends PrincipJFrame {
     
     private void jMenItIngrActionPerformed(java.awt.event.ActionEvent evt) {                                           
         ViewControlersFactory.getSingleton().getEntradasSalidasViewController().setVisible();
-        
     }
     
     private void jMenItDatsGenEmpActionPerformed(java.awt.event.ActionEvent evt) {                                                 
