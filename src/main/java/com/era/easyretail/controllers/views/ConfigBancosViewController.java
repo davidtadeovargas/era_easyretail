@@ -45,7 +45,7 @@ public class ConfigBancosViewController extends ConfigBancosJFrame {
     }
     
     @Override
-    public void clearFields(){            
+    public void clearFields() throws Exception{            
     }
     
     private void jBGuardarActionPerformed(java.awt.event.ActionEvent evt) {                                             

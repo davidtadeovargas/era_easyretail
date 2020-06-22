@@ -67,7 +67,7 @@ public class IngrInventViewController extends IngrInventJFrame
     }
 
     @Override
-    public void clearFields(){            
+    public void clearFields() throws Exception{            
     }
     
     @Override

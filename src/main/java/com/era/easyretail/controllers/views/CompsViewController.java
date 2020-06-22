@@ -100,7 +100,7 @@ public class CompsViewController extends CompsJFrame {
     }
     
     @Override
-    public void clearFields(){            
+    public void clearFields() throws Exception{            
     }
     
     private void jBNewActionPerformed(java.awt.event.ActionEvent evt) {                                             

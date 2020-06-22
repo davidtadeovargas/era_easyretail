@@ -53,7 +53,7 @@ public class RegisterWebsiteViewController extends RegisterWebsiteJFrame {
     }
     
     @Override
-    public void clearFields(){
+    public void clearFields() throws Exception{
     }
     
     public OnURLLabelClicked getOnURLLabelClicked() {

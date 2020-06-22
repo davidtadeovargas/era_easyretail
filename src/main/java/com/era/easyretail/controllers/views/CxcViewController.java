@@ -67,7 +67,7 @@ public class CxcViewController extends CxcJFrame {
     }
     
     @Override
-    public void clearFields(){            
+    public void clearFields() throws Exception{            
     }
     
     @Override

@@ -227,7 +227,7 @@ public class ProvViewController extends ProvJFrame {
     }
     
     @Override
-    public void clearFields(){
+    public void clearFields() throws Exception{
     }
 
     public void setSupplierGlobal(Supplier SupplierGlobal) throws Exception {

@@ -36,12 +36,14 @@ public class ViewControlersFactory {
     
     private static ViewControlersFactory RenderControlersViewManager;
     
+    private PtoVtaTouViewController PtoVtaTouViewController;
     private PremiumViewController PremiumViewController;
     private LoadingViewController LoadingViewController;
     private EmpresasViewController EmpresasViewController;
     private SearchViewController SearchViewController;
     private PrincipViewController PrincipViewController;
     private DevPVtaViewController DevPVtaViewController;
+    private LinesViewController LinesViewController;
     private VerCtaContJFrame VerCtaContJFrame;
     private UsrsJFrame UsrsJFrame;
     private UnidadesJFrame UnidadesJFrame;
@@ -141,8 +143,7 @@ public class ViewControlersFactory {
     private BuscVtaViewController BuscVtaViewController;
     private NewVtaViewController NewVtaViewController;
     private OptPtoVtaViewController OptPtoVtaViewController;
-    private PermsEstacsViewController PermsEstacsViewController;
-    private PtoVtaTouViewController PtoVtaTouViewController;
+    private PermsEstacsViewController PermsEstacsViewController;    
     private VtasViewController VtasViewController;
     private IngrComViewController IngrComViewController;
     private ImpresViewController ImpresViewController;
@@ -536,7 +537,7 @@ public class ViewControlersFactory {
     }
     
     public PtoVtaTouViewController getPtoVtaTouViewController(){
-        PtoVtaTouViewController = new PtoVtaTouViewController();
+        PtoVtaTouViewController = new PtoVtaTouViewController();                
         return PtoVtaTouViewController;       
     }
     
@@ -635,6 +636,11 @@ public class ViewControlersFactory {
     public DevPVtaViewController getDevPVtaViewController(){
         DevPVtaViewController = new DevPVtaViewController();
         return DevPVtaViewController;
+    }
+    
+    public LinesViewController getLinesViewController(){
+        LinesViewController = new LinesViewController();
+        return LinesViewController;
     }
     
     @Override

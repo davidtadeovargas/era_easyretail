@@ -128,7 +128,7 @@ public class ConfGralViewController extends ConfGralJFrame {
     }
     
     @Override
-    public void clearFields(){            
+    public void clearFields() throws Exception{            
     }
     
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                             

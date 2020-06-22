@@ -60,7 +60,7 @@ public class ConceptosPagoViewController extends ConceptosPagoJFrame{
     }
     
     @Override
-    public void clearFields(){            
+    public void clearFields() throws Exception{            
     }
     
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                             

@@ -96,7 +96,7 @@ public class ImpresViewController extends ImpresJFrame {
     }
     
     @Override
-    public void clearFields(){            
+    public void clearFields() throws Exception{            
     }
     
     @Override

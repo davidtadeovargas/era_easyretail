@@ -123,7 +123,7 @@ public class DBFileConnectionConfigurationController extends DBFileConnectionCon
     }
     
     @Override
-    public void clearFields(){            
+    public void clearFields() throws Exception{            
     }
     
     public void setDBFileConnectionConfigurationType(DBFileConnectionConfigurationType DBFileConnectionConfigurationType) {

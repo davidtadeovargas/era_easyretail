@@ -96,7 +96,7 @@ public class SearchViewController extends SearchJFrame {
     }
     
     @Override
-    public void clearFields(){
+    public void clearFields() throws Exception{
     }
     
     private ImageIcon scaleImage(ImageIcon icon, int w, int h){
@@ -326,6 +326,7 @@ public class SearchViewController extends SearchJFrame {
             case EXPEDITION_PLACE:
             case CLAVES_PROD_SAT:
             case PRODUCTS:
+            case PRODUCTS_FOR_SALE:
             case SUPPLIERS:                
                 usePagination = true;
                 break;
@@ -346,6 +347,7 @@ public class SearchViewController extends SearchJFrame {
                 jTab.addShowColumn(TableHeaderFactory.getSigleton().getBasDatssTableHeader().getBD());                
                 break;
 
+            case PRODUCTS_FOR_SALE:
             case PRODUCTS:
                 jTab.addShowColumn(TableHeaderFactory.getSigleton().getProductsTableHeader().getCODE());
                 jTab.addShowColumn(TableHeaderFactory.getSigleton().getProductsTableHeader().getDESCRIPTION());
@@ -531,7 +533,8 @@ public class SearchViewController extends SearchJFrame {
                 case SUPPLIERS:
                     this.jTab.setRepository(RepositoryFactory.getInstance().getSuppliersRepository());
                     break;
-                    
+                
+                case PRODUCTS_FOR_SALE:
                 case PRODUCTS:
                     this.jTab.setRepository(RepositoryFactory.getInstance().getProductsRepository());
                     break;

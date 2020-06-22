@@ -46,7 +46,7 @@ public class VVtasViewController extends VVtasJFrame {
     }
     
     @Override
-    public void clearFields(){
+    public void clearFields() throws Exception{
     }
     
     @Override

@@ -52,7 +52,7 @@ public class LogCorrsViewController extends LogCorrsJFrame {
     }
     
     @Override
-    public void clearFields(){            
+    public void clearFields() throws Exception{            
     }
     
     @Override

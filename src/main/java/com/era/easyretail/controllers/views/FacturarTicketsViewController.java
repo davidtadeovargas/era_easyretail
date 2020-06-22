@@ -46,7 +46,7 @@ public class FacturarTicketsViewController extends FacturarTicketsJFrame {
     }
     
     @Override
-    public void clearFields(){            
+    public void clearFields() throws Exception{            
     }
     
     @Override

@@ -63,7 +63,7 @@ public class CatalBancosViewController extends CatalBancosJFrame {
     }
     
     @Override
-    public void clearFields(){            
+    public void clearFields() throws Exception{            
     }
     
     private void jBDelActionPerformed(java.awt.event.ActionEvent evt) {                                             

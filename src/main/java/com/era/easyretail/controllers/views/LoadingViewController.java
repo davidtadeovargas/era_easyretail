@@ -45,7 +45,7 @@ public class LoadingViewController extends LoadingWaitJFrame {
     }
     
     @Override
-    public void clearFields(){            
+    public void clearFields() throws Exception{            
     }
     
     @Override

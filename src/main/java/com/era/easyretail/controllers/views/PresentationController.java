@@ -57,7 +57,7 @@ public class PresentationController extends PresentationJFrame {
     }
     
     @Override
-    public void clearFields(){
+    public void clearFields() throws Exception{
     }
     
     @Override

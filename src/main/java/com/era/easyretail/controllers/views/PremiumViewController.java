@@ -21,7 +21,7 @@ public class PremiumViewController extends PremiumJFrame {
     }
     
     @Override
-    public void clearFields(){
+    public void clearFields() throws Exception{
     }
     
     @Override

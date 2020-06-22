@@ -49,7 +49,7 @@ public class SeriesViewController extends SeriesJFrame {
     }
     
     @Override
-    public void clearFields(){
+    public void clearFields() throws Exception{
     }
     
     @Override

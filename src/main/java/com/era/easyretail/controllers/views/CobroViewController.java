@@ -52,7 +52,7 @@ public class CobroViewController extends CobroJFrame {
     }
     
     @Override
-    public void clearFields(){            
+    public void clearFields() throws Exception{            
     }
     
     @Override

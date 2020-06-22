@@ -54,7 +54,7 @@ public class DevPVtaPtoViewController extends DevPVtaPtoJFrame {
     }
     
     @Override
-    public void clearFields(){            
+    public void clearFields() throws Exception{            
     }
     
     private void jBActuaActionPerformed(java.awt.event.ActionEvent evt) {

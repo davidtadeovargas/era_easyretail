@@ -72,7 +72,7 @@ public class ProvsViewController extends ProvsJFrame {
     }
     
     @Override
-    public void clearFields(){
+    public void clearFields() throws Exception{
     }
     
     @Override

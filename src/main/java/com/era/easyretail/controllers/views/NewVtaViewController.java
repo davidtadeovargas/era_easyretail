@@ -118,7 +118,7 @@ public class NewVtaViewController extends NewVtaJFrame {
     }
     
     @Override
-    public void clearFields(){
+    public void clearFields() throws Exception{
     }
     
     @Override

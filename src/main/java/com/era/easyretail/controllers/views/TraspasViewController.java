@@ -127,7 +127,7 @@ public class TraspasViewController extends TraspasJFrame{
     }
     
     @Override
-    public void clearFields(){
+    public void clearFields() throws Exception{
     }
     
     private void jBMosTodActionPerformed(java.awt.event.ActionEvent evt) {                                             

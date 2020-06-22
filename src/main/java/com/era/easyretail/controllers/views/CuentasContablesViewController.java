@@ -65,7 +65,7 @@ public class CuentasContablesViewController extends CuentasContablesJFrame {
     }
     
     @Override
-    public void clearFields(){            
+    public void clearFields() throws Exception{            
     }
     
     private void jBTodActionPerformed(java.awt.event.ActionEvent evt) {                                             

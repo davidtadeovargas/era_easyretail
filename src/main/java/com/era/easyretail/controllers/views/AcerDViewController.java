@@ -77,7 +77,7 @@ public class AcerDViewController extends AcerDJFrame {
     }
     
     @Override
-    public void clearFields(){            
+    public void clearFields() throws Exception{            
     }
     
     @Override

@@ -71,7 +71,7 @@ public class IngrComViewController extends IngrComJFrame {
     }
     
     @Override
-    public void clearFields(){            
+    public void clearFields() throws Exception{            
     }
     
     @Override

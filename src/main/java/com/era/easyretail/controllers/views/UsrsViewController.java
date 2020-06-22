@@ -130,7 +130,7 @@ public class UsrsViewController extends UsrsJFrame {
     }
     
     @Override
-    public void clearFields(){
+    public void clearFields() throws Exception{
     }
     
     @Override

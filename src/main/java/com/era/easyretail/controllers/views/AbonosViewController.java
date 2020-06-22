@@ -58,7 +58,7 @@ public class AbonosViewController extends AbonosJFrame {
     }
     
     @Override
-    public void clearFields(){            
+    public void clearFields() throws Exception{            
     }
     
     @Override

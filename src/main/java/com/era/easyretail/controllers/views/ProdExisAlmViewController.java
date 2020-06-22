@@ -55,7 +55,7 @@ public class ProdExisAlmViewController extends ProdExisAlmJFrame {
     }   
     
     @Override
-    public void clearFields(){
+    public void clearFields() throws Exception{
     }
     
     @Override

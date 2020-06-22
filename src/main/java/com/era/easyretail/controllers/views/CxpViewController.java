@@ -59,7 +59,7 @@ public class CxpViewController extends CxpJFrame{
     }
     
     @Override
-    public void clearFields(){            
+    public void clearFields() throws Exception{            
     }
     
     private void jBLibActionPerformed(java.awt.event.ActionEvent evt) {                                             

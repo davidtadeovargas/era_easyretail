@@ -37,7 +37,7 @@ public class TicketsFacturadosViewController extends TicketsFacturadosJFrame {
     }
     
     @Override
-    public void clearFields(){
+    public void clearFields() throws Exception{
     }
     
     @Override

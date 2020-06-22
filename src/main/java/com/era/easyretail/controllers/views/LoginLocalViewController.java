@@ -59,7 +59,7 @@ public class LoginLocalViewController extends LoginLicenseJFrame {
     }
     
     @Override
-    public void clearFields(){            
+    public void clearFields() throws Exception{            
     }
     
     @Override

@@ -51,7 +51,7 @@ public class GeneralCatalogsViewController extends GeneralCatalogsJFrame {
     }
     
     @Override
-    public void clearFields(){            
+    public void clearFields() throws Exception{            
     }
     
     @Override

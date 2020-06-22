@@ -40,7 +40,7 @@ public class ProdSerViewController extends ProdSerJFrame {
     }
 
     @Override
-    public void clearFields(){
+    public void clearFields() throws Exception{
     }
     
     @Override

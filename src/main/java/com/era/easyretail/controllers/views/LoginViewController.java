@@ -102,7 +102,7 @@ public class LoginViewController extends LoginJFrame {
     }
     
     @Override
-    public void clearFields(){            
+    public void clearFields() throws Exception{            
     }
     
     public void setLoginTypeEmpresa(LoginTypeEmpresa LoginTypeEmpresa) {

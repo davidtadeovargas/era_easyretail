@@ -67,7 +67,7 @@ public class BajsMinViewController extends BajsMinJFrame {
     }
     
     @Override
-    public void clearFields(){            
+    public void clearFields() throws Exception{            
     }
     
     private void jBActuaActionPerformed(java.awt.event.ActionEvent evt) {                                             

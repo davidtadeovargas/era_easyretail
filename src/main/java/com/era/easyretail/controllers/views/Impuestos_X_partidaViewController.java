@@ -44,7 +44,7 @@ public class Impuestos_X_partidaViewController extends Impuestos_X_partidaJFrame
     }
     
     @Override
-    public void clearFields(){            
+    public void clearFields() throws Exception{            
     }
     
     private void boton_borrarActionPerformed(java.awt.event.ActionEvent evt) {                                             

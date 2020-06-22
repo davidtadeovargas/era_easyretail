@@ -61,7 +61,7 @@ public class OptPtoVtaViewController extends OptPtoVtaJFrame {
     }
     
     @Override
-    public void clearFields(){
+    public void clearFields() throws Exception{
     }
     
     @Override

@@ -41,7 +41,7 @@ public class DevPVtaViewController extends DevPVtaJFrame {
     }
     
     @Override
-    public void clearFields(){            
+    public void clearFields() throws Exception{            
     }
     
     @Override

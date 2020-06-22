@@ -175,7 +175,7 @@ public class ClientViewController extends ClientJFrame {
     }
     
     @Override
-    public void clearFields(){
+    public void clearFields() throws Exception{
     }
     
     private void jBPaisActionPerformed(java.awt.event.ActionEvent evt) {                                             

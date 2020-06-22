@@ -157,7 +157,7 @@ public class VtasViewController extends VtasJFrame {
     }
     
     @Override
-    public void clearFields(){
+    public void clearFields() throws Exception{
     }
     
     @Override

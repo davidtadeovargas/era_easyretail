@@ -51,7 +51,7 @@ public class RecibOrdViewController extends RecibOrdJFrame{
     }
     
     @Override
-    public void clearFields(){
+    public void clearFields() throws Exception{
     }
     
     private void jBCargActionPerformed(java.awt.event.ActionEvent evt) {                                             

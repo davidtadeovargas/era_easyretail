@@ -305,7 +305,7 @@ public class AlmasViewController extends AlmasJFrame {
     }
     
     @Override
-    public void clearFields(){
+    public void clearFields() throws Exception{
         
         jTCod.setText("");
         jTDir1.setText("");

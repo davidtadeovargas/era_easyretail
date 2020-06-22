@@ -37,7 +37,7 @@ public class UltPrecsViewController extends UltPrecsJFrame {
     }
     
     @Override
-    public void clearFields(){
+    public void clearFields() throws Exception{
     }
     
     @Override

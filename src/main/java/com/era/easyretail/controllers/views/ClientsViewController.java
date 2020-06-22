@@ -72,7 +72,7 @@ public class ClientsViewController extends ClientsJFrame {
     }
     
     @Override
-    public void clearFields(){            
+    public void clearFields() throws Exception{            
     }
     
     private void jBBuscActionPerformed(java.awt.event.ActionEvent evt) {                                             

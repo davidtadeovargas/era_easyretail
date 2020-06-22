@@ -63,7 +63,7 @@ public class NewNotProvViewController extends NewNotProvJFrame {
     }
     
     @Override
-    public void clearFields(){
+    public void clearFields() throws Exception{
     }
     
     private void jBProvActionPerformed(java.awt.event.ActionEvent evt) {

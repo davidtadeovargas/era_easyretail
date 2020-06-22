@@ -42,7 +42,7 @@ public class DevPComViewController extends DevPComJFrame {
     }
 
     @Override
-    public void clearFields(){            
+    public void clearFields() throws Exception{            
     }
     
     @Override

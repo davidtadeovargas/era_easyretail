@@ -49,7 +49,7 @@ public class SubramosViewController extends SubramosJFrame {
     }
     
     @Override
-    public void clearFields(){
+    public void clearFields() throws Exception{
     }
     
     @Override

@@ -128,6 +128,8 @@ public class ProdsViewController extends ProdsJFrame {
                     //Enable the save button
                     jBGuar.setEnabled(true);
 
+                    clearFields();
+                    
                     //Load all the values in fields
                     loadModelInFields(Product);
                     
@@ -239,7 +241,7 @@ public class ProdsViewController extends ProdsJFrame {
     }
     
     @Override
-    public void clearFields(){
+    public void clearFields() throws  Exception{
         
         jTProd.setText("");
         jTADescrip.setText("");
@@ -254,7 +256,7 @@ public class ProdsViewController extends ProdsJFrame {
         taxesGlobal = new ArrayList<>(); 
         jLImg.setVisible(false);
         
-        //Reset comboboxes
+        //Reset comboboxes        
         jComLin.clearSelection();
         jComMeds.clearSelection();
         jComUni.clearSelection();
@@ -538,6 +540,14 @@ public class ProdsViewController extends ProdsJFrame {
                 final boolean askSerie = jCNoSer.isSelected();
                 final boolean isPediment = jCPed.isSelected();
                 final boolean isKit = jCComp.isSelected();
+                final Line Line = (Line)jComLin.getSelectedObject();
+                String lineCode;
+                if(Line!=null){
+                    lineCode = Line.getCode();
+                }
+                else{
+                    lineCode = "";
+                }
 
                 //Create the model
                 Product Product;
@@ -566,6 +576,7 @@ public class ProdsViewController extends ProdsJFrame {
                 Product.setAskSerie(askSerie);
                 Product.setLotPediment(isPediment);
                 Product.setCompound(isKit);
+                Product.setCodeLine(lineCode);
 
                 //If any modification in price lists
                 if(LPrecsDatamodel != null){

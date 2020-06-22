@@ -114,7 +114,7 @@ public class EntradasSalidasViewController extends EntradasSalidasJFrame {
     }
     
     @Override
-    public void clearFields(){            
+    public void clearFields() throws Exception{            
     }
     
     private void btnEntradaActionPerformed(java.awt.event.ActionEvent evt) {

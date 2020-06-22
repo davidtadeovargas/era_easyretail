@@ -80,7 +80,7 @@ public class LPrecsViewController extends LPrecsJFrame {
     }
     
     @Override
-    public void clearFields(){            
+    public void clearFields() throws Exception{            
     }
     
     @Override

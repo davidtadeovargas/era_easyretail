@@ -80,7 +80,10 @@ public class PrincipViewController extends PrincipJFrame {
             final BasDats BasDats = UtilitiesFactory.getSingleton().getSessionUtility().getBasDats();
             final User User = UtilitiesFactory.getSingleton().getSessionUtility().getUser();
             final String userLoggedTime = UtilitiesFactory.getSingleton().getSessionUtility().getUserLoggedTime();
-            
+                        
+            linesMenuItem.addActionListener((java.awt.event.ActionEvent evt) -> {
+                linesMenuItemActionPerformed(evt);
+            });
             importKitsMenItem.addActionListener((java.awt.event.ActionEvent evt) -> {
                 importKitsMenItemActionPerformed(evt);
             });
@@ -1108,14 +1111,28 @@ public class PrincipViewController extends PrincipJFrame {
     }
     
     @Override
-    public void clearFields(){
+    public void clearFields() throws Exception{
     }
     
     private void jMenItEstacsActionPerformed(java.awt.event.ActionEvent evt) {        
         ViewControlersFactory.getSingleton().getUsrsViewController().setVisible();
     }
-       
-    private void importKitsMenItemActionPerformed(java.awt.event.ActionEvent evt) {                                        
+        
+    private void linesMenuItemActionPerformed(java.awt.event.ActionEvent evt) {
+        
+        try {
+            ViewControlersFactory.getSingleton().getLinesViewController().setVisible();
+        } catch (Exception ex) {
+            LoggerUtility.getSingleton().logError(this.getClass(), ex);
+            try {
+                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+            } catch (Exception ex1) {
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
+            }
+        }
+    }
+    
+    private void importKitsMenItemActionPerformed(java.awt.event.ActionEvent evt) {
     
         try{
          

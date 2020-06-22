@@ -52,7 +52,7 @@ public class UnidadesViewController extends UnidadesJFrame {
     }
     
     @Override
-    public void clearFields(){
+    public void clearFields() throws Exception{
     }
     
     @Override

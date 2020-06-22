@@ -1457,7 +1457,7 @@ public class EmpresasViewController extends EmpresasJFrame {
     }
     
     @Override
-    public void clearFields() {
+    public void clearFields()  throws Exception{
         
         JTIdEmpresa.setText("");
         JTCodigoEmpresa.setText(UtilitiesFactory.getSingleton().getGeneralsUtility().getUniqueDayCode());

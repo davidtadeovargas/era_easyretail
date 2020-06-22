@@ -98,7 +98,7 @@ public class ImpsViewController extends ImpsJFrame {
     }
     
     @Override
-    public void clearFields(){
+    public void clearFields() throws Exception{
         
         campo_impuesto.setText("");
         jTVal.setText("");

@@ -68,7 +68,7 @@ public class NewNotViewController extends NewNotJFrame {
     }
     
     @Override
-    public void clearFields(){
+    public void clearFields() throws Exception{
     }
     
     private void jBGuarActionPerformed(java.awt.event.ActionEvent evt) {                                             

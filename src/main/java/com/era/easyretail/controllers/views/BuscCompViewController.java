@@ -45,7 +45,7 @@ public class BuscCompViewController extends BuscCompJFrame{
     }
     
     @Override
-    public void clearFields(){            
+    public void clearFields() throws Exception{            
     }
     
     private void jBSalActionPerformed(java.awt.event.ActionEvent evt) {                                             

@@ -65,7 +65,7 @@ public class LoginOtraViewController extends LoginOtraJFrame {
     }
     
     @Override
-    public void clearFields(){            
+    public void clearFields() throws Exception{            
     }
     
     public void setLoginType(LoginType LoginType) {

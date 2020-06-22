@@ -76,7 +76,7 @@ public class PedidoViewController extends PedidoJFrame {
     }
     
     @Override
-    public void clearFields(){
+    public void clearFields() throws Exception{
     }
     
     @Override

@@ -44,7 +44,7 @@ public class NewClienExpViewController extends NewClienExpJFrame {
     }
     
     @Override
-    public void clearFields(){
+    public void clearFields() throws Exception{
     }
     
     private void jBSalActionPerformed(java.awt.event.ActionEvent evt) {                                             

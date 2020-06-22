@@ -73,7 +73,7 @@ public class ListadoPagosViewController extends ListadoPagosJFrame {
     }
     
     @Override
-    public void clearFields(){            
+    public void clearFields() throws Exception{            
     }
     
     @Override

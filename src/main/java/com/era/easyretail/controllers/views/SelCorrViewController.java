@@ -44,7 +44,7 @@ public class SelCorrViewController extends SelCorrJFrame {
     }
     
     @Override
-    public void clearFields(){
+    public void clearFields() throws Exception{
     }
     
     private void jBEnviActionPerformed(java.awt.event.ActionEvent evt) {                                             

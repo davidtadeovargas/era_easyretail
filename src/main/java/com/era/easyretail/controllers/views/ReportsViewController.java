@@ -45,7 +45,7 @@ public class ReportsViewController extends ReportsJFrame {
     }
     
     @Override
-    public void clearFields(){
+    public void clearFields() throws Exception{
     }
     
     private void generateButtonActionPerformed(java.awt.event.ActionEvent evt) {                                             

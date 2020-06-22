@@ -117,7 +117,7 @@ public class MonsViewController extends MonssJFrame {
     }
     
     @Override
-    public void clearFields(){
+    public void clearFields() throws Exception{
         
         jTCod.setText("");
         jTDescrip.setText("");

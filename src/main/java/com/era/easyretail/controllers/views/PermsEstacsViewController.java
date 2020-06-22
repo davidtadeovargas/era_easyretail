@@ -19,7 +19,7 @@ public class PermsEstacsViewController extends PermsEstacsJFrame {
     }
     
     @Override
-    public void clearFields(){
+    public void clearFields() throws Exception{
     }
     
     @Override

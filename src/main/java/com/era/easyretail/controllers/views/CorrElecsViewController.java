@@ -65,7 +65,7 @@ public class CorrElecsViewController extends CorrElecsJFrame {
     }
     
     @Override
-    public void clearFields(){            
+    public void clearFields() throws Exception{            
     }
     
     private void jBUsrActionPerformed(java.awt.event.ActionEvent evt) {                                             

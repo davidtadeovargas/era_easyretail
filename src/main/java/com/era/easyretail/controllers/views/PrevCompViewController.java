@@ -91,7 +91,7 @@ public class PrevCompViewController extends PrevCompJFrame {
     }
     
     @Override
-    public void clearFields(){
+    public void clearFields() throws Exception{
     }
     
     private void jBAbrActionPerformed(java.awt.event.ActionEvent evt) {                                             

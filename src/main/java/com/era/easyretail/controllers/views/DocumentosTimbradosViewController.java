@@ -40,7 +40,7 @@ public class DocumentosTimbradosViewController extends DocumentosTimbradosJFrame
     }
     
     @Override
-    public void clearFields(){            
+    public void clearFields() throws  Exception{
     }
     
     @Override

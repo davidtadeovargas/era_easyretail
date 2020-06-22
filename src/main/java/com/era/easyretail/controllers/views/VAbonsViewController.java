@@ -40,7 +40,7 @@ public class VAbonsViewController extends VAbonsJFrame {
     }
     
     @Override
-    public void clearFields(){
+    public void clearFields() throws Exception{
     }
     
     @Override

@@ -81,7 +81,7 @@ public class TipCamViewController extends TipCamJFrame {
     }
     
     @Override
-    public void clearFields(){            
+    public void clearFields() throws Exception{            
     }
     
     @Override

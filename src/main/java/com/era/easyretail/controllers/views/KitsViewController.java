@@ -64,7 +64,7 @@ public class KitsViewController extends KitsJFrame {
     }
     
     @Override
-    public void clearFields(){            
+    public void clearFields() throws Exception{            
     }
     
     @Override

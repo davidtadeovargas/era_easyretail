@@ -38,7 +38,7 @@ public class TraspasosSalidaViewController extends TraspasosSalidaJFrame {
     }
     
     @Override
-    public void clearFields(){
+    public void clearFields() throws Exception{
     }
     
     @Override

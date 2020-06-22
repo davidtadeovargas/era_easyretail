@@ -40,7 +40,7 @@ public class DatsCartaPorViewController extends DatsCartaPorJFrame {
     }
     
     @Override
-    public void clearFields(){            
+    public void clearFields() throws Exception{            
     }
     
     @Override

@@ -116,7 +116,7 @@ public class SalidaEntradaViewController extends SalidaEntradaJFrame {
     }
     
     @Override
-    public void clearFields(){
+    public void clearFields() throws Exception{
     }
 
     public void view(final IngresosEncab IngresosEncab){
