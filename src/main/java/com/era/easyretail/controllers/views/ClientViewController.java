@@ -24,10 +24,9 @@ import com.era.easyretail.validators.EmailValidator;
 import com.era.easyretail.validators.WebsitelValidator;
 import com.era.models.CCodigopostal;
 import com.era.models.CCountry;
-import com.era.models.PaymentForm;
-import com.era.models.UsoCFDI;
-import com.era.views.dialogs.ErrorDialogJFrame;
-import java.awt.event.ActionEvent;
+import com.era.models.CPaymentForm;
+import com.era.models.CUsoCFDI;
+
 /**
  *
  * @author PC
@@ -74,8 +73,27 @@ public class ClientViewController extends ClientJFrame {
                 jBPaisActionPerformed(evt);
             });
                         
-            //Load all the comboboxes
-            jComUsoCfdi.loadItems();
+            jComUsoCfdi.setChangeSelectionListener((Object ObjectModel) -> {
+                
+                try {
+                 
+                    //Cast the model
+                    final CUsoCFDI CUsoCfdi = (CUsoCFDI)ObjectModel;
+                    
+                    usoCfdiDescription.setText(CUsoCfdi.getDescription());
+                    
+                } catch (Exception ex) {
+                    LoggerUtility.getSingleton().logError(this.getClass(), ex);
+                    try {
+                        DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+                    } catch (Exception ex1) {
+                        Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
+                    }
+                }
+            });
+            
+            //Load all the comboboxes            
+            jComUsoCfdi.loadItems();            
             jComFormPag.loadItems();
             
         }catch (Exception ex) {
@@ -164,13 +182,13 @@ public class ClientViewController extends ClientJFrame {
         sDepGar = n.format(dCant);        
         
         final String usoCFI = Company.getUsocfdi();
-        final UsoCFDI UsoCFDI = (UsoCFDI)RepositoryFactory.getInstance().getUsoCFDIsRepository().getByCode(usoCFI);
+        final CUsoCFDI UsoCFDI = (CUsoCFDI)RepositoryFactory.getInstance().getCUsoCFDIsRepository().getByCode(usoCFI);
         if(UsoCFDI != null){
             jComUsoCfdi.selectByObject(UsoCFDI);            
         }
-        final PaymentForm PaymentForm = (PaymentForm)RepositoryFactory.getInstance().getPaymentFormsRepository().getByCode(Company.getMetpag());
-        if(PaymentForm != null){
-            jComFormPag.selectByObject(PaymentForm);
+        final CPaymentForm CPaymentForm = (CPaymentForm)RepositoryFactory.getInstance().getPaymentFormsRepository().getByCode(Company.getMetpag());
+        if(CPaymentForm != null){
+            jComFormPag.selectByObject(CPaymentForm);
         }
     }
     
@@ -495,7 +513,7 @@ public class ClientViewController extends ClientJFrame {
                         sBloqCred = "1";
 
                     //Get the selected payment method            
-                    PaymentForm PaymentForm = (PaymentForm)jComFormPag.getSelectedObject();
+                    CPaymentForm PaymentForm = (CPaymentForm)jComFormPag.getSelectedObject();
             
                     //If edit or new customer
                     Company Company;
@@ -507,10 +525,10 @@ public class ClientViewController extends ClientJFrame {
                     }
                      
                     //Get selected object
-                    final UsoCFDI UsoCFDI = (UsoCFDI)jComUsoCfdi.getSelectedObject();
+                    final CUsoCFDI CUsoCFDI = (CUsoCFDI)jComUsoCfdi.getSelectedObject();
                     String usoCFDI = "";
-                    if(UsoCFDI != null){
-                        usoCFDI = UsoCFDI.getCode();
+                    if(CUsoCFDI != null){
+                        usoCFDI = CUsoCFDI.getCode();
                     }
                             
                     Company.setCompanyCode(companyCode);
@@ -545,7 +563,7 @@ public class ClientViewController extends ClientJFrame {
                     Company.setLimtcred(Float.parseFloat(sLimCred));
                     Company.setBloq(sBloq.equals("1"));
                     Company.setPers(sPers);
-                    Company.setMetpag(PaymentForm.getCode());
+                    Company.setMetpag(PaymentForm.getC_FormaPago());
                     Company.setCta(sCta);
                     Company.setList(Integer.parseInt(sList));
                     Company.setBeneficiario(jTBeneficiario.getText());

@@ -6,11 +6,17 @@
 package com.era.easyretail.controllers.views;
 
 import com.era.logger.LoggerUtility;
+import com.era.models.Partvta;
+import com.era.models.Sales;
+import com.era.repositories.RepositoryFactory;
 import com.era.views.VtasJFrame;
 import com.era.views.dialogs.DialogsFactory;
+import com.era.views.tables.BaseJTable;
+import com.era.views.tables.headers.TableHeaderFactory;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.event.ListSelectionEvent;
 
 /**
  *
@@ -35,9 +41,6 @@ public class VtasViewController extends VtasJFrame {
             });
             jBTod.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jBTodActionPerformed(evt);
-            });
-            jBAyu.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jBAyuActionPerformed(evt);
             });
             jBGenPDF.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jBGenPDFActionPerformed(evt);
@@ -145,6 +148,54 @@ public class VtasViewController extends VtasJFrame {
                 jBAbrNotCredActionPerformed(evt);
             });
             
+            //Config partvta table            
+            jTab2.addShowColumn(TableHeaderFactory.getSigleton().getPartvtasTableHeader().getROWNUMBER());
+            jTab2.addShowColumn(TableHeaderFactory.getSigleton().getPartvtasTableHeader().getCANT());
+            jTab2.addShowColumn(TableHeaderFactory.getSigleton().getPartvtasTableHeader().getPROD());
+            jTab2.addShowColumn(TableHeaderFactory.getSigleton().getPartvtasTableHeader().getALMA());
+            jTab2.addShowColumn(TableHeaderFactory.getSigleton().getPartvtasTableHeader().getDESCRIP());
+            jTab2.addShowColumn(TableHeaderFactory.getSigleton().getPartvtasTableHeader().getDESCU());
+            jTab2.addShowColumn(TableHeaderFactory.getSigleton().getPartvtasTableHeader().getIMPO());
+            jTab2.addShowColumn(TableHeaderFactory.getSigleton().getPartvtasTableHeader().getIMPUE());
+            jTab2.addShowColumn(TableHeaderFactory.getSigleton().getPartvtasTableHeader().getLIST());
+            
+            //Config sales table
+            jTableVentas.addShowColumn(TableHeaderFactory.getSigleton().getSalessTableHeader().getROWNUMBER());
+            jTableVentas.addShowColumn(TableHeaderFactory.getSigleton().getSalessTableHeader().getCOMPANYCODE());
+            jTableVentas.addShowColumn(TableHeaderFactory.getSigleton().getSalessTableHeader().getRAZON());
+            jTableVentas.addShowColumn(TableHeaderFactory.getSigleton().getSalessTableHeader().getESTATUS());
+            jTableVentas.addShowColumn(TableHeaderFactory.getSigleton().getSalessTableHeader().getEMISIONDATE());
+            jTableVentas.addShowColumn(TableHeaderFactory.getSigleton().getSalessTableHeader().getFACTURADO());
+            jTableVentas.addShowColumn(TableHeaderFactory.getSigleton().getSalessTableHeader().getOBSERVATION());
+            jTableVentas.addShowColumn(TableHeaderFactory.getSigleton().getSalessTableHeader().getPAYMENTFORM());
+            jTableVentas.addShowColumn(TableHeaderFactory.getSigleton().getSalessTableHeader().getSUBTOTAL());
+            jTableVentas.addShowColumn(TableHeaderFactory.getSigleton().getSalessTableHeader().getTAX());
+            jTableVentas.addShowColumn(TableHeaderFactory.getSigleton().getSalessTableHeader().getTOTAL());
+            jTableVentas.setITableRowSelected((ListSelectionEvent lse, Object Object) -> {
+                
+                try {
+                    
+                    //Get the model
+                    final Sales Sale = (Sales)Object;
+
+                    //Get all the items from that sale
+                    final List<Partvta> parts = RepositoryFactory.getInstance().getPartvtaRepository().getPartsVta(Sale.getId());
+                                        
+                    //Load the parts in table
+                    jTab2.initTable(parts);
+                            
+                } catch (Exception ex) {
+                    LoggerUtility.getSingleton().logError(this.getClass(), ex);
+                    try {
+                        DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+                    } catch (Exception ex1) {
+                        Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
+                    }
+                }
+            });
+            
+            //Load all the sales
+            jTableVentas.initTableWithPagination();
             
         }catch (Exception ex) {
             LoggerUtility.getSingleton().logError(VtasViewController.class, ex);
@@ -675,21 +726,6 @@ public class VtasViewController extends VtasJFrame {
     }
     
     private void jBGenPDFActionPerformed(java.awt.event.ActionEvent evt) {                                             
-
-	try{            	
-            
-	}
-	catch (Exception ex) {
-            LoggerUtility.getSingleton().logError(VtasViewController.class, ex);
-            try {
-                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
-            } catch (Exception ex1) {
-                Logger.getLogger(VtasViewController.class.getName()).log(Level.SEVERE, null, ex1);
-            }
-	}
-    }
-    
-    private void jBAyuActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	
             
