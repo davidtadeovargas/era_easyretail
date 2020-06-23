@@ -398,6 +398,9 @@ public class SearchViewController extends SearchJFrame {
                 break;
                
            case WAREHOUSES:
+                jTab.addShowColumn(TableHeaderFactory.getSigleton().getWarehousesTableHeader().getCODE());
+                jTab.addShowColumn(TableHeaderFactory.getSigleton().getWarehousesTableHeader().getDESCRIPTION());
+                jTab.addShowColumn(TableHeaderFactory.getSigleton().getWarehousesTableHeader().getADDRESS1());
                 break;
 
            case CLASSIFICATIONS:

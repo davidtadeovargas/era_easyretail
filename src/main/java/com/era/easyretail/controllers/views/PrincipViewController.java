@@ -60,7 +60,7 @@ public class PrincipViewController extends PrincipJFrame {
         
         try{                        
             
-            final Confgral Confgral = RepositoryFactory.getInstance().getConfgralsRepository().getSistemClasifByConf("reporteCaja");
+            final Confgral Confgral = RepositoryFactory.getInstance().getConfgralRepository().getSistemClasifByConf("reporteCaja");
             if(Confgral==null){
                 jBReporteCaja.setEnabled(false);
             }
@@ -87,6 +87,9 @@ public class PrincipViewController extends PrincipJFrame {
             importKitsMenItem.addActionListener((java.awt.event.ActionEvent evt) -> {
                 importKitsMenItemActionPerformed(evt);
             });
+            seriesJMenuItem.addActionListener((java.awt.event.ActionEvent evt) -> {
+                seriesJMenuItemActionPerformed(evt);
+            });            
             jMenIt4.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jMenIt4ActionPerformed(evt);
             });
@@ -1159,8 +1162,11 @@ public class PrincipViewController extends PrincipJFrame {
             }
         }
     }
-    
-    private void jMenIt4ActionPerformed(java.awt.event.ActionEvent evt) {                                        
+        
+    private void seriesJMenuItemActionPerformed(java.awt.event.ActionEvent evt) {
+        ViewControlersFactory.getSingleton().getSeriesViewController().setVisible();
+    }
+    private void jMenIt4ActionPerformed(java.awt.event.ActionEvent evt) {
         ViewControlersFactory.getSingleton().getCorrElecsViewController().setVisible();
     }
     
@@ -1285,7 +1291,7 @@ public class PrincipViewController extends PrincipJFrame {
     {
         try{
             
-            final String ptovtaAlmacen = RepositoryFactory.getInstance().getConfgralsRepository().getPtovtaAlmacen();
+            final String ptovtaAlmacen = RepositoryFactory.getInstance().getConfgralRepository().getPtovtaAlmacen();
 
             /*Si el almacén no exsite entonces*/
             if(ptovtaAlmacen==null)

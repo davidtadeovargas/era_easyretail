@@ -7,6 +7,12 @@
 
 /*!40000 ALTER TABLE `documentos_origen` DISABLE KEYS */;
 INSERT INTO documentos_origen(nombre,tipo,falt,fmod) VALUES('COMPRAS','COMP',now(),now());
+INSERT INTO documentos_origen(nombre,tipo,falt,fmod) VALUES('COTIZACIONES','COT',now(),now());
+INSERT INTO documentos_origen(nombre,tipo,falt,fmod) VALUES('PREVIO COMPRAS','PREV',now(),now());
+INSERT INTO documentos_origen(nombre,tipo,falt,fmod) VALUES('PROVEEDORES','PROV',now(),now());
+INSERT INTO documentos_origen(nombre,tipo,falt,fmod) VALUES('REMISIONES','REM',now(),now());
+INSERT INTO documentos_origen(nombre,tipo,falt,fmod) VALUES('ORDENES COMPRA','ORDC',now(),now());
+INSERT INTO documentos_origen(nombre,tipo,falt,fmod) VALUES('PEDIDOS','PED',now(),now());
 INSERT INTO documentos_origen(nombre,tipo,falt,fmod) VALUES('PAGOS','CXC',now(),now());
 INSERT INTO documentos_origen(nombre,tipo,falt,fmod) VALUES('FACTURAS','FAC',now(),now());
 INSERT INTO documentos_origen(nombre,tipo,falt,fmod) VALUES('NOTAS DE CRÉDITO CLIENTES','NOTC',now(),now());
@@ -72,7 +78,7 @@ INSERT INTO confgral(dia,clasif,conf,val,falt,fmod,estac,sucu,nocaj) VALUES(30,'
 INSERT INTO confgral(dia,clasif,conf,val,falt,fmod,estac,sucu,nocaj) VALUES(0,'sist','cfdi33',1,now(),now(),'INICIAL','INICIAL','INICIAL');
 INSERT INTO confgral(clasif,conf,val,nume, falt,fmod,estac,sucu,nocaj) VALUES('sist','posdecimal',0,4, now(),now(),'INICIAL','INICIAL','INICIAL');
 INSERT INTO confgral(clasif,conf,val,falt,fmod,estac,sucu,nocaj) VALUES('sist','cumple',0,now(),now(),'INICIAL','INICIAL','INICIAL');
-INSERT INTO confgral(clasif,conf,val,falt,fmod,estac,sucu,nocaj) VALUES('sist','dlogin',0,now(),now(),'INICIAL','INICIAL','INICIAL');
+INSERT INTO confgral(clasif,conf,val,falt,fmod,estac,sucu,nocaj) VALUES('sist','dlogin',1,now(),now(),'INICIAL','INICIAL','INICIAL');
 INSERT INTO confgral(clasif,conf,val,falt,fmod,estac,sucu,nocaj) VALUES('vtas','venunaser',0,now(),now(),'INICIAL','INICIAL','INICIAL');
 INSERT INTO confgral(clasif,conf,val,falt,fmod,estac,sucu,nocaj) VALUES('vtas','vencotunaser',0,now(),now(),'INICIAL','INICIAL','INICIAL');
 INSERT INTO confgral(clasif,conf,val,falt,fmod,estac,sucu,nocaj) VALUES('vtas','venunaserpv',0,now(),now(),'INICIAL','INICIAL','INICIAL');
@@ -85,7 +91,7 @@ INSERT INTO confgral(clasif,conf,val,falt,fmod,estac,sucu,nocaj) VALUES('rems','
 INSERT INTO confgral(clasif,conf,val,falt,fmod,estac,sucu,nocaj) VALUES('rems','guapdfcan',1,now(),now(),'INICIAL','INICIAL','INICIAL');
 INSERT INTO confgral(clasif,conf,val,falt,fmod,estac,sucu,nocaj,extr) VALUES('vtas','moddescrip',0,now(),now(),'INICIAL','INICIAL','INICIAL','SYS');
 INSERT INTO confgral(clasif,conf,val,falt,fmod,estac,sucu,nocaj) VALUES('vtas','monfacfij',0,now(),now(),'INICIAL','INICIAL','INICIAL');
-INSERT INTO confgral(clasif,conf,val,falt,fmod,estac,sucu,nocaj) VALUES('vtas','serfacfij',0,now(),now(),'INICIAL','INICIAL','INICIAL');
+INSERT INTO confgral(clasif,conf,val,falt,fmod,estac,sucu,nocaj,extr) VALUES('vtas','serfacfij',0,now(),now(),'INICIAL','INICIAL','INICIAL','FAC');
 INSERT INTO confgral(clasif,conf,val,falt,fmod,estac,sucu,nocaj,extr,nume) VALUES('vtas','minfac',0,now(),now(),'INICIAL','INICIAL','INICIAL','SYS',100);
 INSERT INTO confgral(clasif,conf,val,falt,fmod,estac,sucu,nocaj,extr) VALUES('vtas','almavtaf',0,now(),now(),'INICIAL','INICIAL','INICIAL','SYS');
 INSERT INTO confgral(clasif,conf,val,falt,fmod,estac,sucu,nocaj) VALUES('vtas','devvtaspto',0,now(),now(),'INICIAL','INICIAL','INICIAL');
@@ -138,6 +144,7 @@ INSERT INTO confgral(clasif,conf,val,falt,fmod,estac,sucu,nocaj) VALUES('vtas','
 INSERT INTO confgral(clasif,conf,val,falt,fmod,estac,sucu,nocaj) VALUES('vtas','catgralfac',0,now(),now(),'INICIAL','INICIAL','INICIAL');
 INSERT INTO confgral(clasif,conf,val,falt,fmod,estac,sucu,nocaj) VALUES('vtas','otramon',1,now(),now(),'INICIAL','INICIAL','INICIAL');
 INSERT INTO confgral(clasif,conf,val,falt,fmod,estac,sucu,nocaj) VALUES('cots','cotunaser',0,now(),now(),'INICIAL','INICIAL','INICIAL');
+INSERT INTO confgral(clasif,conf,val,falt,fmod,estac,sucu,nocaj) VALUES('cots','msjexistnegpcot',0,now(),now(),'INICIAL','INICIAL','INICIAL');
 INSERT INTO confgral(clasif,conf,val,falt,fmod,estac,sucu,nocaj) VALUES('cots','cotconaser',1,now(),now(),'INICIAL','INICIAL','INICIAL');
 INSERT INTO confgral(clasif,conf,val,falt,fmod,estac,sucu,nocaj,extr) VALUES('cots','moddescrip',0,now(),now(),'INICIAL','INICIAL','INICIAL','SYS');
 INSERT INTO confgral(clasif,conf,val,falt,fmod,estac,sucu,nocaj,extr) VALUES('cots','almavtac',0,now(),now(),'INICIAL','INICIAL','INICIAL','SYS');
@@ -174,7 +181,7 @@ INSERT INTO consecs(tip,ser,descrip,consec,estac,sucu,nocaj,falt,fmod) VALUES('R
 INSERT INTO consecs(tip,ser,descrip,consec,estac,sucu,nocaj,falt,fmod) VALUES('COMP','COMP','COMPRAS',1,'INICIAL','INICIAL','INICIAL',now(),now());
 INSERT INTO consecs(tip,ser,descrip,consec,estac,sucu,nocaj,falt,fmod) VALUES('ORDC','ORDC','ORDENES COMPRA',1,'INICIAL','INICIAL','INICIAL',now(),now());
 INSERT INTO consecs(tip,ser,descrip,consec,estac,sucu,nocaj,falt,fmod) VALUES('CXC','PAG','PAGOS', 1, 'INICIAL', 'INICIAL', 'INICIAL',now(),now());
-INSERT INTO consecs(tip,ser,descrip,consec,estac,sucu,nocaj,falt,fmod) VALUES('PEDIDOS','PED','PEDIDOS', 1, 'INICIAL', 'INICIAL', 'INICIAL',now(),now());
+INSERT INTO consecs(tip,ser,descrip,consec,estac,sucu,nocaj,falt,fmod) VALUES('PED','PED','PEDIDOS', 1, 'INICIAL', 'INICIAL', 'INICIAL',now(),now());
 /*!40000 ALTER TABLE `consecs` ENABLE KEYS */;
 
 /*!40000 ALTER TABLE `estacs` DISABLE KEYS */;

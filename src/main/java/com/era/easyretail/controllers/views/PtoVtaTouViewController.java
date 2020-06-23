@@ -5,6 +5,7 @@
  */
 package com.era.easyretail.controllers.views;
 
+import com.era.datamodels.TotalsDataModel;
 import com.era.datamodels.enums.SearchCommonTypeEnum;
 import com.era.views.PtoVtaTouJFrame;
 import java.util.List;
@@ -15,6 +16,7 @@ import com.era.models.ImpuesXProduct;
 import com.era.models.Line;
 import com.era.models.Partvta;
 import com.era.models.Product;
+import com.era.models.Sales;
 import com.era.models.Tax;
 import com.era.models.Unid;
 import com.era.models.User;
@@ -37,6 +39,7 @@ public class PtoVtaTouViewController extends PtoVtaTouJFrame {
  
     private String productCode;
     private String productDescription;
+    private TotalsDataModel Totals;
     
     public PtoVtaTouViewController() {
         super("window_title_ptovta");
@@ -205,7 +208,7 @@ public class PtoVtaTouViewController extends PtoVtaTouJFrame {
     public void clearFields() throws Exception{
     }
     
-    private void fillTotals(final Totals Totals) throws Exception {
+    private void fillTotals(final TotalsDataModel Totals) throws Exception {
         
         //Place in fields
         jTSubTot.setText(UtilitiesFactory.getSingleton().getNumbersUtility().toMoneyFormat(String.valueOf(Totals.getSubtotal().doubleValue())));
@@ -214,55 +217,7 @@ public class PtoVtaTouViewController extends PtoVtaTouJFrame {
         jTQtyP.setText(String.valueOf(Totals.getCant().doubleValue()) + " pzas");
     }
     
-    private class Totals {
-        private BigDecimal taxes;
-        private BigDecimal subtotal;
-        private BigDecimal disccount;
-        private BigDecimal total;
-        private BigDecimal cant;
-
-        public BigDecimal getTaxes() {
-            return taxes;
-        }
-
-        public void setTaxes(BigDecimal taxes) {
-            this.taxes = taxes;
-        }       
-
-        public BigDecimal getSubtotal() {
-            return subtotal;
-        }
-
-        public void setSubtotal(BigDecimal subtotal) {
-            this.subtotal = subtotal;
-        }
-
-        public BigDecimal getDisccount() {
-            return disccount;
-        }
-
-        public void setDisccount(BigDecimal disccount) {
-            this.disccount = disccount;
-        }
-
-        public BigDecimal getTotal() {
-            return total;
-        }
-
-        public void setTotal(BigDecimal total) {
-            this.total = total;
-        }
-
-        public BigDecimal getCant() {
-            return cant;
-        }
-
-        public void setCant(BigDecimal cant) {
-            this.cant = cant;
-        }
-    }
-    
-    private Totals calculateTotals() throws Exception {
+    private TotalsDataModel calculateTotals() throws Exception {
         
         //Get all table items
         final List<Partvta> items = (List<Partvta>)jTab.getAllItemsInTable();
@@ -306,7 +261,7 @@ public class PtoVtaTouViewController extends PtoVtaTouJFrame {
         total = total.add(subtotal.add(taxes));
 
         //Create the model
-        final Totals Totals = new Totals();
+        final TotalsDataModel Totals = new TotalsDataModel();
         Totals.setTaxes(taxes);
         Totals.setDisccount(BigDecimal.ZERO);
         Totals.setSubtotal(subtotal);
@@ -316,7 +271,7 @@ public class PtoVtaTouViewController extends PtoVtaTouJFrame {
         return Totals;
     }
     
-    private void jBNewVtaActionPerformed(java.awt.event.ActionEvent evt) {                                             
+    private void jBNewVtaActionPerformed(java.awt.event.ActionEvent evt) {
 
 	try{
             
@@ -545,13 +500,15 @@ public class PtoVtaTouViewController extends PtoVtaTouJFrame {
             Partvta.setTipcam(new BigDecimal(Coin.getValue(), MathContext.DECIMAL64));
             Partvta.setUnid(Unid.getCode());
             Partvta.setImpo(new BigDecimal(import_, MathContext.DECIMAL64));
+            Partvta.setImpue(0);
             Partvta.setProd(Product.getCode());
+            Partvta.setDescu(BigDecimal.ZERO);
             
             //Add it to the table
             jTab.addObject(Partvta);
             
             //Get the totals
-            final Totals Totals = calculateTotals();                        
+            Totals = calculateTotals();                        
             
             //Fill the totals
             fillTotals(Totals);
@@ -605,7 +562,7 @@ public class PtoVtaTouViewController extends PtoVtaTouJFrame {
             }
             
             //Get the customer
-            final Company Company = (Company)RepositoryFactory.getInstance().getCompanysRepository().getByCode(customer);
+            final Company Company = (Company)RepositoryFactory.getInstance().getCompanysRepository().getCustomerByCode(customer);
             
             //Iif customer doesnt exists
             if(Company==null){
@@ -619,7 +576,7 @@ public class PtoVtaTouViewController extends PtoVtaTouJFrame {
             final List<Partvta> items = (List<Partvta>)jTab.getAllItemsInTable();
             
             //First need items in table
-            if(items.size()==0){
+            if(items.isEmpty()){
                 DialogsFactory.getSingleton().showErrorCeroItemsOKDialog(baseJFrame, (JFrame jFrame) -> {
                     jTab.grabFocus();
                 });
@@ -634,7 +591,7 @@ public class PtoVtaTouViewController extends PtoVtaTouJFrame {
             
             //If the printer is empty
             String defaultPrinter;
-            if(User.getTicketPrinter().isEmpty()){
+            if(User.getTicketPrinter()==null){
                 defaultPrinter = UtilitiesFactory.getSingleton().getPrintersUtility().getDefaultPrinter();
             }
             else{                
@@ -647,7 +604,34 @@ public class PtoVtaTouViewController extends PtoVtaTouJFrame {
                 return;
             }
             
+            //Create the sales model
+            final Sales Sales = new Sales();
+            Sales.setCompanyCode(Company.getCompanyCode());
+            Sales.setRazon(Company.getNom());
+            Sales.setSubtotal(Totals.getSubtotal());
+            Sales.setTax(Totals.getTaxes());
+            Sales.setTotal(Totals.getTotal());                        
             
+            //Open screen to make the payment
+            final CobroViewController CobroViewController = ViewControlersFactory.getSingleton().getCobroViewController();
+            CobroViewController.init(Sales, items);
+            CobroViewController.setOnFinish(() -> {
+                
+                try {
+                    
+                    //New sale
+                    this.newSale();
+                    
+                } catch (Exception ex) {
+                    LoggerUtility.getSingleton().logError(this.getClass(), ex);
+                    try {
+                        DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+                    } catch (Exception ex1) {
+                        Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
+                    }
+                }
+            });
+            CobroViewController.setVisible();
 	}
 	catch (Exception ex) {
             LoggerUtility.getSingleton().logError(this.getClass(), ex);
