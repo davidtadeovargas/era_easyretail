@@ -73,6 +73,7 @@ public class ViewControlersFactory {
     private CatalogoMonedaJFrame CatalogoMonedaJFrame;
     private CatalBancosJFrame CatalBancosJFrame;
     private AlmasJFrame AlmasJFrame;
+    private GeneralLogsViewController GeneralLogsViewController;
     private VerCtaContViewController VerCtaContViewController;
     private UsrsViewController UsrsViewController;
     private UnidadesViewController UnidadesViewController;
@@ -638,6 +639,10 @@ public class ViewControlersFactory {
         return DevPVtaViewController;
     }
     
+    public GeneralLogsViewController getGeneralLogsViewController(){
+        GeneralLogsViewController = new GeneralLogsViewController();
+        return GeneralLogsViewController;
+    }
     public LinesViewController getLinesViewController(){
         LinesViewController = new LinesViewController();
         return LinesViewController;

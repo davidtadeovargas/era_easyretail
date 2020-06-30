@@ -1531,8 +1531,10 @@ public class PrincipViewController extends PrincipJFrame {
     
     private void jMenItDeslogActionPerformed(java.awt.event.ActionEvent evt) {                                             
         
-        //Close the current window and open the login screen as login
+        //Close the current window
         dispose();
+        
+        //Open the login screen as login        
         final LoginOtraViewController LoginOtraViewController = ViewControlersFactory.getSingleton().getLoginOtraViewController();
         LoginOtraViewController.setLoginType(LoginType.DESLOGIN);
         LoginOtraViewController.setVisible();
@@ -1652,8 +1654,8 @@ public class PrincipViewController extends PrincipJFrame {
         
     }
     
-    private void jMLogProdActionPerformed(java.awt.event.ActionEvent evt) {                                          
-                      
+    private void jMLogProdActionPerformed(java.awt.event.ActionEvent evt) {
+        ViewControlersFactory.getSingleton().getGeneralLogsViewController().setVisible();
     }
     private void jMLogKActionPerformed(java.awt.event.ActionEvent evt) {                                       
         

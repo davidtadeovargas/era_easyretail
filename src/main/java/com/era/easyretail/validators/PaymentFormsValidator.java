@@ -1,8 +1,6 @@
 package com.era.easyretail.validators;
 
 import com.era.easyretail.validators.exceptions.PaymentFormsValidatorsExceptions;
-import com.era.models.PaymentForm;
-import com.era.repositories.RepositoryFactory;
 
 public class PaymentFormsValidator extends IValidate{
 

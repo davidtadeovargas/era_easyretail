@@ -214,7 +214,7 @@ public class EntradasSalidasViewController extends EntradasSalidasJFrame {
     private void btnMostrarActionPerformed(java.awt.event.ActionEvent evt) {
 
 	try{            	
-            
+            this.tblEncabezados.loadAllItemsInTable();
 	}
 	catch (Exception ex) {
             LoggerUtility.getSingleton().logError(EntradasSalidasViewController.class, ex);
@@ -230,21 +230,16 @@ public class EntradasSalidasViewController extends EntradasSalidasJFrame {
 
 	try{            	
             
-	}
-	catch (Exception ex) {
-            LoggerUtility.getSingleton().logError(EntradasSalidasViewController.class, ex);
-            try {
-                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
-            } catch (Exception ex1) {
-                Logger.getLogger(EntradasSalidasViewController.class.getName()).log(Level.SEVERE, null, ex1);
-            }
-	}
-    }
-    
-    private void ActionPerformed(java.awt.event.ActionEvent evt) {
-
-	try{            	
+            //Get the value to search
+            final String search = btnBuscar.getText().trim();
             
+            //If nothing to search so return
+            if(search.isEmpty()){
+                return;
+            }
+            
+            //Search all the ocurrences
+            this.tblEncabezados.getByLikeEncabezados(search);
 	}
 	catch (Exception ex) {
             LoggerUtility.getSingleton().logError(EntradasSalidasViewController.class, ex);

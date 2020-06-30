@@ -11,7 +11,6 @@ import com.era.models.Sales;
 import com.era.repositories.RepositoryFactory;
 import com.era.views.VtasJFrame;
 import com.era.views.dialogs.DialogsFactory;
-import com.era.views.tables.BaseJTable;
 import com.era.views.tables.headers.TableHeaderFactory;
 import java.util.List;
 import java.util.logging.Level;

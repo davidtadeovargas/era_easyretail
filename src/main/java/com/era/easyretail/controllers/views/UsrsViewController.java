@@ -16,7 +16,9 @@ import com.era.logger.LoggerUtility;
 import com.era.models.User;
 import com.era.repositories.RepositoryFactory;
 import com.era.utilities.UtilitiesFactory;
+import com.era.utilities.exceptions.InvalidFileExtensionException;
 import com.era.utilities.filechooser.FileChooserUtility;
+import com.era.utilities.filechooser.ImageFileChooserUtility;
 import com.era.views.UsrsJFrame;
 import com.era.views.dialogs.DialogsFactory;
 import com.era.views.dialogs.ErrorOKDialog;
@@ -273,50 +275,43 @@ public class UsrsViewController extends UsrsJFrame {
                 return;
             }
             
-            //Search for the image
-            final FileChooserUtility FileChooserUtility = UtilitiesFactory.getSingleton().getFileChooserUtility();
-            FileChooserUtility.setPropertyTitle("");
-            FileChooserUtility.setIApproveOpption((String absolutePath, String fileName) -> {
+            try{
                 
-                try{
-                    
-                    //Validate that the image format is valid
-                    if (    !fileName.endsWith(".jpg") && 
-                            !fileName.endsWith(".jpeg") && 
-                            !fileName.endsWith(".bmp") && 
-                            !fileName.endsWith(".gif") && 
-                            !fileName.endsWith(".png")) {
-                        
-                        final ErrorOKDialog ErrorOKDialog = DialogsFactory.getSingleton().getErrorOKDialog(baseJFrame);
-                        ErrorOKDialog.setPropertyText("error_invalid_image_format");
-                        ErrorOKDialog.show();
-                        return;
-                    }
-                    
-                    //Get selected model
-                    final User User = (User) jTab.getRowSelected();
-                    
-                    //Create the final path
-                    final String finalPath = absolutePath + "\\" + fileName;
-                    
-                    //Save the user image in folder
-                    UtilitiesFactory.getSingleton().getImagesUtility().saveUserImage(User.getCode(), finalPath);
-                    
-                    //Load image in the panel
-                    jLImg.setIcon(new ImageIcon(UtilitiesFactory.getSingleton().getImagesUtility().getUserImagePath(User.getCode())));
-                    jLImg.setVisible(true);
-                    
-                }catch (Exception ex) {
-                    
-                    LoggerUtility.getSingleton().logError(UsrsViewController.class, ex);
-                    try {
-                        DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
-                    } catch (Exception ex1) {
-                        Logger.getLogger(UsrsViewController.class.getName()).log(Level.SEVERE, null, ex1);
-                    }
-                }                                    
-            });
-            FileChooserUtility.showSaveDialog(baseJFrame);
+                //Search for the image
+                final ImageFileChooserUtility ImageFileChooserUtility = UtilitiesFactory.getSingleton().getImageFileChooserUtility();
+                ImageFileChooserUtility.setIApproveOpption((String absolutePath, String fileName) -> {
+
+                    try{
+
+                        //Get selected model
+                        final User User = (User) jTab.getRowSelected();
+
+                        //Create the final path
+                        final String finalPath = absolutePath + "\\" + fileName;
+
+                        //Save the user image in folder
+                        UtilitiesFactory.getSingleton().getImagesUtility().saveUserImage(User.getCode(), finalPath);
+
+                        //Load image in the panel
+                        jLImg.setIcon(new ImageIcon(UtilitiesFactory.getSingleton().getImagesUtility().getUserImagePath(User.getCode())));
+                        jLImg.setVisible(true);
+
+                    }catch (Exception ex) {
+
+                        LoggerUtility.getSingleton().logError(UsrsViewController.class, ex);
+                        try {
+                            DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+                        } catch (Exception ex1) {
+                            Logger.getLogger(UsrsViewController.class.getName()).log(Level.SEVERE, null, ex1);
+                        }
+                    }                                    
+                });
+                ImageFileChooserUtility.showSaveDialog(baseJFrame);
+                
+            }catch(InvalidFileExtensionException InvalidFileExtensionException){
+                DialogsFactory.getSingleton().showErrorInvalidFileExtensionOKDialog(baseJFrame, (JFrame jFrame) -> {
+                });
+            }
             
         }catch (Exception ex) {
                     

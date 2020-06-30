@@ -1,8 +1,6 @@
 package com.era.easyretail.validators;
 
 import com.era.easyretail.validators.exceptions.UsoCFDIsValidatorsExceptions;
-import com.era.models.UsoCFDI;
-import com.era.repositories.RepositoryFactory;
 
 public class UsoCFDIsValidator extends IValidate{
 
