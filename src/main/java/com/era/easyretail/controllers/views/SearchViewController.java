@@ -311,7 +311,7 @@ public class SearchViewController extends SearchJFrame {
         });
         jTab.loadScrollpane();
         jTab.getJScrollPane().setPreferredSize(new Dimension(70,150));
-        jPanelTable.add(jTab.getJScrollPane());        
+        jPanelTable.add(jTab.getJScrollPane());
         jTab.setScrollAtStartWhenEnd(true);
         jTab.setJTableEnterKeyPressed((int selectedRow) -> {
             jBCarg.doClick();

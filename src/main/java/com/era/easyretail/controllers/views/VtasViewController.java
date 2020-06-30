@@ -12,9 +12,11 @@ import com.era.repositories.RepositoryFactory;
 import com.era.views.VtasJFrame;
 import com.era.views.dialogs.DialogsFactory;
 import com.era.views.tables.headers.TableHeaderFactory;
+import java.awt.Dimension;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JScrollPane;
 import javax.swing.event.ListSelectionEvent;
 
 /**
@@ -37,9 +39,6 @@ public class VtasViewController extends VtasJFrame {
             });
             jBMosT.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jBMosTActionPerformed(evt);
-            });
-            jBTod.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jBTodActionPerformed(evt);
             });
             jBGenPDF.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jBGenPDFActionPerformed(evt);
@@ -194,6 +193,7 @@ public class VtasViewController extends VtasJFrame {
             });
             
             //Load all the sales
+            jTableVentas.setJScrollPane(panelTable);
             jTableVentas.initTableWithPagination();
             
         }catch (Exception ex) {
@@ -725,21 +725,6 @@ public class VtasViewController extends VtasJFrame {
     }
     
     private void jBGenPDFActionPerformed(java.awt.event.ActionEvent evt) {                                             
-
-	try{            	
-            
-	}
-	catch (Exception ex) {
-            LoggerUtility.getSingleton().logError(VtasViewController.class, ex);
-            try {
-                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
-            } catch (Exception ex1) {
-                Logger.getLogger(VtasViewController.class.getName()).log(Level.SEVERE, null, ex1);
-            }
-	}
-    }
-    
-    private void jBTodActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	
             

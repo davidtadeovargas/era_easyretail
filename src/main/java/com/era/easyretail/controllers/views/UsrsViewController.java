@@ -17,7 +17,6 @@ import com.era.models.User;
 import com.era.repositories.RepositoryFactory;
 import com.era.utilities.UtilitiesFactory;
 import com.era.utilities.exceptions.InvalidFileExtensionException;
-import com.era.utilities.filechooser.FileChooserUtility;
 import com.era.utilities.filechooser.ImageFileChooserUtility;
 import com.era.views.UsrsJFrame;
 import com.era.views.dialogs.DialogsFactory;

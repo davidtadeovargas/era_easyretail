@@ -27,7 +27,6 @@ import com.era.utilities.UtilitiesFactory;
 import com.era.utilities.WinRegistry;
 import com.era.views.ViewsFactory;
 import com.era.views.dialogs.DialogsFactory;
-import com.era.views.dialogs.ErrorDialogJFrame.OnOkButtonActionPerformed;
 import java.awt.event.ActionEvent;
 
 //Initialization of the system

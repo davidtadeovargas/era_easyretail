@@ -610,7 +610,7 @@ public class PtoVtaTouViewController extends PtoVtaTouJFrame {
             Sales.setRazon(Company.getNom());
             Sales.setSubtotal(Totals.getSubtotal());
             Sales.setTax(Totals.getTaxes());
-            Sales.setTotal(Totals.getTotal());                        
+            Sales.setTotal(Totals.getTotal());
             
             //Open screen to make the payment
             final CobroViewController CobroViewController = ViewControlersFactory.getSingleton().getCobroViewController();

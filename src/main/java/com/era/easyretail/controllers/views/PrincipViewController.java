@@ -87,9 +87,6 @@ public class PrincipViewController extends PrincipJFrame {
             importKitsMenItem.addActionListener((java.awt.event.ActionEvent evt) -> {
                 importKitsMenItemActionPerformed(evt);
             });
-            seriesJMenuItem.addActionListener((java.awt.event.ActionEvent evt) -> {
-                seriesJMenuItemActionPerformed(evt);
-            });            
             jMenIt4.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jMenIt4ActionPerformed(evt);
             });
@@ -1163,9 +1160,6 @@ public class PrincipViewController extends PrincipJFrame {
         }
     }
         
-    private void seriesJMenuItemActionPerformed(java.awt.event.ActionEvent evt) {
-        ViewControlersFactory.getSingleton().getSeriesViewController().setVisible();
-    }
     private void jMenIt4ActionPerformed(java.awt.event.ActionEvent evt) {
         ViewControlersFactory.getSingleton().getCorrElecsViewController().setVisible();
     }

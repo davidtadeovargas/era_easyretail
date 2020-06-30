@@ -204,7 +204,6 @@ public class ClientsViewController extends ClientsJFrame {
             //Open the customer window to see the customer information
             final ClientViewController ClientViewController = ViewControlersFactory.getSingleton().getClientViewController();
             ClientViewController.setCompanyGlobal(Company);
-            ClientViewController.setReadOnly(true);
             ClientViewController.setVisible();
             
 	}
