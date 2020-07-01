@@ -749,7 +749,9 @@ public class EmpresasViewController extends EmpresasJFrame {
                 try{
                     
                     //Updte the company in the database
-                    addOrUpdateCompany();
+                    if(!addOrUpdateCompany()){
+                        return;
+                    }
                              
                     jTabEmpresas.clearRows();
                     
@@ -1047,6 +1049,7 @@ public class EmpresasViewController extends EmpresasJFrame {
             
             final FileChooserUtility FileChooserUtility = UtilitiesFactory.getSingleton().getFileChooserUtility();
             FileChooserUtility.setPropertyTitle("question_continue");
+            FileChooserUtility.addValidExtension("sql");
             FileChooserUtility.setIApproveOpption((String absolutePath, String fileName) -> {
                 
                 final String backupRestoreDBPath = absolutePath + "\\" + fileName;
@@ -1480,6 +1483,8 @@ public class EmpresasViewController extends EmpresasJFrame {
         JTRegimenFiscal.setText("");
         JTRutaCertificado.setText("");
         JTRutaKey.setText("");
+        JTFechaAlta.setText("");
+        JTFechaModificacion.setText("");        
         JTPasswordCertificado.setText("");
         JTRutaAplicacion.setText(UtilitiesFactory.getSingleton().getFilesUtility().getCurrentWorkingDir());
         JTPlantilla.setText("");
@@ -1528,6 +1533,9 @@ public class EmpresasViewController extends EmpresasJFrame {
         JTSitioWeb.setText(Company.getPagweb());
         JTLugarDeExpedicion.setText(Company.getLugexp());
         JTRegimenFiscal.setText(Company.getRegfisc());
+        
+        JTFechaAlta.setText(Company.getFalt().toString());
+        JTFechaModificacion.setText(Company.getFalt().toString());
         
         final String certPath = Company.getRutcer()==null?"":Company.getRutcer().replace("\\\\", "\\");
         final String certKeyPath = Company.getRutkey()==null?"":Company.getRutkey().replace("\\\\", "\\");

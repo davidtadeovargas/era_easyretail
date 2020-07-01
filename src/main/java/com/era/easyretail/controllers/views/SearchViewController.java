@@ -297,12 +297,6 @@ public class SearchViewController extends SearchJFrame {
         }
     }
 
-    private void showPaginationLabel() throws Exception {
-        labelPaginacion.setVisible(true);
-        final Properties Properties = UtilitiesFactory.getSingleton().getDialogPropertiesUitlity().getProperties();
-        labelPaginacion.setText(Properties.getProperty("visible_records") + " " + jTab.getLastRowIndex() + " " + Properties.getProperty("visible_records_visibles") + " " + jTab.getPagination() + " " + Properties.getProperty("visible_records_of") + " " + jTab.getCount());
-    }
-    
     private void initTable(final List<?> items) throws Exception {
                 
         jTab.setSearchCommonTypeEnum(SearchCommonTypeEnum);        
@@ -544,24 +538,9 @@ public class SearchViewController extends SearchJFrame {
 
             }
                                     
-            this.jTab.setOnScrollsChanges(() -> {
-                
-                try{
-                    
-                    //Show the pagination label
-                    showPaginationLabel();
-                    
-                }catch(Exception e){
-            
-                    LoggerUtility.getSingleton().logError(SearchViewController.class, e);
-
-                    try {
-                        final ErrorOKDialog ErrorOKDialog = DialogsFactory.getSingleton().getErrorOKDialog(baseJFrame);
-                        ErrorOKDialog.show();
-                    } catch (Exception ex) {
-                        Logger.getLogger(SearchViewController.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
+            this.jTab.setOnPaginationLabelUpdate((String paginationUpdate) -> {
+                labelPaginacion.setVisible(true);
+                labelPaginacion.setText(paginationUpdate);
             });
             this.jTab.initTableWithPagination();
         }

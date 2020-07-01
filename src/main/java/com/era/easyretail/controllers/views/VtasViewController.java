@@ -12,11 +12,9 @@ import com.era.repositories.RepositoryFactory;
 import com.era.views.VtasJFrame;
 import com.era.views.dialogs.DialogsFactory;
 import com.era.views.tables.headers.TableHeaderFactory;
-import java.awt.Dimension;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JScrollPane;
 import javax.swing.event.ListSelectionEvent;
 
 /**
@@ -146,7 +144,7 @@ public class VtasViewController extends VtasJFrame {
                 jBAbrNotCredActionPerformed(evt);
             });
             
-            //Config partvta table            
+            //Config partvta table
             jTab2.addShowColumn(TableHeaderFactory.getSigleton().getPartvtasTableHeader().getROWNUMBER());
             jTab2.addShowColumn(TableHeaderFactory.getSigleton().getPartvtasTableHeader().getCANT());
             jTab2.addShowColumn(TableHeaderFactory.getSigleton().getPartvtasTableHeader().getPROD());
@@ -157,8 +155,8 @@ public class VtasViewController extends VtasJFrame {
             jTab2.addShowColumn(TableHeaderFactory.getSigleton().getPartvtasTableHeader().getIMPUE());
             jTab2.addShowColumn(TableHeaderFactory.getSigleton().getPartvtasTableHeader().getLIST());
             
-            //Config sales table
-            jTableVentas.addShowColumn(TableHeaderFactory.getSigleton().getSalessTableHeader().getROWNUMBER());
+            //Config sales table            
+            jTableVentas.addShowColumn(TableHeaderFactory.getSigleton().getSalessTableHeader().getSALE_ID());
             jTableVentas.addShowColumn(TableHeaderFactory.getSigleton().getSalessTableHeader().getCOMPANYCODE());
             jTableVentas.addShowColumn(TableHeaderFactory.getSigleton().getSalessTableHeader().getRAZON());
             jTableVentas.addShowColumn(TableHeaderFactory.getSigleton().getSalessTableHeader().getESTATUS());
@@ -193,7 +191,11 @@ public class VtasViewController extends VtasJFrame {
             });
             
             //Load all the sales
+            jTableVentas.setScrollAtStartWhenEnd(true);
             jTableVentas.setJScrollPane(panelTable);
+            jTableVentas.setOnPaginationLabelUpdate((String paginationUpdate) -> {
+                jLabelPagination.setText(paginationUpdate);
+            });
             jTableVentas.initTableWithPagination();
             
         }catch (Exception ex) {

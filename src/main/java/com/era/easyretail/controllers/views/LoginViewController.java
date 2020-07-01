@@ -144,13 +144,13 @@ public class LoginViewController extends LoginJFrame {
             if(JComponentUtils.F2EventFired()){
                 jCMostC.setSelected(false);
             }            
-            jPContra.setEchoChar((char)0);
+            jPContra.setEchoChar('*');
         }
         else{
             if(JComponentUtils.F2EventFired()){
                 jCMostC.setSelected(true);
             }
-            jPContra.setEchoChar('*');            
+            jPContra.setEchoChar((char)0);            
         }
     }
     
