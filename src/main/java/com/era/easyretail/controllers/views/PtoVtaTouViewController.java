@@ -29,7 +29,6 @@ import java.math.MathContext;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 /**
  *
@@ -89,6 +88,9 @@ public class PtoVtaTouViewController extends PtoVtaTouJFrame {
                 jBSincronizarActionPerformed(evt);
             });
                   
+            //Connect the image
+            this.initImageControls(jLImg, jPanImg);
+            
             this.JComponentUtils.onlyNumbers(jTDesc);
             
             //Load all the unids
@@ -188,7 +190,7 @@ public class PtoVtaTouViewController extends PtoVtaTouJFrame {
         jTab.clearRows();
         jTCant.setText("1");
         
-        showOrHideProductImage(false, null);
+        hideImage();
         
         //Select unid
         final Unid Unid = (Unid)RepositoryFactory.getInstance().getUnidsRepository().getUnidPIEZA();
@@ -420,10 +422,10 @@ public class PtoVtaTouViewController extends PtoVtaTouJFrame {
                 productDescription = SearchViewController.getDescrip();
                 
                 //Get the product imageicon
-                final ImageIcon productImageIcon = UtilitiesFactory.getSingleton().getImagesUtility().getProductImagePathImageIcon(productCode);
+                final String imagePath = UtilitiesFactory.getSingleton().getImagesUtility().getProductImagePath(productCode);
                 
                 //Show the control
-                showOrHideProductImage(true, productImageIcon);
+                showImage(imagePath);
             });
             SearchViewController.setVisible();
 	}
@@ -526,20 +528,13 @@ public class PtoVtaTouViewController extends PtoVtaTouJFrame {
 	}
     }
     
-    private void showOrHideProductImage(final boolean show, final ImageIcon ImageIcon){
-        
-        //Remove image
-        jLImg.setIcon(ImageIcon);
-        jLImg.setVisible(show);
-    }
-    
     private void clearNewProduct() throws Exception {
         
         jTProd.setText("");
         jTCant.setText("1");
         
         //Remove image
-        showOrHideProductImage(false, null);
+        hideImage();
                 
         //Select unid
         final Unid Unid = (Unid)RepositoryFactory.getInstance().getUnidsRepository().getUnidPIEZA();

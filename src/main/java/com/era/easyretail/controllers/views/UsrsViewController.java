@@ -63,6 +63,9 @@ public class UsrsViewController extends UsrsJFrame {
             this.JComponentUtils.onlyNumbers(jTComi);
             this.JComponentUtils.onlyNumbers(jTCP);
             
+            //Connect the image
+            this.initImageControls(jLImg, jPanImg);
+            
             //Get all the users and load them in table            
             this.BaseJTable = jTab;
             this.BaseJTable.addShowColumn(TableHeaderFactory.getSigleton().getUsersTableHeader().getROWNUMBER());
@@ -232,8 +235,7 @@ public class UsrsViewController extends UsrsJFrame {
                     UtilitiesFactory.getSingleton().getImagesUtility().deleteUserImage(User.getCode());
 
                     //Remove image from user
-                    jLImg.setVisible(false);
-                    jLImg.setIcon(null);
+                    hideImage();
 
                     //Show success dialog
                     final OKDialog OKDialog = DialogsFactory.getSingleton().getOKDialog(jFrame);
@@ -291,9 +293,8 @@ public class UsrsViewController extends UsrsJFrame {
                         //Save the user image in folder
                         UtilitiesFactory.getSingleton().getImagesUtility().saveUserImage(User.getCode(), finalPath);
 
-                        //Load image in the panel
-                        jLImg.setIcon(new ImageIcon(UtilitiesFactory.getSingleton().getImagesUtility().getUserImagePath(User.getCode())));
-                        jLImg.setVisible(true);
+                        //Show image
+                        showImage(finalPath);
 
                     }catch (Exception ex) {
 
@@ -521,8 +522,7 @@ public class UsrsViewController extends UsrsJFrame {
             //jTab.clearSelection();
             
             //Remove image from user
-            jLImg.setVisible(false);
-            jLImg.setIcon(null);
+            hideImage();
 
             jTEstac.setEditable(true);
                 
@@ -703,12 +703,11 @@ public class UsrsViewController extends UsrsJFrame {
             //If the user has image
             if(UtilitiesFactory.getSingleton().getImagesUtility().usersImageExists(User.getCode())){
                 
-                //Get the user image path
-                final String userImagePath = UtilitiesFactory.getSingleton().getImagesUtility().getUserImagePath(User.getCode());
-                
                 //Load the image in the panel
-                jLImg.setIcon(new ImageIcon(userImagePath));
-                jLImg.setVisible(true);
+                final String imagePath = UtilitiesFactory.getSingleton().getImagesUtility().getUserImagePath(User.getCode());
+                
+                //Show image
+                showImage(imagePath);
             }
             
         }catch (Exception ex) {

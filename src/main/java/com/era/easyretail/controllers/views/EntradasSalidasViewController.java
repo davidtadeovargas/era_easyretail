@@ -57,6 +57,7 @@ public class EntradasSalidasViewController extends EntradasSalidasJFrame {
             //Config table
             this.BaseJTable = tblEncabezados;
             tblEncabezados.addShowColumn(TableHeaderFactory.getSigleton().getIngresosEncabsTableHeader().getROWNUMBER());
+            tblEncabezados.addShowColumn(TableHeaderFactory.getSigleton().getIngresosEncabsTableHeader().getENTSAL());
             tblEncabezados.addShowColumn(TableHeaderFactory.getSigleton().getIngresosEncabsTableHeader().getCONCEP());
             tblEncabezados.addShowColumn(TableHeaderFactory.getSigleton().getIngresosEncabsTableHeader().getALMA());
             tblEncabezados.addShowColumn(TableHeaderFactory.getSigleton().getIngresosEncabsTableHeader().getNOREFER());
@@ -66,7 +67,6 @@ public class EntradasSalidasViewController extends EntradasSalidasJFrame {
             tblPartidas.addShowColumn(TableHeaderFactory.getSigleton().getIngressTableHeader().getPROD());
             tblPartidas.addShowColumn(TableHeaderFactory.getSigleton().getIngressTableHeader().getPRODUCT_DESCRIPTION());
             tblPartidas.addShowColumn(TableHeaderFactory.getSigleton().getIngressTableHeader().getALMA());
-            tblPartidas.addShowColumn(TableHeaderFactory.getSigleton().getIngressTableHeader().getENTSAL());
             tblPartidas.addShowColumn(TableHeaderFactory.getSigleton().getIngressTableHeader().getCOSTO());
             tblPartidas.addShowColumn(TableHeaderFactory.getSigleton().getIngressTableHeader().getLOTE());
             tblPartidas.addShowColumn(TableHeaderFactory.getSigleton().getIngressTableHeader().getPEDIMENTO());
@@ -231,7 +231,7 @@ public class EntradasSalidasViewController extends EntradasSalidasJFrame {
 	try{            	
             
             //Get the value to search
-            final String search = btnBuscar.getText().trim();
+            final String search = txtBuscar.getText().trim();
             
             //If nothing to search so return
             if(search.isEmpty()){

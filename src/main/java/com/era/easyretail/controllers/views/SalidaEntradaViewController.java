@@ -65,6 +65,9 @@ public class SalidaEntradaViewController extends SalidaEntradaJFrame {
                 btnAgregarActionPerformed(evt);
             });
  
+            //Not modificable, only the product selection can do that
+            cmbUnidad.setEnabled(false);
+            
             //Init caducity date to today
             caducityjCalendar.setCalendar(UtilitiesFactory.getSingleton().getDateTimeUtility().getCurrentDateInCalendar());
             
@@ -353,7 +356,17 @@ public class SalidaEntradaViewController extends SalidaEntradaJFrame {
                     final double existence = RepositoryFactory.getInstance().getExistalmasRepository().getGeneralExistenceFromProduct(productCode);
                     
                     txtExistencias.setText(String.valueOf(existence));
-                        
+                    
+                    //Get the product
+                    final Product Product = (Product)RepositoryFactory.getInstance().getProductsRepository().getByCode(productCode);
+                    
+                    //Get the unid
+                    final String unid = Product.getUnit();
+                    final Unid Unid = (Unid)RepositoryFactory.getInstance().getUnidsRepository().getByCode(unid);
+                    
+                    //Select the unid in the combo
+                    cmbUnidad.selectByObject(Unid);
+                    
                 } catch (Exception ex) {
                     LoggerUtility.getSingleton().logError(SalidaEntradaViewController.class, ex);
                     try {

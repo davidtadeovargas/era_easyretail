@@ -16,7 +16,6 @@ import com.era.views.dialogs.DialogsFactory;
 import com.era.views.tables.headers.TableHeaderFactory;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.event.ListSelectionEvent;
 /**
@@ -55,6 +54,9 @@ public class LinesViewController extends LinesJFrame {
                 jBActuaActionPerformed(evt);
             });
 
+            //Connect the image
+            this.initImageControls(jLImg, jPanImg);
+            
             this.disposeButton(jBSal);
             
             //Config table
@@ -107,15 +109,14 @@ public class LinesViewController extends LinesJFrame {
         //If exists
         if(imageExists){
             
-            //Load the image        
-            final ImageIcon ImageIcon = UtilitiesFactory.getSingleton().getImagesUtility().getLineImagePathImageIcon(Line.getCode());
+            //Get image path
+            final String imagePath = UtilitiesFactory.getSingleton().getImagesUtility().getLineImagePath(Line.getCode());
             
-            //Load the image in control
-            jLImg.setIcon(ImageIcon);
-            jLImg.setVisible(true);
+            //Show image
+            showImage(imagePath);
         }
         else{
-            jLImg.setVisible(false);
+            hideImage();
         }
     }
     
@@ -353,8 +354,7 @@ public class LinesViewController extends LinesJFrame {
                     //Delete the line image                    
                     UtilitiesFactory.getSingleton().getImagesUtility().deleteLineImage(Line.getCode());
 
-                    jLImg.setIcon(null);
-                    jLImg.setVisible(false);
+                    hideImage();
 
                     DialogsFactory.getSingleton().showOKOperationCompletedCallbackDialog(jFrame, null);
                 }
@@ -405,8 +405,8 @@ public class LinesViewController extends LinesJFrame {
                     //Save the image 
                     UtilitiesFactory.getSingleton().getImagesUtility().saveLineImage(Line.getCode(), finalPath);
 
-                    jLImg.setIcon(new ImageIcon(finalPath));
-                    jLImg.setVisible(true);
+                    //Show image
+                    showImage(finalPath);
                     
                     //Announce the user
                     DialogsFactory.getSingleton().showOKOperationCompletedCallbackDialog(baseJFrame, null);

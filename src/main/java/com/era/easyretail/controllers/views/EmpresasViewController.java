@@ -23,6 +23,7 @@ import com.era.repositories.utils.MysqlScriptsUtil;
 import com.era.utilities.PathsUtility;
 import com.era.utilities.UtilitiesFactory;
 import com.era.utilities.filechooser.FileChooserUtility;
+import com.era.utilities.filechooser.ImageFileChooserUtility;
 import com.era.views.EmpresasJFrame;
 import com.era.views.dialogs.DialogsFactory;
 import com.era.views.dialogs.ErrorOKDialog;
@@ -34,7 +35,6 @@ import java.awt.event.FocusEvent;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.event.ListSelectionEvent;
 
@@ -69,6 +69,9 @@ public class EmpresasViewController extends EmpresasJFrame {
 
             JTCodigoEmpresa.setText(UtilitiesFactory.getSingleton().getGeneralsUtility().getUniqueDayCode());
 
+            //Connect the image
+            this.initImageControls(jLImg, jPanImg1);
+            
             this.BaseJTable = jTabEmpresas;
             this.BaseJTable.addShowColumn(TableHeaderFactory.getSigleton().getBasDatssTableHeader().getROWNUMBER());
             this.BaseJTable.addShowColumn(TableHeaderFactory.getSigleton().getBasDatssTableHeader().getCODEMP());
@@ -260,36 +263,24 @@ public class EmpresasViewController extends EmpresasJFrame {
     
     private void buttonDeleteImageClicked(ActionEvent e){
      
-        jLImg.setIcon(null);
-        jLImg.setVisible(false);
+        hideImage();
     }
     
     private void buttonLoadIconClicked(ActionEvent e){
      
         try{
             
-            final FileChooserUtility FileChooserUtility = UtilitiesFactory.getSingleton().getFileChooserUtility();
-            FileChooserUtility.setPropertyTitle("fc_titles_search_logo");
-            FileChooserUtility.setIApproveOpption((String absolutePath, String fileName) -> {
+            final ImageFileChooserUtility ImageFileChooserUtility = UtilitiesFactory.getSingleton().getImageFileChooserUtility();
+            ImageFileChooserUtility.setPropertyTitle("fc_titles_search_logo");
+            ImageFileChooserUtility.setIApproveOpption((String absolutePath, String fileName) -> {
                 
                 try{
                     
-                    if(     !fileName.endsWith(".jpg") && 
-                            !fileName.endsWith(".jpeg") && 
-                            !fileName.endsWith(".bmp") && 
-                            !fileName.endsWith(".gif") && 
-                            !fileName.endsWith(".png")){
-                        
-                        final OKDialog OKDialog = DialogsFactory.getSingleton().getOKDialog(baseJFrame);
-                        OKDialog.setPropertyText("basdats_frame_msg18");
-                        OKDialog.show();
-                        return;
-                    }
+                    //Complete final path
+                    logoPath = absolutePath + "\\" + fileName;                                        
                     
-                    logoPath = absolutePath + "\\" + fileName;
-                    
-                    jLImg.setIcon(new ImageIcon(logoPath));
-                    jLImg.setVisible(true);
+                    //Show image
+                    showImage(logoPath);
                 
                 }catch(Exception ex){
             
@@ -304,7 +295,7 @@ public class EmpresasViewController extends EmpresasJFrame {
                     }
                 }
             });
-            FileChooserUtility.showSaveDialog(baseJFrame);
+            ImageFileChooserUtility.showSaveDialog(baseJFrame);
         }
         catch(Exception ex){
             
@@ -1506,8 +1497,7 @@ public class EmpresasViewController extends EmpresasJFrame {
         bgTipoContribuyente.setSelected(JRBMoral.getModel(), true);
         bgTipoContribuyente.setSelected(JRBFisica.getModel(), false);
         
-        jLImg.setIcon(null);
-        jLImg.setVisible(false);
+        this.hideImage();        
         
         Company = null;
     }
@@ -1553,8 +1543,9 @@ public class EmpresasViewController extends EmpresasJFrame {
         String companyLogoPath = UtilitiesFactory.getSingleton().getPathsUtility().getCompanyLogoPath();
         companyLogoPath += "\\" + UtilitiesFactory.getSingleton().getPathsUtility().getLogoFileName();
         if(UtilitiesFactory.getSingleton().getFilesUtility().fileExists(companyLogoPath)){
-            jLImg.setIcon(new ImageIcon(companyLogoPath));
-            jLImg.setVisible(true);
+            
+            //Show image
+            showImage(companyLogoPath);
         }        
         
         /*Selecciona el método de costeo que sea de la empresa*/

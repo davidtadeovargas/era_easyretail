@@ -31,7 +31,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.event.ListSelectionEvent;
 
@@ -113,6 +112,9 @@ public class ProdsViewController extends ProdsJFrame {
             //Disable the save button
             jBGuar.setEnabled(false);
                 
+            //Connect the image
+            this.initImageControls(jLImg, jPanImg);
+            
             //Init table
             this.BaseJTable = jTab;
             jTab.addShowColumn(TableHeaderFactory.getSigleton().getProductsTableHeader().getROWNUMBER());
@@ -217,11 +219,10 @@ public class ProdsViewController extends ProdsJFrame {
             final String imagePath = UtilitiesFactory.getSingleton().getImagesUtility().getProductImagePath(Product_.getCode());
             
             //Load the image in control
-            jLImg.setIcon(new ImageIcon(imagePath));
-            jLImg.setVisible(true);
+            showImage(imagePath);                        
         }
         else{
-            jLImg.setVisible(false);
+            hideImage();
         }
         
         //Check or uncheck         
@@ -254,7 +255,8 @@ public class ProdsViewController extends ProdsJFrame {
         jTClaveSat.setText("");
         
         taxesGlobal = new ArrayList<>(); 
-        jLImg.setVisible(false);
+        
+        hideImage();
         
         //Reset comboboxes        
         jComLin.clearSelection();
@@ -871,8 +873,7 @@ public class ProdsViewController extends ProdsJFrame {
                     //Save the image 
                     UtilitiesFactory.getSingleton().getImagesUtility().saveProductImage(productCode, finalPath);
 
-                    jLImg.setIcon(new ImageIcon(finalPath));
-                    jLImg.setVisible(true);
+                    showImage(finalPath);
                     
                     //Announce the user
                     DialogsFactory.getSingleton().showOKOperationCompletedCallbackDialog(baseJFrame, null);
@@ -939,7 +940,7 @@ public class ProdsViewController extends ProdsJFrame {
                     //Delete the product image                    
                     UtilitiesFactory.getSingleton().getImagesUtility().deleteProductImage(productCode);
 
-                    jLImg.setVisible(false);
+                    hideImage();
 
                     DialogsFactory.getSingleton().showOKOperationCompletedCallbackDialog(jFrame, null);
                 }
