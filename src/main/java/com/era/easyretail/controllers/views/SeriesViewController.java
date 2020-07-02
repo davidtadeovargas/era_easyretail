@@ -60,6 +60,7 @@ public class SeriesViewController extends SeriesJFrame {
             //Config table
             this.BaseJTable = jTab;
             jTab.addShowColumn(TableHeaderFactory.getSigleton().getSeriesTableHeader().getROWNUMBER());
+            jTab.addShowColumn(TableHeaderFactory.getSigleton().getSeriesTableHeader().getSERIE());
             jTab.addShowColumn(TableHeaderFactory.getSigleton().getSeriesTableHeader().getTYPE());
             jTab.addShowColumn(TableHeaderFactory.getSigleton().getSeriesTableHeader().getDESCRIPTION());
             jTab.addShowColumn(TableHeaderFactory.getSigleton().getSeriesTableHeader().getCONSECUTIVE());

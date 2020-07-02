@@ -42,12 +42,29 @@ public class CobroViewController extends CobroJFrame {
         super("window_title_cobro");
         
         try{
-                     
+            
+            this.getRootPane().setDefaultButton(jBCob);
+        
+            jTEfeCant.grabFocus();
+
+            jTSald.setText("$0.00");
+            jTCamb.setText("$0.00");
+
             jBSal.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jBSalActionPerformed(evt);
             });
             jBCob.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jBCobActionPerformed(evt);
+            });
+            
+            JComponentUtils.setALT_TEvent(() -> {
+                jRTic.setSelected(true);
+            });
+            JComponentUtils.setALT_FEvent(() -> {
+                jRFac.setSelected(true);
+            });
+            JComponentUtils.setALT_REvent(() -> {
+                jRRem.setSelected(true);
             });
             
             this.JComponentUtils.moneyFormat(jTEfeCant);
@@ -160,7 +177,16 @@ public class CobroViewController extends CobroJFrame {
     }
     
     @Override
-    public void clearFields() throws Exception{            
+    public void clearFields() throws Exception{
+        
+        jRTic.setSelected(true);
+        jTAObserv.setText("");
+        
+        jTEfeCant.setText("$0.00");
+        jTDebCant.setText("$0.00");
+        jTTarCredCant.setText("$0.00");
+        jTSald.setText("$0.00");
+        jTCamb.setText("$0.00");
     }
     
     @Override
@@ -190,9 +216,6 @@ public class CobroViewController extends CobroJFrame {
         else if(jRFac.isSelected()){
             prevalidateInvoice();
         }
-        else if(jRNot.isSelected()){
-            prevalidateNotc();
-        }
 
         //Get national coin
         final Coin Coin = (Coin)RepositoryFactory.getInstance().getCoinsRepository().getNationalCoin();
@@ -220,15 +243,35 @@ public class CobroViewController extends CobroJFrame {
         }
         else if(jRRem.isSelected()){
 
+            //Get the serie
+            final Confgral Confgral = RepositoryFactory.getInstance().getConfgralRepository().getSerieRemisionsInPointOfSale();
+            serie = Confgral.getExtr();
+
+            //Get the consec for this serie
+            Consec = (Consec)RepositoryFactory.getInstance().getConsecsRepository().getRemisionsConsec(serie);
+
+            //Get the document type
+            DocumentOrigin = RepositoryFactory.getInstance().getDocumentOriginRepository().getDocumentOriginREM();
+
+            ticket = false;
+            
             estatus = "CO";
         }
         else if(jRFac.isSelected()){
 
-            estatus = "CO";
-        }
-        else if(jRNot.isSelected()){
+            //Get the serie
+            final Confgral Confgral = RepositoryFactory.getInstance().getConfgralRepository().getSerieInvoiceInPointOfSale();
+            serie = Confgral.getExtr();
 
-            estatus = "PE";
+            //Get the consec for this serie
+            Consec = (Consec)RepositoryFactory.getInstance().getConsecsRepository().getSalesConsec(serie);
+
+            //Get the document type
+            DocumentOrigin = RepositoryFactory.getInstance().getDocumentOriginRepository().getDocumentOriginFAC();
+
+            ticket = false;
+            
+            estatus = "CO";
         }
 
         if(serie.isEmpty()){
@@ -245,7 +288,8 @@ public class CobroViewController extends CobroJFrame {
         }            
 
         //Update the consec
-
+        Consec = RepositoryFactory.getInstance().getConsecsRepository().updateConsec(Consec);
+        
         //Get the customer
         final Company Company = (Company)RepositoryFactory.getInstance().getCompanysRepository().getByCod(Sale.getCompanyCode());
 
@@ -352,10 +396,6 @@ public class CobroViewController extends CobroJFrame {
     private void prevalidateInvoice() throws Exception {
     
         //Get configuration to check if need admin password to continue with invoice        
-    }
-    
-    private void prevalidateNotc() throws Exception {
-        
     }
     
     private void jBSalActionPerformed(java.awt.event.ActionEvent evt) {                                             

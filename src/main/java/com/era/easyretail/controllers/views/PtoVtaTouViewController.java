@@ -93,6 +93,10 @@ public class PtoVtaTouViewController extends PtoVtaTouJFrame {
             
             this.JComponentUtils.onlyNumbers(jTDesc);
             
+            JComponentUtils.setF11Event(() -> {
+                ViewControlersFactory.getSingleton().getOptPtoVtaViewController().setVisible();
+            });
+            
             //Load all the unids
             jComUnid.loadItems();
             
@@ -216,6 +220,7 @@ public class PtoVtaTouViewController extends PtoVtaTouJFrame {
         jTSubTot.setText(UtilitiesFactory.getSingleton().getNumbersUtility().toMoneyFormat(String.valueOf(Totals.getSubtotal().doubleValue())));
         jTImpue.setText(UtilitiesFactory.getSingleton().getNumbersUtility().toMoneyFormat(String.valueOf(Totals.getTaxes().doubleValue())));
         jTTot.setText(UtilitiesFactory.getSingleton().getNumbersUtility().toMoneyFormat(String.valueOf(Totals.getTotal().doubleValue())));
+        jTTotDesc.setText(UtilitiesFactory.getSingleton().getNumbersUtility().toMoneyFormat(String.valueOf(Totals.getDisccount().doubleValue())));
         jTQtyP.setText(String.valueOf(Totals.getCant().doubleValue()) + " pzas");
     }
     
@@ -229,7 +234,8 @@ public class PtoVtaTouViewController extends PtoVtaTouJFrame {
         BigDecimal total = BigDecimal.ZERO;
         BigDecimal subtotal = BigDecimal.ZERO;
         BigDecimal cant = BigDecimal.ZERO;
-
+        BigDecimal disccountTotal = BigDecimal.ZERO;
+        
         //Loop to calculate totals
         for(Partvta Partvta:items){
 
@@ -238,10 +244,22 @@ public class PtoVtaTouViewController extends PtoVtaTouJFrame {
 
             //Get amount
             final BigDecimal qty = Partvta.getCant();
-
+            
             //Calculate the import
-            final BigDecimal import_ = price.multiply(qty);
+            BigDecimal import_ = price.multiply(qty);
 
+            //Get the disccount
+            final BigDecimal descu = Partvta.getDescu();
+            final BigDecimal descuTot = descu.divide(new BigDecimal(100, MathContext.DECIMAL64));
+            
+            //Get the disccount                        
+            BigDecimal totalDisccount = descuTot.multiply(import_);
+
+            disccountTotal = disccountTotal.add(totalDisccount);
+            
+            //Remove the disccount
+            import_ = import_.subtract(totalDisccount);
+            
             //Continue adding the subtotal
             subtotal = subtotal.add(import_);
 
@@ -255,7 +273,8 @@ public class PtoVtaTouViewController extends PtoVtaTouJFrame {
             for(ImpuesXProduct ImpuesXProduct: taxesProduct){
                 final String taxCode = ImpuesXProduct.getImpue();
                 final Tax Tax = (Tax)RepositoryFactory.getInstance().getTaxesRepository().getByCode(taxCode);
-                taxes = taxes.add(import_.multiply(new BigDecimal(Tax.getValue(), MathContext.DECIMAL64)));
+                final double tax = Tax.getValue() / 100;
+                taxes = taxes.add(import_.multiply(new BigDecimal(tax, MathContext.DECIMAL64)));
             }
         }
 
@@ -263,14 +282,14 @@ public class PtoVtaTouViewController extends PtoVtaTouJFrame {
         total = total.add(subtotal.add(taxes));
 
         //Create the model
-        final TotalsDataModel Totals = new TotalsDataModel();
-        Totals.setTaxes(taxes);
-        Totals.setDisccount(BigDecimal.ZERO);
-        Totals.setSubtotal(subtotal);
-        Totals.setTotal(total);
-        Totals.setCant(cant);
+        final TotalsDataModel Totals_ = new TotalsDataModel();
+        Totals_.setTaxes(taxes);
+        Totals_.setDisccount(disccountTotal);
+        Totals_.setSubtotal(subtotal);
+        Totals_.setTotal(total);
+        Totals_.setCant(cant);
 
-        return Totals;
+        return Totals_;
     }
     
     private void jBNewVtaActionPerformed(java.awt.event.ActionEvent evt) {
@@ -324,6 +343,14 @@ public class PtoVtaTouViewController extends PtoVtaTouJFrame {
                     
                     //Remove the object from the table
                     jTab.deleteObject(Partvta);
+                    
+                    //Recalc totals                    
+                    Totals = calculateTotals();                        
+            
+                    //Fill the totals
+                    fillTotals(Totals);
+                    
+                    jTDesc.setText("0");
                     
                 } catch (Exception ex) {
                     LoggerUtility.getSingleton().logError(this.getClass(), ex);
@@ -504,7 +531,9 @@ public class PtoVtaTouViewController extends PtoVtaTouJFrame {
             Partvta.setImpo(new BigDecimal(import_, MathContext.DECIMAL64));
             Partvta.setImpue(0);
             Partvta.setProd(Product.getCode());
-            Partvta.setDescu(BigDecimal.ZERO);
+            double diccount = Double.parseDouble(jTDesc.getText().trim());
+            BigDecimal disccount = new BigDecimal(diccount, MathContext.DECIMAL64);
+            Partvta.setDescu(disccount);
             
             //Add it to the table
             jTab.addObject(Partvta);
@@ -517,6 +546,8 @@ public class PtoVtaTouViewController extends PtoVtaTouJFrame {
             
             //Clear for a new product insertion
             clearNewProduct();
+            
+            jTDesc.setText("0");
 	}
 	catch (Exception ex) {
             LoggerUtility.getSingleton().logError(this.getClass(), ex);
@@ -609,7 +640,8 @@ public class PtoVtaTouViewController extends PtoVtaTouJFrame {
             
             //Open screen to make the payment
             final CobroViewController CobroViewController = ViewControlersFactory.getSingleton().getCobroViewController();
-            CobroViewController.init(Sales, items);
+            CobroViewController.clearFields();
+            CobroViewController.init(Sales, items);            
             CobroViewController.setOnFinish(() -> {
                 
                 try {

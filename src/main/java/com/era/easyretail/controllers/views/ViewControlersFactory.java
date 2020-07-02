@@ -508,7 +508,9 @@ public class ViewControlersFactory {
     }
     
     public CobroViewController getCobroViewController(){
-        CobroViewController = new CobroViewController();
+        if(CobroViewController==null){
+            CobroViewController = new CobroViewController();
+        }        
         return CobroViewController;       
     }
     

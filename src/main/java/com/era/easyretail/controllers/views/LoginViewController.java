@@ -9,6 +9,7 @@ import com.era.datamodels.enums.SearchCommonTypeEnum;
 import com.era.easyretail.enums.LoginTypeEmpresa;
 import com.era.logger.LoggerUtility;
 import com.era.models.BasDats;
+import com.era.models.Confgral;
 import com.era.models.User;
 import com.era.repositories.RepositoryFactory;
 import com.era.repositories.models.HibernateConfigModel;
@@ -305,17 +306,34 @@ public class LoginViewController extends LoginJFrame {
             UtilitiesFactory.getSingleton().getSessionUtility().setBasDats(BasDats);                        
 
             dispose();
-
-            //Open the main window
-            ViewControlersFactory.getSingleton().getPrincipViewController().setVisible();
-
-            if(this.LoginTypeEmpresa == LoginTypeEmpresa.FIRST_LOGIN){                                
+            
+            boolean openPrincipal = true;
+            boolean openSalesPoint = false;
+            if(this.LoginTypeEmpresa == LoginTypeEmpresa.FIRST_LOGIN){
+                
+                //If the system should open the sales point at startup
+                final Confgral Confgral = RepositoryFactory.getInstance().getConfgralRepository().getInitSalesPointOnIinitSystem();
+                if(Confgral.getVal()==1){
+                    openSalesPoint = true;
+                }
             }
             else{
                 
                 final OKDialog OKDialog = DialogsFactory.getSingleton().getOKDialog(baseJFrame);
                 OKDialog.setPropertyText("new_company_login_correct");
                 OKDialog.show();                
+            }
+            
+            if(openPrincipal){
+                
+                //Open the main window
+                ViewControlersFactory.getSingleton().getPrincipViewController().setVisible();
+            }
+            
+            if(openSalesPoint){
+             
+                //Open the point of sales
+                ViewControlersFactory.getSingleton().getPtoVtaTouViewController().setVisible();
             }
             
         }catch(Exception ex){
