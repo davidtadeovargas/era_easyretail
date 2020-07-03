@@ -55,6 +55,7 @@ INSERT INTO conceps(code,descrip,estac,sucu,nocaj,falt,fmod) VALUES('PROR','PROR
 INSERT INTO conceps(code,descrip,estac,sucu,nocaj,falt,fmod) VALUES('DONA','DONACIONES','INICIAL','INICIAL','INICIAL',now(),now());
 INSERT INTO conceps(code,descrip,estac,sucu,nocaj,falt,fmod) VALUES('TRAS','TRASPASO','INICIAL','INICIAL','INICIAL',now(),now());
 INSERT INTO conceps(code,descrip,estac,sucu,nocaj,falt,fmod) VALUES('VENTA','VENTA DE PRODUCTO','INICIAL','INICIAL','INICIAL',now(),now());
+INSERT INTO conceps(code,descrip,estac,sucu,nocaj,falt,fmod) VALUES('CANVENTA','CANCELACION DE VENTA','INICIAL','INICIAL','INICIAL',now(),now());
 /*!40000 ALTER TABLE `conceps` ENABLE KEYS */;
 
 /*!40000 ALTER TABLE `confgral` DISABLE KEYS */;

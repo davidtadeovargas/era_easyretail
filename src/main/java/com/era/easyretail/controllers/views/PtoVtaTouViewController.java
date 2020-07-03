@@ -13,6 +13,7 @@ import com.era.logger.LoggerUtility;
 import com.era.models.Coin;
 import com.era.models.Company;
 import com.era.models.ImpuesXProduct;
+import com.era.models.Kits;
 import com.era.models.Line;
 import com.era.models.Partvta;
 import com.era.models.Product;
@@ -96,6 +97,8 @@ public class PtoVtaTouViewController extends PtoVtaTouJFrame {
             JComponentUtils.setF11Event(() -> {
                 ViewControlersFactory.getSingleton().getOptPtoVtaViewController().setVisible();
             });
+            
+            jTProd.grabFocus();
             
             //Load all the unids
             jComUnid.loadItems();
@@ -266,15 +269,18 @@ public class PtoVtaTouViewController extends PtoVtaTouJFrame {
             //Continue adding the quantity
             cant = cant.add(qty);
             
-            //Get the taxes of the product
-            final List<ImpuesXProduct> taxesProduct = RepositoryFactory.getInstance().getImpuesXProductRepository().getAllByProd(Partvta.getProd());
-
-            //Iterate over all the taxes to calculate to taxes total
-            for(ImpuesXProduct ImpuesXProduct: taxesProduct){
-                final String taxCode = ImpuesXProduct.getImpue();
-                final Tax Tax = (Tax)RepositoryFactory.getInstance().getTaxesRepository().getByCode(taxCode);
-                final double tax = Tax.getValue() / 100;
-                taxes = taxes.add(import_.multiply(new BigDecimal(tax, MathContext.DECIMAL64)));
+            //If the product is kit
+            if(Partvta.isEskit()){
+                
+                //Get all the components of the product
+                final List<Kits> kits = RepositoryFactory.getInstance().getKitssRepository().getComponentsByKit(Partvta.getProd());
+                
+                for(Kits Kit: kits){
+                    taxes = taxes.add(getTotalTaxesOfProduct(Kit.getProd(), import_));
+                }
+            }
+            else{
+                taxes = taxes.add(getTotalTaxesOfProduct(Partvta.getProd(), import_));
             }
         }
 
@@ -290,6 +296,24 @@ public class PtoVtaTouViewController extends PtoVtaTouJFrame {
         Totals_.setCant(cant);
 
         return Totals_;
+    }
+    
+    private BigDecimal getTotalTaxesOfProduct(final String productCode, final BigDecimal import_) throws Exception {
+        
+        //Get the taxes of the product
+        final List<ImpuesXProduct> taxesProduct = RepositoryFactory.getInstance().getImpuesXProductRepository().getAllByProd(productCode);
+
+        BigDecimal taxes = BigDecimal.ZERO;
+        
+        //Iterate over all the taxes to calculate to taxes total
+        for(ImpuesXProduct ImpuesXProduct: taxesProduct){
+            final String taxCode = ImpuesXProduct.getImpue();
+            final Tax Tax = (Tax)RepositoryFactory.getInstance().getTaxesRepository().getByCode(taxCode);
+            final double tax = Tax.getValue() / 100;
+            taxes = taxes.add(import_.multiply(new BigDecimal(tax, MathContext.DECIMAL64)));
+        }
+        
+        return taxes;
     }
     
     private void jBNewVtaActionPerformed(java.awt.event.ActionEvent evt) {

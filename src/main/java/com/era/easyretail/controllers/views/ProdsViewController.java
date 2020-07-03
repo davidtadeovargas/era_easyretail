@@ -109,6 +109,8 @@ public class ProdsViewController extends ProdsJFrame {
                 jBCompsActionPerformed(evt);
             });
             
+            this.JComponentUtils.onKeyTypedToMayus(jTProd);
+            
             //Disable the save button
             jBGuar.setEnabled(false);
                 

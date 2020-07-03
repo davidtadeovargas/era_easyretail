@@ -111,7 +111,7 @@ public class EmpresasViewController extends EmpresasJFrame {
                     Company = (BasDats) jTabEmpresas.getRowSelected();
 
                     //Init the UtilityManager with the current app path and company code
-                    UtilitiesFactory.getSingleton().getImagesUtility().init(System.getProperty("user.dir"),Company.getCodemp());
+                    UtilitiesFactory.getSingleton().getImagesUtility().init(Company.getCodemp());
         
                     vCargaComponentes(Company);
 

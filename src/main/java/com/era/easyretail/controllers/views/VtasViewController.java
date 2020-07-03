@@ -15,6 +15,7 @@ import com.era.views.tables.headers.TableHeaderFactory;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFrame;
 import javax.swing.event.ListSelectionEvent;
 
 /**
@@ -713,23 +714,76 @@ public class VtasViewController extends VtasJFrame {
     
     private void jBCaActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
-	try{            	
+	try {
             
-	}
-	catch (Exception ex) {
-            LoggerUtility.getSingleton().logError(VtasViewController.class, ex);
+            //First select a sale
+            if(!jTableVentas.isRowSelected()){
+                DialogsFactory.getSingleton().showErrorOKNoSelectionCallbackDialog(baseJFrame, (JFrame jFrame) -> {
+                    jTableVentas.grabFocus();
+                });
+                return;
+            }
+            
+            //Get the selected sale
+            final Sales Sale = (Sales)jTableVentas.getRowSelected();
+                    
+            //If the sale is already canceled stop
+            if(Sale.isCanceled()){
+                DialogsFactory.getSingleton().showErrorOKCallbackDialog(baseJFrame, "errors_sale_already_cancelled", (JFrame jFrame) -> {
+                    jTableVentas.grabFocus();
+                });
+                return; 
+            }
+            
+            final String razon = "";
+                    
+            //Type first a razon
+            /*final String razon = jTMot.getText().trim();
+            if(razon.isEmpty()){
+                DialogsFactory.getSingleton().showOKEmptyFieldCallbackDialog(baseJFrame, (JFrame jFrame) -> {
+                    jTMot.grabFocus();
+                });
+                return;
+            }*/
+            
+            DialogsFactory.getSingleton().showQuestionContinueDialog(baseJFrame, (JFrame jFrame) -> {
+                
+                try {
+                    
+                    //Cancel the sale
+                    RepositoryFactory.getInstance().getSalessRepository().cancelSale(Sale.getId(), razon);
+                    
+                    //Reload the table
+                    jTableVentas.initTableWithPagination();
+                    
+                    //Success
+                    DialogsFactory.getSingleton().showOKOperationCompletedCallbackDialog(jFrame, (JFrame jFrame1) -> {
+                    });
+                    
+                } catch (Exception ex) {
+                    LoggerUtility.getSingleton().logError(this.getClass(), ex);
+                    try {
+                        DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+                    } catch (Exception ex1) {
+                        Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
+                    }
+                }
+            });
+            
+        } catch (Exception ex) {
+            LoggerUtility.getSingleton().logError(this.getClass(), ex);
             try {
                 DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
             } catch (Exception ex1) {
-                Logger.getLogger(VtasViewController.class.getName()).log(Level.SEVERE, null, ex1);
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
             }
-	}
+        }
     }
     
     private void jBGenPDFActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	
-            
+                        
 	}
 	catch (Exception ex) {
             LoggerUtility.getSingleton().logError(VtasViewController.class, ex);
@@ -745,6 +799,7 @@ public class VtasViewController extends VtasJFrame {
 
 	try{            	
             
+            this.jTableVentas.initTableWithPagination();
 	}
 	catch (Exception ex) {
             LoggerUtility.getSingleton().logError(VtasViewController.class, ex);
@@ -760,6 +815,16 @@ public class VtasViewController extends VtasJFrame {
 
 	try{            	
             
+            //Get the value to search
+            final String search = jTBusc.getText().trim();
+            
+            //If nothing to search so return
+            if(search.isEmpty()){
+                return;
+            }
+            
+            //Search all the ocurrences
+            this.jTableVentas.getByLikeEncabezados(search);            
 	}
 	catch (Exception ex) {
             LoggerUtility.getSingleton().logError(VtasViewController.class, ex);

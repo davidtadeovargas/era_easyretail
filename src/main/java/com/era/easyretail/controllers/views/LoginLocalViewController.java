@@ -339,6 +339,9 @@ public class LoginLocalViewController extends LoginLicenseJFrame {
         RepositoryFactory.getInstance().getProductsRepository().addOrUpdateProduct(Product1);
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Test product 1 taxes saved in the database");
         
+        //Init the images utility
+        UtilitiesFactory.getSingleton().getImagesUtility().init(CompanyTest.getCodemp());
+        
         final String pathImgProduc1 = ComputerLicenseDataModel.getTestCompanyDataModel().getProduct1().getPathIMG();
         final String productCode1 = ComputerLicenseDataModel.getTestCompanyDataModel().getProduct1().getCode();
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Product 1 saving image " + pathImgProduc1 + " to local folder");

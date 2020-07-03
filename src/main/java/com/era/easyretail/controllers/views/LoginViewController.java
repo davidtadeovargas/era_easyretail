@@ -302,7 +302,7 @@ public class LoginViewController extends LoginJFrame {
                 final BasDats BasDats = RepositoryFactory.getInstance().getBasDatssRepository().getByDBName(companyCode);
                 
                 //Init the UtilityManager with the current app path and company code
-                UtilitiesFactory.getSingleton().getImagesUtility().init(System.getProperty("user.dir"),BasDats.getCodemp());
+                UtilitiesFactory.getSingleton().getImagesUtility().init(BasDats.getCodemp());
             }
             else{                                
                     

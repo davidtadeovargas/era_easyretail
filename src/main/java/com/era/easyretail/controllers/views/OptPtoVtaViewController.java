@@ -8,9 +8,12 @@ package com.era.easyretail.controllers.views;
 import com.era.views.OptPtoVtaJFrame;
 import java.util.List;
 import com.era.logger.LoggerUtility;
+import com.era.repositories.CortszxsRepository;
+import com.era.repositories.RepositoryFactory;
 import com.era.views.dialogs.DialogsFactory;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFrame;
 /**
  *
  * @author PC
@@ -102,7 +105,25 @@ public class OptPtoVtaViewController extends OptPtoVtaJFrame {
     private void jBCortXActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	
-            
+    
+            DialogsFactory.getSingleton().showQuestionContinueDialog(baseJFrame, (JFrame jFrame) -> {
+                
+                try {
+                    
+                    //Get the next cort
+                    final int consec = RepositoryFactory.getInstance().getCortszxsRepository().getNextCorteXZ(CortszxsRepository.Type.X);
+                    
+                    
+                    
+                } catch (Exception ex) {
+                    LoggerUtility.getSingleton().logError(this.getClass(), ex);
+                    try {
+                        DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+                    } catch (Exception ex1) {
+                        Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
+                    }
+                }
+            });
 	}
 	catch (Exception ex) {
             LoggerUtility.getSingleton().logError(this.getClass(), ex);
@@ -132,7 +153,9 @@ public class OptPtoVtaViewController extends OptPtoVtaJFrame {
     private void jBCanVtasActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{
+            
             dispose();
+            
             ViewControlersFactory.getSingleton().getCanVtasViewController().setVisible();
 	}
 	catch (Exception ex) {
@@ -147,8 +170,11 @@ public class OptPtoVtaViewController extends OptPtoVtaJFrame {
     
     private void jBVtasActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
-	try{            	
+	try{
             
+            dispose();
+            
+            ViewControlersFactory.getSingleton().getVVtasViewController().setVisible();
 	}
 	catch (Exception ex) {
             LoggerUtility.getSingleton().logError(this.getClass(), ex);
