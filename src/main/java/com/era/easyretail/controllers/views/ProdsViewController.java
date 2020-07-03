@@ -743,6 +743,8 @@ public class ProdsViewController extends ProdsJFrame {
             //Enable the save button
             jBGuar.setEnabled(false);
             
+            jTab.clearSelection();
+            
             //Enable product code field
             jTProd.setEnabled(true);
 	}

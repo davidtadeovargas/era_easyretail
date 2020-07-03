@@ -144,14 +144,23 @@ public class LoginViewController extends LoginJFrame {
         if(jCMostC.isSelected()){
             if(JComponentUtils.F2EventFired()){
                 jCMostC.setSelected(false);
-            }            
-            jPContra.setEchoChar('*');
+                
+                jPContra.setEchoChar('*');
+            }
+            else{
+                jPContra.setEchoChar((char)0);
+            }
+            
         }
-        else{
+        else{            
             if(JComponentUtils.F2EventFired()){
                 jCMostC.setSelected(true);
+                
+                jPContra.setEchoChar((char)0);
             }
-            jPContra.setEchoChar((char)0);            
+            else{
+                jPContra.setEchoChar('*');
+            }            
         }
     }
     
@@ -287,10 +296,16 @@ public class LoginViewController extends LoginJFrame {
             //Get the user from db
             final User User = (User) RepositoryFactory.getInstance().getUsersRepository().getByCode(user);           
             
-            if(this.LoginTypeEmpresa == LoginTypeEmpresa.FIRST_LOGIN){                                
-            }
-            else{
+            if(this.LoginTypeEmpresa == LoginTypeEmpresa.FIRST_LOGIN){
                 
+                //Get the company by database
+                final BasDats BasDats = RepositoryFactory.getInstance().getBasDatssRepository().getByDBName(companyCode);
+                
+                //Init the UtilityManager with the current app path and company code
+                UtilitiesFactory.getSingleton().getImagesUtility().init(System.getProperty("user.dir"),BasDats.getCodemp());
+            }
+            else{                                
+                    
                 //Deslogin the current user
                 UtilitiesFactory.getSingleton().getSessionUtility().deslogUserSession();
                 
@@ -321,7 +336,7 @@ public class LoginViewController extends LoginJFrame {
                 
                 final OKDialog OKDialog = DialogsFactory.getSingleton().getOKDialog(baseJFrame);
                 OKDialog.setPropertyText("new_company_login_correct");
-                OKDialog.show();                
+                OKDialog.show();
             }
             
             if(openPrincipal){

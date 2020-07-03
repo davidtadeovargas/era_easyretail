@@ -96,10 +96,6 @@ public class Start {
         //Check if the main database exists
         boolean result = MysqlScriptsUtil.getInstance().existsDB(HibernateConfigModel_.getDatabase(), HibernateConfigModel_.getUser(), HibernateConfigModel_.getPassword(), HibernateConfigModel_.getInstance(), HibernateConfigModel_.getPort());
         
-        //Init the UtilityManager with the current app path
-        UtilitiesFactory.getSingleton().getImagesUtility().init(System.getProperty("user.dir"));
-            
-        
         if(!result) {//Else database not exists                
             dbempresasNotExists();
         }
@@ -291,10 +287,6 @@ public class Start {
                 LoggerUtility.getSingleton().logInfo(Start.class, "Licenciamiento: disableInvoiceTicketsWindow: " + ComputerLicenseDataModel.getPremiumFuntionsDataModel().isDisableInvoiceTicketsWindow());
                 LoggerUtility.getSingleton().logInfo(Start.class, "Licenciamiento: Mostrando la pantalla de presentación del sistema");
 
-                //Init the working direcory
-                final String currentWorkingDir = System.getProperty("user.dir");
-                UtilitiesFactory.getSingleton().getPathsUtility().initPaths(currentWorkingDir, "");
-                
                 //Continue with the presentation screen
                 ViewControlersFactory.getSingleton().getPresentationController().setVisible();
                 

@@ -147,6 +147,9 @@ public class CompsViewController extends CompsJFrame {
             
             //Add it to the table
             jTab.addObject(Kits);
+            
+            //Reste the ammount
+            jTCant.setText("1");
 	}
 	catch (Exception ex) {
             LoggerUtility.getSingleton().logError(CompsViewController.class, ex);

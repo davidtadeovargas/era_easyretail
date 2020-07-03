@@ -54,6 +54,7 @@ INSERT INTO conceps(code,descrip,estac,sucu,nocaj,falt,fmod) VALUES('MERMA','MER
 INSERT INTO conceps(code,descrip,estac,sucu,nocaj,falt,fmod) VALUES('PROR','PRORATEO','INICIAL','INICIAL','INICIAL',now(),now());
 INSERT INTO conceps(code,descrip,estac,sucu,nocaj,falt,fmod) VALUES('DONA','DONACIONES','INICIAL','INICIAL','INICIAL',now(),now());
 INSERT INTO conceps(code,descrip,estac,sucu,nocaj,falt,fmod) VALUES('TRAS','TRASPASO','INICIAL','INICIAL','INICIAL',now(),now());
+INSERT INTO conceps(code,descrip,estac,sucu,nocaj,falt,fmod) VALUES('VENTA','VENTA DE PRODUCTO','INICIAL','INICIAL','INICIAL',now(),now());
 /*!40000 ALTER TABLE `conceps` ENABLE KEYS */;
 
 /*!40000 ALTER TABLE `confgral` DISABLE KEYS */;
@@ -218,6 +219,16 @@ INSERT INTO impues(code, reten, impueval, estac, sucu, nocaj, impuestoXML,falt,f
 /*!40000 ALTER TABLE `lins` DISABLE KEYS */;
 INSERT INTO lins(code,descrip,img,estac,sucu,nocaj,falt,fmod)
 VALUES ('SYS','LÍNEA GENERICA',-1,'INICIAL','INICIAL','INICIAL',now(),now());
+INSERT INTO lins(code,descrip,img,estac,sucu,nocaj,falt,fmod)
+VALUES ('FRUTAS','FRUTAS',-1,'INICIAL','INICIAL','INICIAL',now(),now());
+INSERT INTO lins(code,descrip,img,estac,sucu,nocaj,falt,fmod)
+VALUES ('VERDURAS','VERDURAS',-1,'INICIAL','INICIAL','INICIAL',now(),now());
+INSERT INTO lins(code,descrip,img,estac,sucu,nocaj,falt,fmod)
+VALUES ('LACTEOS','LACTEOS',-1,'INICIAL','INICIAL','INICIAL',now(),now());
+INSERT INTO lins(code,descrip,img,estac,sucu,nocaj,falt,fmod)
+VALUES ('VINOS','VINOS',-1,'INICIAL','INICIAL','INICIAL',now(),now());
+INSERT INTO lins(code,descrip,img,estac,sucu,nocaj,falt,fmod)
+VALUES ('PLASTICOS','PLASTICOS',-1,'INICIAL','INICIAL','INICIAL',now(),now());
 /*!40000 ALTER TABLE `lins` ENABLE KEYS */;
 
 

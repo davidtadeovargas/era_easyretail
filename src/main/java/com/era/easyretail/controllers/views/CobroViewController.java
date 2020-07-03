@@ -313,7 +313,6 @@ public class CobroViewController extends CobroJFrame {
                 total_retencion = total_retencion.add(new BigDecimal(Tax.getValue(), MathContext.DECIMAL64));
                 total_traslado = total_traslado.add(value);
             }*/
-
         }
 
         //Get the sales man

@@ -55,6 +55,7 @@ public class ViewControlersFactory {
     private SectoresJFrame SectoresJFrame;
     private ProvViewController ProvViewController;
     private DevPVtaPtoViewController DevPVtaPtoViewController;
+    private CanVtasViewController CanVtasViewController;
     private RubrJFrame RubrJFrame;
     private ProvsJFrame ProvsJFrame;
     private ProdsJFrame ProdsJFrame;
@@ -648,6 +649,11 @@ public class ViewControlersFactory {
     public LinesViewController getLinesViewController(){
         LinesViewController = new LinesViewController();
         return LinesViewController;
+    }
+    
+    public CanVtasViewController getCanVtasViewController(){
+        CanVtasViewController = new CanVtasViewController();
+        return CanVtasViewController;
     }
     
     @Override

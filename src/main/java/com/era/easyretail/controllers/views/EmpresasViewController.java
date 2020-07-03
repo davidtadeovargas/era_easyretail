@@ -20,7 +20,6 @@ import com.era.repositories.models.HibernateConfigModel;
 import com.era.repositories.utils.HibernateConfigUtil;
 import com.era.repositories.utils.HibernateUtil;
 import com.era.repositories.utils.MysqlScriptsUtil;
-import com.era.utilities.PathsUtility;
 import com.era.utilities.UtilitiesFactory;
 import com.era.utilities.filechooser.FileChooserUtility;
 import com.era.utilities.filechooser.ImageFileChooserUtility;
@@ -111,6 +110,9 @@ public class EmpresasViewController extends EmpresasJFrame {
 
                     Company = (BasDats) jTabEmpresas.getRowSelected();
 
+                    //Init the UtilityManager with the current app path and company code
+                    UtilitiesFactory.getSingleton().getImagesUtility().init(System.getProperty("user.dir"),Company.getCodemp());
+        
                     vCargaComponentes(Company);
 
                     BTNActualiza.setEnabled(true);
@@ -664,14 +666,8 @@ public class EmpresasViewController extends EmpresasJFrame {
         //If logo to update so
         if(logoPath!=null){
             
-            final PathsUtility PathsUtility = UtilitiesFactory.getSingleton().getPathsUtility();
-            
-            PathsUtility.initPaths(null, companyCode);           
-            
-            String companyLogoPath = PathsUtility.getCompanyLogoPath();
-            final String logoFileName = PathsUtility.getLogoFileName();
-            companyLogoPath += "\\" + logoFileName;
-            UtilitiesFactory.getSingleton().getFilesUtility().copyFile(logoPath, companyLogoPath);
+            //Save the company logo
+            UtilitiesFactory.getSingleton().getImagesUtility().saveCompanyLogoImage(companyCode, logoPath);
         }
         
         boolean update = true;
@@ -1537,11 +1533,10 @@ public class EmpresasViewController extends EmpresasJFrame {
         JTRutaAplicacion.setText(appPath);
         JTPlantilla.setText("");
         
-        UtilitiesFactory.getSingleton().getPathsUtility().initPaths(null, Company.getCodemp());
+        //Get company logo image path
+        final String companyLogoPath = UtilitiesFactory.getSingleton().getImagesUtility().getCompanyLogoImagePath(Company.getCodemp());        
                 
         //Load icon
-        String companyLogoPath = UtilitiesFactory.getSingleton().getPathsUtility().getCompanyLogoPath();
-        companyLogoPath += "\\" + UtilitiesFactory.getSingleton().getPathsUtility().getLogoFileName();
         if(UtilitiesFactory.getSingleton().getFilesUtility().fileExists(companyLogoPath)){
             
             //Show image

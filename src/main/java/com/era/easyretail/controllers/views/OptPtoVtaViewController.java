@@ -131,8 +131,9 @@ public class OptPtoVtaViewController extends OptPtoVtaJFrame {
     
     private void jBCanVtasActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
-	try{            	
-            
+	try{
+            dispose();
+            ViewControlersFactory.getSingleton().getCanVtasViewController().setVisible();
 	}
 	catch (Exception ex) {
             LoggerUtility.getSingleton().logError(this.getClass(), ex);
