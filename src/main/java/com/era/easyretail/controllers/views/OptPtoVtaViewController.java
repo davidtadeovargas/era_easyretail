@@ -8,9 +8,13 @@ package com.era.easyretail.controllers.views;
 import com.era.views.OptPtoVtaJFrame;
 import java.util.List;
 import com.era.logger.LoggerUtility;
+import com.era.models.Cortszx;
 import com.era.repositories.CortszxsRepository;
 import com.era.repositories.RepositoryFactory;
+import com.era.repositories.SalessRepository;
 import com.era.views.dialogs.DialogsFactory;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
@@ -25,9 +29,6 @@ public class OptPtoVtaViewController extends OptPtoVtaJFrame {
         
         try{
                      
-            jBSal.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jBSalActionPerformed(evt);
-            });
             jBCortZ.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jBCortZActionPerformed(evt);
             });
@@ -53,6 +54,8 @@ public class OptPtoVtaViewController extends OptPtoVtaJFrame {
                 jBDevActionPerformed(evt);
             });
             
+            this.disposeButton(jBSal);
+            
         }catch (Exception ex) {
             LoggerUtility.getSingleton().logError(OptPtoVtaViewController.class, ex);
             try {
@@ -71,25 +74,110 @@ public class OptPtoVtaViewController extends OptPtoVtaJFrame {
     public void loadModelInFields(Object ObjectModel) throws  Exception {        
     }
     
-    private void jBSalActionPerformed(java.awt.event.ActionEvent evt) {                                             
-
-	try{            	
+    private void generateCort(final boolean isCortX) throws Exception {
+        
+        //If there is not anything for cut stop
+        final SalessRepository.CortZXData CortZXData = RepositoryFactory.getInstance().getSalessRepository().getTotalsForCortXZ();
+        if(CortZXData.getSales().isEmpty()){
+            DialogsFactory.getSingleton().showErrorOKCallbackDialog(baseJFrame, "errors_not_available_cort", (JFrame jFrame) -> {
+            });
+            return;
+        }
+        
+        DialogsFactory.getSingleton().showQuestionContinueDialog(baseJFrame, (JFrame jFrame) -> {
             
-	}
-	catch (Exception ex) {
-            LoggerUtility.getSingleton().logError(this.getClass(), ex);
             try {
-                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
-            } catch (Exception ex1) {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
+                
+                final Cortszx Cortszx = new Cortszx();                
+                Cortszx.setTotvtas(CortZXData.getTotalSales());
+                Cortszx.setTotingr(CortZXData.getTotal());
+                Cortszx.setTotegre(BigDecimal.ZERO);
+                Cortszx.setTotcaj(CortZXData.getTotalExistenceMoneyInCasher());
+                Cortszx.setVtabruta(CortZXData.getTotal());
+                Cortszx.setDescu(CortZXData.getDisccount());
+                Cortszx.setDevs(CortZXData.getTotalImportDevs());
+                Cortszx.setVtanet(CortZXData.getSubtotal());
+                Cortszx.setImpue(CortZXData.getTaxes());
+                Cortszx.setVtanetimp(CortZXData.getSubtotal());
+                Cortszx.setTotfacs(CortZXData.getTotalImportFactus());
+                Cortszx.setTottics(CortZXData.getTotalImportTickets());
+                Cortszx.setCantfac(CortZXData.getTotalFactus());
+                Cortszx.setCanttics(CortZXData.getTotalTickets());
+                Cortszx.setTotefe(CortZXData.getTotalCashPayment());
+                Cortszx.setTotdeb(CortZXData.getTotalCardDebitPayment());
+                Cortszx.setTottarcred(CortZXData.getTotalCardCreditPayment());
+                Cortszx.setTotdep(BigDecimal.ZERO);
+                
+                //Get the next cort
+                BigInteger consec;
+                if(isCortX){
+                    
+                    consec = RepositoryFactory.getInstance().getCortszxsRepository().getNextCorteXZ(CortszxsRepository.Type.X);
+                    
+                    //Update the next cort
+                    RepositoryFactory.getInstance().getCortszxsRepository().updateNextCortX(Cortszx);
+                }
+                else{
+                    consec = RepositoryFactory.getInstance().getCortszxsRepository().getNextCorteXZ(CortszxsRepository.Type.Z);
+
+                    //Update the next cort
+                    RepositoryFactory.getInstance().getCortszxsRepository().updateNextCortZ(Cortszx);
+                    
+                    //Update all the corts as no more available corts
+                    RepositoryFactory.getInstance().getCortszxsRepository().updateAllAvailableCortsAsZNotAvailableAnyMore();
+                }
+
+                //Meanwhile console logs
+                final String temp = "Cort number: " + consec +
+                                    "Total sales: " + CortZXData.getSales() +
+                                    "---------------------" +
+                                    "Subtotal: " + CortZXData.getSubtotal() +
+                                    "Disccount: " + CortZXData.getDisccount() +
+                                    "Taxes: " + CortZXData.getTaxes() +                                            
+                                    "Total: " + CortZXData.getTotal() +
+                                    "---------------------" +
+                                    "Cash payment total: " + CortZXData.getTotalCashPayment() +
+                                    "Card debit payment total: " + CortZXData.getTotalCardDebitPayment() +
+                                    "Card credit payment total: " + CortZXData.getTotalCardCreditPayment() +
+                                    "---------------------" +
+                                    "Total money with casher: " + CortZXData.getTotalExistenceMoneyInCasher() +
+                                    "---------------------" +
+                                    "Total import tickets: " + CortZXData.getTotalImportTickets() +
+                                    "Total import invoices: " + CortZXData.getTotalImportFactus() +
+                                    "Total import remisions: " + CortZXData.getTotalImportRems() +
+                                    "---------------------" +
+                                    "Total amount tickets: " + CortZXData.getTotalTickets() +
+                                    "Total amount invoices: " + CortZXData.getTotalSales() +
+                                    "Total amount remisions: " + CortZXData.getTotalRems() +
+                                    "Total amount devs: " + CortZXData.getTotalSalesDevs();
+                System.out.println(temp);
+                
+                dispose();
+                
+                if(isCortX){
+                    
+                }
+                else{
+                    
+                    ViewControlersFactory.getSingleton().getIngreCajViewController().setVisible();
+                }
+                
+            } catch (Exception ex) {
+                LoggerUtility.getSingleton().logError(this.getClass(), ex);
+                try {
+                    DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+                } catch (Exception ex1) {
+                    Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
+                }
             }
-	}
+        });                
     }
     
     private void jBCortZActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	
             
+            generateCort(false);
 	}
 	catch (Exception ex) {
             LoggerUtility.getSingleton().logError(this.getClass(), ex);
@@ -105,25 +193,8 @@ public class OptPtoVtaViewController extends OptPtoVtaJFrame {
     private void jBCortXActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	
-    
-            DialogsFactory.getSingleton().showQuestionContinueDialog(baseJFrame, (JFrame jFrame) -> {
-                
-                try {
-                    
-                    //Get the next cort
-                    final int consec = RepositoryFactory.getInstance().getCortszxsRepository().getNextCorteXZ(CortszxsRepository.Type.X);
-                    
-                    
-                    
-                } catch (Exception ex) {
-                    LoggerUtility.getSingleton().logError(this.getClass(), ex);
-                    try {
-                        DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
-                    } catch (Exception ex1) {
-                        Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
-                    }
-                }
-            });
+            
+            generateCort(true);
 	}
 	catch (Exception ex) {
             LoggerUtility.getSingleton().logError(this.getClass(), ex);

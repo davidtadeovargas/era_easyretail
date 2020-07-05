@@ -35,3 +35,4 @@ target/classes/com/era/easyretail/Start.class
 target/classes/properties/dialogs.properties
 target/era_easyretail-1.0-SNAPSHOT.jar
 target/maven-archiver/pom.properties
+log.log

@@ -49,6 +49,7 @@ public class ViewControlersFactory {
     private UnidadesJFrame UnidadesJFrame;
     private GeneralCatalogsViewController GeneralCatalogsViewController;
     private TipsPagsJFrame TipsPagsJFrame;
+    private IngreCajViewController IngreCajViewController;
     private ReportsViewController ReportsViewController;
     private SubramosJFrame SubramosJFrame;
     private SeriesJFrame SeriesJFrame;
@@ -654,6 +655,11 @@ public class ViewControlersFactory {
     public CanVtasViewController getCanVtasViewController(){
         CanVtasViewController = new CanVtasViewController();
         return CanVtasViewController;
+    }
+
+    public IngreCajViewController getIngreCajViewController(){
+        IngreCajViewController = new IngreCajViewController();
+        return IngreCajViewController;
     }
     
     @Override

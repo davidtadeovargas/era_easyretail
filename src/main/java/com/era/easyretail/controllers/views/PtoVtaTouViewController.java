@@ -172,6 +172,9 @@ public class PtoVtaTouViewController extends PtoVtaTouJFrame {
                 }
             });
             
+            //If there is no money of the casher ask for it
+            existMoneyFromCasherAlready();
+            
         }catch (Exception ex) {
             LoggerUtility.getSingleton().logError(ReportsViewController.class, ex);
             try {
@@ -185,6 +188,17 @@ public class PtoVtaTouViewController extends PtoVtaTouJFrame {
     
     @Override
     public void loadModelInFields(Object ObjectModel) throws  Exception {
+    }
+    
+    private boolean existMoneyFromCasherAlready() throws Exception {
+        
+        //If there is no money of the casher ask for it
+        final boolean existsMoneyInCasherForNewCort = RepositoryFactory.getInstance().getFlujsRepository().existsMoneyInCasherForNewCort();
+        if(!existsMoneyInCasherForNewCort){
+            ViewControlersFactory.getSingleton().getIngreCajViewController().setVisible();
+        }
+        
+        return existsMoneyInCasherForNewCort;
     }
     
     private void newSale() throws Exception {
@@ -493,6 +507,12 @@ public class PtoVtaTouViewController extends PtoVtaTouJFrame {
     private void jBNewActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	
+            
+            //If there is no money of the casher ask for it
+            final boolean existsMoneyInCasherForNewCort = existMoneyFromCasherAlready();
+            if(!existsMoneyInCasherForNewCort){
+                return;
+            }
             
             //Select a product
             if(productCode==null){

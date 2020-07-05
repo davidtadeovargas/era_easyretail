@@ -338,9 +338,14 @@ public class CobroViewController extends CobroJFrame {
         Sale.setTicket(ticket);
         Sale.setEstatus(estatus);
         Sale.setObservation(observations);
+        Sale.setSalesPoint(true);
 
+        final BigDecimal BigDecimalTotal = new BigDecimal(UtilitiesFactory.getSingleton().getNumbersUtility().fromMoneyFormat(jTEfeCant.getText().trim()));
+        final BigDecimal BigDecimalCardDebit = new BigDecimal(UtilitiesFactory.getSingleton().getNumbersUtility().fromMoneyFormat(jTDebCant.getText().trim()));
+        final BigDecimal BigDecimalCardCredit = new BigDecimal(UtilitiesFactory.getSingleton().getNumbersUtility().fromMoneyFormat(jTTarCredCant.getText().trim()));
+        
         //Save the sale
-        RepositoryFactory.getInstance().getSalessRepository().saveSale(Sale, partvtas);
+        RepositoryFactory.getInstance().getSalessRepository().saveSale(Sale, partvtas,BigDecimalTotal,BigDecimalCardDebit,BigDecimalCardCredit);
 
         DialogsFactory.getSingleton().showOKOperationCompletedCallbackDialog(baseJFrame, (JFrame jFrame1) -> {
 
