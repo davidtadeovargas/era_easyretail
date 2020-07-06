@@ -60,6 +60,7 @@ public class ViewControlersFactory {
     private RubrJFrame RubrJFrame;
     private ProvsJFrame ProvsJFrame;
     private ProdsJFrame ProdsJFrame;
+    private DevVtaPtoViewController DevVtaPtoViewController;
     private ActivosViewController ActivosViewController;
     private ProdSerJFrame ProdSerJFrame;    
     private MaxsMinsJFrame MaxsMinsJFrame;
@@ -660,6 +661,11 @@ public class ViewControlersFactory {
     public IngreCajViewController getIngreCajViewController(){
         IngreCajViewController = new IngreCajViewController();
         return IngreCajViewController;
+    }
+    
+    public DevVtaPtoViewController getDevVtaPtoViewController(){
+        DevVtaPtoViewController = new DevVtaPtoViewController();
+        return DevVtaPtoViewController;
     }
     
     @Override

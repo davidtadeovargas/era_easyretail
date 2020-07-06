@@ -24,6 +24,8 @@ import javax.swing.JFrame;
  */
 public class OptPtoVtaViewController extends OptPtoVtaJFrame {
  
+    private boolean returnSalesOnPointOfSales;
+    
     public OptPtoVtaViewController() {
         super("window_title_optsptovta");
         
@@ -54,6 +56,8 @@ public class OptPtoVtaViewController extends OptPtoVtaJFrame {
                 jBDevActionPerformed(evt);
             });
             
+            returnSalesOnPointOfSales = RepositoryFactory.getInstance().getConfgralRepository().getReturnSalesOnPointOfSales().getVal()==1;
+                    
             this.disposeButton(jBSal);
             
         }catch (Exception ex) {
@@ -279,6 +283,7 @@ public class OptPtoVtaViewController extends OptPtoVtaJFrame {
 
 	try{            	
             
+            
 	}
 	catch (Exception ex) {
             LoggerUtility.getSingleton().logError(this.getClass(), ex);
@@ -293,7 +298,17 @@ public class OptPtoVtaViewController extends OptPtoVtaJFrame {
     private void jBDevActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	
+    
+            //If the config is not permitted stop
+            if(!returnSalesOnPointOfSales){
+                DialogsFactory.getSingleton().showErrorStopByConfigOKDialog(baseJFrame, null);
+                return;
+            }
             
+            dispose();
+            
+            //Open the window
+            ViewControlersFactory.getSingleton().getDevVtaPtoViewController().setVisible();
 	}
 	catch (Exception ex) {
             LoggerUtility.getSingleton().logError(this.getClass(), ex);

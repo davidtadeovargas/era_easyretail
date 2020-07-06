@@ -41,7 +41,16 @@ public class PtoVtaTouViewController extends PtoVtaTouJFrame {
  
     private String productCode;
     private String productDescription;
-    private TotalsDataModel Totals;
+    private TotalsDataModel Totals;    
+    private Company Company;
+    
+    //Configs
+    private boolean useListPriceCustomer;
+    private boolean showProductsPanelInSalespoint;
+    private String warehouseForSalesOnPointOfSales;
+    private boolean showMessageWithNoExistencesInSalespoint;
+    private boolean newCustomersOnPointOfSales;    
+    
     
     public PtoVtaTouViewController() {
         super("window_title_ptovta");
@@ -103,7 +112,16 @@ public class PtoVtaTouViewController extends PtoVtaTouJFrame {
                     }
                 }
             });
-                             
+            
+            //Read all configs
+            useListPriceCustomer = RepositoryFactory.getInstance().getConfgralRepository().getApplyCustomerPriceInSalespoint().getVal()==1;
+            showProductsPanelInSalespoint = RepositoryFactory.getInstance().getConfgralRepository().getShowProductsPanelInSalespoint().getVal()==1;
+            warehouseForSalesOnPointOfSales = RepositoryFactory.getInstance().getConfgralRepository().getWarehouseForSalesOnPointOfSales().getExtr();
+            showMessageWithNoExistencesInSalespoint = RepositoryFactory.getInstance().getConfgralRepository().getShowMessageWithNoExistencesInSalespoint().getVal()==1;
+            newCustomersOnPointOfSales = RepositoryFactory.getInstance().getConfgralRepository().getNewCustomersOnPointOfSales().getVal()==1;            
+            
+            this.showHandCursorWhenComponent(jLabel1);
+            
             //Connect the image
             this.initImageControls(jLImg, jPanImg);
             
@@ -143,7 +161,7 @@ public class PtoVtaTouViewController extends PtoVtaTouJFrame {
             jTNomb.setText(Company.getNom());
             
             //Hide or show the lines and products panel ?
-            if(RepositoryFactory.getInstance().getConfgralRepository().getShowProductsPanelInSalespoint().getVal()==1){
+            if(showProductsPanelInSalespoint){
                 
                 //Load all the lines
                 jPanelLin.loadAllButtonsFromRepository();
@@ -231,9 +249,9 @@ public class PtoVtaTouViewController extends PtoVtaTouJFrame {
     
     private void newSale() throws Exception {
         
-        final Company Company = (Company)RepositoryFactory.getInstance().getCompanysRepository().getClienteMostrador();
-        jTCli.setText(Company.getCompanyCode());
-        jTNomb.setText(Company.getNom());
+        final Company Company_ = (Company)RepositoryFactory.getInstance().getCompanysRepository().getClienteMostrador();
+        jTCli.setText(Company_.getCompanyCode());
+        jTNomb.setText(Company_.getNom());
         
         jTProd.setText("");
         jTab.clearRows();
@@ -244,6 +262,8 @@ public class PtoVtaTouViewController extends PtoVtaTouJFrame {
         //Select unid
         final Unid Unid = (Unid)RepositoryFactory.getInstance().getUnidsRepository().getUnidPIEZA();
         jComUnid.selectByObject(Unid);
+        
+        Company = null;
         
         jTDesc.setText("0");
         
@@ -544,6 +564,36 @@ public class PtoVtaTouViewController extends PtoVtaTouJFrame {
                 return;
             }
             
+            //No previous customer selected
+            Company Company_;
+            if(Company==null){
+             
+                //First select a customer
+                final String customer = jTCli.getText().trim();
+
+                //If not customer stop
+                if(customer.isEmpty()){
+                    DialogsFactory.getSingleton().showOKEmptyFieldCallbackDialog(baseJFrame, (JFrame jFrame) -> {
+                        jTCli.grabFocus();
+                    });
+                    return;
+                }
+
+                //Get the customer
+                Company_ = (Company)RepositoryFactory.getInstance().getCompanysRepository().getCustomerByCode(customer);
+
+                //Iif customer doesnt exists
+                if(Company_==null){
+                    DialogsFactory.getSingleton().showErrorOKRecordNotExistsCallbackDialog(baseJFrame, (JFrame jFrame) -> {
+                        jTCli.grabFocus();
+                    });
+                    return;
+                }
+            }
+            else{
+                Company_ = Company;
+            }
+            
             //Select a product
             if(productCode==null){
                 DialogsFactory.getSingleton().showErrorOKNoSelectionCallbackDialog(baseJFrame, (JFrame jFrame) -> {
@@ -579,17 +629,18 @@ public class PtoVtaTouViewController extends PtoVtaTouJFrame {
                 return;
             }
             
-            //Show message if the product has not existences ?
-            if(RepositoryFactory.getInstance().getConfgralRepository().getShowMessageWithNoExistencesInSalespoint().getVal()==1){
-                
-                //Get the warehouse configured for sales
-                final String warehouseForSale = RepositoryFactory.getInstance().getConfgralRepository().getWarehouseForSalesOnPointOfSales().getExtr();
-
-                //Get existences for producto
-                final Existalma Existalma = RepositoryFactory.getInstance().getExistalmasRepository().getByWarehouseAndProduct(warehouseForSale, productCode);
-                
-                if(Existalma.getExist()<=0){
+            //Get existences for producto
+            final Existalma Existalma = RepositoryFactory.getInstance().getExistalmasRepository().getByWarehouseAndProduct(warehouseForSalesOnPointOfSales, productCode);
+            
+            //If no existences
+            if(Existalma!=null && Existalma.getExist()<=0){
+                                               
+                if(showMessageWithNoExistencesInSalespoint){
                     DialogsFactory.getSingleton().showOKCallbackDialog(baseJFrame, "errors_missing_existences", null);
+                }
+                
+                if(RepositoryFactory.getInstance().getConfgralRepository().getSaleWithNoExistencesInSalespoint().getVal()==0){
+                    return;
                 }
             }
             
@@ -602,8 +653,10 @@ public class PtoVtaTouViewController extends PtoVtaTouJFrame {
             //Get the national coin
             final Coin Coin = (Coin)RepositoryFactory.getInstance().getCoinsRepository().getNationalCoin();
             
+            double priceList = getCorrectPriceList(useListPriceCustomer, Company_, Product);
+            
             //Calculate the imports
-            final double import_ = qty * Product.getPriceList1();
+            final double import_ = qty * priceList;
             
             //Create the model
             final Partvta Partvta = new Partvta();
@@ -613,7 +666,7 @@ public class PtoVtaTouViewController extends PtoVtaTouJFrame {
             Partvta.setDescrip(Product.getDescription());
             Partvta.setEskit(Product.getCompound());
             Partvta.setList(1);
-            Partvta.setPre(new BigDecimal(Product.getPriceList1(), MathContext.DECIMAL64));
+            Partvta.setPre(new BigDecimal(priceList, MathContext.DECIMAL64));
             Partvta.setTipcam(new BigDecimal(Coin.getValue(), MathContext.DECIMAL64));
             Partvta.setUnid(Unid.getCode());
             Partvta.setImpo(new BigDecimal(import_, MathContext.DECIMAL64));
@@ -636,6 +689,9 @@ public class PtoVtaTouViewController extends PtoVtaTouJFrame {
             clearNewProduct();
             
             jTDesc.setText("0");
+            
+            //Already a customer selected
+            Company = Company_;
 	}
 	catch (Exception ex) {
             LoggerUtility.getSingleton().logError(this.getClass(), ex);
@@ -645,6 +701,59 @@ public class PtoVtaTouViewController extends PtoVtaTouJFrame {
                 Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
             }
 	}
+    }
+    
+    private double getCorrectPriceList(final boolean useListPriceCustomer, final Company Company_, final Product Product){
+        
+        //Determine wich price list to use
+        final int list;
+        if(useListPriceCustomer){
+            list = Company_.getList();
+        }
+        else{
+            list = 1;
+        }
+
+        double priceList;
+        if(list==1){
+            priceList = Product.getPriceList1();
+        }
+        else if(list==2){
+            priceList = Product.getPriceList2();
+        }
+        else if(list==3){
+            priceList = Product.getPriceList3();
+        }
+        else if(list==4){
+            priceList = Product.getPriceList4();
+        }
+        else if(list==5){
+            priceList = Product.getPriceList5();
+        }
+        else if(list==6){
+            priceList = Product.getPriceList6();
+        }
+        else if(list==7){
+            priceList = Product.getPriceList7();
+        }
+        else if(list==8){
+            priceList = Product.getPriceList8();
+        }
+        else if(list==9){
+            priceList = Product.getPriceList9();
+        }
+        else if(list==10){
+            priceList = Product.getPriceList10();
+        }
+        else{
+            priceList = Product.getPriceList1();
+        }
+        
+        if(priceList==0){
+            priceList = Product.getPriceList1();
+        }
+        
+        return priceList;
     }
     
     private void clearNewProduct() throws Exception {
@@ -684,7 +793,7 @@ public class PtoVtaTouViewController extends PtoVtaTouJFrame {
                     jTCli.grabFocus();
                 });
                 return;
-            }                
+            }
             
             //Get all table items
             final List<Partvta> items = (List<Partvta>)jTab.getAllItemsInTable();
@@ -760,17 +869,45 @@ public class PtoVtaTouViewController extends PtoVtaTouJFrame {
     
     private void jBCliActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
-	try{            	
+	try{
             
             final SearchViewController SearchViewController = new SearchViewController();
             SearchViewController.setSEARCH_TYPE(SearchCommonTypeEnum.CUSTOMERS);
             SearchViewController.setButtonAceptClicked(() -> {
 
-                final String customerCode = SearchViewController.getCod();
-                jTCli.setText(customerCode);
-                
-                final String customerName = SearchViewController.getDescrip();
-                jTNomb.setText(customerName);
+                try {
+                 
+                    final String customerCode = SearchViewController.getCod();
+                    final String customerName = SearchViewController.getDescrip();
+                    
+                    //If already a customer
+                    if(Company!=null){
+
+                        DialogsFactory.getSingleton().showQuestionContinueDialog(baseJFrame, (JFrame jFrame) -> {
+                            try {
+                                changeCustomer(customerCode,customerName);
+                            } catch (Exception ex) {
+                                LoggerUtility.getSingleton().logError(this.getClass(), ex);
+                                try {
+                                    DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+                                } catch (Exception ex1) {
+                                    Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
+                                }
+                            }
+                        });
+                    }
+                    else{
+                        changeCustomer(customerCode,customerName);
+                    }
+                    
+                } catch (Exception ex) {
+                    LoggerUtility.getSingleton().logError(this.getClass(), ex);
+                    try {
+                        DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+                    } catch (Exception ex1) {
+                        Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
+                    }
+                }
             });
             SearchViewController.setVisible();
 	}
@@ -784,9 +921,23 @@ public class PtoVtaTouViewController extends PtoVtaTouJFrame {
 	}
     }
     
+    private void changeCustomer(final String customerCode, final String customerName) throws Exception {
+                                
+        newSale();
+        
+        jTCli.setText(customerCode);        
+        jTNomb.setText(customerName);
+    }
+    
     private void jBNewEmpActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	
+            
+            //If by config user can not continue so stop
+            if(!newCustomersOnPointOfSales){
+                DialogsFactory.getSingleton().showErrorStopByConfigOKDialog(baseJFrame, null);
+                return;
+            }
             
             final ClientViewController ClientViewController = ViewControlersFactory.getSingleton().getClientViewController();
             ClientViewController.setVisible();

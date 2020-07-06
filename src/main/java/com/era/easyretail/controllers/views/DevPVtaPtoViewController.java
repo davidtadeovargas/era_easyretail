@@ -35,9 +35,6 @@ public class DevPVtaPtoViewController extends DevPVtaPtoJFrame {
             jBMosT.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jBMosTActionPerformed(evt);
             });
-            jBActua.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jBActuaActionPerformed(evt);
-            });
             
         }catch (Exception ex) {
             LoggerUtility.getSingleton().logError(DevPVtaPtoViewController.class, ex);
@@ -56,22 +53,7 @@ public class DevPVtaPtoViewController extends DevPVtaPtoJFrame {
     @Override
     public void clearFields() throws Exception{            
     }
-    
-    private void jBActuaActionPerformed(java.awt.event.ActionEvent evt) {
-
-	try{            	
-            
-	}
-	catch (Exception ex) {
-            LoggerUtility.getSingleton().logError(ActivosViewController.class, ex);
-            try {
-                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
-            } catch (Exception ex1) {
-                Logger.getLogger(ActivosViewController.class.getName()).log(Level.SEVERE, null, ex1);
-            }
-	}
-    }
-    
+        
     private void jBMosTActionPerformed(java.awt.event.ActionEvent evt) {
 
 	try{            	
