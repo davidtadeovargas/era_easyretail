@@ -154,13 +154,16 @@ public class OptPtoVtaViewController extends OptPtoVtaJFrame {
                 
                 dispose();
                 
-                if(isCortX){
+                DialogsFactory.getSingleton().showOKOperationCompletedCallbackDialog(jFrame, (JFrame jFrame1) -> {
                     
-                }
-                else{
-                    
-                    ViewControlersFactory.getSingleton().getIngreCajViewController().setVisible();
-                }
+                    if(isCortX){
+
+                    }
+                    else{
+
+                        ViewControlersFactory.getSingleton().getIngreCajViewController().setVisible();
+                    }
+                });
                 
             } catch (Exception ex) {
                 LoggerUtility.getSingleton().logError(this.getClass(), ex);

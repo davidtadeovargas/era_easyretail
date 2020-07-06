@@ -5,6 +5,7 @@
  */
 package com.era.easyretail.controllers.views;
 
+import com.era.easyretail.controllers.views.ClavMastViewController.OnResult;
 import com.era.logger.LoggerUtility;
 import com.era.models.Sales;
 import com.era.repositories.RepositoryFactory;
@@ -149,15 +150,52 @@ public class CanVtasViewController extends CanVtasJFrame {
                 
                 try {
                     
-                    //Cancel the sale
-                    RepositoryFactory.getInstance().getSalessRepository().cancelSale(Sale.getId(), razon);
-                    
-                    //Reload the table
-                    jTab.initTableWithPagination();
-                    
-                    //Success
-                    DialogsFactory.getSingleton().showOKOperationCompletedCallbackDialog(jFrame, (JFrame jFrame1) -> {
-                    });
+                    //If should ask by admin password first so
+                    if(RepositoryFactory.getInstance().getConfgralRepository().getAskForAdminPasswordOnCancelInvoicesOnPointOfSales().getVal()==1){
+                        final ClavMastViewController ClavMastViewController = ViewControlersFactory.getSingleton().getClavMastViewController();
+                        ClavMastViewController.setOnResult(new OnResult(){
+
+                            @Override
+                            public void onValidAdminUser() {
+                                
+                                try {
+                                    
+                                    cancelSale(Sale.getId(), razon);
+                                                                        
+                                } catch (Exception ex) {
+                                    LoggerUtility.getSingleton().logError(this.getClass(), ex);
+                                    try {
+                                        DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+                                    } catch (Exception ex1) {
+                                        Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onInvalidAdminUser() {
+                                
+                                try {
+                                 
+                                    DialogsFactory.getSingleton().showErrorInvalidLoginOKDialog(baseJFrame, (JFrame jFrame1) -> {
+                                    });
+                                    
+                                } catch (Exception ex) {
+                                    LoggerUtility.getSingleton().logError(this.getClass(), ex);
+                                    try {
+                                        DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+                                    } catch (Exception ex1) {
+                                        Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
+                                    }
+                                }
+                            }
+
+                        });
+                        ClavMastViewController.setVisible();
+                    }
+                    else{
+                        cancelSale(Sale.getId(), razon);
+                    }
                     
                 } catch (Exception ex) {
                     LoggerUtility.getSingleton().logError(this.getClass(), ex);
@@ -177,6 +215,19 @@ public class CanVtasViewController extends CanVtasJFrame {
                 Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
             }
         }
+    }
+    
+    private void cancelSale(final int saleID, final String razon) throws Exception {
+        
+        //Cancel the sale
+        RepositoryFactory.getInstance().getSalessRepository().cancelSale(saleID, razon);
+
+        //Reload the table
+        jTab.initTableWithPagination();
+
+        //Success
+        DialogsFactory.getSingleton().showOKOperationCompletedCallbackDialog(baseJFrame, (JFrame jFrame1) -> {
+        });
     }
     
     @Override

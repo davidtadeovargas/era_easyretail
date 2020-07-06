@@ -269,13 +269,9 @@ public class LoginViewController extends LoginJFrame {
             
             //If the user does not exists
             if(!userExists){
-                
-                final OKDialog OKDialog = DialogsFactory.getSingleton().getOKDialog(baseJFrame);
-                OKDialog.setPropertyText("users_invalid_login");
-                OKDialog.setOKDialogInterface((JFrame jFrame) -> {
-                    jTEsta.grabFocus();                    
+                DialogsFactory.getSingleton().showErrorInvalidLoginOKDialog(baseJFrame, (JFrame jFrame1) -> {
+                    jTEsta.grabFocus();
                 });
-                OKDialog.show();
                 return;
             }
             

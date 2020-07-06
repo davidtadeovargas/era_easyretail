@@ -12,6 +12,7 @@ import java.util.List;
 import com.era.logger.LoggerUtility;
 import com.era.models.Coin;
 import com.era.models.Company;
+import com.era.models.Existalma;
 import com.era.models.ImpuesXProduct;
 import com.era.models.Kits;
 import com.era.models.Line;
@@ -25,6 +26,7 @@ import com.era.repositories.RepositoryFactory;
 import com.era.utilities.UtilitiesFactory;
 import com.era.views.dialogs.DialogsFactory;
 import com.era.views.tables.headers.TableHeaderFactory;
+import java.awt.event.MouseEvent;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.util.ArrayList;
@@ -88,7 +90,20 @@ public class PtoVtaTouViewController extends PtoVtaTouJFrame {
             jBSincronizar.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jBSincronizarActionPerformed(evt);
             });
-                  
+            this.addMouseListenerClicked(jLabel1, (MouseEvent evt) -> {
+                
+                try {
+                    ViewControlersFactory.getSingleton().getOptPtoVtaViewController().setVisible();
+                } catch (Exception ex) {
+                    LoggerUtility.getSingleton().logError(this.getClass(), ex);
+                    try {
+                        DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+                    } catch (Exception ex1) {
+                        Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
+                    }
+                }
+            });
+                             
             //Connect the image
             this.initImageControls(jLImg, jPanImg);
             
@@ -127,50 +142,63 @@ public class PtoVtaTouViewController extends PtoVtaTouJFrame {
             jTCli.setText(Company.getCompanyCode());
             jTNomb.setText(Company.getNom());
             
-            //Load all the lines
-            jPanelLin.loadAllButtonsFromRepository();
-            jPanelLin.setOnButtonClic((Object Object) -> {
+            //Hide or show the lines and products panel ?
+            if(RepositoryFactory.getInstance().getConfgralRepository().getShowProductsPanelInSalespoint().getVal()==1){
                 
-                try {
-                 
-                    //Cast the model
-                    final Line Line = (Line)Object;
+                //Load all the lines
+                jPanelLin.loadAllButtonsFromRepository();
+                jPanelLin.setOnButtonClic((Object Object) -> {
 
-                    //Get all the products for that line
-                    final List<Product> products = RepositoryFactory.getInstance().getProductsRepository().getAllByLine(Line.getCode());
-
-                    //Load all the productos in the panel
-                    jPanProds.loadAllButtonsPageAxis(products);
-                    
-                } catch (Exception ex) {
-                    LoggerUtility.getSingleton().logError(this.getClass(), ex);
                     try {
-                        DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
-                    } catch (Exception ex1) {
-                        Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
+
+                        //Cast the model
+                        final Line Line = (Line)Object;
+
+                        //Get all the products for that line
+                        final List<Product> products = RepositoryFactory.getInstance().getProductsRepository().getAllByLine(Line.getCode());
+
+                        //Load all the productos in the panel
+                        jPanProds.loadAllButtonsPageAxis(products);
+
+                        jTProd.grabFocus();
+
+                    } catch (Exception ex) {
+                        LoggerUtility.getSingleton().logError(this.getClass(), ex);
+                        try {
+                            DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+                        } catch (Exception ex1) {
+                            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
+                        }
                     }
-                }
-            });
-            jPanProds.setOnButtonClic((Object Object) -> {
+                });
+                jPanProds.setOnButtonClic((Object Object) -> {
+
+                    try {
+
+                        //Cast the model
+                        final Product Product = (Product)Object;
+
+                        productCode = Product.getCode();
+
+                        jBNewActionPerformed(null);
+
+                        jTProd.grabFocus();
+
+                    } catch (Exception ex) {
+                        LoggerUtility.getSingleton().logError(this.getClass(), ex);
+                        try {
+                            DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+                        } catch (Exception ex1) {
+                            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
+                        }
+                    }
+                });
+            }
+            else{
                 
-                try {
-                 
-                    //Cast the model
-                    final Product Product = (Product)Object;
-
-                    productCode = Product.getCode();
-                    
-                    jBNewActionPerformed(null);
-                    
-                } catch (Exception ex) {
-                    LoggerUtility.getSingleton().logError(this.getClass(), ex);
-                    try {
-                        DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
-                    } catch (Exception ex1) {
-                        Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
-                    }
-                }
-            });
+                jScrollPaneLin.setVisible(false);
+                jScrollProds.setVisible(false);
+            }
             
             //If there is no money of the casher ask for it
             existMoneyFromCasherAlready();
@@ -339,6 +367,8 @@ public class PtoVtaTouViewController extends PtoVtaTouJFrame {
                 try {
                     
                     this.newSale();
+                    
+                    jTProd.grabFocus();
                     
                 } catch (Exception ex) {
                     LoggerUtility.getSingleton().logError(this.getClass(), ex);
@@ -547,6 +577,20 @@ public class PtoVtaTouViewController extends PtoVtaTouJFrame {
                     jComUnid.grabFocus();
                 });
                 return;
+            }
+            
+            //Show message if the product has not existences ?
+            if(RepositoryFactory.getInstance().getConfgralRepository().getShowMessageWithNoExistencesInSalespoint().getVal()==1){
+                
+                //Get the warehouse configured for sales
+                final String warehouseForSale = RepositoryFactory.getInstance().getConfgralRepository().getWarehouseForSalesOnPointOfSales().getExtr();
+
+                //Get existences for producto
+                final Existalma Existalma = RepositoryFactory.getInstance().getExistalmasRepository().getByWarehouseAndProduct(warehouseForSale, productCode);
+                
+                if(Existalma.getExist()<=0){
+                    DialogsFactory.getSingleton().showOKCallbackDialog(baseJFrame, "errors_missing_existences", null);
+                }
             }
             
             //Get the selected unid
