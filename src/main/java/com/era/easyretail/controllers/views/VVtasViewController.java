@@ -35,6 +35,8 @@ public class VVtasViewController extends VVtasJFrame {
                 jBMosTActionPerformed(evt);
             });
             
+            this.disposeButton(jBSal);
+            
             //Configuretable
             this.BaseJTable = jTab;
             jTab.addShowColumn(TableHeaderFactory.getSigleton().getSalessTableHeader().getSALE_ID());
@@ -75,7 +77,7 @@ public class VVtasViewController extends VVtasJFrame {
     public void loadModelInFields(Object ObjectModel) throws  Exception {        
     }
     
-    private void jBBuscActionPerformed(java.awt.event.ActionEvent evt) {                                             
+    private void jBBuscActionPerformed(java.awt.event.ActionEvent evt) {
 
 	try{            	
             

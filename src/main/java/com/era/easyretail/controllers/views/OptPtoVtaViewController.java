@@ -25,6 +25,7 @@ import javax.swing.JFrame;
 public class OptPtoVtaViewController extends OptPtoVtaJFrame {
  
     private boolean returnSalesOnPointOfSales;
+    private boolean partialReturnsOfSalesOnPointOfSales;
     
     public OptPtoVtaViewController() {
         super("window_title_optsptovta");
@@ -46,9 +47,6 @@ public class OptPtoVtaViewController extends OptPtoVtaJFrame {
             jBVtas.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jBVtasActionPerformed(evt);
             });
-            jBCompa.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jBCompaActionPerformed(evt);
-            });
             jBDevP.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jBDevPActionPerformed(evt);
             });
@@ -56,7 +54,11 @@ public class OptPtoVtaViewController extends OptPtoVtaJFrame {
                 jBDevActionPerformed(evt);
             });
             
+            alwaysOnTop();
+                    
+            //Get configs
             returnSalesOnPointOfSales = RepositoryFactory.getInstance().getConfgralRepository().getReturnSalesOnPointOfSales().getVal()==1;
+            partialReturnsOfSalesOnPointOfSales = RepositoryFactory.getInstance().getConfgralRepository().getPartialReturnsOfSalesOnPointOfSales().getVal()==1;
                     
             this.disposeButton(jBSal);
             
@@ -215,8 +217,11 @@ public class OptPtoVtaViewController extends OptPtoVtaJFrame {
     
     private void jBImpVtasActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
-	try{            	
+	try{
             
+            dispose();
+            
+            ViewControlersFactory.getSingleton().getImprVtasViewController().setVisible();
 	}
 	catch (Exception ex) {
             LoggerUtility.getSingleton().logError(this.getClass(), ex);
@@ -264,26 +269,20 @@ public class OptPtoVtaViewController extends OptPtoVtaJFrame {
 	}
     }
     
-    private void jBCompaActionPerformed(java.awt.event.ActionEvent evt) {                                             
-
-	try{            	
-            
-	}
-	catch (Exception ex) {
-            LoggerUtility.getSingleton().logError(this.getClass(), ex);
-            try {
-                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
-            } catch (Exception ex1) {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
-            }
-	}
-    }
-    
     private void jBDevPActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	
             
+            //If the config is not permitted stop
+            if(!partialReturnsOfSalesOnPointOfSales){
+                DialogsFactory.getSingleton().showErrorStopByConfigOKDialog(baseJFrame, null);
+                return;
+            }
             
+            dispose();
+            
+            //Open the window
+            ViewControlersFactory.getSingleton().getDevPVtaPtoViewController().setVisible();
 	}
 	catch (Exception ex) {
             LoggerUtility.getSingleton().logError(this.getClass(), ex);

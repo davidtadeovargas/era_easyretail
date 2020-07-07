@@ -130,8 +130,8 @@ public class CanVtasViewController extends CanVtasJFrame {
             final Sales Sale = (Sales)jTab.getRowSelected();
                     
             //If the sale is already canceled stop
-            if(Sale.isCanceled()){
-                DialogsFactory.getSingleton().showErrorOKCallbackDialog(baseJFrame, "errors_sale_already_cancelled", (JFrame jFrame) -> {
+            if(Sale.isCanceled() || Sale.isDev() || Sale.isParcialDev()){
+                DialogsFactory.getSingleton().showErrorSaleNotContinueByEstatusOKDialog(baseJFrame, (JFrame jFrame) -> {
                     jTab.grabFocus();
                 });
                 return; 

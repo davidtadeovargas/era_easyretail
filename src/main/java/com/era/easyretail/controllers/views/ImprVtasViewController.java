@@ -7,8 +7,7 @@ package com.era.easyretail.controllers.views;
 
 import com.era.logger.LoggerUtility;
 import com.era.models.Sales;
-import com.era.repositories.RepositoryFactory;
-import com.era.views.DevVtaPtoJFrame;
+import com.era.views.ImprVtasJFrame;
 import com.era.views.dialogs.DialogsFactory;
 import com.era.views.tables.headers.TableHeaderFactory;
 import java.util.logging.Level;
@@ -19,16 +18,16 @@ import javax.swing.JFrame;
  *
  * @author PC
  */
-public class DevVtaPtoViewController extends DevVtaPtoJFrame {
+public class ImprVtasViewController extends ImprVtasJFrame{
         
-    public DevVtaPtoViewController(){
+    public ImprVtasViewController(){
         
         super("window_title_devs_sales");
         
         try {
             
-            jBDev.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jBDevActionPerformed(evt);
+            jBImp.addActionListener((java.awt.event.ActionEvent evt) -> {
+                jBImpActionPerformed(evt);
             });
             jBBusc.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jBBuscActionPerformed(evt);
@@ -71,25 +70,9 @@ public class DevVtaPtoViewController extends DevVtaPtoJFrame {
         }
     }
     
-    private void jBMosTActionPerformed(java.awt.event.ActionEvent evt) {
-    
-        try {
-            
-            this.jTab.initTableWithPagination();
-            
-        } catch (Exception ex) {
-            LoggerUtility.getSingleton().logError(this.getClass(), ex);
-            try {
-                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
-            } catch (Exception ex1) {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
-            }
-        }
-    }
-    
     private void jBBuscActionPerformed(java.awt.event.ActionEvent evt) {
-    
-        try {
+
+	try{            	
             
             //Get the value to search
             final String search = jTBusc.getText().trim();
@@ -101,21 +84,37 @@ public class DevVtaPtoViewController extends DevVtaPtoJFrame {
             
             //Search all the ocurrences
             this.jTab.getByLikeEncabezados(search);
-            
-        } catch (Exception ex) {
-            LoggerUtility.getSingleton().logError(this.getClass(), ex);
+	}
+	catch (Exception ex) {
+            LoggerUtility.getSingleton().logError(VVtasViewController.class, ex);
             try {
                 DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
             } catch (Exception ex1) {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
+                Logger.getLogger(VVtasViewController.class.getName()).log(Level.SEVERE, null, ex1);
             }
-        }
+	}
     }
     
-    private void jBDevActionPerformed(java.awt.event.ActionEvent evt) {
-        
-        try {
+    private void jBMosTActionPerformed(java.awt.event.ActionEvent evt) {                                             
+
+	try{            	
+            
+            this.jTab.initTableWithPagination();
+	}
+	catch (Exception ex) {
+            LoggerUtility.getSingleton().logError(VVtasViewController.class, ex);
+            try {
+                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+            } catch (Exception ex1) {
+                Logger.getLogger(VVtasViewController.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+	}
+    }
     
+    private void jBImpActionPerformed(java.awt.event.ActionEvent evt) {                                             
+
+	try{            	
+            
             //First select a sale
             if(!jTab.isRowSelected()){
                 DialogsFactory.getSingleton().showErrorOKNoSelectionCallbackDialog(baseJFrame, (JFrame jFrame) -> {
@@ -126,55 +125,17 @@ public class DevVtaPtoViewController extends DevVtaPtoJFrame {
             
             //Get the selected sale
             final Sales Sale = (Sales)jTab.getRowSelected();
-                    
-            //If the sale is already returned stop
-            if(Sale.isDev() || Sale.isCanceled() || Sale.isParcialDev()){
-                DialogsFactory.getSingleton().showErrorSaleNotContinueByEstatusOKDialog(baseJFrame, (JFrame jFrame) -> {
-                    jTab.grabFocus();
-                });
-                return; 
-            }
+         
+            //Print
             
-            //Type first a razon
-            final String razon = jTMot.getText().trim();
-            if(razon.isEmpty()){
-                DialogsFactory.getSingleton().showOKEmptyFieldCallbackDialog(baseJFrame, (JFrame jFrame) -> {
-                    jTMot.grabFocus();
-                });
-                return;
-            }
-            
-            DialogsFactory.getSingleton().showQuestionContinueDialog(baseJFrame, (JFrame jFrame) -> {
-                
-                try {
-                    
-                    //Return the sale
-                    RepositoryFactory.getInstance().getSalessRepository().returnSale(Sale.getId(), razon);
-
-                    //Reload the table
-                    jTab.initTableWithPagination();
-
-                    //Success
-                    DialogsFactory.getSingleton().showOKOperationCompletedCallbackDialog(baseJFrame, (JFrame jFrame1) -> {
-                    });
-                    
-                } catch (Exception ex) {
-                    LoggerUtility.getSingleton().logError(this.getClass(), ex);
-                    try {
-                        DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
-                    } catch (Exception ex1) {
-                        Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
-                    }
-                }
-            });
-            
-        } catch (Exception ex) {
-            LoggerUtility.getSingleton().logError(this.getClass(), ex);
+	}
+	catch (Exception ex) {
+            LoggerUtility.getSingleton().logError(VVtasViewController.class, ex);
             try {
                 DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
             } catch (Exception ex1) {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
+                Logger.getLogger(VVtasViewController.class.getName()).log(Level.SEVERE, null, ex1);
             }
-        }
+	}
     }
 }

@@ -53,6 +53,7 @@ public class ViewControlersFactory {
     private ReportsViewController ReportsViewController;
     private SubramosJFrame SubramosJFrame;
     private SeriesJFrame SeriesJFrame;
+    private ImprVtasViewController ImprVtasViewController;
     private SectoresJFrame SectoresJFrame;
     private ProvViewController ProvViewController;
     private DevPVtaPtoViewController DevPVtaPtoViewController;
@@ -533,7 +534,9 @@ public class ViewControlersFactory {
     }
     
     public OptPtoVtaViewController getOptPtoVtaViewController(){
-        OptPtoVtaViewController = new OptPtoVtaViewController();
+        if(OptPtoVtaViewController==null){
+            OptPtoVtaViewController = new OptPtoVtaViewController();
+        }        
         return OptPtoVtaViewController;       
     }
     
@@ -666,6 +669,11 @@ public class ViewControlersFactory {
     public DevVtaPtoViewController getDevVtaPtoViewController(){
         DevVtaPtoViewController = new DevVtaPtoViewController();
         return DevVtaPtoViewController;
+    }
+    
+    public ImprVtasViewController getImprVtasViewController(){
+        ImprVtasViewController = new ImprVtasViewController();
+        return ImprVtasViewController;
     }
     
     @Override
