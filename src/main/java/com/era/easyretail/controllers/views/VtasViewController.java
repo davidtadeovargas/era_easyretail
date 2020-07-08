@@ -551,6 +551,21 @@ public class VtasViewController extends VtasJFrame {
 
 	try{            	
             
+            //First select a sale to view
+            if(!jTableVentas.isRowSelected()){
+                DialogsFactory.getSingleton().showErrorOKNoSelectionCallbackDialog(baseJFrame, (JFrame jFrame) -> {
+                    jTableVentas.grabFocus();
+                });
+                return;
+            }
+            
+            //Get selected sale
+            final Sales Sale = (Sales)jTableVentas.getRowSelected();
+            
+            //Open the sale in view mode
+            final NewVtaViewController NewVtaViewController = ViewControlersFactory.getSingleton().getNewVtaViewController();
+            NewVtaViewController.setSale(Sale);
+            NewVtaViewController.setVisible();
 	}
 	catch (Exception ex) {
             LoggerUtility.getSingleton().logError(VtasViewController.class, ex);
@@ -610,7 +625,7 @@ public class VtasViewController extends VtasJFrame {
     private void jBNewActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	
-            
+            ViewControlersFactory.getSingleton().getNewVtaViewController().setVisible();
 	}
 	catch (Exception ex) {
             LoggerUtility.getSingleton().logError(VtasViewController.class, ex);
@@ -639,8 +654,8 @@ public class VtasViewController extends VtasJFrame {
     
     private void jBDevPActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
-	try{            	
-            
+	try{            
+            ViewControlersFactory.getSingleton().getDevPVtaPtoViewController().setVisible();
 	}
 	catch (Exception ex) {
             LoggerUtility.getSingleton().logError(VtasViewController.class, ex);
@@ -669,8 +684,8 @@ public class VtasViewController extends VtasJFrame {
     
     private void jBDevActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
-	try{            	
-            
+	try{
+            ViewControlersFactory.getSingleton().getDevVtaPtoViewController().setVisible();
 	}
 	catch (Exception ex) {
             LoggerUtility.getSingleton().logError(VtasViewController.class, ex);
@@ -715,60 +730,8 @@ public class VtasViewController extends VtasJFrame {
     private void jBCaActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try {
-            
-            //First select a sale
-            if(!jTableVentas.isRowSelected()){
-                DialogsFactory.getSingleton().showErrorOKNoSelectionCallbackDialog(baseJFrame, (JFrame jFrame) -> {
-                    jTableVentas.grabFocus();
-                });
-                return;
-            }
-            
-            //Get the selected sale
-            final Sales Sale = (Sales)jTableVentas.getRowSelected();
-                    
-            //If the sale is already canceled stop
-            if(Sale.isCanceled()){
-                DialogsFactory.getSingleton().showErrorOKCallbackDialog(baseJFrame, "errors_sale_already_cancelled", (JFrame jFrame) -> {
-                    jTableVentas.grabFocus();
-                });
-                return; 
-            }
-            
-            final String razon = "";
-                    
-            //Type first a razon
-            /*final String razon = jTMot.getText().trim();
-            if(razon.isEmpty()){
-                DialogsFactory.getSingleton().showOKEmptyFieldCallbackDialog(baseJFrame, (JFrame jFrame) -> {
-                    jTMot.grabFocus();
-                });
-                return;
-            }*/
-            
-            DialogsFactory.getSingleton().showQuestionContinueDialog(baseJFrame, (JFrame jFrame) -> {
-                
-                try {
-                    
-                    //Cancel the sale
-                    RepositoryFactory.getInstance().getSalessRepository().cancelSale(Sale.getId(), razon);
-                    
-                    //Reload the table
-                    jTableVentas.initTableWithPagination();
-                    
-                    //Success
-                    DialogsFactory.getSingleton().showOKOperationCompletedCallbackDialog(jFrame, (JFrame jFrame1) -> {
-                    });
-                    
-                } catch (Exception ex) {
-                    LoggerUtility.getSingleton().logError(this.getClass(), ex);
-                    try {
-                        DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
-                    } catch (Exception ex1) {
-                        Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
-                    }
-                }
-            });
+                        
+            ViewControlersFactory.getSingleton().getCanVtasViewController().setVisible();
             
         } catch (Exception ex) {
             LoggerUtility.getSingleton().logError(this.getClass(), ex);

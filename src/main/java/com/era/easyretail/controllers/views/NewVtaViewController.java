@@ -5,17 +5,40 @@
  */
 package com.era.easyretail.controllers.views;
 
+import com.era.datamodels.NewVtaCustomerInfoDataModel;
+import com.era.datamodels.NewVtaHeaderInfoDataModel;
+import com.era.datamodels.NewVtaProductInfoDataModel;
+import com.era.datamodels.TotalsDataModel;
 import com.era.views.NewVtaJFrame;
 import java.util.List;
 import com.era.logger.LoggerUtility;
+import com.era.models.Company;
+import com.era.models.Consec;
+import com.era.models.DocumentOrigin;
+import com.era.models.Kits;
+import com.era.models.Partvta;
+import com.era.models.Sales;
+import com.era.repositories.RepositoryFactory;
+import com.era.utilities.UtilitiesFactory;
 import com.era.views.dialogs.DialogsFactory;
+import com.era.views.tables.headers.TableHeaderFactory;
+import java.math.BigDecimal;
+import java.math.MathContext;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFrame;
 /**
  *
  * @author PC
  */
 public class NewVtaViewController extends NewVtaJFrame {
+    
+    private Sales Sale;
+    private NewVtaCustomerInfoDataModel NewVtaCustomerInfoDataModel;
+    private NewVtaProductInfoDataModel NewVtaProductInfoDataModel;
+    private NewVtaHeaderInfoDataModel NewVtaHeaderInfoDataModel;
+    private TotalsDataModel Totals;    
     
     public NewVtaViewController() {
         super("window_title_newvta");
@@ -28,84 +51,34 @@ public class NewVtaViewController extends NewVtaJFrame {
             jBSal.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jBSalActionPerformed(evt);
             });
-            jBProd.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jBProdActionPerformed(evt);
-            });
-            jBUltPre.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jBUltPreActionPerformed(evt);
-            });
-            jBList.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jBListActionPerformed(evt);
-            });
-            jBVeGran.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jBVeGranActionPerformed(evt);
-            });
-            jBTipCam.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jBTipCamActionPerformed(evt);
-            });
-            jBGranDescrip.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jBGranDescripActionPerformed(evt);
-            });
-            jBUltCostT.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jBUltCostTActionPerformed(evt);
-            });
-            jBExisAlma.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jBExisAlmaActionPerformed(evt);
-            });
-            jButton2.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jButton2ActionPerformed(evt);
-            });
-            jBCuentaCont.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jBCuentaContActionPerformed(evt);
-            });
-            jBtnReferencia.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jBtnReferenciaActionPerformed(evt);
-            });
-            jBDatsCarta.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jBDatsCartaActionPerformed(evt);
-            });
-            jButtonBuscarCliente.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jButtonBuscarClienteActionPerformed(evt);
-            });
-            jBDom.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jBDomActionPerformed(evt);
-            });
-            jButtonBuscarPedidos.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jButtonBuscarPedidosActionPerformed(evt);
-            });
-            jButtonBuscarRemisiones.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jButtonBuscarRemisionesActionPerformed(evt);
-            });
-            jBGenPDF.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jBGenPDFActionPerformed(evt);
-            });
             jBNew.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jBNewActionPerformed(evt);
+            });
+            jBCustomer.addActionListener((java.awt.event.ActionEvent evt) -> {
+                jBCustomerActionPerformed(evt);
+            });
+            jBHeader.addActionListener((java.awt.event.ActionEvent evt) -> {
+                jBHeaderActionPerformed(evt);
             });
             jBDel.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jBDelActionPerformed(evt);
             });
-            jButton1.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jButton1ActionPerformed(evt);
-            });
-            jBFilt.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jBFiltActionPerformed(evt);
-            });
-            jBTipoRelacion.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jBTipoRelacionActionPerformed(evt);
-            });
-            jBVend.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jBVendActionPerformed(evt);
-            });
-            jBCarSer.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jBCarSerActionPerformed(evt);
-            });
-            jBCarSer.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jBCarSerActionPerformed(evt);
-            });
             btnPrevio.addActionListener((java.awt.event.ActionEvent evt) -> {
                 btnPrevioActionPerformed(evt);
             });
+            
+            //Config table
+            this.BaseJTable = jTablePartidas;
+            jTablePartidas.addShowColumn(TableHeaderFactory.getSigleton().getPartvtasTableHeader().getROWNUMBER());
+            jTablePartidas.addShowColumn(TableHeaderFactory.getSigleton().getPartvtasTableHeader().getCANT());
+            jTablePartidas.addShowColumn(TableHeaderFactory.getSigleton().getPartvtasTableHeader().getPROD());            
+            jTablePartidas.addShowColumn(TableHeaderFactory.getSigleton().getPartvtasTableHeader().getUNID());
+            jTablePartidas.addShowColumn(TableHeaderFactory.getSigleton().getPartvtasTableHeader().getDESCRIP());
+            jTablePartidas.addShowColumn(TableHeaderFactory.getSigleton().getPartvtasTableHeader().getPRE());
+            
+            //Init empty table
+            final List<Partvta> items = new ArrayList<>();
+            jTablePartidas.initTable(items);
             
         }catch (Exception ex) {
             LoggerUtility.getSingleton().logError(NewVtaViewController.class, ex);
@@ -116,6 +89,10 @@ public class NewVtaViewController extends NewVtaJFrame {
             }
         }
     }
+
+    public void setSale(Sales Sale) {
+        this.Sale = Sale;
+    }
     
     @Override
     public void clearFields() throws Exception{
@@ -125,10 +102,94 @@ public class NewVtaViewController extends NewVtaJFrame {
     public void loadModelInFields(Object ObjectModel) throws  Exception {        
     }
     
-    private void jBGuarActionPerformed(java.awt.event.ActionEvent evt) {                                             
+    
+    private void jBGuarActionPerformed(java.awt.event.ActionEvent evt) {
 
 	try{            	
             
+            //First need customer info
+            if(NewVtaCustomerInfoDataModel==null){
+                DialogsFactory.getSingleton().showErrorOKCallbackDialog(baseJFrame, "errors_customer_info_missing", (JFrame jFrame) -> {
+                    jBCustomer.requestFocus();
+                });
+                return;
+            }
+            
+            //First need header info
+            if(NewVtaHeaderInfoDataModel==null){
+                DialogsFactory.getSingleton().showErrorOKCallbackDialog(baseJFrame, "errors_sale_info_missing", (JFrame jFrame) -> {
+                    jBHeader.requestFocus();
+                });
+                return;
+            }
+            
+            //Get all parts
+            final List<Partvta> parts = (List<Partvta>)jTablePartidas.getAllItemsInTable();
+            if(parts.isEmpty()){
+                DialogsFactory.getSingleton().showErrorCeroItemsOKDialog(baseJFrame, (JFrame jFrame) -> {
+                    jTablePartidas.grabFocus();
+                });
+                return;
+            }
+            
+            DialogsFactory.getSingleton().showQuestionContinueDialog(baseJFrame, (JFrame jFrame) -> {
+                
+                try {
+                          
+                    final Consec Consec = (Consec)RepositoryFactory.getInstance().getConsecsRepository().getSalesConsec(NewVtaHeaderInfoDataModel.getSerie().getSer());
+                    
+                    final DocumentOrigin DocumentOrigin = RepositoryFactory.getInstance().getDocumentOriginRepository().getDocumentOriginFAC();
+                    
+                    //Create the sales model
+                    final Sales Sales = new Sales();
+                    Sales.setCompanyCode(NewVtaCustomerInfoDataModel.getCompany().getCompanyCode());
+                    Sales.setRazon(NewVtaCustomerInfoDataModel.getCompany().getNom());
+                    Sales.setSubtotal(Totals.getSubtotal());
+                    Sales.setTax(Totals.getTaxes());
+                    Sales.setTotal(Totals.getTotal());                    
+                    Sales.setAccount(NewVtaHeaderInfoDataModel.getAccount());
+                    Sales.setReferenceNumber(String.valueOf(Consec.getConsec()));
+                    Sales.setSerie(NewVtaHeaderInfoDataModel.getSerie().getCode());
+                    Sales.setNoser("");
+                    Sales.setCoinCode(NewVtaHeaderInfoDataModel.getCoin().getCode());
+                    Sales.setSalesMan(NewVtaHeaderInfoDataModel.getSalesman().getCode());
+                    Sales.setPaymentForm(NewVtaHeaderInfoDataModel.getCPaymentForm().getC_FormaPago());
+                    Sales.setTypeExchange(new BigDecimal(Float.toString(NewVtaHeaderInfoDataModel.getCoin().getValue())));
+                    Sales.setTotalTranslade(BigDecimal.ZERO);
+                    Sales.setTotalRetention(BigDecimal.ZERO);
+                    Sales.setDocumentType(DocumentOrigin.getType());
+                    Sales.setPaymentMethod(NewVtaHeaderInfoDataModel.getMetogoPago().getCode());
+                    Sales.setEmisionDate(UtilitiesFactory.getSingleton().getDateTimeUtility().getCurrentDate());
+                    Sales.setDeliverDate(UtilitiesFactory.getSingleton().getDateTimeUtility().getCurrentDate());
+                    Sales.setTicket(false);
+                    Sales.setEstatus(RepositoryFactory.getInstance().getSalessRepository().getConfirmedSaleStatus());
+                    Sales.setObservation("");
+                    Sales.setSalesPoint(false);
+                    
+                    //Save the sale
+                    RepositoryFactory.getInstance().getSalessRepository().saveSale(Sales, parts,BigDecimal.ZERO,BigDecimal.ZERO,BigDecimal.ZERO);
+
+                    //If the user wants to update the customer info
+                    if(NewVtaCustomerInfoDataModel.isUpdateCustomer()){
+                        
+                        final Company Company_ = NewVtaCustomerInfoDataModel.getCompany();
+                        
+                        RepositoryFactory.getInstance().getCompanysRepository().update(Company_);
+                    }
+                    
+                    DialogsFactory.getSingleton().showOKOperationCompletedCallbackDialog(baseJFrame, (JFrame jFrame1) -> {
+                        dispose();
+                    });
+                    
+                } catch (Exception ex) {
+                    LoggerUtility.getSingleton().logError(this.getClass(), ex);
+                    try {
+                        DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+                    } catch (Exception ex1) {
+                        Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
+                    }
+                }
+            });
 	}
 	catch (Exception ex) {
             LoggerUtility.getSingleton().logError(this.getClass(), ex);
@@ -143,262 +204,7 @@ public class NewVtaViewController extends NewVtaJFrame {
     private void jBSalActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	
-            
-	}
-	catch (Exception ex) {
-            LoggerUtility.getSingleton().logError(this.getClass(), ex);
-            try {
-                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
-            } catch (Exception ex1) {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
-            }
-	}
-    }
-    
-    private void jBProdActionPerformed(java.awt.event.ActionEvent evt) {                                             
-
-	try{            	
-            
-	}
-	catch (Exception ex) {
-            LoggerUtility.getSingleton().logError(this.getClass(), ex);
-            try {
-                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
-            } catch (Exception ex1) {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
-            }
-	}
-    }
-    
-    private void jBUltPreActionPerformed(java.awt.event.ActionEvent evt) {                                             
-
-	try{            	
-            
-	}
-	catch (Exception ex) {
-            LoggerUtility.getSingleton().logError(this.getClass(), ex);
-            try {
-                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
-            } catch (Exception ex1) {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
-            }
-	}
-    }
-    
-    private void jBListActionPerformed(java.awt.event.ActionEvent evt) {                                             
-
-	try{            	
-            
-	}
-	catch (Exception ex) {
-            LoggerUtility.getSingleton().logError(this.getClass(), ex);
-            try {
-                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
-            } catch (Exception ex1) {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
-            }
-	}
-    }
-    
-    private void jBVeGranActionPerformed(java.awt.event.ActionEvent evt) {                                             
-
-	try{            	
-            
-	}
-	catch (Exception ex) {
-            LoggerUtility.getSingleton().logError(this.getClass(), ex);
-            try {
-                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
-            } catch (Exception ex1) {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
-            }
-	}
-    }
-    
-    private void jBTipCamActionPerformed(java.awt.event.ActionEvent evt) {                                             
-
-	try{            	
-            
-	}
-	catch (Exception ex) {
-            LoggerUtility.getSingleton().logError(this.getClass(), ex);
-            try {
-                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
-            } catch (Exception ex1) {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
-            }
-	}
-    }
-    
-    private void jBGranDescripActionPerformed(java.awt.event.ActionEvent evt) {                                             
-
-	try{            	
-            
-	}
-	catch (Exception ex) {
-            LoggerUtility.getSingleton().logError(this.getClass(), ex);
-            try {
-                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
-            } catch (Exception ex1) {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
-            }
-	}
-    }
-    
-    private void jBUltCostTActionPerformed(java.awt.event.ActionEvent evt) {                                             
-
-	try{            	
-            
-	}
-	catch (Exception ex) {
-            LoggerUtility.getSingleton().logError(this.getClass(), ex);
-            try {
-                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
-            } catch (Exception ex1) {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
-            }
-	}
-    }
-    
-    private void jBExisAlmaActionPerformed(java.awt.event.ActionEvent evt) {                                             
-
-	try{            	
-            
-	}
-	catch (Exception ex) {
-            LoggerUtility.getSingleton().logError(this.getClass(), ex);
-            try {
-                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
-            } catch (Exception ex1) {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
-            }
-	}
-    }
-    
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {                                             
-
-	try{            	
-            
-	}
-	catch (Exception ex) {
-            LoggerUtility.getSingleton().logError(this.getClass(), ex);
-            try {
-                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
-            } catch (Exception ex1) {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
-            }
-	}
-    }
-    
-    private void jBCuentaContActionPerformed(java.awt.event.ActionEvent evt) {                                             
-
-	try{            	
-            
-	}
-	catch (Exception ex) {
-            LoggerUtility.getSingleton().logError(this.getClass(), ex);
-            try {
-                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
-            } catch (Exception ex1) {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
-            }
-	}
-    }
-    
-    private void jBtnReferenciaActionPerformed(java.awt.event.ActionEvent evt) {                                             
-
-	try{            	
-            
-	}
-	catch (Exception ex) {
-            LoggerUtility.getSingleton().logError(this.getClass(), ex);
-            try {
-                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
-            } catch (Exception ex1) {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
-            }
-	}
-    }
-    
-    private void jBDatsCartaActionPerformed(java.awt.event.ActionEvent evt) {                                             
-
-	try{            	
-            
-	}
-	catch (Exception ex) {
-            LoggerUtility.getSingleton().logError(this.getClass(), ex);
-            try {
-                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
-            } catch (Exception ex1) {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
-            }
-	}
-    }
-    
-    private void jButtonBuscarClienteActionPerformed(java.awt.event.ActionEvent evt) {                                             
-
-	try{            	
-            
-	}
-	catch (Exception ex) {
-            LoggerUtility.getSingleton().logError(this.getClass(), ex);
-            try {
-                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
-            } catch (Exception ex1) {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
-            }
-	}
-    }
-    
-    private void jBDomActionPerformed(java.awt.event.ActionEvent evt) {                                             
-
-	try{            	
-            
-	}
-	catch (Exception ex) {
-            LoggerUtility.getSingleton().logError(this.getClass(), ex);
-            try {
-                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
-            } catch (Exception ex1) {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
-            }
-	}
-    }
-    
-    private void jButtonBuscarPedidosActionPerformed(java.awt.event.ActionEvent evt) {                                             
-
-	try{            	
-            
-	}
-	catch (Exception ex) {
-            LoggerUtility.getSingleton().logError(this.getClass(), ex);
-            try {
-                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
-            } catch (Exception ex1) {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
-            }
-	}
-    }
-    
-    private void jButtonBuscarRemisionesActionPerformed(java.awt.event.ActionEvent evt) {                                             
-
-	try{            	
-            
-	}
-	catch (Exception ex) {
-            LoggerUtility.getSingleton().logError(this.getClass(), ex);
-            try {
-                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
-            } catch (Exception ex1) {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
-            }
-	}
-    }
-    
-    private void jBGenPDFActionPerformed(java.awt.event.ActionEvent evt) {                                             
-
-	try{            	
-            
+            dispose();
 	}
 	catch (Exception ex) {
             LoggerUtility.getSingleton().logError(this.getClass(), ex);
@@ -413,7 +219,115 @@ public class NewVtaViewController extends NewVtaJFrame {
     private void jBNewActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	
-            
+            final NewVtaProductInfoController NewVtaProductInfoController = ViewControlersFactory.getSingleton().getNewVtaProductInfoController();
+            NewVtaProductInfoController.setOnResult((NewVtaProductInfoDataModel NewVtaProductInfoDataModel_) -> {
+                
+                try {
+                 
+                    this.NewVtaProductInfoDataModel = NewVtaProductInfoDataModel_;
+
+                    //Calculate the imports
+                    final BigDecimal import_ = this.NewVtaProductInfoDataModel.getCant().multiply(this.NewVtaProductInfoDataModel.getPrice());
+
+                    //Create table model
+                    final Partvta Partvta = new Partvta();
+                    Partvta.setAlma("SYS");
+                    Partvta.setMon("");
+                    Partvta.setCant(this.NewVtaProductInfoDataModel.getCant());
+                    Partvta.setDescrip(this.NewVtaProductInfoDataModel.getProduct().getDescription());
+                    Partvta.setEskit(this.NewVtaProductInfoDataModel.getProduct().getCompound());
+                    Partvta.setList(this.NewVtaProductInfoDataModel.getList());
+                    Partvta.setPre(this.NewVtaProductInfoDataModel.getPrice());
+                    Partvta.setTipcam(BigDecimal.ZERO);
+                    Partvta.setUnid(this.NewVtaProductInfoDataModel.getUnid().getCode());
+                    Partvta.setImpo(import_);
+                    Partvta.setImpue(0);
+                    Partvta.setProd(this.NewVtaProductInfoDataModel.getProduct().getCode());                
+                    BigDecimal disccount = new BigDecimal(this.NewVtaProductInfoDataModel.getDisccount(), MathContext.DECIMAL64);
+                    Partvta.setDescu(disccount);
+
+                    jTablePartidas.addObject(Partvta);
+
+                    //Recalc totals                    
+                    Totals = calculateTotals();                        
+
+                    //Fill the totals
+                    fillTotals(Totals);
+                    
+                } catch (Exception ex) {
+                    LoggerUtility.getSingleton().logError(this.getClass(), ex);
+                    try {
+                        DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+                    } catch (Exception ex1) {
+                        Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
+                    }
+                }
+            });
+            NewVtaProductInfoController.setVisible();
+	}
+	catch (Exception ex) {
+            LoggerUtility.getSingleton().logError(this.getClass(), ex);
+            try {
+                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+            } catch (Exception ex1) {
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
+            }
+	}
+    }
+    
+    private void jBCustomerActionPerformed(java.awt.event.ActionEvent evt) {                                             
+
+	try{            	
+            final NewVtaCustomerInfoViewController NewVtaCustomerInfoViewController = ViewControlersFactory.getSingleton().getNewVtaCustomerInfoViewController();
+            NewVtaCustomerInfoViewController.setOnResult((NewVtaCustomerInfoDataModel NewVtaCustomerInfoDataModel_) -> {
+                NewVtaCustomerInfoDataModel = NewVtaCustomerInfoDataModel_;
+                
+                jLabelCustomer.setText(NewVtaCustomerInfoDataModel.getCompany().getNom());
+                jLabelAddress.setText(NewVtaCustomerInfoDataModel.getCompany().getCalle() + ", Ext: " + NewVtaCustomerInfoDataModel.getCompany().getNoext() + ", Col: " + NewVtaCustomerInfoDataModel.getCompany().getCol());
+                jLabelAddress2.setText(NewVtaCustomerInfoDataModel.getCompany().getPai() + "," + NewVtaCustomerInfoDataModel.getCompany().getCiu() + ", CP " + NewVtaCustomerInfoDataModel.getCompany().getCP());
+                jLabelAddress3.setText(NewVtaCustomerInfoDataModel.getCompany().getTel());
+            });
+            if(NewVtaCustomerInfoDataModel!=null){
+                NewVtaCustomerInfoViewController.setNewVtaCustomerInfoDataModel(NewVtaCustomerInfoDataModel);
+            }                
+            NewVtaCustomerInfoViewController.setVisible();
+	}
+	catch (Exception ex) {
+            LoggerUtility.getSingleton().logError(this.getClass(), ex);
+            try {
+                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+            } catch (Exception ex1) {
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
+            }
+	}
+    }
+    
+    private void jBHeaderActionPerformed(java.awt.event.ActionEvent evt) {                                             
+
+	try{            	
+            final NewVtaHeaderInfoController NewVtaHeaderInfoController = ViewControlersFactory.getSingleton().getNewVtaHeaderInfoController();
+            if(NewVtaHeaderInfoDataModel!=null){
+                NewVtaHeaderInfoController.setNewVtaHeaderInfoDataModel(NewVtaHeaderInfoDataModel);
+            }
+            NewVtaHeaderInfoController.setOnResult((NewVtaHeaderInfoDataModel NewVtaHeaderInfoDataModel_) -> {
+                
+                this.NewVtaHeaderInfoDataModel = NewVtaHeaderInfoDataModel_;
+                                
+                final String date = this.NewVtaHeaderInfoDataModel.getDate()==null?UtilitiesFactory.getSingleton().getDateTimeUtility().getCurrentDate().toString():this.NewVtaHeaderInfoDataModel.getDate();
+                
+                //Create the info text
+                final String info = "Fecha: " + date + "\n" +
+                                    "Forma de pago: " + this.NewVtaHeaderInfoDataModel.getCPaymentForm().getDescription() + "\n" +
+                                    "Moneda: " + this.NewVtaHeaderInfoDataModel.getCoin().getDescription() + "\n" +
+                                    "Uso CFDI: " + this.NewVtaHeaderInfoDataModel.getCUsoCFDI().getDescription() + "\n" +
+                                    "Vendedor: " + this.NewVtaHeaderInfoDataModel.getSalesman().getName() + "\n" + 
+                                    "Serie: " + this.NewVtaHeaderInfoDataModel.getSerie().getDescription() + "\n" +
+                                    "Observaciones: " + this.NewVtaHeaderInfoDataModel.getObervations() + "\n";
+                
+                //Set the info
+                jTextArea1.setText(info);
+            });
+            NewVtaHeaderInfoController.setVisible();
 	}
 	catch (Exception ex) {
             LoggerUtility.getSingleton().logError(this.getClass(), ex);
@@ -428,7 +342,40 @@ public class NewVtaViewController extends NewVtaJFrame {
     private void jBDelActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	
+    
+            //First select in table
+            if(!jTablePartidas.isRowSelected()){
+                DialogsFactory.getSingleton().showErrorOKNoSelectionCallbackDialog(baseJFrame, (JFrame jFrame) -> {
+                    jTablePartidas.grabFocus();
+                });
+                return;
+            }
             
+            DialogsFactory.getSingleton().showQuestionContinueDialog(baseJFrame, (JFrame jFrame) -> {
+                
+                try {                    
+                    
+                    //Get selected object
+                    final Partvta Partvta = (Partvta)jTablePartidas.getRowSelected();
+                    
+                    //Remove the object from the table
+                    jTablePartidas.deleteObject(Partvta);
+                    
+                    //Recalc totals                    
+                    Totals = calculateTotals();                        
+            
+                    //Fill the totals
+                    fillTotals(Totals);
+                    
+                } catch (Exception ex) {
+                    LoggerUtility.getSingleton().logError(this.getClass(), ex);
+                    try {
+                        DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+                    } catch (Exception ex1) {
+                        Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
+                    }
+                }
+            });
 	}
 	catch (Exception ex) {
             LoggerUtility.getSingleton().logError(this.getClass(), ex);
@@ -440,79 +387,84 @@ public class NewVtaViewController extends NewVtaJFrame {
 	}
     }
     
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                             
-
-	try{            	
-            
-	}
-	catch (Exception ex) {
-            LoggerUtility.getSingleton().logError(this.getClass(), ex);
-            try {
-                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
-            } catch (Exception ex1) {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
-            }
-	}
+    private void fillTotals(final TotalsDataModel Totals) throws Exception {
+        
+        //Place in fields
+        jTSubTot.setText(UtilitiesFactory.getSingleton().getNumbersUtility().toMoneyFormat(String.valueOf(Totals.getSubtotal().doubleValue())));
+        campo_impuesto.setText(UtilitiesFactory.getSingleton().getNumbersUtility().toMoneyFormat(String.valueOf(Totals.getTaxes().doubleValue())));
+        jTTot.setText(UtilitiesFactory.getSingleton().getNumbersUtility().toMoneyFormat(String.valueOf(Totals.getTotal().doubleValue())));
+        jTTotDesc.setText(UtilitiesFactory.getSingleton().getNumbersUtility().toMoneyFormat(String.valueOf(Totals.getDisccount().doubleValue())));
     }
     
-    private void jBFiltActionPerformed(java.awt.event.ActionEvent evt) {                                             
+    private TotalsDataModel calculateTotals() throws Exception {
+        
+        //Get all table items
+        final List<Partvta> items = (List<Partvta>)jTablePartidas.getAllItemsInTable();
 
-	try{            	
-            
-	}
-	catch (Exception ex) {
-            LoggerUtility.getSingleton().logError(this.getClass(), ex);
-            try {
-                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
-            } catch (Exception ex1) {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
-            }
-	}
-    }
-    
-    private void jBTipoRelacionActionPerformed(java.awt.event.ActionEvent evt) {                                             
+        //Contains the total
+        BigDecimal taxes = BigDecimal.ZERO;
+        BigDecimal total = BigDecimal.ZERO;
+        BigDecimal subtotal = BigDecimal.ZERO;
+        BigDecimal cant = BigDecimal.ZERO;
+        BigDecimal disccountTotal = BigDecimal.ZERO;
+        
+        //Loop to calculate totals
+        for(Partvta Partvta:items){
 
-	try{            	
-            
-	}
-	catch (Exception ex) {
-            LoggerUtility.getSingleton().logError(this.getClass(), ex);
-            try {
-                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
-            } catch (Exception ex1) {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
-            }
-	}
-    }
-    
-    private void jBVendActionPerformed(java.awt.event.ActionEvent evt) {                                             
+            //Get the price
+            final BigDecimal price = Partvta.getPre();
 
-	try{            	
+            //Get amount
+            final BigDecimal qty = Partvta.getCant();
             
-	}
-	catch (Exception ex) {
-            LoggerUtility.getSingleton().logError(this.getClass(), ex);
-            try {
-                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
-            } catch (Exception ex1) {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
-            }
-	}
-    }
-    
-    private void jBCarSerActionPerformed(java.awt.event.ActionEvent evt) {                                             
+            //Calculate the import
+            BigDecimal import_ = price.multiply(qty);
 
-	try{            	
+            //Get the disccount
+            final BigDecimal descu = Partvta.getDescu();
+            final BigDecimal descuTot = descu.divide(new BigDecimal(100, MathContext.DECIMAL64));
             
-	}
-	catch (Exception ex) {
-            LoggerUtility.getSingleton().logError(this.getClass(), ex);
-            try {
-                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
-            } catch (Exception ex1) {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
+            //Get the disccount                        
+            BigDecimal totalDisccount = descuTot.multiply(import_);
+
+            disccountTotal = disccountTotal.add(totalDisccount);
+            
+            //Remove the disccount
+            import_ = import_.subtract(totalDisccount);
+            
+            //Continue adding the subtotal
+            subtotal = subtotal.add(import_);
+
+            //Continue adding the quantity
+            cant = cant.add(qty);
+            
+            //If the product is kit
+            if(Partvta.isEskit()){
+                
+                //Get all the components of the product
+                final List<Kits> kits = RepositoryFactory.getInstance().getKitssRepository().getComponentsByKit(Partvta.getProd());
+                
+                for(Kits Kit: kits){
+                    taxes = taxes.add(RepositoryFactory.getInstance().getProductsRepository().getTotalTaxesOfProduct(Kit.getProd(), import_));
+                }
             }
-	}
+            else{
+                taxes = taxes.add(RepositoryFactory.getInstance().getProductsRepository().getTotalTaxesOfProduct(Partvta.getProd(), import_));
+            }
+        }
+
+        //Create the total
+        total = total.add(subtotal.add(taxes));
+
+        //Create the model
+        final TotalsDataModel Totals_ = new TotalsDataModel();
+        Totals_.setTaxes(taxes);
+        Totals_.setDisccount(disccountTotal);
+        Totals_.setSubtotal(subtotal);
+        Totals_.setTotal(total);
+        Totals_.setCant(cant);
+
+        return Totals_;
     }
     
     private void btnPrevioActionPerformed(java.awt.event.ActionEvent evt) {                                             

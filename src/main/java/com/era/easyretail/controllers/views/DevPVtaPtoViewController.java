@@ -141,6 +141,8 @@ public class DevPVtaPtoViewController extends DevPVtaPtoJFrame {
                 return; 
             }
             
+            dispose();
+            
             final DevPVtaViewController DevPVtaViewController = ViewControlersFactory.getSingleton().getDevPVtaViewController();
             DevPVtaViewController.setSale(Sale);
             DevPVtaViewController.setVisible();

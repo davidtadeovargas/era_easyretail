@@ -13,13 +13,11 @@ import com.era.logger.LoggerUtility;
 import com.era.models.Coin;
 import com.era.models.Company;
 import com.era.models.Existalma;
-import com.era.models.ImpuesXProduct;
 import com.era.models.Kits;
 import com.era.models.Line;
 import com.era.models.Partvta;
 import com.era.models.Product;
 import com.era.models.Sales;
-import com.era.models.Tax;
 import com.era.models.Unid;
 import com.era.models.User;
 import com.era.repositories.RepositoryFactory;
@@ -41,7 +39,7 @@ public class PtoVtaTouViewController extends PtoVtaTouJFrame {
  
     private String productCode;
     private String productDescription;
-    private TotalsDataModel Totals;    
+    private TotalsDataModel Totals;
     private Company Company;
     
     //Configs
@@ -102,7 +100,10 @@ public class PtoVtaTouViewController extends PtoVtaTouJFrame {
             this.addMouseListenerClicked(jLabel1, (MouseEvent evt) -> {
                 
                 try {
-                    ViewControlersFactory.getSingleton().getOptPtoVtaViewController().setVisible();
+                    final OptPtoVtaViewController OptPtoVtaViewController = ViewControlersFactory.getSingleton().getOptPtoVtaViewController();
+                    OptPtoVtaViewController.readConfigs();
+                    OptPtoVtaViewController.setVisible();
+                    
                 } catch (Exception ex) {
                     LoggerUtility.getSingleton().logError(this.getClass(), ex);
                     try {
@@ -337,12 +338,12 @@ public class PtoVtaTouViewController extends PtoVtaTouJFrame {
                 //Get all the components of the product
                 final List<Kits> kits = RepositoryFactory.getInstance().getKitssRepository().getComponentsByKit(Partvta.getProd());
                 
-                for(Kits Kit: kits){
-                    taxes = taxes.add(getTotalTaxesOfProduct(Kit.getProd(), import_));
+                for(Kits Kit: kits){                    
+                    taxes = taxes.add(RepositoryFactory.getInstance().getProductsRepository().getTotalTaxesOfProduct(Kit.getProd(), import_));
                 }
             }
             else{
-                taxes = taxes.add(getTotalTaxesOfProduct(Partvta.getProd(), import_));
+                taxes = taxes.add(RepositoryFactory.getInstance().getProductsRepository().getTotalTaxesOfProduct(Partvta.getProd(), import_));
             }
         }
 
@@ -358,24 +359,6 @@ public class PtoVtaTouViewController extends PtoVtaTouJFrame {
         Totals_.setCant(cant);
 
         return Totals_;
-    }
-    
-    private BigDecimal getTotalTaxesOfProduct(final String productCode, final BigDecimal import_) throws Exception {
-        
-        //Get the taxes of the product
-        final List<ImpuesXProduct> taxesProduct = RepositoryFactory.getInstance().getImpuesXProductRepository().getAllByProd(productCode);
-
-        BigDecimal taxes = BigDecimal.ZERO;
-        
-        //Iterate over all the taxes to calculate to taxes total
-        for(ImpuesXProduct ImpuesXProduct: taxesProduct){
-            final String taxCode = ImpuesXProduct.getImpue();
-            final Tax Tax = (Tax)RepositoryFactory.getInstance().getTaxesRepository().getByCode(taxCode);
-            final double tax = Tax.getValue() / 100;
-            taxes = taxes.add(import_.multiply(new BigDecimal(tax, MathContext.DECIMAL64)));
-        }
-        
-        return taxes;
     }
     
     private void jBNewVtaActionPerformed(java.awt.event.ActionEvent evt) {
@@ -611,6 +594,27 @@ public class PtoVtaTouViewController extends PtoVtaTouJFrame {
                     jTProd.grabFocus();
                 });
                 return;
+            }
+            
+            //If the product doesnt have a price
+            if(Product.getPriceList1()==0){
+                DialogsFactory.getSingleton().showErrorOKCallbackDialog(baseJFrame, "errors_product_without_price", (JFrame jFrame) -> {
+                    jTProd.grabFocus();
+                });
+                return;
+            }
+            
+            //If the product is kit
+            if(Product.getCompound()){
+                
+                //Get all the components of the kit
+                final List<Kits> components = RepositoryFactory.getInstance().getKitssRepository().getComponentsByKit(productCode);
+                if(components.isEmpty()){
+                    DialogsFactory.getSingleton().showErrorOKCallbackDialog(baseJFrame, "errors_kit_without_components", (JFrame jFrame) -> {
+                        jTProd.grabFocus();
+                    });
+                    return;
+                }
             }
             
             //If the product is not for sale

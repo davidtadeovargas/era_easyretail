@@ -344,7 +344,7 @@ public class LinesViewController extends LinesJFrame {
                 DialogsFactory.getSingleton().showErrorFileNotExistsOKDialog(baseJFrame, (JFrame jFrame) -> {
                 });
                 return;
-            }
+            }                        
             
             //Question if continue
             DialogsFactory.getSingleton().showQuestionContinueDialog(baseJFrame, (JFrame jFrame) -> {
@@ -444,12 +444,21 @@ public class LinesViewController extends LinesJFrame {
                 return;
             }
             
+            //Get selected object
+            final Line Line = (Line)jTab.getRowSelected();
+                    
+            //Check if linea is associated to any product
+            final boolean existsLineInProduct = RepositoryFactory.getInstance().getProductsRepository().existsLineInProduct(Line.getCode());
+            if(existsLineInProduct){
+                DialogsFactory.getSingleton().showErrorOKCallbackDialog(baseJFrame, "errors_line_associated_with_product_stop", (JFrame jFrame) -> {
+                    jTab.grabFocus();
+                });
+               return; 
+            }
+            
             DialogsFactory.getSingleton().showQuestionContinueDialog(baseJFrame, (JFrame jFrame) -> {
                 
                 try {
-                    
-                    //Get selected object
-                    final Line Line = (Line)jTab.getRowSelected();
     
                     //Delete from the db
                     RepositoryFactory.getInstance().getLinesRepository().delete(Line);                    

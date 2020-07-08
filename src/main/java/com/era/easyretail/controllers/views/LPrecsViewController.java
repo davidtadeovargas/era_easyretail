@@ -69,6 +69,8 @@ public class LPrecsViewController extends LPrecsJFrame {
             this.JComponentUtils.onlyDecimals(jTUtil9V);
             this.JComponentUtils.onlyDecimals(jTUtil10V);
             
+            jTPre1.grabFocus();
+            
         }catch (Exception ex) {
             LoggerUtility.getSingleton().logError(LPrecsViewController.class, ex);
             try {

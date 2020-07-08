@@ -43,14 +43,17 @@ public class ViewControlersFactory {
     private SearchViewController SearchViewController;
     private PrincipViewController PrincipViewController;
     private DevPVtaViewController DevPVtaViewController;
+    private NewVtaHeaderInfoController NewVtaHeaderInfoController;
     private LinesViewController LinesViewController;
     private VerCtaContJFrame VerCtaContJFrame;
     private UsrsJFrame UsrsJFrame;
     private UnidadesJFrame UnidadesJFrame;
+    private NewVtaCustomerInfoViewController NewVtaCustomerInfoViewController;
     private GeneralCatalogsViewController GeneralCatalogsViewController;
     private TipsPagsJFrame TipsPagsJFrame;
     private IngreCajViewController IngreCajViewController;
     private ReportsViewController ReportsViewController;
+    private NewVtaProductInfoController NewVtaProductInfoController;
     private SubramosJFrame SubramosJFrame;
     private SeriesJFrame SeriesJFrame;
     private ImprVtasViewController ImprVtasViewController;
@@ -674,6 +677,21 @@ public class ViewControlersFactory {
     public ImprVtasViewController getImprVtasViewController(){
         ImprVtasViewController = new ImprVtasViewController();
         return ImprVtasViewController;
+    }
+ 
+    public NewVtaCustomerInfoViewController getNewVtaCustomerInfoViewController(){
+        NewVtaCustomerInfoViewController = new NewVtaCustomerInfoViewController();
+        return NewVtaCustomerInfoViewController;
+    }
+ 
+    public NewVtaHeaderInfoController getNewVtaHeaderInfoController(){
+        NewVtaHeaderInfoController = new NewVtaHeaderInfoController();
+        return NewVtaHeaderInfoController;
+    }
+ 
+    public NewVtaProductInfoController getNewVtaProductInfoController(){
+        NewVtaProductInfoController = new NewVtaProductInfoController();
+        return NewVtaProductInfoController;
     }
     
     @Override

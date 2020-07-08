@@ -56,10 +56,6 @@ public class OptPtoVtaViewController extends OptPtoVtaJFrame {
             
             alwaysOnTop();
                     
-            //Get configs
-            returnSalesOnPointOfSales = RepositoryFactory.getInstance().getConfgralRepository().getReturnSalesOnPointOfSales().getVal()==1;
-            partialReturnsOfSalesOnPointOfSales = RepositoryFactory.getInstance().getConfgralRepository().getPartialReturnsOfSalesOnPointOfSales().getVal()==1;
-                    
             this.disposeButton(jBSal);
             
         }catch (Exception ex) {
@@ -68,6 +64,24 @@ public class OptPtoVtaViewController extends OptPtoVtaJFrame {
                 DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
             } catch (Exception ex1) {
                 Logger.getLogger(OptPtoVtaViewController.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+        }
+    }
+    
+    public void readConfigs(){
+        
+        try {
+            
+            //Get configs
+            returnSalesOnPointOfSales = RepositoryFactory.getInstance().getConfgralRepository().getReturnSalesOnPointOfSales().getVal()==1;
+            partialReturnsOfSalesOnPointOfSales = RepositoryFactory.getInstance().getConfgralRepository().getPartialReturnsOfSalesOnPointOfSales().getVal()==1;
+        
+        } catch (Exception ex) {
+            LoggerUtility.getSingleton().logError(this.getClass(), ex);
+            try {
+                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+            } catch (Exception ex1) {
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
             }
         }
     }
