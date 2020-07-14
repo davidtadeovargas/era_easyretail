@@ -140,6 +140,11 @@ public class NewVtaViewController extends NewVtaJFrame {
                     
                     final DocumentOrigin DocumentOrigin = RepositoryFactory.getInstance().getDocumentOriginRepository().getDocumentOriginFAC();
                     
+                    //If has to update the customer info
+                    if(NewVtaCustomerInfoDataModel.isUpdateCustomer()){
+                        RepositoryFactory.getInstance().getCompanysRepository().saveOrUpdateCustomer(NewVtaCustomerInfoDataModel.getCompany());
+                    }
+                    
                     //Create the sales model
                     final Sales Sales = new Sales();
                     Sales.setCompanyCode(NewVtaCustomerInfoDataModel.getCompany().getCompanyCode());
@@ -166,8 +171,14 @@ public class NewVtaViewController extends NewVtaJFrame {
                     Sales.setObservation("");
                     Sales.setSalesPoint(false);
                     
+                    //If the user will pay the sale in cash at the moment
+                    BigDecimal totalCash = BigDecimal.ZERO;
+                    if(NewVtaCustomerInfoDataModel.isContado()){
+                        totalCash = new BigDecimal(UtilitiesFactory.getSingleton().getNumbersUtility().fromMoneyFormat(jTTot.getText().trim()));
+                    }                        
+                    
                     //Save the sale
-                    RepositoryFactory.getInstance().getSalessRepository().saveSale(Sales, parts,BigDecimal.ZERO,BigDecimal.ZERO,BigDecimal.ZERO);
+                    RepositoryFactory.getInstance().getSalessRepository().saveSale(Sales, parts,totalCash,BigDecimal.ZERO,BigDecimal.ZERO);
 
                     //If the user wants to update the customer info
                     if(NewVtaCustomerInfoDataModel.isUpdateCustomer()){

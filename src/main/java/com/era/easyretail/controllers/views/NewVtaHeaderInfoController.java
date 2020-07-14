@@ -6,15 +6,16 @@
 package com.era.easyretail.controllers.views;
 
 import com.era.datamodels.NewVtaHeaderInfoDataModel;
-import com.era.datamodels.enums.SearchCommonTypeEnum;
 import com.era.logger.LoggerUtility;
 import com.era.models.CPaymentForm;
 import com.era.models.CUsoCFDI;
 import com.era.models.Coin;
+import com.era.models.Consec;
 import com.era.models.MetogoPago;
 import com.era.models.Serie;
 import com.era.models.User;
 import com.era.repositories.RepositoryFactory;
+import com.era.utilities.UtilitiesFactory;
 import com.era.views.NewVtaHeaderInfoJFrame;
 import com.era.views.comboboxes.SeriesCombobox;
 import com.era.views.dialogs.DialogsFactory;
@@ -40,9 +41,6 @@ public class NewVtaHeaderInfoController extends NewVtaHeaderInfoJFrame {
             jBSal.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jBSalActionPerformed(evt);
             });
-            jBVend.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jBVendActionPerformed(evt);
-            });
             jBAcept.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jBAceptActionPerformed(evt);
             });            
@@ -56,6 +54,30 @@ public class NewVtaHeaderInfoController extends NewVtaHeaderInfoJFrame {
             
             jComboBoxSerie.setType(SeriesCombobox.Type.FAC);
             jComboBoxSerie.loadItems();
+            
+            //Set the current user
+            final User User = UtilitiesFactory.getSingleton().getSessionUtility().getUser();
+            jTextFieldVendedor.setText(User.getCode());
+            
+            //Select the sales serie
+            final Serie Serie = RepositoryFactory.getInstance().getSerieRepository().getFirstSerieFAC();            
+            jComboBoxSerie.selectByObject(Serie);
+            
+            //Select national coin
+            final Coin Coin = RepositoryFactory.getInstance().getCoinsRepository().getNationalCoin();
+            jComboboxMonedas.selectByObject(Coin);
+            
+            //Select the first payment method
+            final MetogoPago MetodoPago = (MetogoPago)RepositoryFactory.getInstance().getMetogoPagosRepository().getFirst();
+            jComboBoxMetodoPago.selectByObject(MetodoPago);
+            
+            //Select cash option
+            final CPaymentForm CPaymentForm = RepositoryFactory.getInstance().getPaymentFormsRepository().getByCash();            
+            jComboBoxFormaPago.selectByObject(CPaymentForm);
+            
+            //Select uso cfdi
+            final CUsoCFDI CUsoCFDI = (CUsoCFDI)RepositoryFactory.getInstance().getCUsoCFDIsRepository().getFirst();            
+            jUsoCFDI.selectByObject(CUsoCFDI);
             
         }catch (Exception ex) {
             LoggerUtility.getSingleton().logError(NewVtaHeaderInfoController.class, ex);
@@ -186,30 +208,6 @@ public class NewVtaHeaderInfoController extends NewVtaHeaderInfoJFrame {
                     }
                 }
             });
-            
-        } catch (Exception ex) {
-            LoggerUtility.getSingleton().logError(this.getClass(), ex);
-            try {
-                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
-            } catch (Exception ex1) {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
-            }
-        }
-    }
-    
-    private void jBVendActionPerformed(java.awt.event.ActionEvent evt) {
-        
-        try {
-            
-            //Search warehouse
-            final SearchViewController SearchViewController = new SearchViewController();
-            SearchViewController.setSEARCH_TYPE(SearchCommonTypeEnum.USERS);
-            SearchViewController.setButtonAceptClicked(() -> {
-
-                final String salesmanCode = SearchViewController.getCod();
-                jTextFieldVendedor.setText(salesmanCode);
-            });
-            SearchViewController.setVisible();
             
         } catch (Exception ex) {
             LoggerUtility.getSingleton().logError(this.getClass(), ex);

@@ -86,6 +86,20 @@ public class NewVtaCustomerInfoViewController extends NewVtaCustomerInfoJFrame {
                     final boolean emal3 = jCCo3.isSelected();
                     final boolean updateCustomer = jCGDats.isSelected();
                     
+                    //Update the company model
+                    Company.setCalle(jTextFieldCalle.getText().trim());
+                    Company.setCo1(jTCo1.getText().trim());
+                    Company.setCo2(jTCo2.getText().trim());
+                    Company.setCo3(jTCo3.getText().trim());
+                    Company.setCol(jTCol.getText().trim());
+                    Company.setTel(jTTel.getText().trim());
+                    Company.setCP(jTCP.getText().trim());
+                    Company.setNoext(jTNoExt.getText().trim());
+                    Company.setNoint(jTNoInt.getText().trim());
+                    Company.setRFC(jTRFC.getText().trim());
+                    Company.setCiu(jTCiu.getText().trim());
+                    Company.setEstad(jTEstad.getText().trim());
+                    
                     //Create the response model
                     final NewVtaCustomerInfoDataModel NewVtaCustomerInfoDataModel_ = new NewVtaCustomerInfoDataModel();
                     NewVtaCustomerInfoDataModel_.setCompany(Company);
@@ -142,6 +156,38 @@ public class NewVtaCustomerInfoViewController extends NewVtaCustomerInfoJFrame {
                             
                     //Set all the fields
                     loadModelInFields(Company);
+                    
+                    //If is the cash customer disable all the fields, the user can not modify this customer
+                    if(Company.isCashCustomer()){
+                                                
+                        jTextFieldCalle.setEditable(false);
+                        jTCol.setEditable(false);
+                        jTTel.setEditable(false);
+                        jTCP.setEditable(false);
+                        jTNoExt.setEditable(false);
+                        jTNoInt.setEditable(false);
+                        jTRFC.setEditable(false);
+                        jTCiu.setEditable(false);
+                        jTEstad.setEditable(false);
+                        jTCo1.setEditable(false);
+                        jTCo2.setEditable(false);
+                        jTCo3.setEditable(false);
+                    }
+                    else{
+                        
+                        jTextFieldCalle.setEditable(true);
+                        jTCol.setEditable(true);
+                        jTTel.setEditable(true);
+                        jTCP.setEditable(true);
+                        jTNoExt.setEditable(true);
+                        jTNoInt.setEditable(true);
+                        jTRFC.setEditable(true);
+                        jTCiu.setEditable(true);
+                        jTEstad.setEditable(true);
+                        jTCo1.setEditable(true);
+                        jTCo2.setEditable(true);
+                        jTCo3.setEditable(true);
+                    }
                     
                 } catch (Exception ex) {
                     LoggerUtility.getSingleton().logError(this.getClass(), ex);
@@ -200,7 +246,7 @@ public class NewVtaCustomerInfoViewController extends NewVtaCustomerInfoJFrame {
             jCCo1.setSelected(NewVtaCustomerInfoDataModel_.isEmail1());
             jCCo2.setSelected(NewVtaCustomerInfoDataModel_.isEmail2());
             jCCo3.setSelected(NewVtaCustomerInfoDataModel_.isEmail3());
-            jCGDats.setSelected(NewVtaCustomerInfoDataModel_.isContado());        
+            jCGDats.setSelected(NewVtaCustomerInfoDataModel_.isUpdateCustomer());
         }
     }
     
