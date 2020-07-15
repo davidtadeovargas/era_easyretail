@@ -25,6 +25,7 @@ INSERT INTO documentos_origen(nombre,tipo,falt,fmod) VALUES('CLIENTES','EMP',now
 INSERT INTO almas(code,almadescrip,estac,sucu,nocaj,respon, falt,fmod) VALUES('SYS','ALMACÉN GENÉRICO','INICIAL','INICIAL','INICIAL','',now(),now());
 INSERT INTO almas(code,almadescrip,estac,sucu,nocaj,respon, falt,fmod) VALUES('ACTFIJ','ACTIVO FIJO','INICIAL','INICIAL','INICIAL','',now(),now());
 INSERT INTO almas(code,almadescrip,estac,sucu,nocaj,respon, falt,fmod) VALUES('GENERAL','GENERAL','INICIAL','INICIAL','INICIAL','',now(),now());
+INSERT INTO almas(code,almadescrip,estac,sucu,nocaj,respon, falt,fmod) VALUES('VTAS','VENTAS','INICIAL','INICIAL','INICIAL','',now(),now());
 /*!40000 ALTER TABLE `almas` ENABLE KEYS */;
 
 /*!40000 ALTER TABLE `emps` DISABLE KEYS */;
@@ -247,20 +248,6 @@ INSERT INTO mons(code,mondescrip,estac,sucu,nocaj,mn,val,simb,c_moneda,falt,fmod
 INSERT INTO mons(code,mondescrip,estac,val,sucu,nocaj,simb,c_moneda,falt,fmod) VALUES('USD','DOLAR','INICIAL',14,'INICIAL','INICIAL','$','USD',now(),now());
 /*!40000 ALTER TABLE `mons` ENABLE KEYS */;
 
-   
-/*!40000 ALTER TABLE `pags` DISABLE KEYS */;
-INSERT INTO pags (code, descrip, estac, sucu, nocaj,falt,fmod) VALUES
-('01', '01', 'INICIAL', 'INICIAL', 'INICIAL',now(),now()),
-('02', '02', 'INICIAL', 'INICIAL', 'INICIAL',now(),now()),
-('03', '03', 'INICIAL', 'INICIAL', 'INICIAL',now(),now()),
-('04', '04', 'INICIAL', 'INICIAL', 'INICIAL',now(),now()),
-('05', '05', 'INICIAL', 'INICIAL', 'INICIAL',now(),now()),
-('06', '06', 'INICIAL', 'INICIAL', 'INICIAL',now(),now()),
-('08', '08', 'INICIAL', 'INICIAL', 'INICIAL',now(),now()),
-('28', '28', 'INICIAL', 'INICIAL', 'INICIAL',now(),now()),
-('29', '29', 'INICIAL', 'INICIAL', 'INICIAL',now(),now()),
-('99', '99', 'INICIAL', 'INICIAL', 'INICIAL',now(),now());
-/*!40000 ALTER TABLE `pags` ENABLE KEYS */;
 	
 	
 /*!40000 ALTER TABLE `unids` DISABLE KEYS */;

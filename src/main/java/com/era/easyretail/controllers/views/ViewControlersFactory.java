@@ -44,6 +44,7 @@ public class ViewControlersFactory {
     private PrincipViewController PrincipViewController;
     private DevPVtaViewController DevPVtaViewController;
     private NewVtaHeaderInfoController NewVtaHeaderInfoController;
+    private DescripGranViewController DescripGranViewController;
     private LinesViewController LinesViewController;
     private VerCtaContJFrame VerCtaContJFrame;
     private UsrsJFrame UsrsJFrame;
@@ -692,6 +693,11 @@ public class ViewControlersFactory {
     public NewVtaProductInfoController getNewVtaProductInfoController(){
         NewVtaProductInfoController = new NewVtaProductInfoController();
         return NewVtaProductInfoController;
+    }
+    
+    public DescripGranViewController getDescripGranViewController(){
+        DescripGranViewController = new DescripGranViewController();
+        return DescripGranViewController;
     }
     
     @Override

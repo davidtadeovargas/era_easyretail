@@ -9,6 +9,7 @@ import com.era.datamodels.enums.SearchCommonTypeEnum;
 import com.era.easyretail.validators.ValidatorFactory;
 import com.era.easyretail.validators.WarehousesValidator;
 import com.era.logger.LoggerUtility;
+import com.era.models.Existalma;
 import com.era.models.User;
 import com.era.models.Warehouse;
 import com.era.repositories.RepositoryFactory;
@@ -344,14 +345,21 @@ public class AlmasViewController extends AlmasJFrame {
                 });
                 return ;
             }
+    
+            //Get the selected model
+            final Warehouse Warehouse = (Warehouse)jTab.getRowSelected();
+                    
+            //If the warehouse is assign to any product stop
+            final Existalma Existalma = RepositoryFactory.getInstance().getExistalmasRepository().getByWarehouse(Warehouse.getCode());
+            if(Existalma!=null){
+                DialogsFactory.getSingleton().showErrorOKCallbackDialog(baseJFrame, "errors_warehouse_cannot_delete", null);
+                return;
+            }
             
             //Question if continue
             DialogsFactory.getSingleton().showQuestionContinueDialog(baseJFrame, (JFrame jFrame) -> {
                 
                 try{
-                
-                    //Get the selected model
-                    final Warehouse Warehouse = (Warehouse)jTab.getRowSelected();
                     
                     //Delete the record
                     RepositoryFactory.getInstance().getWarehousesRepository().delete(Warehouse);

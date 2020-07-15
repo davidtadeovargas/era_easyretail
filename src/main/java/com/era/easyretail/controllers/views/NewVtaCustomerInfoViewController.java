@@ -159,19 +159,7 @@ public class NewVtaCustomerInfoViewController extends NewVtaCustomerInfoJFrame {
                     
                     //If is the cash customer disable all the fields, the user can not modify this customer
                     if(Company.isCashCustomer()){
-                                                
-                        jTextFieldCalle.setEditable(false);
-                        jTCol.setEditable(false);
-                        jTTel.setEditable(false);
-                        jTCP.setEditable(false);
-                        jTNoExt.setEditable(false);
-                        jTNoInt.setEditable(false);
-                        jTRFC.setEditable(false);
-                        jTCiu.setEditable(false);
-                        jTEstad.setEditable(false);
-                        jTCo1.setEditable(false);
-                        jTCo2.setEditable(false);
-                        jTCo3.setEditable(false);
+                        disableFieldsBecasuseIsCasherCustomer();
                     }
                     else{
                         
@@ -208,6 +196,22 @@ public class NewVtaCustomerInfoViewController extends NewVtaCustomerInfoJFrame {
                 Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
             }
         }
+    }
+    
+    public void disableFieldsBecasuseIsCasherCustomer(){
+        
+        jTextFieldCalle.setEditable(false);
+        jTCol.setEditable(false);
+        jTTel.setEditable(false);
+        jTCP.setEditable(false);
+        jTNoExt.setEditable(false);
+        jTNoInt.setEditable(false);
+        jTRFC.setEditable(false);
+        jTCiu.setEditable(false);
+        jTEstad.setEditable(false);
+        jTCo1.setEditable(false);
+        jTCo2.setEditable(false);
+        jTCo3.setEditable(false);
     }
     
     @Override
@@ -247,6 +251,10 @@ public class NewVtaCustomerInfoViewController extends NewVtaCustomerInfoJFrame {
             jCCo2.setSelected(NewVtaCustomerInfoDataModel_.isEmail2());
             jCCo3.setSelected(NewVtaCustomerInfoDataModel_.isEmail3());
             jCGDats.setSelected(NewVtaCustomerInfoDataModel_.isUpdateCustomer());
+        }
+        
+        if(Company_.isCashCustomer()){
+            disableFieldsBecasuseIsCasherCustomer();
         }
     }
     

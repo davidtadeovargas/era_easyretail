@@ -80,6 +80,9 @@ public class NewVtaViewController extends NewVtaJFrame {
             final List<Partvta> items = new ArrayList<>();
             jTablePartidas.initTable(items);
             
+            //Load default casher customer
+            loadCasherCustomer();
+                    
         }catch (Exception ex) {
             LoggerUtility.getSingleton().logError(NewVtaViewController.class, ex);
             try {
@@ -93,9 +96,55 @@ public class NewVtaViewController extends NewVtaJFrame {
     public void setSale(Sales Sale) {
         this.Sale = Sale;
     }
+
+    private void loadCasherCustomer() throws Exception {
+        
+        //Get the casher customer
+        final Company Company = RepositoryFactory.getInstance().getCompanysRepository().getClienteMostrador();
+        
+        //Create the response model
+        NewVtaCustomerInfoDataModel = new NewVtaCustomerInfoDataModel();
+        NewVtaCustomerInfoDataModel.setCompany(Company);
+        NewVtaCustomerInfoDataModel.setContado(false);
+        NewVtaCustomerInfoDataModel.setEmail1(true);
+        NewVtaCustomerInfoDataModel.setEmail2(false);
+        NewVtaCustomerInfoDataModel.setEmail3(false);
+        NewVtaCustomerInfoDataModel.setUpdateCustomer(false);
+        
+        //Set customer info in fields
+        setCustomerInfoInPanel(NewVtaCustomerInfoDataModel);
+    }
+    
+    private void setCustomerInfoInPanel(final NewVtaCustomerInfoDataModel NewVtaCustomerInfoDataModel){
+        
+        final String name = NewVtaCustomerInfoDataModel.getCompany().getNom();
+        final String street = NewVtaCustomerInfoDataModel.getCompany().getCalle()==null?"":NewVtaCustomerInfoDataModel.getCompany().getCalle();
+        final String externalNumber = NewVtaCustomerInfoDataModel.getCompany().getNoext()==null?"":NewVtaCustomerInfoDataModel.getCompany().getNoext();
+        final String colony = NewVtaCustomerInfoDataModel.getCompany().getCol()==null?"":NewVtaCustomerInfoDataModel.getCompany().getCol();
+        final String country = NewVtaCustomerInfoDataModel.getCompany().getPai()==null?"":NewVtaCustomerInfoDataModel.getCompany().getPai();
+        final String city = NewVtaCustomerInfoDataModel.getCompany().getCiu()==null?"":NewVtaCustomerInfoDataModel.getCompany().getCiu();
+        final String CP = NewVtaCustomerInfoDataModel.getCompany().getCP()==null?"":NewVtaCustomerInfoDataModel.getCompany().getCP();
+        final String phone = NewVtaCustomerInfoDataModel.getCompany().getTel()==null?"":NewVtaCustomerInfoDataModel.getCompany().getTel();
+        
+        jLabelCustomer.setText(name);
+        
+        if(!NewVtaCustomerInfoDataModel.getCompany().isCashCustomer()){
+            jLabelAddress.setText(street + ", Ext: " + externalNumber + ", Col: " + colony);
+            jLabelAddress2.setText(country + "," + city + ", CP " + CP);
+            jLabelAddress3.setText(phone);
+        }
+        else{            
+            jLabelAddress.setText("");
+            jLabelAddress2.setText("");
+            jLabelAddress3.setText("");
+        }
+    }
     
     @Override
     public void clearFields() throws Exception{
+        
+        //Load default casher customer
+        loadCasherCustomer();
     }
     
     @Override
@@ -229,7 +278,15 @@ public class NewVtaViewController extends NewVtaJFrame {
     
     private void jBNewActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
-	try{            	
+	try{
+            
+            if(NewVtaHeaderInfoDataModel==null){
+                DialogsFactory.getSingleton().showErrorOKCallbackDialog(baseJFrame, "errors_sale_info_missing", (JFrame jFrame) -> {
+                    jBHeader.requestFocus();
+                });
+                return;
+            }
+            
             final NewVtaProductInfoController NewVtaProductInfoController = ViewControlersFactory.getSingleton().getNewVtaProductInfoController();
             NewVtaProductInfoController.setOnResult((NewVtaProductInfoDataModel NewVtaProductInfoDataModel_) -> {
                 
@@ -242,8 +299,8 @@ public class NewVtaViewController extends NewVtaJFrame {
 
                     //Create table model
                     final Partvta Partvta = new Partvta();
-                    Partvta.setAlma("SYS");
-                    Partvta.setMon("");
+                    Partvta.setAlma(NewVtaProductInfoDataModel.getWarehouse().getCode());
+                    Partvta.setMon(NewVtaHeaderInfoDataModel.getCoin().getCode());
                     Partvta.setCant(this.NewVtaProductInfoDataModel.getCant());
                     Partvta.setDescrip(this.NewVtaProductInfoDataModel.getProduct().getDescription());
                     Partvta.setEskit(this.NewVtaProductInfoDataModel.getProduct().getCompound());
@@ -293,10 +350,8 @@ public class NewVtaViewController extends NewVtaJFrame {
             NewVtaCustomerInfoViewController.setOnResult((NewVtaCustomerInfoDataModel NewVtaCustomerInfoDataModel_) -> {
                 NewVtaCustomerInfoDataModel = NewVtaCustomerInfoDataModel_;
                 
-                jLabelCustomer.setText(NewVtaCustomerInfoDataModel.getCompany().getNom());
-                jLabelAddress.setText(NewVtaCustomerInfoDataModel.getCompany().getCalle() + ", Ext: " + NewVtaCustomerInfoDataModel.getCompany().getNoext() + ", Col: " + NewVtaCustomerInfoDataModel.getCompany().getCol());
-                jLabelAddress2.setText(NewVtaCustomerInfoDataModel.getCompany().getPai() + "," + NewVtaCustomerInfoDataModel.getCompany().getCiu() + ", CP " + NewVtaCustomerInfoDataModel.getCompany().getCP());
-                jLabelAddress3.setText(NewVtaCustomerInfoDataModel.getCompany().getTel());
+                //Set customer info in fields
+                setCustomerInfoInPanel(NewVtaCustomerInfoDataModel);
             });
             if(NewVtaCustomerInfoDataModel!=null){
                 NewVtaCustomerInfoViewController.setNewVtaCustomerInfoDataModel(NewVtaCustomerInfoDataModel);

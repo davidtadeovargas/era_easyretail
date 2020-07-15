@@ -16,7 +16,6 @@ import com.era.repositories.RepositoryFactory;
 import com.era.utilities.UtilitiesFactory;
 import com.era.views.NewVtaProductInfoJFrame;
 import com.era.views.dialogs.DialogsFactory;
-import com.era.views.utils.JComponentUtils;
 import java.awt.event.FocusEvent;
 import java.math.BigDecimal;
 import java.util.List;
@@ -54,6 +53,9 @@ public class NewVtaProductInfoController extends NewVtaProductInfoJFrame {
             jBAcept.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jBAceptActionPerformed(evt);
             });
+            jBGranDescrip.addActionListener((java.awt.event.ActionEvent evt) -> {
+                jBGranDescripActionPerformed(evt);
+            });            
                                     
             jComboBoxAlmacenes.loadItems();
             jComUnid.loadItems();
@@ -96,6 +98,9 @@ public class NewVtaProductInfoController extends NewVtaProductInfoJFrame {
             this.JComponentUtils.onlyNumbers(jTextFieldExistencia);            
             
             this.initImageControls(jLImg, jPanImg);
+                        
+            //Set the sales warehouse initially            
+            setSalesWarehouse();
             
         }catch (Exception ex) {
             LoggerUtility.getSingleton().logError(NewVtaProductInfoController.class, ex);
@@ -111,7 +116,40 @@ public class NewVtaProductInfoController extends NewVtaProductInfoJFrame {
     public void setOnResult(OnResult OnResult) {
         this.OnResult = OnResult;
     }
+    
+    private void setSalesWarehouse() throws Exception {
         
+        //Set the sales warehouse initially            
+        final Warehouse Warehouse = RepositoryFactory.getInstance().getWarehousesRepository().getSalesWarehouse();
+        jComboBoxAlmacenes.selectByObject(Warehouse);
+    }
+    
+   
+    private void jBGranDescripActionPerformed(java.awt.event.ActionEvent evt) {
+        
+        try {
+         
+            if(Product==null){
+                DialogsFactory.getSingleton().showErrorOKNoSelectionCallbackDialog(baseJFrame, (JFrame jFrame) -> {
+                    jTextFieldProducto.grabFocus();
+                });
+                return;
+            }
+            
+            final DescripGranViewController DescripGranViewController = ViewControlersFactory.getSingleton().getDescripGranViewController();
+            DescripGranViewController.setText(Product.getDescription());
+            DescripGranViewController.setVisible();
+            
+        } catch (Exception ex) {
+            LoggerUtility.getSingleton().logError(this.getClass(), ex);
+            try {
+                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+            } catch (Exception ex1) {
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
+            }
+        }
+    }
+    
     private void jBAceptActionPerformed(java.awt.event.ActionEvent evt) {
         
         try {
@@ -389,7 +427,7 @@ public class NewVtaProductInfoController extends NewVtaProductInfoJFrame {
         }
         else{
             hideImage();
-        }
+        }                
         
         if(NewVtaProductInfoDataModel_!=null){
             
@@ -411,7 +449,13 @@ public class NewVtaProductInfoController extends NewVtaProductInfoJFrame {
                 existence = Existalma.getExist();
             }
             jTextFieldExistencia.setText(String.valueOf(existence));
-        }        
+        }
+        else{
+            
+            //Select the unid of the product
+            final Unid Unid = (Unid)RepositoryFactory.getInstance().getUnidsRepository().getByCode(Product_.getUnit());
+            jComUnid.selectByObject(Unid);
+        }
     }
     
     @Override
@@ -427,11 +471,14 @@ public class NewVtaProductInfoController extends NewVtaProductInfoJFrame {
         jTCant.setText("1");
         jTList.setText("1");
         jTextFieldExistencia.setText("0");
-        
+            
         jComboBoxAlmacenes.clearSelection();
         jComUnid.clearSelection();
         
         this.hideImage();
+        
+        //Set the sales warehouse initially            
+        setSalesWarehouse();
     }
     
     @Override
