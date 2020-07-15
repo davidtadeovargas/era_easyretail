@@ -26,6 +26,7 @@ import com.era.models.CCodigopostal;
 import com.era.models.CCountry;
 import com.era.models.CPaymentForm;
 import com.era.models.CUsoCFDI;
+import java.math.BigDecimal;
 
 /**
  *
@@ -125,8 +126,8 @@ public class ClientViewController extends ClientJFrame {
         final Company Company = (Company)ObjectModel;
         
         String limitCred = "";
-        if(Company.getLimtcred()>0){
-            double dCant = Company.getLimtcred();
+        if(Company.getLimtcred().compareTo(BigDecimal.ZERO)>0){
+            double dCant = Company.getLimtcred().doubleValue();
             NumberFormat n = NumberFormat.getCurrencyInstance(new Locale("es","MX"));
             limitCred = n.format(dCant);                    
         }
@@ -164,7 +165,7 @@ public class ClientViewController extends ClientJFrame {
         jTCodEmp.setText(Company.getCompanyCode());
         jTNoInt.setText(Company.getNoint());
         jTNoExt.setText(Company.getNoext());
-        jTDCred.setText(Company.getDiacred());
+        jTDCred.setText(String.valueOf(Company.getDiacred()));
         jTLimCred.setText(String.valueOf(Company.getLimtcred()));        
         jTCta.setText(Company.getCta());
         jComList.setSelectedItem(String.valueOf(Company.getList()));        
@@ -559,8 +560,8 @@ public class ClientViewController extends ClientJFrame {
                     Company.setCurp(jTCURP.getText());
                     Company.setExten(jTNoExt.getText());
                     Company.setNoint(jTNoInt.getText());
-                    Company.setDiacred(sDiaCred);                    
-                    Company.setLimtcred(Float.parseFloat(sLimCred));
+                    Company.setDiacred(Integer.valueOf(sDiaCred));
+                    Company.setLimtcred(new BigDecimal(sLimCred));
                     Company.setBloq(sBloq.equals("1"));
                     Company.setPers(sPers);
                     Company.setMetpag(PaymentForm.getC_FormaPago());

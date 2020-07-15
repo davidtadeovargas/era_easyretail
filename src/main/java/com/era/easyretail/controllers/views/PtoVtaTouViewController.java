@@ -842,7 +842,7 @@ public class PtoVtaTouViewController extends PtoVtaTouJFrame {
             //Open screen to make the payment
             final CobroViewController CobroViewController = ViewControlersFactory.getSingleton().getCobroViewController();
             CobroViewController.clearFields();
-            CobroViewController.init(Sales, items);            
+            CobroViewController.init(Sales, Company,items);            
             CobroViewController.setOnFinish(() -> {
                 
                 try {

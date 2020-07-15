@@ -19,12 +19,14 @@ import com.era.models.Kits;
 import com.era.models.Partvta;
 import com.era.models.Sales;
 import com.era.repositories.RepositoryFactory;
+import com.era.utilities.DialogPropertiesUitlity;
 import com.era.utilities.UtilitiesFactory;
 import com.era.views.dialogs.DialogsFactory;
 import com.era.views.tables.headers.TableHeaderFactory;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.util.ArrayList;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
@@ -115,7 +117,7 @@ public class NewVtaViewController extends NewVtaJFrame {
         setCustomerInfoInPanel(NewVtaCustomerInfoDataModel);
     }
     
-    private void setCustomerInfoInPanel(final NewVtaCustomerInfoDataModel NewVtaCustomerInfoDataModel){
+    private void setCustomerInfoInPanel(final NewVtaCustomerInfoDataModel NewVtaCustomerInfoDataModel) throws Exception {
         
         final String name = NewVtaCustomerInfoDataModel.getCompany().getNom();
         final String street = NewVtaCustomerInfoDataModel.getCompany().getCalle()==null?"":NewVtaCustomerInfoDataModel.getCompany().getCalle();
@@ -138,6 +140,19 @@ public class NewVtaViewController extends NewVtaJFrame {
             jLabelAddress2.setText("");
             jLabelAddress3.setText("");
         }
+        
+        final Properties Properties = DialogPropertiesUitlity.getSingleton().getProperties();
+        
+        //If is pay at the moment
+        String labelConditionPayment;
+        if(NewVtaCustomerInfoDataModel.isContado()){
+            labelConditionPayment = Properties.getProperty("sale_pay_at_moment");        }
+        else{        
+            labelConditionPayment = Properties.getProperty("sale_pay_with_credit");
+        }
+        
+        //Set label for credit or pay at the momento
+        jLTipVta.setText(labelConditionPayment);
     }
     
     @Override
@@ -184,7 +199,7 @@ public class NewVtaViewController extends NewVtaJFrame {
             DialogsFactory.getSingleton().showQuestionContinueDialog(baseJFrame, (JFrame jFrame) -> {
                 
                 try {
-                          
+                    
                     final Consec Consec = (Consec)RepositoryFactory.getInstance().getConsecsRepository().getSalesConsec(NewVtaHeaderInfoDataModel.getSerie().getSer());
                     
                     final DocumentOrigin DocumentOrigin = RepositoryFactory.getInstance().getDocumentOriginRepository().getDocumentOriginFAC();
@@ -224,18 +239,15 @@ public class NewVtaViewController extends NewVtaJFrame {
                     BigDecimal totalCash = BigDecimal.ZERO;
                     if(NewVtaCustomerInfoDataModel.isContado()){
                         totalCash = new BigDecimal(UtilitiesFactory.getSingleton().getNumbersUtility().fromMoneyFormat(jTTot.getText().trim()));
-                    }                        
+                        
+                        Sales.setCredit(false);
+                    }
+                    else{
+                        Sales.setCredit(true);
+                    }
                     
                     //Save the sale
-                    RepositoryFactory.getInstance().getSalessRepository().saveSale(Sales, parts,totalCash,BigDecimal.ZERO,BigDecimal.ZERO);
-
-                    //If the user wants to update the customer info
-                    if(NewVtaCustomerInfoDataModel.isUpdateCustomer()){
-                        
-                        final Company Company_ = NewVtaCustomerInfoDataModel.getCompany();
-                        
-                        RepositoryFactory.getInstance().getCompanysRepository().update(Company_);
-                    }
+                    RepositoryFactory.getInstance().getSalessRepository().saveSale(Sales, NewVtaCustomerInfoDataModel.getCompany(),NewVtaCustomerInfoDataModel.isUpdateCustomer(), parts,totalCash,BigDecimal.ZERO,BigDecimal.ZERO);
                     
                     DialogsFactory.getSingleton().showOKOperationCompletedCallbackDialog(baseJFrame, (JFrame jFrame1) -> {
                         dispose();
@@ -348,10 +360,22 @@ public class NewVtaViewController extends NewVtaJFrame {
 	try{            	
             final NewVtaCustomerInfoViewController NewVtaCustomerInfoViewController = ViewControlersFactory.getSingleton().getNewVtaCustomerInfoViewController();
             NewVtaCustomerInfoViewController.setOnResult((NewVtaCustomerInfoDataModel NewVtaCustomerInfoDataModel_) -> {
-                NewVtaCustomerInfoDataModel = NewVtaCustomerInfoDataModel_;
                 
-                //Set customer info in fields
-                setCustomerInfoInPanel(NewVtaCustomerInfoDataModel);
+                try {
+                    
+                    NewVtaCustomerInfoDataModel = NewVtaCustomerInfoDataModel_;
+
+                    //Set customer info in fields
+                    setCustomerInfoInPanel(NewVtaCustomerInfoDataModel);
+                    
+                } catch (Exception ex) {
+                    LoggerUtility.getSingleton().logError(this.getClass(), ex);
+                    try {
+                        DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+                    } catch (Exception ex1) {
+                        Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
+                    }
+                }
             });
             if(NewVtaCustomerInfoDataModel!=null){
                 NewVtaCustomerInfoViewController.setNewVtaCustomerInfoDataModel(NewVtaCustomerInfoDataModel);

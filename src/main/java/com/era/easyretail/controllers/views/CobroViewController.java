@@ -37,6 +37,7 @@ public class CobroViewController extends CobroJFrame {
     private Sales Sale;
     private List<Partvta> partvtas;
     private OnFinish OnFinish;
+    private Company Company;
             
     public CobroViewController() {
         super("window_title_cobro");
@@ -131,10 +132,11 @@ public class CobroViewController extends CobroJFrame {
         this.OnFinish = OnFinish;
     }        
     
-    public void init(final Sales Sale, final List<Partvta> partvtas) throws Exception {
+    public void init(final Sales Sale, final Company Company, final List<Partvta> partvtas) throws Exception {
         
         //Save globally
         this.Sale = Sale;
+        this.Company = Company;
         this.partvtas = partvtas;
         
         //Set the cash
@@ -345,7 +347,7 @@ public class CobroViewController extends CobroJFrame {
         final BigDecimal BigDecimalCardCredit = new BigDecimal(UtilitiesFactory.getSingleton().getNumbersUtility().fromMoneyFormat(jTTarCredCant.getText().trim()));
         
         //Save the sale
-        RepositoryFactory.getInstance().getSalessRepository().saveSale(Sale, partvtas,BigDecimalTotal,BigDecimalCardDebit,BigDecimalCardCredit);
+        RepositoryFactory.getInstance().getSalessRepository().saveSale(Sale, Company, false, partvtas,BigDecimalTotal,BigDecimalCardDebit,BigDecimalCardCredit);
 
         DialogsFactory.getSingleton().showOKOperationCompletedCallbackDialog(baseJFrame, (JFrame jFrame1) -> {
 

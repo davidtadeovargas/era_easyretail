@@ -10,9 +10,13 @@ import com.era.datamodels.enums.SearchCommonTypeEnum;
 import com.era.logger.LoggerUtility;
 import com.era.models.Company;
 import com.era.repositories.RepositoryFactory;
+import com.era.utilities.DialogPropertiesUitlity;
+import com.era.utilities.UtilitiesFactory;
 import com.era.views.NewVtaCustomerInfoJFrame;
 import com.era.views.dialogs.DialogsFactory;
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
@@ -177,6 +181,9 @@ public class NewVtaCustomerInfoViewController extends NewVtaCustomerInfoJFrame {
                         jTCo3.setEditable(true);
                     }
                     
+                    //Show conditions
+                    showCustomerConditions(Company);
+                    
                 } catch (Exception ex) {
                     LoggerUtility.getSingleton().logError(this.getClass(), ex);
                     try {
@@ -255,6 +262,45 @@ public class NewVtaCustomerInfoViewController extends NewVtaCustomerInfoJFrame {
         
         if(Company_.isCashCustomer()){
             disableFieldsBecasuseIsCasherCustomer();
+        }
+        
+        //Show conditions
+        showCustomerConditions(Company_);
+    }
+    
+    private void showCustomerConditions(final Company Company) throws Exception {
+        
+        //If the user has credit
+        String conditions;
+        final Properties Properties = DialogPropertiesUitlity.getSingleton().getProperties();;
+        if(Company.hasCredit()){
+            conditions = Properties.getProperty("customer_credit_at_days");                        
+            conditions = conditions.replace("%1",String.valueOf(Company.getDiacred()));
+            conditions = conditions.replace("%2",UtilitiesFactory.getSingleton().getNumbersUtility().toMoneyFormat(String.valueOf(Company.getLimtcred())));
+
+            jCConta.setEnabled(true);
+            jCConta.setSelected(false);
+        }
+        else{                        
+            conditions = Properties.getProperty("pay_at_moment");
+
+            jCConta.setSelected(true);
+            jCConta.setEnabled(false);
+        }                
+        
+        //Get positive sald of the customer
+        final BigDecimal favorSald = RepositoryFactory.getInstance().getCxcRepository().getSaldoFavorFromCustomer(Company.getCompanyCode());
+        
+        //Concatenate the sald
+        conditions = conditions.replace("%3",String.valueOf(favorSald));
+        
+        //Set the condtions
+        jTCond.setText(conditions);
+        
+        //If the customer doesnt have money credit avaible
+        if(favorSald.compareTo(Company.getLimtcred())<0){            
+            jCConta.setSelected(true);
+            jCConta.setEnabled(false);
         }
     }
     
