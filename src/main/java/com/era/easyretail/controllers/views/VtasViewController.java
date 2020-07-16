@@ -5,6 +5,7 @@
  */
 package com.era.easyretail.controllers.views;
 
+import com.era.datamodels.enums.DocumentType;
 import com.era.logger.LoggerUtility;
 import com.era.models.Partvta;
 import com.era.models.Sales;
@@ -23,6 +24,8 @@ import javax.swing.event.ListSelectionEvent;
  * @author PC
  */
 public class VtasViewController extends VtasJFrame {
+    
+    private DocumentType DocumentType;
     
     public VtasViewController() {
         super("window_title_sales");
@@ -45,69 +48,69 @@ public class VtasViewController extends VtasJFrame {
             jBCa.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jBCaActionPerformed(evt);
             });
-            jButtonDirectorioRemisiones.addActionListener((java.awt.event.ActionEvent evt) -> {
+            /*jButtonDirectorioRemisiones.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jButtonDirectorioRemisionesActionPerformed(evt);
             });
             jBDirX.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jBDirXActionPerformed(evt);
-            });
+            });*/
             jBDev.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jBDevActionPerformed(evt);
             });
-            jBDirZ.addActionListener((java.awt.event.ActionEvent evt) -> {
+            /*jBDirZ.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jBDirZActionPerformed(evt);
-            });
+            });*/
             jBDevP.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jBDevPActionPerformed(evt);
             });
-            jButtonDirectorioNotaCredito.addActionListener((java.awt.event.ActionEvent evt) -> {
+            /*jButtonDirectorioNotaCredito.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jButtonDirectorioNotaCreditoActionPerformed(evt);
-            });
+            });*/
             jBNew.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jBNewActionPerformed(evt);
             });
-            jButtonDirectorioCFDI.addActionListener((java.awt.event.ActionEvent evt) -> {
+            /*jButtonDirectorioCFDI.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jButtonDirectorioCFDIActionPerformed(evt);
-            });
+            });*/
             jButtonNotaCredito.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jButtonNotaCreditoActionPerformed(evt);
             });
-            jButtonDirectorioTickets.addActionListener((java.awt.event.ActionEvent evt) -> {
+            /*jButtonDirectorioTickets.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jButtonDirectorioTicketsActionPerformed(evt);
-            });
+            });*/
             jBVer.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jBVerActionPerformed(evt);
             });
-            jBDirCan.addActionListener((java.awt.event.ActionEvent evt) -> {
+            /*jBDirCan.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jBDirCanActionPerformed(evt);
-            });
+            });*/
             jButtonEnviar.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jButtonEnviarActionPerformed(evt);
             });
-            jBDirBack.addActionListener((java.awt.event.ActionEvent evt) -> {
+            /*jBDirBack.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jBDirBackActionPerformed(evt);
-            });
+            });*/
             jBPDF.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jBPDFActionPerformed(evt);
             });
-            jBDirDev.addActionListener((java.awt.event.ActionEvent evt) -> {
+            /*jBDirDev.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jBDirDevActionPerformed(evt);
-            });
-            jButtonActualizar.addActionListener((java.awt.event.ActionEvent evt) -> {
+            });*/
+            /*jButtonActualizar.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jButtonActualizarActionPerformed(evt);
-            });
-            jBDirDevP.addActionListener((java.awt.event.ActionEvent evt) -> {
+            });*/
+            /*jBDirDevP.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jBDirDevPActionPerformed(evt);
-            });
+            });*/
             jButtonTimbrar.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jButtonTimbrarActionPerformed(evt);
             });
-            jButtonDirectorioAcuses.addActionListener((java.awt.event.ActionEvent evt) -> {
+            /*jButtonDirectorioAcuses.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jButtonDirectorioAcusesActionPerformed(evt);
-            });
-            jBEntre.addActionListener((java.awt.event.ActionEvent evt) -> {
+            });*/
+            /*jBEntre.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jBEntreActionPerformed(evt);
-            });
+            });*/
             jButtonComprobar.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jButtonComprobarActionPerformed(evt);
             });
@@ -117,33 +120,33 @@ public class VtasViewController extends VtasJFrame {
             jButtonObtenerXML.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jButtonObtenerXMLActionPerformed(evt);
             });
-            jButtonTicketsFacturados.addActionListener((java.awt.event.ActionEvent evt) -> {
+            /*jButtonTicketsFacturados.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jButtonTicketsFacturadosActionPerformed(evt);
-            });
-            jButtonBorrarDocumento.addActionListener((java.awt.event.ActionEvent evt) -> {
+            });*/
+            /*jButtonBorrarDocumento.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jButtonBorrarDocumentoActionPerformed(evt);
-            });
-            jButtonVerArchivos.addActionListener((java.awt.event.ActionEvent evt) -> {
+            });*/
+            /*jButtonVerArchivos.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jButtonVerArchivosActionPerformed(evt);
-            });
-            jButtonCargar.addActionListener((java.awt.event.ActionEvent evt) -> {
+            });*/
+            /*jButtonCargar.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jButtonCargarActionPerformed(evt);
-            });
-            jBCli.addActionListener((java.awt.event.ActionEvent evt) -> {
+            });*/
+            /*jBCli.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jBCliActionPerformed(evt);
-            });
+            });*/
             jBSal.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jBSalActionPerformed(evt);
             });
             jButtonAbrir.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jButtonAbrirActionPerformed(evt);
             });
-            jButtonRelacionar.addActionListener((java.awt.event.ActionEvent evt) -> {
+            /*jButtonRelacionar.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jButtonRelacionarActionPerformed(evt);
-            });
-            jBAbrNotCred.addActionListener((java.awt.event.ActionEvent evt) -> {
+            });*/
+            /*jBAbrNotCred.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jBAbrNotCredActionPerformed(evt);
-            });
+            });*/
             
             //Config partvta table
             jTab2.addShowColumn(TableHeaderFactory.getSigleton().getPartvtasTableHeader().getROWNUMBER());
@@ -193,11 +196,10 @@ public class VtasViewController extends VtasJFrame {
             
             //Load all the sales
             jTableVentas.setScrollAtStartWhenEnd(true);
-            jTableVentas.setJScrollPane(panelTable);
+            jTableVentas.setJScrollPane(jScrollPane2);
             jTableVentas.setOnPaginationLabelUpdate((String paginationUpdate) -> {
                 jLabelPagination.setText(paginationUpdate);
             });
-            jTableVentas.initTableWithPagination();
             
         }catch (Exception ex) {
             LoggerUtility.getSingleton().logError(VtasViewController.class, ex);
@@ -208,6 +210,43 @@ public class VtasViewController extends VtasJFrame {
             }
         }
     }
+
+    public void setDocumentType(DocumentType DocumentType) throws Exception {
+        
+        this.DocumentType = DocumentType;
+        
+        String type = "";
+        
+        switch(DocumentType){
+            
+            case REMISION:
+                jTableVentas.setDocumentType(DocumentType.REMISION);
+                type = this.props.getProperty("remisions");
+                break;
+                
+            case INVOICE:
+                jTableVentas.setDocumentType(DocumentType.INVOICE);
+                type = this.props.getProperty("invoices");
+                break;
+                
+            case SALES:
+                jTableVentas.setDocumentType(DocumentType.SALES);
+                this.props.getProperty("sales");
+                break;
+                
+            case TICKETS:
+                jTableVentas.setDocumentType(DocumentType.TICKETS);
+                type = this.props.getProperty("tickets");
+                break;
+        }
+        
+        //Set the label
+        jLabelTipDoc.setText(type);
+        
+        //Load all the records
+        jTableVentas.initTableWithPagination();
+    }
+        
     
     @Override
     public void clearFields() throws Exception{

@@ -8,6 +8,24 @@
     <finalName>retail</finalName>
     <plugins>
       <plugin>
+        <artifactId>maven-install-plugin</artifactId>
+        <version>2.3.1</version>
+        <executions>
+          <execution>
+            <phase>install</phase>
+            <goals>
+              <goal>install-file</goal>
+            </goals>
+            <configuration>
+              <file>target/${project.build.finalName}.${project.packaging}</file>
+              <generatePom>false</generatePom>
+              <pomFile>pom.xml</pomFile>
+              <version>${my.version}</version>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
         <artifactId>maven-eclipse-plugin</artifactId>
         <version>2.9</version>
         <configuration>
@@ -17,7 +35,7 @@
       </plugin>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>2.3.2</version>
+        <version>3.1</version>
         <configuration>
           <source>1.8</source>
           <target>1.8</target>

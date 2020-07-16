@@ -9,6 +9,7 @@ import com.era.datamodels.NewVtaCustomerInfoDataModel;
 import com.era.datamodels.NewVtaHeaderInfoDataModel;
 import com.era.datamodels.NewVtaProductInfoDataModel;
 import com.era.datamodels.TotalsDataModel;
+import com.era.datamodels.enums.DocumentType;
 import com.era.views.NewVtaJFrame;
 import java.util.List;
 import com.era.logger.LoggerUtility;
@@ -41,6 +42,8 @@ public class NewVtaViewController extends NewVtaJFrame {
     private NewVtaProductInfoDataModel NewVtaProductInfoDataModel;
     private NewVtaHeaderInfoDataModel NewVtaHeaderInfoDataModel;
     private TotalsDataModel Totals;    
+    private DocumentType DocumentType;
+    
     
     public NewVtaViewController() {
         super("window_title_newvta");
@@ -95,6 +98,21 @@ public class NewVtaViewController extends NewVtaJFrame {
         }
     }
 
+    public void setDocumentType(DocumentType DocumentType) {
+        
+        this.DocumentType = DocumentType;
+        
+        switch(DocumentType){
+            
+            case REMISION:
+                break;
+                
+            case INVOICE:
+                break;
+        }
+    }
+
+        
     public void setSale(Sales Sale) {
         this.Sale = Sale;
     }
@@ -575,5 +593,5 @@ public class NewVtaViewController extends NewVtaJFrame {
     @Override
     public List<?> getItemsToLoadInTable() throws Exception {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    }        
 }

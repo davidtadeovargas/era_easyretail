@@ -5,6 +5,7 @@
  */
 package com.era.easyretail.controllers.views;
 
+import com.era.datamodels.enums.DocumentType;
 import com.era.easyretail.enums.DBFileConnectionConfigurationType;
 import com.era.easyretail.enums.LoginType;
 import com.era.easyretail.enums.LoginTypeEmpresa;
@@ -254,6 +255,12 @@ public class PrincipViewController extends PrincipJFrame {
             });
             jMenuItemRemisiones.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jMenuItemRemisionesActionPerformed(evt);
+            });
+            jMenuItemTickets.addActionListener((java.awt.event.ActionEvent evt) -> {
+                jMenuItemTicketsActionPerformed(evt);
+            });
+            jMenuItemInvoices.addActionListener((java.awt.event.ActionEvent evt) -> {
+                jMenuItemInvoicesActionPerformed(evt);
             });
             jButtonPedidos.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jButtonPedidosActionPerformed(evt);
@@ -1277,8 +1284,22 @@ public class PrincipViewController extends PrincipJFrame {
         ViewControlersFactory.getSingleton().getCotsViewController().setVisible();
     }
     
-    private void jMenItVtasActionPerformed(java.awt.event.ActionEvent evt) {                                           
-        ViewControlersFactory.getSingleton().getVtasViewController().setVisible();
+    private void jMenItVtasActionPerformed(java.awt.event.ActionEvent evt) {
+        
+        try {
+         
+            final VtasViewController VtasViewController = ViewControlersFactory.getSingleton().getVtasViewController();
+            VtasViewController.setDocumentType(DocumentType.SALES);
+            VtasViewController.setVisible();
+            
+        } catch (Exception ex) {
+            LoggerUtility.getSingleton().logError(this.getClass(), ex);
+            try {
+                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+            } catch (Exception ex1) {
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
+            }
+        }
     }
     
     private void vAbrPto()
@@ -1823,7 +1844,21 @@ public class PrincipViewController extends PrincipJFrame {
     }
     
     private void jBVtasActionPerformed(java.awt.event.ActionEvent evt) {                                       
-        ViewControlersFactory.getSingleton().getVtasViewController().setVisible();
+        
+        try {
+         
+            final VtasViewController VtasViewController = ViewControlersFactory.getSingleton().getVtasViewController();
+            VtasViewController.setDocumentType(DocumentType.SALES);
+            VtasViewController.setVisible();
+            
+        } catch (Exception ex) {
+            LoggerUtility.getSingleton().logError(this.getClass(), ex);
+            try {
+                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+            } catch (Exception ex1) {
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
+            }
+        }
     }
     
     private void jBCompsActionPerformed(java.awt.event.ActionEvent evt) {                                        
@@ -2327,7 +2362,57 @@ public class PrincipViewController extends PrincipJFrame {
     }
     
     private void jMenuItemRemisionesActionPerformed(java.awt.event.ActionEvent evt) {                                                    
-        ViewControlersFactory.getSingleton().getVtasViewController().setVisible();
+        
+        try {
+         
+            final VtasViewController VtasViewController = ViewControlersFactory.getSingleton().getVtasViewController();
+            VtasViewController.setDocumentType(DocumentType.REMISION);
+            VtasViewController.setVisible();
+            
+        } catch (Exception ex) {
+            LoggerUtility.getSingleton().logError(this.getClass(), ex);
+            try {
+                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+            } catch (Exception ex1) {
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
+            }
+        }
+    }
+    
+    private void jMenuItemTicketsActionPerformed(java.awt.event.ActionEvent evt) {                                                    
+        
+        try {
+         
+            final VtasViewController VtasViewController = ViewControlersFactory.getSingleton().getVtasViewController();
+            VtasViewController.setDocumentType(DocumentType.TICKETS);
+            VtasViewController.setVisible();
+            
+        } catch (Exception ex) {
+            LoggerUtility.getSingleton().logError(this.getClass(), ex);
+            try {
+                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+            } catch (Exception ex1) {
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
+            }
+        }
+    }
+    
+    private void jMenuItemInvoicesActionPerformed(java.awt.event.ActionEvent evt) {                                                    
+        
+        try {
+         
+            final VtasViewController VtasViewController = ViewControlersFactory.getSingleton().getVtasViewController();
+            VtasViewController.setDocumentType(DocumentType.INVOICE);
+            VtasViewController.setVisible();
+            
+        } catch (Exception ex) {
+            LoggerUtility.getSingleton().logError(this.getClass(), ex);
+            try {
+                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+            } catch (Exception ex1) {
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
+            }
+        }
     }
     
     private void jButtonPedidosActionPerformed(java.awt.event.ActionEvent evt) {                                               

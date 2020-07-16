@@ -349,14 +349,11 @@ public class CobroViewController extends CobroJFrame {
         //Save the sale
         RepositoryFactory.getInstance().getSalessRepository().saveSale(Sale, Company, false, partvtas,BigDecimalTotal,BigDecimalCardDebit,BigDecimalCardCredit);
 
-        DialogsFactory.getSingleton().showOKOperationCompletedCallbackDialog(baseJFrame, (JFrame jFrame1) -> {
+        if(OnFinish!=null){
+            OnFinish.onFinish();
+        }
 
-            if(OnFinish!=null){
-                OnFinish.onFinish();
-            }
-
-            dispose();
-        });
+        dispose();
     }
     
     private void jBCobActionPerformed(java.awt.event.ActionEvent evt) {                                             
