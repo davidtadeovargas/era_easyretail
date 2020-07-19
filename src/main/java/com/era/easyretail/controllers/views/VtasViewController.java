@@ -7,9 +7,11 @@ package com.era.easyretail.controllers.views;
 
 import com.era.datamodels.enums.DocumentType;
 import com.era.logger.LoggerUtility;
+import com.era.models.DocumentOrigin;
 import com.era.models.Partvta;
 import com.era.models.Sales;
 import com.era.repositories.RepositoryFactory;
+import com.era.utilities.UtilitiesFactory;
 import com.era.views.VtasJFrame;
 import com.era.views.dialogs.DialogsFactory;
 import com.era.views.tables.headers.TableHeaderFactory;
@@ -42,108 +44,90 @@ public class VtasViewController extends VtasJFrame {
             jBMosT.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jBMosTActionPerformed(evt);
             });
-            jBGenPDF.addActionListener((java.awt.event.ActionEvent evt) -> {
+            jMenuItemSalesFacTick.addActionListener((java.awt.event.ActionEvent evt) -> {
+                jMenuItemSalesFacTickActionPerformed(evt);
+            });
+            jMenuItemDocuSatGetXML.addActionListener((java.awt.event.ActionEvent evt) -> {
+                jMenuItemDocuSatGetXMLActionPerformed(evt);
+            });            
+            jMenuItemGralGeneratePDF.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jBGenPDFActionPerformed(evt);
             });
-            jBCa.addActionListener((java.awt.event.ActionEvent evt) -> {
+            jMenuItemGralCancel.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jBCaActionPerformed(evt);
             });
-            /*jButtonDirectorioRemisiones.addActionListener((java.awt.event.ActionEvent evt) -> {
+            jMenuItemFoldersRems.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jButtonDirectorioRemisionesActionPerformed(evt);
             });
-            jBDirX.addActionListener((java.awt.event.ActionEvent evt) -> {
+            jMenuItemFoldersCortX.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jBDirXActionPerformed(evt);
-            });*/
-            jBDev.addActionListener((java.awt.event.ActionEvent evt) -> {
+            });
+            jMenuItemSalesDev.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jBDevActionPerformed(evt);
             });
-            /*jBDirZ.addActionListener((java.awt.event.ActionEvent evt) -> {
+            jMenuItemFoldersCortZ.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jBDirZActionPerformed(evt);
-            });*/
-            jBDevP.addActionListener((java.awt.event.ActionEvent evt) -> {
+            });
+            jMenuItemSalesDevP.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jBDevPActionPerformed(evt);
             });
-            /*jButtonDirectorioNotaCredito.addActionListener((java.awt.event.ActionEvent evt) -> {
+            jMenuItemFoldersCreditNot.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jButtonDirectorioNotaCreditoActionPerformed(evt);
-            });*/
-            jBNew.addActionListener((java.awt.event.ActionEvent evt) -> {
+            });
+            jMenuItemGralNew.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jBNewActionPerformed(evt);
             });
-            /*jButtonDirectorioCFDI.addActionListener((java.awt.event.ActionEvent evt) -> {
+            jMenuItemFoldersCFDI.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jButtonDirectorioCFDIActionPerformed(evt);
-            });*/
-            jButtonNotaCredito.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jButtonNotaCreditoActionPerformed(evt);
             });
-            /*jButtonDirectorioTickets.addActionListener((java.awt.event.ActionEvent evt) -> {
+            jMenuItemFoldersTicks.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jButtonDirectorioTicketsActionPerformed(evt);
-            });*/
-            jBVer.addActionListener((java.awt.event.ActionEvent evt) -> {
+            });
+            jMenuItemGralView.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jBVerActionPerformed(evt);
             });
-            /*jBDirCan.addActionListener((java.awt.event.ActionEvent evt) -> {
+            jMenuItemFoldersCancels.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jBDirCanActionPerformed(evt);
-            });*/
-            jButtonEnviar.addActionListener((java.awt.event.ActionEvent evt) -> {
+            });
+            jMenuItemGralSend.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jButtonEnviarActionPerformed(evt);
             });
-            /*jBDirBack.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jBDirBackActionPerformed(evt);
-            });*/
-            jBPDF.addActionListener((java.awt.event.ActionEvent evt) -> {
+            jMenuItemGralViewPDF.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jBPDFActionPerformed(evt);
             });
-            /*jBDirDev.addActionListener((java.awt.event.ActionEvent evt) -> {
+            jMenuItemFoldersDevs.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jBDirDevActionPerformed(evt);
-            });*/
+            });
             /*jButtonActualizar.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jButtonActualizarActionPerformed(evt);
             });*/
-            /*jBDirDevP.addActionListener((java.awt.event.ActionEvent evt) -> {
+            jMenuItemFoldersDevsP.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jBDirDevPActionPerformed(evt);
-            });*/
-            jButtonTimbrar.addActionListener((java.awt.event.ActionEvent evt) -> {
+            });
+            jMenuItemDocuSatRing.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jButtonTimbrarActionPerformed(evt);
             });
-            /*jButtonDirectorioAcuses.addActionListener((java.awt.event.ActionEvent evt) -> {
+            jMenuItemFoldersAcuses.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jButtonDirectorioAcusesActionPerformed(evt);
-            });*/
-            /*jBEntre.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jBEntreActionPerformed(evt);
-            });*/
-            jButtonComprobar.addActionListener((java.awt.event.ActionEvent evt) -> {
+            });
+            jMenuItemDocuSatCheck.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jButtonComprobarActionPerformed(evt);
             });
-            jButtonAcuse.addActionListener((java.awt.event.ActionEvent evt) -> {
+            jMenuItemDocuSatAcuse.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jButtonAcuseActionPerformed(evt);
             });
-            jButtonObtenerXML.addActionListener((java.awt.event.ActionEvent evt) -> {
+            jMenuItemGetXML.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jButtonObtenerXMLActionPerformed(evt);
             });
             /*jButtonTicketsFacturados.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jButtonTicketsFacturadosActionPerformed(evt);
             });*/
-            /*jButtonBorrarDocumento.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jButtonBorrarDocumentoActionPerformed(evt);
-            });*/
-            /*jButtonVerArchivos.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jButtonVerArchivosActionPerformed(evt);
-            });*/
-            /*jButtonCargar.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jButtonCargarActionPerformed(evt);
-            });*/
-            /*jBCli.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jBCliActionPerformed(evt);
-            });*/
-            jBSal.addActionListener((java.awt.event.ActionEvent evt) -> {
+            jMenuItemExit.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jBSalActionPerformed(evt);
             });
-            jButtonAbrir.addActionListener((java.awt.event.ActionEvent evt) -> {
+            jMenuItemGralOpen.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jButtonAbrirActionPerformed(evt);
             });
-            /*jButtonRelacionar.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jButtonRelacionarActionPerformed(evt);
-            });*/
             /*jBAbrNotCred.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jBAbrNotCredActionPerformed(evt);
             });*/
@@ -159,18 +143,10 @@ public class VtasViewController extends VtasJFrame {
             jTab2.addShowColumn(TableHeaderFactory.getSigleton().getPartvtasTableHeader().getIMPUE());
             jTab2.addShowColumn(TableHeaderFactory.getSigleton().getPartvtasTableHeader().getLIST());
             
-            //Config sales table            
-            jTableVentas.addShowColumn(TableHeaderFactory.getSigleton().getSalessTableHeader().getSALE_ID());
-            jTableVentas.addShowColumn(TableHeaderFactory.getSigleton().getSalessTableHeader().getCOMPANYCODE());
-            jTableVentas.addShowColumn(TableHeaderFactory.getSigleton().getSalessTableHeader().getRAZON());
-            jTableVentas.addShowColumn(TableHeaderFactory.getSigleton().getSalessTableHeader().getESTATUS());
-            jTableVentas.addShowColumn(TableHeaderFactory.getSigleton().getSalessTableHeader().getEMISIONDATE());
-            jTableVentas.addShowColumn(TableHeaderFactory.getSigleton().getSalessTableHeader().getFACTURADO());
-            jTableVentas.addShowColumn(TableHeaderFactory.getSigleton().getSalessTableHeader().getOBSERVATION());
-            jTableVentas.addShowColumn(TableHeaderFactory.getSigleton().getSalessTableHeader().getPAYMENTFORM());
-            jTableVentas.addShowColumn(TableHeaderFactory.getSigleton().getSalessTableHeader().getSUBTOTAL());
-            jTableVentas.addShowColumn(TableHeaderFactory.getSigleton().getSalessTableHeader().getTAX());
-            jTableVentas.addShowColumn(TableHeaderFactory.getSigleton().getSalessTableHeader().getTOTAL());
+            //Show the columns
+            jTableVentas.showCommonColumns();
+            
+            //Event when row is selected
             jTableVentas.setITableRowSelected((ListSelectionEvent lse, Object Object) -> {
                 
                 try {
@@ -196,9 +172,48 @@ public class VtasViewController extends VtasJFrame {
             
             //Load all the sales
             jTableVentas.setScrollAtStartWhenEnd(true);
-            jTableVentas.setJScrollPane(jScrollPane2);
+            jTableVentas.setJScrollPane(jScrollPane3);
             jTableVentas.setOnPaginationLabelUpdate((String paginationUpdate) -> {
                 jLabelPagination.setText(paginationUpdate);
+            });
+            
+            //Load all the documents for sales
+            final List<DocumentOrigin> documents = RepositoryFactory.getInstance().getDocumentOriginRepository().getSalesModuleItems();
+            jRadioBoxTipoDeVentas.loadItems(documents);
+            
+            jRadioBoxTipoDeVentas.setChangeSelectionListener((Object ObjectModel) -> {
+                
+                try {
+                 
+                    //Cast the model
+                    final DocumentOrigin DocumentOrigin_ = (DocumentOrigin)ObjectModel;
+
+                    //Determine the document type
+                    DocumentType DocumentType_ = DocumentType.SALES;
+                    if(DocumentOrigin_.isInvoice()){
+                        DocumentType_ = DocumentType.INVOICE;
+                    }
+                    else if(DocumentOrigin_.isNotc()){
+                        DocumentType_ = DocumentType.NOTC;
+                    }
+                    else if(DocumentOrigin_.isRemision()){
+                        DocumentType_ = DocumentType.REMISION;
+                    }
+                    else if(DocumentOrigin_.isTicket()){
+                        DocumentType_ = DocumentType.TICKETS;
+                    }
+
+                    //Change the type of sales of the module
+                    setDocumentType(DocumentType_);
+                    
+                } catch (Exception ex) {
+                    LoggerUtility.getSingleton().logError(this.getClass(), ex);
+                    try {
+                        DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+                    } catch (Exception ex1) {
+                        Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
+                    }
+                }
             });
             
         }catch (Exception ex) {
@@ -231,11 +246,16 @@ public class VtasViewController extends VtasJFrame {
                 
             case SALES:
                 jTableVentas.setDocumentType(DocumentType.SALES);
-                this.props.getProperty("sales");
+                type = this.props.getProperty("sales");
                 break;
                 
             case TICKETS:
                 jTableVentas.setDocumentType(DocumentType.TICKETS);
+                type = this.props.getProperty("tickets");
+                break;
+                
+            case NOTC:
+                jTableVentas.setDocumentType(DocumentType.NOTC);
                 type = this.props.getProperty("tickets");
                 break;
         }
@@ -271,21 +291,6 @@ public class VtasViewController extends VtasJFrame {
 	}
     }
     
-    private void jButtonRelacionarActionPerformed(java.awt.event.ActionEvent evt) {                                             
-
-	try{            	
-            
-	}
-	catch (Exception ex) {
-            LoggerUtility.getSingleton().logError(VtasViewController.class, ex);
-            try {
-                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
-            } catch (Exception ex1) {
-                Logger.getLogger(VtasViewController.class.getName()).log(Level.SEVERE, null, ex1);
-            }
-	}
-    }
-    
     private void jButtonAbrirActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	
@@ -304,67 +309,7 @@ public class VtasViewController extends VtasJFrame {
     private void jBSalActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	
-            
-	}
-	catch (Exception ex) {
-            LoggerUtility.getSingleton().logError(VtasViewController.class, ex);
-            try {
-                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
-            } catch (Exception ex1) {
-                Logger.getLogger(VtasViewController.class.getName()).log(Level.SEVERE, null, ex1);
-            }
-	}
-    }
-    
-    private void jBCliActionPerformed(java.awt.event.ActionEvent evt) {                                             
-
-	try{            	
-            
-	}
-	catch (Exception ex) {
-            LoggerUtility.getSingleton().logError(VtasViewController.class, ex);
-            try {
-                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
-            } catch (Exception ex1) {
-                Logger.getLogger(VtasViewController.class.getName()).log(Level.SEVERE, null, ex1);
-            }
-	}
-    }
-    
-    private void jButtonCargarActionPerformed(java.awt.event.ActionEvent evt) {                                             
-
-	try{            	
-            
-	}
-	catch (Exception ex) {
-            LoggerUtility.getSingleton().logError(VtasViewController.class, ex);
-            try {
-                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
-            } catch (Exception ex1) {
-                Logger.getLogger(VtasViewController.class.getName()).log(Level.SEVERE, null, ex1);
-            }
-	}
-    }
-    
-    private void jButtonVerArchivosActionPerformed(java.awt.event.ActionEvent evt) {                                             
-
-	try{            	
-            
-	}
-	catch (Exception ex) {
-            LoggerUtility.getSingleton().logError(VtasViewController.class, ex);
-            try {
-                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
-            } catch (Exception ex1) {
-                Logger.getLogger(VtasViewController.class.getName()).log(Level.SEVERE, null, ex1);
-            }
-	}
-    }
-    
-    private void jButtonBorrarDocumentoActionPerformed(java.awt.event.ActionEvent evt) {                                             
-
-	try{            	
-            
+            dispose();
 	}
 	catch (Exception ex) {
             LoggerUtility.getSingleton().logError(VtasViewController.class, ex);
@@ -436,25 +381,10 @@ public class VtasViewController extends VtasJFrame {
 	}
     }
     
-    private void jBEntreActionPerformed(java.awt.event.ActionEvent evt) {                                             
-
-	try{            	
-            
-	}
-	catch (Exception ex) {
-            LoggerUtility.getSingleton().logError(VtasViewController.class, ex);
-            try {
-                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
-            } catch (Exception ex1) {
-                Logger.getLogger(VtasViewController.class.getName()).log(Level.SEVERE, null, ex1);
-            }
-	}
-    }
-    
     private void jButtonDirectorioAcusesActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	
-            
+            UtilitiesFactory.getSingleton().getImagesUtility().openAcusesPath();
 	}
 	catch (Exception ex) {
             LoggerUtility.getSingleton().logError(VtasViewController.class, ex);
@@ -484,7 +414,7 @@ public class VtasViewController extends VtasJFrame {
     private void jBDirDevPActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	
-            
+            UtilitiesFactory.getSingleton().getImagesUtility().openDevspPath();
 	}
 	catch (Exception ex) {
             LoggerUtility.getSingleton().logError(VtasViewController.class, ex);
@@ -514,7 +444,7 @@ public class VtasViewController extends VtasJFrame {
     private void jBDirDevActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	
-            
+            UtilitiesFactory.getSingleton().getImagesUtility().openDevsPath();
 	}
 	catch (Exception ex) {
             LoggerUtility.getSingleton().logError(VtasViewController.class, ex);
@@ -527,21 +457,6 @@ public class VtasViewController extends VtasJFrame {
     }
     
     private void jBPDFActionPerformed(java.awt.event.ActionEvent evt) {                                             
-
-	try{            	
-            
-	}
-	catch (Exception ex) {
-            LoggerUtility.getSingleton().logError(VtasViewController.class, ex);
-            try {
-                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
-            } catch (Exception ex1) {
-                Logger.getLogger(VtasViewController.class.getName()).log(Level.SEVERE, null, ex1);
-            }
-	}
-    }
-    
-    private void jBDirBackActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	
             
@@ -574,7 +489,7 @@ public class VtasViewController extends VtasJFrame {
     private void jBDirCanActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	
-            
+            UtilitiesFactory.getSingleton().getImagesUtility().openCancelsPath();
 	}
 	catch (Exception ex) {
             LoggerUtility.getSingleton().logError(VtasViewController.class, ex);
@@ -619,22 +534,7 @@ public class VtasViewController extends VtasJFrame {
     private void jButtonDirectorioTicketsActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	
-            
-	}
-	catch (Exception ex) {
-            LoggerUtility.getSingleton().logError(VtasViewController.class, ex);
-            try {
-                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
-            } catch (Exception ex1) {
-                Logger.getLogger(VtasViewController.class.getName()).log(Level.SEVERE, null, ex1);
-            }
-	}
-    }
-    
-    private void jButtonNotaCreditoActionPerformed(java.awt.event.ActionEvent evt) {                                             
-
-	try{            	
-            
+            UtilitiesFactory.getSingleton().getImagesUtility().openTicketsPath();
 	}
 	catch (Exception ex) {
             LoggerUtility.getSingleton().logError(VtasViewController.class, ex);
@@ -649,7 +549,7 @@ public class VtasViewController extends VtasJFrame {
     private void jButtonDirectorioCFDIActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	
-            
+            UtilitiesFactory.getSingleton().getImagesUtility().openInvoicesPath();
 	}
 	catch (Exception ex) {
             LoggerUtility.getSingleton().logError(VtasViewController.class, ex);
@@ -679,7 +579,7 @@ public class VtasViewController extends VtasJFrame {
     private void jButtonDirectorioNotaCreditoActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	
-            
+            UtilitiesFactory.getSingleton().getImagesUtility().openNotcPath();
 	}
 	catch (Exception ex) {
             LoggerUtility.getSingleton().logError(VtasViewController.class, ex);
@@ -709,7 +609,7 @@ public class VtasViewController extends VtasJFrame {
     private void jBDirZActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	
-            
+            UtilitiesFactory.getSingleton().getImagesUtility().openCortzPath();
 	}
 	catch (Exception ex) {
             LoggerUtility.getSingleton().logError(VtasViewController.class, ex);
@@ -739,7 +639,7 @@ public class VtasViewController extends VtasJFrame {
     private void jBDirXActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	
-            
+            UtilitiesFactory.getSingleton().getImagesUtility().openCortxPath();
 	}
 	catch (Exception ex) {
             LoggerUtility.getSingleton().logError(VtasViewController.class, ex);
@@ -754,7 +654,7 @@ public class VtasViewController extends VtasJFrame {
     private void jButtonDirectorioRemisionesActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	
-            
+            UtilitiesFactory.getSingleton().getImagesUtility().openRemsPath();
 	}
 	catch (Exception ex) {
             LoggerUtility.getSingleton().logError(VtasViewController.class, ex);
@@ -781,8 +681,23 @@ public class VtasViewController extends VtasJFrame {
             }
         }
     }
+        
     
-    private void jBGenPDFActionPerformed(java.awt.event.ActionEvent evt) {                                             
+    private void jMenuItemDocuSatGetXMLActionPerformed(java.awt.event.ActionEvent evt) {
+        
+        try {
+            
+        } catch (Exception ex) {
+            LoggerUtility.getSingleton().logError(this.getClass(), ex);
+            try {
+                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+            } catch (Exception ex1) {
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
+            }
+        }
+    }
+    
+    private void jBGenPDFActionPerformed(java.awt.event.ActionEvent evt) {
 
 	try{            	
                         
@@ -797,7 +712,21 @@ public class VtasViewController extends VtasJFrame {
 	}
     }
     
-    private void jBMosTActionPerformed(java.awt.event.ActionEvent evt) {                                             
+    private void jMenuItemSalesFacTickActionPerformed(java.awt.event.ActionEvent evt) {
+        
+        try {
+            ViewControlersFactory.getSingleton().getFacturarTicketsViewController().setVisible();
+        } catch (Exception ex) {
+            LoggerUtility.getSingleton().logError(this.getClass(), ex);
+            try {
+                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+            } catch (Exception ex1) {
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
+            }
+        }
+    }
+    
+    private void jBMosTActionPerformed(java.awt.event.ActionEvent evt) {
 
 	try{            	
             

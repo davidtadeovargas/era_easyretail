@@ -343,6 +343,7 @@ public class NewVtaViewController extends NewVtaJFrame {
                     Partvta.setProd(this.NewVtaProductInfoDataModel.getProduct().getCode());                
                     BigDecimal disccount = new BigDecimal(this.NewVtaProductInfoDataModel.getDisccount(), MathContext.DECIMAL64);
                     Partvta.setDescu(disccount);
+                    Partvta.setInventory(true);
 
                     jTablePartidas.addObject(Partvta);
 

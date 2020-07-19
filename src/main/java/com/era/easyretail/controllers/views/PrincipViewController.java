@@ -259,6 +259,9 @@ public class PrincipViewController extends PrincipJFrame {
             jMenuItemTickets.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jMenuItemTicketsActionPerformed(evt);
             });
+            jMenuItemNotc.addActionListener((java.awt.event.ActionEvent evt) -> {
+                jMenuItemNotcActionPerformed(evt);
+            });
             jMenuItemInvoices.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jMenuItemInvoicesActionPerformed(evt);
             });
@@ -2396,8 +2399,26 @@ public class PrincipViewController extends PrincipJFrame {
             }
         }
     }
+        
+    private void jMenuItemNotcActionPerformed(java.awt.event.ActionEvent evt) {
+        
+        try {
+         
+            final VtasViewController VtasViewController = ViewControlersFactory.getSingleton().getVtasViewController();
+            VtasViewController.setDocumentType(DocumentType.NOTC);
+            VtasViewController.setVisible();
+            
+        } catch (Exception ex) {
+            LoggerUtility.getSingleton().logError(this.getClass(), ex);
+            try {
+                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+            } catch (Exception ex1) {
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
+            }
+        }
+    }
     
-    private void jMenuItemInvoicesActionPerformed(java.awt.event.ActionEvent evt) {                                                    
+    private void jMenuItemInvoicesActionPerformed(java.awt.event.ActionEvent evt) {
         
         try {
          

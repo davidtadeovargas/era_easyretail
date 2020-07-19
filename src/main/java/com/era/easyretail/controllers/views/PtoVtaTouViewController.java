@@ -679,6 +679,7 @@ public class PtoVtaTouViewController extends PtoVtaTouJFrame {
             double diccount = Double.parseDouble(jTDesc.getText().trim());
             BigDecimal disccount = new BigDecimal(diccount, MathContext.DECIMAL64);
             Partvta.setDescu(disccount);
+            Partvta.setInventory(true);
             
             //Add it to the table
             jTab.addObject(Partvta);
