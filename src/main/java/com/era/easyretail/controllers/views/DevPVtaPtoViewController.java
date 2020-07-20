@@ -7,6 +7,7 @@ package com.era.easyretail.controllers.views;
 
 import com.era.logger.LoggerUtility;
 import com.era.models.Sales;
+import com.era.repositories.RepositoryFactory;
 import com.era.views.DevPVtaPtoJFrame;
 import com.era.views.dialogs.DialogsFactory;
 import com.era.views.tables.headers.TableHeaderFactory;
@@ -134,7 +135,7 @@ public class DevPVtaPtoViewController extends DevPVtaPtoJFrame {
             final Sales Sale = (Sales)jTab.getRowSelected();
                     
             //If the sale is already canceled stop
-            if(Sale.isDev() || Sale.isCanceled()){
+            if(RepositoryFactory.getInstance().getSalessRepository().isDev(Sale) || RepositoryFactory.getInstance().getSalessRepository().isCanceled(Sale)){
                 DialogsFactory.getSingleton().showErrorSaleNotContinueByEstatusOKDialog(baseJFrame, (JFrame jFrame) -> {
                     jTab.grabFocus();
                 });

@@ -18,8 +18,6 @@ import com.era.utilities.UtilitiesFactory;
 import com.era.views.comboboxes.SeriesCombobox;
 import com.era.views.dialogs.DialogsFactory;
 import java.math.BigDecimal;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.logging.Level;
@@ -153,10 +151,11 @@ public class FacturarTicketsViewController extends FacturarTicketsJFrame {
                     final Company Company = RepositoryFactory.getInstance().getCompanysRepository().getCustomerByCode(customerCode);
                     
                     //Update the sales
-                    RepositoryFactory.getInstance().getSalessRepository().ringTicketSales(Company, sales, observations,Serie.getCode(),MetogoPago.getCode());
+                    RepositoryFactory.getInstance().getSalessRepository().ringTicketSales(Company, sales, observations,Serie.getSer(),MetogoPago.getCode());
                     
                     //Ring the document
                     
+                    //Success
                     DialogsFactory.getSingleton().showOKOperationCompletedCallbackDialog(jFrame, (JFrame jFrame1) -> {
                         dispose();
                     });
@@ -227,7 +226,7 @@ public class FacturarTicketsViewController extends FacturarTicketsJFrame {
             }
             
             //Get all the sales 
-            sales = RepositoryFactory.getInstance().getSalessRepository().getAllTicketsByDatesRange(customerCode,dateFrom, dateTo);
+            sales = RepositoryFactory.getInstance().getSalessRepository().getAllTicketsByDatesRangeOnlyNotFactured(customerCode,dateFrom, dateTo);
             
             //Load all the sales
             jTableSales.initTable(sales);                        

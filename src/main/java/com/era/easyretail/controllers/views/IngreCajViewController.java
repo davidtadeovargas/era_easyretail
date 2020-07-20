@@ -75,10 +75,7 @@ public class IngreCajViewController extends IngreCajJFrame {
                     //Save the new casher money in box
                     RepositoryFactory.getInstance().getFlujsRepository().saveIngreCaj(ammount);
                     
-                    //Success
-                    DialogsFactory.getSingleton().showOKOperationCompletedCallbackDialog(jFrame, (JFrame jFrame1) -> {
-                        dispose();
-                    });
+                    dispose();
                     
                 } catch (Exception ex) {
                     LoggerUtility.getSingleton().logError(this.getClass(), ex);

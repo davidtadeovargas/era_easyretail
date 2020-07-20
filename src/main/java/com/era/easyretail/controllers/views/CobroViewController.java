@@ -5,6 +5,7 @@
  */
 package com.era.easyretail.controllers.views;
 
+import com.era.datamodels.enums.DocumentType;
 import com.era.easyretail.exceptions.InternalUnexpectedErrorException;
 import com.era.views.CobroJFrame;
 import java.util.List;
@@ -12,8 +13,6 @@ import com.era.logger.LoggerUtility;
 import com.era.models.Coin;
 import com.era.models.Company;
 import com.era.models.Confgral;
-import com.era.models.Consec;
-import com.era.models.DocumentOrigin;
 import com.era.models.ImpuesXProduct;
 import com.era.models.Partvta;
 import com.era.models.Product;
@@ -222,9 +221,8 @@ public class CobroViewController extends CobroJFrame {
         //Get national coin
         final Coin Coin = (Coin)RepositoryFactory.getInstance().getCoinsRepository().getNationalCoin();
 
-        String serie = "";
-        Consec Consec = null;
-        DocumentOrigin DocumentOrigin = null;
+        String serie = "";        
+        DocumentType DocumentType_ = null;
         boolean ticket = false;
         String estatus = "";
         if(jRTic.isSelected()){
@@ -233,11 +231,7 @@ public class CobroViewController extends CobroJFrame {
             final Confgral Confgral = RepositoryFactory.getInstance().getConfgralRepository().getSerieTickInPointOfSale();
             serie = Confgral.getExtr();
 
-            //Get the consec for this serie
-            Consec = (Consec)RepositoryFactory.getInstance().getConsecsRepository().getTicketsConsec(serie);
-
-            //Get the document type
-            DocumentOrigin = RepositoryFactory.getInstance().getDocumentOriginRepository().getDocumentOriginTIK();
+            DocumentType_ = DocumentType.TICKETS;
 
             ticket = true;
 
@@ -249,11 +243,7 @@ public class CobroViewController extends CobroJFrame {
             final Confgral Confgral = RepositoryFactory.getInstance().getConfgralRepository().getSerieRemisionsInPointOfSale();
             serie = Confgral.getExtr();
 
-            //Get the consec for this serie
-            Consec = (Consec)RepositoryFactory.getInstance().getConsecsRepository().getRemisionsConsec(serie);
-
-            //Get the document type
-            DocumentOrigin = RepositoryFactory.getInstance().getDocumentOriginRepository().getDocumentOriginREM();
+            DocumentType_ = DocumentType.REMISION;
 
             ticket = false;
             
@@ -265,35 +255,26 @@ public class CobroViewController extends CobroJFrame {
             final Confgral Confgral = RepositoryFactory.getInstance().getConfgralRepository().getSerieInvoiceInPointOfSale();
             serie = Confgral.getExtr();
 
-            //Get the consec for this serie
-            Consec = (Consec)RepositoryFactory.getInstance().getConsecsRepository().getSalesConsec(serie);
-
-            //Get the document type
-            DocumentOrigin = RepositoryFactory.getInstance().getDocumentOriginRepository().getDocumentOriginFAC();
+            DocumentType_ = DocumentType.INVOICE;
 
             ticket = false;
             
             estatus = "CO";
         }
 
+        if(DocumentType_==null){
+            UtilitiesFactory.getSingleton().getGenericExceptionUtil().generateException("errors_exception_generic_type_of_sale_not_found");
+            return;
+        }
         if(serie.isEmpty()){
             throw new InternalUnexpectedErrorException("serie");
-        }
-        if(Consec==null){
-            throw new InternalUnexpectedErrorException("Consec");
-        }
-        if(DocumentOrigin==null){
-            throw new InternalUnexpectedErrorException("DocumentOrigin");
         }
         if(estatus==null){
             throw new InternalUnexpectedErrorException("estatus");
         }            
 
-        //Update the consec
-        Consec = RepositoryFactory.getInstance().getConsecsRepository().updateConsec(Consec);
-        
         //Get the customer
-        final Company Company = (Company)RepositoryFactory.getInstance().getCompanysRepository().getByCod(Sale.getCompanyCode());
+        final Company Company_ = (Company)RepositoryFactory.getInstance().getCompanysRepository().getByCod(Sale.getCompanyCode());
 
         //Contains the taxes of all the items
         BigDecimal total_retencion = BigDecimal.ZERO;
@@ -324,7 +305,6 @@ public class CobroViewController extends CobroJFrame {
         final String observations = jTAObserv.getText().trim();
 
         Sale.setAccount("");
-        Sale.setReferenceNumber(String.valueOf(Consec.getConsec()));
         Sale.setSerie(serie);
         Sale.setNoser("");
         Sale.setCoinCode(Coin.getCode());
@@ -333,7 +313,6 @@ public class CobroViewController extends CobroJFrame {
         Sale.setTypeExchange(new BigDecimal(Float.toString(Coin.getValue())));
         Sale.setTotalTranslade(total_traslado);
         Sale.setTotalRetention(total_retencion);
-        Sale.setDocumentType(DocumentOrigin.getType());
         Sale.setPaymentMethod("01");
         Sale.setEmisionDate(UtilitiesFactory.getSingleton().getDateTimeUtility().getCurrentDate());
         Sale.setDeliverDate(UtilitiesFactory.getSingleton().getDateTimeUtility().getCurrentDate());
@@ -346,8 +325,24 @@ public class CobroViewController extends CobroJFrame {
         final BigDecimal BigDecimalCardDebit = new BigDecimal(UtilitiesFactory.getSingleton().getNumbersUtility().fromMoneyFormat(jTDebCant.getText().trim()));
         final BigDecimal BigDecimalCardCredit = new BigDecimal(UtilitiesFactory.getSingleton().getNumbersUtility().fromMoneyFormat(jTTarCredCant.getText().trim()));
         
-        //Save the sale
-        RepositoryFactory.getInstance().getSalessRepository().saveSale(Sale, Company, false, partvtas,BigDecimalTotal,BigDecimalCardDebit,BigDecimalCardCredit);
+        switch(DocumentType_){
+            
+            case REMISION:
+                RepositoryFactory.getInstance().getSalessRepository().saveSaleRemision(Sale, Company, false, partvtas,BigDecimalTotal,BigDecimalCardDebit,BigDecimalCardCredit);
+                break;
+                
+            case INVOICE:
+                RepositoryFactory.getInstance().getSalessRepository().saveSaleInvoice(Sale, Company_, false, partvtas,BigDecimalTotal,BigDecimalCardDebit,BigDecimalCardCredit);
+                break;
+    
+            case TICKETS:
+                RepositoryFactory.getInstance().getSalessRepository().saveSaleTicket(Sale, Company_, false, partvtas,BigDecimalTotal,BigDecimalCardDebit,BigDecimalCardCredit);
+                break;
+            
+            case NOTC:
+                RepositoryFactory.getInstance().getSalessRepository().saveSaleNotc(Sale, Company_, false, partvtas,BigDecimalTotal,BigDecimalCardDebit,BigDecimalCardCredit);
+                break;
+        }
 
         if(OnFinish!=null){
             OnFinish.onFinish();

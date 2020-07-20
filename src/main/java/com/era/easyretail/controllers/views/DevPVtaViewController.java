@@ -83,14 +83,14 @@ public class DevPVtaViewController extends DevPVtaJFrame {
         final Company Company = (Company)RepositoryFactory.getInstance().getCompanysRepository().getCustomerByCode(Sale_.getCompanyCode());
         
         //Create document type
-        String typeDocument = "Indefinido (error)";
-        if(Sale_.isInvoiceDocument()){
+        String typeDocument = "Indefinido (error)";        
+        if(RepositoryFactory.getInstance().getSalessRepository().isInvoiceDocument(Sale_)){
             typeDocument = "Factura";
         }
-        else if(Sale_.isRemDocument()){
+        else if(RepositoryFactory.getInstance().getSalessRepository().isRemDocument(Sale_)){
             typeDocument = "Remisión";
         }
-        else if(Sale_.isTicketDocument()){
+        else if(RepositoryFactory.getInstance().getSalessRepository().isTicketDocument(Sale_)){
             typeDocument = "Ticket";
         }
         

@@ -233,6 +233,7 @@ public class ProdsViewController extends ProdsJFrame {
         jCComp.setSelected(Product_.getCompound());
         jCEsParaVent.setSelected(Product_.getIsForSale());
         jCNoSolMaxMin.setSelected(Product_.getAskMaxMin());
+        jCServ.setSelected(Product_.isService());
         jCBajCost.setSelected(Product_.getLowerCost());
         jCNoSer.setSelected(Product_.isAskSerie());
                 

@@ -6,11 +6,11 @@
 package com.era.easyretail.controllers.views;
 
 import com.era.datamodels.NewVtaHeaderInfoDataModel;
+import com.era.datamodels.enums.DocumentType;
 import com.era.logger.LoggerUtility;
 import com.era.models.CPaymentForm;
 import com.era.models.CUsoCFDI;
 import com.era.models.Coin;
-import com.era.models.Consec;
 import com.era.models.MetogoPago;
 import com.era.models.Serie;
 import com.era.models.User;
@@ -32,6 +32,7 @@ public class NewVtaHeaderInfoController extends NewVtaHeaderInfoJFrame {
     
     private NewVtaHeaderInfoDataModel NewVtaHeaderInfoDataModel;
     private OnResult OnResult;
+    private DocumentType DocumentType_;
     
     public NewVtaHeaderInfoController() {
         super("window_title_new_vta_info_header");
@@ -50,18 +51,11 @@ public class NewVtaHeaderInfoController extends NewVtaHeaderInfoJFrame {
             jComboboxMonedas.loadItems();
             jComboBoxFormaPago.loadItems();
             jUsoCFDI.loadItems();
-            jComboBoxMetodoPago.loadItems();
-            
-            jComboBoxSerie.setType(SeriesCombobox.Type.FAC);
-            jComboBoxSerie.loadItems();
+            jComboBoxMetodoPago.loadItems();                        
             
             //Set the current user
             final User User = UtilitiesFactory.getSingleton().getSessionUtility().getUser();
-            jTextFieldVendedor.setText(User.getCode());
-            
-            //Select the sales serie
-            final Serie Serie = RepositoryFactory.getInstance().getSerieRepository().getFirstSerieFAC();            
-            jComboBoxSerie.selectByObject(Serie);
+            jTextFieldVendedor.setText(User.getCode());                        
             
             //Select national coin
             final Coin Coin = RepositoryFactory.getInstance().getCoinsRepository().getNationalCoin();
@@ -89,6 +83,34 @@ public class NewVtaHeaderInfoController extends NewVtaHeaderInfoJFrame {
         }
         
     }
+
+    public void setDocumentType_(DocumentType DocumentType_) throws Exception {
+        this.DocumentType_ = DocumentType_;
+                
+        Serie Serie;
+        switch(DocumentType_){
+            
+            case REMISION:                
+                jComboBoxSerie.setType(SeriesCombobox.Type.REM);
+                Serie = RepositoryFactory.getInstance().getSerieRepository().getFirstSerieREM();
+                break;
+                
+            case INVOICE:
+                jComboBoxSerie.setType(SeriesCombobox.Type.FAC);
+                Serie = RepositoryFactory.getInstance().getSerieRepository().getFirstSerieFAC();
+                break;
+                
+            default:
+                Serie = RepositoryFactory.getInstance().getSerieRepository().getFirstSerieFAC();
+                jComboBoxSerie.setType(SeriesCombobox.Type.FAC);                
+        }
+                
+        //Load items in the combobox
+        jComboBoxSerie.loadItems();
+        
+        //Select the sales serie
+        jComboBoxSerie.selectByObject(Serie);
+    }        
 
     public void setOnResult(OnResult OnResult) {
         this.OnResult = OnResult;

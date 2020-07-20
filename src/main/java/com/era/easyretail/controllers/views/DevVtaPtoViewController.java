@@ -127,8 +127,8 @@ public class DevVtaPtoViewController extends DevVtaPtoJFrame {
             //Get the selected sale
             final Sales Sale = (Sales)jTab.getRowSelected();
                     
-            //If the sale is already returned stop
-            if(Sale.isDev() || Sale.isCanceled() || Sale.isParcialDev()){
+            //If the sale is already returned stop            
+            if(RepositoryFactory.getInstance().getSalessRepository().isDev(Sale) || RepositoryFactory.getInstance().getSalessRepository().isCanceled(Sale) || RepositoryFactory.getInstance().getSalessRepository().isParcialDev(Sale)){
                 DialogsFactory.getSingleton().showErrorSaleNotContinueByEstatusOKDialog(baseJFrame, (JFrame jFrame) -> {
                     jTab.grabFocus();
                 });

@@ -13,21 +13,23 @@ import com.era.datamodels.enums.DocumentType;
 import com.era.views.NewVtaJFrame;
 import java.util.List;
 import com.era.logger.LoggerUtility;
+import com.era.models.CPaymentForm;
+import com.era.models.CUsoCFDI;
+import com.era.models.Coin;
 import com.era.models.Company;
-import com.era.models.Consec;
-import com.era.models.DocumentOrigin;
 import com.era.models.Kits;
+import com.era.models.MetogoPago;
 import com.era.models.Partvta;
 import com.era.models.Sales;
+import com.era.models.Serie;
+import com.era.models.User;
 import com.era.repositories.RepositoryFactory;
-import com.era.utilities.DialogPropertiesUitlity;
 import com.era.utilities.UtilitiesFactory;
 import com.era.views.dialogs.DialogsFactory;
 import com.era.views.tables.headers.TableHeaderFactory;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.util.ArrayList;
-import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
@@ -42,7 +44,7 @@ public class NewVtaViewController extends NewVtaJFrame {
     private NewVtaProductInfoDataModel NewVtaProductInfoDataModel;
     private NewVtaHeaderInfoDataModel NewVtaHeaderInfoDataModel;
     private TotalsDataModel Totals;    
-    private DocumentType DocumentType;
+    private DocumentType DocumentType_;
     
     
     public NewVtaViewController() {
@@ -87,6 +89,8 @@ public class NewVtaViewController extends NewVtaJFrame {
             
             //Load default casher customer
             loadCasherCustomer();
+            
+            setContadoConditions();
                     
         }catch (Exception ex) {
             LoggerUtility.getSingleton().logError(NewVtaViewController.class, ex);
@@ -97,24 +101,37 @@ public class NewVtaViewController extends NewVtaJFrame {
             }
         }
     }
-
+    
     public void setDocumentType(DocumentType DocumentType) {
         
-        this.DocumentType = DocumentType;
+        this.DocumentType_ = DocumentType;
         
-        switch(DocumentType){
+        String content;
+        switch(DocumentType_){
             
-            case REMISION:
+            case REMISION:                
+                content = this.props.getProperty("new_remision_sales");
                 break;
                 
             case INVOICE:
+                content = this.props.getProperty("new_invoice_sales");
+                break;
+                
+            default:
+                content = this.props.getProperty("new_invoice_sales");
                 break;
         }
+        
+        //Set the content
+        jLNot.setText(content);
     }
 
         
-    public void setSale(Sales Sale) {
+    public void setSale(Sales Sale) throws Exception {
         this.Sale = Sale;
+        
+        //Load the sale
+        loadModelInFields(Sale);
     }
 
     private void loadCasherCustomer() throws Exception {
@@ -159,17 +176,26 @@ public class NewVtaViewController extends NewVtaJFrame {
             jLabelAddress3.setText("");
         }
         
-        final Properties Properties = DialogPropertiesUitlity.getSingleton().getProperties();
+        //If is pay at the moment        
+        if(NewVtaCustomerInfoDataModel.isContado()){
+            setContadoConditions();
+        }
+        else{        
+            setCreditConditions();
+        }
+    }
+    
+    private void setContadoConditions() {
         
         //If is pay at the moment
-        String labelConditionPayment;
-        if(NewVtaCustomerInfoDataModel.isContado()){
-            labelConditionPayment = Properties.getProperty("sale_pay_at_moment");        }
-        else{        
-            labelConditionPayment = Properties.getProperty("sale_pay_with_credit");
-        }
+        String labelConditionPayment = props.getProperty("sale_pay_at_moment");
+        jLTipVta.setText(labelConditionPayment);
+    }
+    
+    private void setCreditConditions() {
         
-        //Set label for credit or pay at the momento
+        //If is pay at the moment
+        String labelConditionPayment = props.getProperty("sale_pay_with_credit");
         jLTipVta.setText(labelConditionPayment);
     }
     
@@ -181,7 +207,59 @@ public class NewVtaViewController extends NewVtaJFrame {
     }
     
     @Override
-    public void loadModelInFields(Object ObjectModel) throws  Exception {        
+    public void loadModelInFields(Object ObjectModel) throws  Exception {
+        
+        //Cast the model
+        final Sales Sale_ = (Sales)ObjectModel;
+        
+        //Get from repositories missing data
+        final Serie Serie = RepositoryFactory.getInstance().getSerieRepository().getBySerie(Sale_.getSerie());
+        final CPaymentForm CPaymentForm = (CPaymentForm)RepositoryFactory.getInstance().getPaymentFormsRepository().getByCode(Sale_.getPaymentForm());
+        final CUsoCFDI CUsoCFDI = (CUsoCFDI)RepositoryFactory.getInstance().getCUsoCFDIsRepository().getByCode(Sale_.getUsocfdi());
+        final Coin Coin = (Coin)RepositoryFactory.getInstance().getCoinsRepository().getByCode(Sale_.getCoinCode());
+        final MetogoPago MetogoPago = (MetogoPago)RepositoryFactory.getInstance().getMetogoPagosRepository().getByCode(Sale_.getPaymentMethod());        
+        final User User = (User)RepositoryFactory.getInstance().getUsersRepository().getByCode(Sale_.getSalesMan());
+        
+        //Create the header model
+        final NewVtaHeaderInfoDataModel NewVtaHeaderInfoDataModel_ = new NewVtaHeaderInfoDataModel();
+        NewVtaHeaderInfoDataModel_.setSerie(Serie);
+        NewVtaHeaderInfoDataModel_.setCPaymentForm(CPaymentForm);
+        NewVtaHeaderInfoDataModel_.setCUsoCFDI(CUsoCFDI);
+        NewVtaHeaderInfoDataModel_.setCoin(Coin);
+        NewVtaHeaderInfoDataModel_.setMetogoPago(MetogoPago);
+        NewVtaHeaderInfoDataModel_.setAccount(Sale_.getAccount());
+        NewVtaHeaderInfoDataModel_.setObervations(Sale_.getObservation());
+        NewVtaHeaderInfoDataModel_.setSalesman(User);
+        NewVtaHeaderInfoDataModel_.setDate(Sale_.getFalt().toString());
+        
+        //Set the header info
+        setHeaderInfo(NewVtaHeaderInfoDataModel_);
+        
+        final Company Company = (Company)RepositoryFactory.getInstance().getCompanysRepository().getCustomerByCode(Sale_.getCompanyCode());
+        
+        //Create the customer model
+        final NewVtaCustomerInfoDataModel NewVtaCustomerInfoDataModel_ = new NewVtaCustomerInfoDataModel();
+        NewVtaCustomerInfoDataModel_.setCompany(Company);
+        NewVtaCustomerInfoDataModel_.setContado(!Sale_.isCredit());
+        
+        //Set the customer info
+        setCustomerInfoInPanel(NewVtaCustomerInfoDataModel_);
+        
+        //Load the items in the detail table
+        final List<Partvta> items = (List<Partvta>)RepositoryFactory.getInstance().getPartvtaRepository().getPartsVta(Sale_.getId());
+        jTablePartidas.initTable(items);
+        
+        //Convert to money the totals
+        final String subtotal = UtilitiesFactory.getSingleton().getNumbersUtility().toMoneyFormat(String.valueOf(Sale_.getSubtotal()));
+        final String disccount = UtilitiesFactory.getSingleton().getNumbersUtility().toMoneyFormat(String.valueOf(Sale_.getTotalDisccount()));
+        final String taxes = UtilitiesFactory.getSingleton().getNumbersUtility().toMoneyFormat(String.valueOf(Sale_.getTax()));
+        final String total = UtilitiesFactory.getSingleton().getNumbersUtility().toMoneyFormat(String.valueOf(Sale_.getTotal()));
+                
+        //Set the totals
+        jTSubTot.setText(subtotal);        
+        jTTotDesc.setText(disccount);
+        campo_impuesto.setText(taxes);
+        jTTot.setText(total);
     }
     
     
@@ -218,15 +296,6 @@ public class NewVtaViewController extends NewVtaJFrame {
                 
                 try {
                     
-                    final Consec Consec = (Consec)RepositoryFactory.getInstance().getConsecsRepository().getSalesConsec(NewVtaHeaderInfoDataModel.getSerie().getSer());
-                    
-                    final DocumentOrigin DocumentOrigin = RepositoryFactory.getInstance().getDocumentOriginRepository().getDocumentOriginFAC();
-                    
-                    //If has to update the customer info
-                    if(NewVtaCustomerInfoDataModel.isUpdateCustomer()){
-                        RepositoryFactory.getInstance().getCompanysRepository().saveOrUpdateCustomer(NewVtaCustomerInfoDataModel.getCompany());
-                    }
-                    
                     //Create the sales model
                     final Sales Sales = new Sales();
                     Sales.setCompanyCode(NewVtaCustomerInfoDataModel.getCompany().getCompanyCode());
@@ -235,8 +304,7 @@ public class NewVtaViewController extends NewVtaJFrame {
                     Sales.setTax(Totals.getTaxes());
                     Sales.setTotal(Totals.getTotal());                    
                     Sales.setAccount(NewVtaHeaderInfoDataModel.getAccount());
-                    Sales.setReferenceNumber(String.valueOf(Consec.getConsec()));
-                    Sales.setSerie(NewVtaHeaderInfoDataModel.getSerie().getCode());
+                    Sales.setSerie(NewVtaHeaderInfoDataModel.getSerie().getSer());
                     Sales.setNoser("");
                     Sales.setCoinCode(NewVtaHeaderInfoDataModel.getCoin().getCode());
                     Sales.setSalesMan(NewVtaHeaderInfoDataModel.getSalesman().getCode());
@@ -244,10 +312,10 @@ public class NewVtaViewController extends NewVtaJFrame {
                     Sales.setTypeExchange(new BigDecimal(Float.toString(NewVtaHeaderInfoDataModel.getCoin().getValue())));
                     Sales.setTotalTranslade(BigDecimal.ZERO);
                     Sales.setTotalRetention(BigDecimal.ZERO);
-                    Sales.setDocumentType(DocumentOrigin.getType());
                     Sales.setPaymentMethod(NewVtaHeaderInfoDataModel.getMetogoPago().getCode());
                     Sales.setEmisionDate(UtilitiesFactory.getSingleton().getDateTimeUtility().getCurrentDate());
                     Sales.setDeliverDate(UtilitiesFactory.getSingleton().getDateTimeUtility().getCurrentDate());
+                    Sales.setUsocfdi(NewVtaHeaderInfoDataModel.getCUsoCFDI().getCode());
                     Sales.setTicket(false);
                     Sales.setEstatus(RepositoryFactory.getInstance().getSalessRepository().getConfirmedSaleStatus());
                     Sales.setObservation("");
@@ -257,15 +325,21 @@ public class NewVtaViewController extends NewVtaJFrame {
                     BigDecimal totalCash = BigDecimal.ZERO;
                     if(NewVtaCustomerInfoDataModel.isContado()){
                         totalCash = new BigDecimal(UtilitiesFactory.getSingleton().getNumbersUtility().fromMoneyFormat(jTTot.getText().trim()));
-                        
-                        Sales.setCredit(false);
-                    }
-                    else{
-                        Sales.setCredit(true);
                     }
                     
-                    //Save the sale
-                    RepositoryFactory.getInstance().getSalessRepository().saveSale(Sales, NewVtaCustomerInfoDataModel.getCompany(),NewVtaCustomerInfoDataModel.isUpdateCustomer(), parts,totalCash,BigDecimal.ZERO,BigDecimal.ZERO);
+                    switch(DocumentType_){
+                        
+                        case REMISION:
+                            RepositoryFactory.getInstance().getSalessRepository().saveSaleRemision(Sales, NewVtaCustomerInfoDataModel.getCompany(),NewVtaCustomerInfoDataModel.isUpdateCustomer(), parts,totalCash,BigDecimal.ZERO,BigDecimal.ZERO);
+                            break;
+                            
+                        case INVOICE:
+                            RepositoryFactory.getInstance().getSalessRepository().saveSaleInvoice(Sales, NewVtaCustomerInfoDataModel.getCompany(),NewVtaCustomerInfoDataModel.isUpdateCustomer(), parts,totalCash,BigDecimal.ZERO,BigDecimal.ZERO);
+                            break;
+                            
+                        default:
+                            RepositoryFactory.getInstance().getSalessRepository().saveSaleInvoice(Sales, NewVtaCustomerInfoDataModel.getCompany(),NewVtaCustomerInfoDataModel.isUpdateCustomer(), parts,totalCash,BigDecimal.ZERO,BigDecimal.ZERO);
+                    }
                     
                     DialogsFactory.getSingleton().showOKOperationCompletedCallbackDialog(baseJFrame, (JFrame jFrame1) -> {
                         dispose();
@@ -421,21 +495,11 @@ public class NewVtaViewController extends NewVtaJFrame {
             NewVtaHeaderInfoController.setOnResult((NewVtaHeaderInfoDataModel NewVtaHeaderInfoDataModel_) -> {
                 
                 this.NewVtaHeaderInfoDataModel = NewVtaHeaderInfoDataModel_;
-                                
-                final String date = this.NewVtaHeaderInfoDataModel.getDate()==null?UtilitiesFactory.getSingleton().getDateTimeUtility().getCurrentDate().toString():this.NewVtaHeaderInfoDataModel.getDate();
-                
-                //Create the info text
-                final String info = "Fecha: " + date + "\n" +
-                                    "Forma de pago: " + this.NewVtaHeaderInfoDataModel.getCPaymentForm().getDescription() + "\n" +
-                                    "Moneda: " + this.NewVtaHeaderInfoDataModel.getCoin().getDescription() + "\n" +
-                                    "Uso CFDI: " + this.NewVtaHeaderInfoDataModel.getCUsoCFDI().getDescription() + "\n" +
-                                    "Vendedor: " + this.NewVtaHeaderInfoDataModel.getSalesman().getName() + "\n" + 
-                                    "Serie: " + this.NewVtaHeaderInfoDataModel.getSerie().getDescription() + "\n" +
-                                    "Observaciones: " + this.NewVtaHeaderInfoDataModel.getObervations() + "\n";
-                
-                //Set the info
-                jTextArea1.setText(info);
+                              
+                //Set the header info
+                setHeaderInfo(NewVtaHeaderInfoDataModel);
             });
+            NewVtaHeaderInfoController.setDocumentType_(DocumentType_);
             NewVtaHeaderInfoController.setVisible();
 	}
 	catch (Exception ex) {
@@ -446,6 +510,23 @@ public class NewVtaViewController extends NewVtaJFrame {
                 Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
             }
 	}
+    }
+    
+    private void setHeaderInfo(final NewVtaHeaderInfoDataModel NewVtaHeaderInfoDataModel){
+        
+        final String date = NewVtaHeaderInfoDataModel.getDate()==null?UtilitiesFactory.getSingleton().getDateTimeUtility().getCurrentDate().toString():NewVtaHeaderInfoDataModel.getDate();
+        
+        //Create the info text
+        final String info = "Fecha: " + date + "\n" +
+                            "Forma de pago: " + NewVtaHeaderInfoDataModel.getCPaymentForm().getDescription() + "\n" +
+                            "Moneda: " + NewVtaHeaderInfoDataModel.getCoin().getDescription() + "\n" +
+                            "Uso CFDI: " + NewVtaHeaderInfoDataModel.getCUsoCFDI().getDescription() + "\n" +
+                            "Vendedor: " + NewVtaHeaderInfoDataModel.getSalesman().getName() + "\n" + 
+                            "Serie: " + NewVtaHeaderInfoDataModel.getSerie().getDescription() + "\n" +
+                            "Observaciones: " + NewVtaHeaderInfoDataModel.getObervations() + "\n";
+
+        //Set the info
+        jTextArea1.setText(info);
     }
     
     private void jBDelActionPerformed(java.awt.event.ActionEvent evt) {                                             

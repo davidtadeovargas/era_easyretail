@@ -252,6 +252,11 @@ public class VtasViewController extends VtasJFrame {
             case TICKETS:
                 jTableVentas.setDocumentType(DocumentType.TICKETS);
                 type = this.props.getProperty("tickets");
+                
+                jMenuItemGralNew.setEnabled(false);
+                jMenuDocuSAT.setEnabled(false);
+                jMenuItemGralSend.setEnabled(false);
+                
                 break;
                 
             case NOTC:
@@ -518,8 +523,10 @@ public class VtasViewController extends VtasJFrame {
             
             //Open the sale in view mode
             final NewVtaViewController NewVtaViewController = ViewControlersFactory.getSingleton().getNewVtaViewController();
+            NewVtaViewController.setDocumentType(DocumentType);
             NewVtaViewController.setSale(Sale);
-            NewVtaViewController.setVisible();
+            NewVtaViewController.setReadOnly(true);
+            NewVtaViewController.setVisible();            
 	}
 	catch (Exception ex) {
             LoggerUtility.getSingleton().logError(VtasViewController.class, ex);
@@ -564,7 +571,9 @@ public class VtasViewController extends VtasJFrame {
     private void jBNewActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	
-            ViewControlersFactory.getSingleton().getNewVtaViewController().setVisible();
+            final NewVtaViewController NewVtaViewController_ = ViewControlersFactory.getSingleton().getNewVtaViewController();
+            NewVtaViewController_.setDocumentType(DocumentType);
+            NewVtaViewController_.setVisible();            
 	}
 	catch (Exception ex) {
             LoggerUtility.getSingleton().logError(VtasViewController.class, ex);

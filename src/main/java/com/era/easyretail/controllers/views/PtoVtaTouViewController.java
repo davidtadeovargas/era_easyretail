@@ -157,9 +157,9 @@ public class PtoVtaTouViewController extends PtoVtaTouJFrame {
             jTab.initTable(items);
 
             //Select the customer for the screen
-            final Company Company = (Company)RepositoryFactory.getInstance().getCompanysRepository().getClienteMostrador();
-            jTCli.setText(Company.getCompanyCode());
-            jTNomb.setText(Company.getNom());
+            final Company Company_ = (Company)RepositoryFactory.getInstance().getCompanysRepository().getClienteMostrador();
+            jTCli.setText(Company_.getCompanyCode());
+            jTNomb.setText(Company_.getNom());
             
             //Hide or show the lines and products panel ?
             if(showProductsPanelInSalespoint){
