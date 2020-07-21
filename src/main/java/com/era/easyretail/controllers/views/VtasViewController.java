@@ -7,6 +7,7 @@ package com.era.easyretail.controllers.views;
 
 import com.era.datamodels.enums.DocumentType;
 import com.era.logger.LoggerUtility;
+import com.era.models.Company;
 import com.era.models.DocumentOrigin;
 import com.era.models.Partvta;
 import com.era.models.Sales;
@@ -15,6 +16,7 @@ import com.era.utilities.UtilitiesFactory;
 import com.era.views.VtasJFrame;
 import com.era.views.dialogs.DialogsFactory;
 import com.era.views.tables.headers.TableHeaderFactory;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -27,7 +29,7 @@ import javax.swing.event.ListSelectionEvent;
  */
 public class VtasViewController extends VtasJFrame {
     
-    private DocumentType DocumentType;
+    private DocumentType DocumentType_;
     
     public VtasViewController() {
         super("window_title_sales");
@@ -41,6 +43,9 @@ public class VtasViewController extends VtasJFrame {
             jBBusc.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jBBuscActionPerformed(evt);
             });
+            jMenuItemTicketsFacturados.addActionListener((java.awt.event.ActionEvent evt) -> {
+                jMenuItemTicketsFacturadosActionPerformed(evt);
+            });            
             jBMosT.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jBMosTActionPerformed(evt);
             });
@@ -158,7 +163,27 @@ public class VtasViewController extends VtasJFrame {
                     final List<Partvta> parts = RepositoryFactory.getInstance().getPartvtaRepository().getPartsVta(Sale.getId());
                                         
                     //Load the parts in table
-                    jTab2.initTable(parts);
+                    jTab2.initTable(parts);                                        
+                        
+                    //Show the type of sale
+                    String type;
+                    if(RepositoryFactory.getInstance().getSalessRepository().isInvoiceDocument(Sale)){
+                        type = this.props.getProperty("invoice");
+                    }
+                    else if(RepositoryFactory.getInstance().getSalessRepository().isRemDocument(Sale)){
+                        type = this.props.getProperty("remision");
+                    }
+                    else if(RepositoryFactory.getInstance().getSalessRepository().isTicketDocument(Sale)){
+                        type = this.props.getProperty("ticket");
+                    }
+                    else if(RepositoryFactory.getInstance().getSalessRepository().isNotcDocument(Sale)){
+                        type = this.props.getProperty("notc");
+                    }
+                    else{
+                        UtilitiesFactory.getSingleton().getGenericExceptionUtil().generateException("");
+                        return;
+                    }
+                    jLabelTypeSale.setText(type);
                             
                 } catch (Exception ex) {
                     LoggerUtility.getSingleton().logError(this.getClass(), ex);
@@ -228,7 +253,7 @@ public class VtasViewController extends VtasJFrame {
 
     public void setDocumentType(DocumentType DocumentType) throws Exception {
         
-        this.DocumentType = DocumentType;
+        this.DocumentType_ = DocumentType;
         
         String type = "";
         
@@ -404,7 +429,58 @@ public class VtasViewController extends VtasJFrame {
     private void jButtonTimbrarActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	
+    
+            //First select a sale to view
+            if(!jTableVentas.isRowSelected()){
+                DialogsFactory.getSingleton().showErrorOKNoSelectionCallbackDialog(baseJFrame, (JFrame jFrame) -> {
+                    jTableVentas.grabFocus();
+                });
+                return;
+            }
             
+            //Get selected sale
+            final Sales Sale = (Sales)jTableVentas.getRowSelected();
+            
+            //If the sale is not an invoice stop
+            if(!RepositoryFactory.getInstance().getSalessRepository().isInvoiceDocument(Sale)){
+                DialogsFactory.getSingleton().showErrorOKCallbackDialog(baseJFrame, "errors_document_has_to_be_invoice", null);
+                return;
+            }
+            
+            //If the invoice is already ringed stopd
+            if(Sale.isInvoiced()){
+                DialogsFactory.getSingleton().showErrorOKCallbackDialog(baseJFrame, "errors_document_already_ringed", null);
+                return;
+            }
+            
+            //If the sale is not in ideal estate stop
+            if(!RepositoryFactory.getInstance().getSalessRepository().isConfirmed(Sale)){
+                DialogsFactory.getSingleton().showErrorOKCallbackDialog(baseJFrame, "errors_sale_is_not_confirmed", null);
+                return;
+            }
+            
+            DialogsFactory.getSingleton().showQuestionContinueDialog(baseJFrame, (JFrame jFrame) -> {
+                
+                try {
+                    
+                    //Get the customer from db
+                    final Company Company = RepositoryFactory.getInstance().getCompanysRepository().getCustomerByCode(Sale.getCompanyCode());
+                    
+                    //Ring the sale
+                    RepositoryFactory.getInstance().getSalessRepository().actualizaVentaTimbrado(Sale.getId(), String.valueOf(new Date().getTime()), String.valueOf(new Date().getTime()), String.valueOf(new Date().getTime()), Company.getExpeditionPlace(), Company.getFiscalRegimen(), String.valueOf(new Date().getTime()), String.valueOf(new Date().getTime()), String.valueOf(new Date().getTime()));
+                    
+                    DialogsFactory.getSingleton().showOKOperationCompletedCallbackDialog(jFrame, (JFrame jFrame1) -> {
+                    });
+                    
+                } catch (Exception ex) {
+                    LoggerUtility.getSingleton().logError(this.getClass(), ex);
+                    try {
+                        DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+                    } catch (Exception ex1) {
+                        Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
+                    }
+                }
+            });
 	}
 	catch (Exception ex) {
             LoggerUtility.getSingleton().logError(VtasViewController.class, ex);
@@ -520,10 +596,19 @@ public class VtasViewController extends VtasJFrame {
             
             //Get selected sale
             final Sales Sale = (Sales)jTableVentas.getRowSelected();
-            
-            //Open the sale in view mode
             final NewVtaViewController NewVtaViewController = ViewControlersFactory.getSingleton().getNewVtaViewController();
-            NewVtaViewController.setDocumentType(DocumentType);
+            if(RepositoryFactory.getInstance().getSalessRepository().isInvoiceDocument(Sale)){
+                NewVtaViewController.setDocumentType(DocumentType.INVOICE);
+            }
+            else if(RepositoryFactory.getInstance().getSalessRepository().isRemDocument(Sale)){
+                NewVtaViewController.setDocumentType(DocumentType.REMISION);
+            }
+            else if(RepositoryFactory.getInstance().getSalessRepository().isTicketDocument(Sale)){
+                NewVtaViewController.setDocumentType(DocumentType.TICKETS);
+            }
+            else if(RepositoryFactory.getInstance().getSalessRepository().isNotcDocument(Sale)){
+                NewVtaViewController.setDocumentType(DocumentType.NOTC);
+            }
             NewVtaViewController.setSale(Sale);
             NewVtaViewController.setReadOnly(true);
             NewVtaViewController.setVisible();            
@@ -572,7 +657,7 @@ public class VtasViewController extends VtasJFrame {
 
 	try{            	
             final NewVtaViewController NewVtaViewController_ = ViewControlersFactory.getSingleton().getNewVtaViewController();
-            NewVtaViewController_.setDocumentType(DocumentType);
+            NewVtaViewController_.setDocumentType(DocumentType_);
             NewVtaViewController_.setVisible();            
 	}
 	catch (Exception ex) {
@@ -725,6 +810,50 @@ public class VtasViewController extends VtasJFrame {
         
         try {
             ViewControlersFactory.getSingleton().getFacturarTicketsViewController().setVisible();
+        } catch (Exception ex) {
+            LoggerUtility.getSingleton().logError(this.getClass(), ex);
+            try {
+                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+            } catch (Exception ex1) {
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
+            }
+        }
+    }
+    
+    
+    private void jMenuItemTicketsFacturadosActionPerformed(java.awt.event.ActionEvent evt) {
+        try {
+            
+            //First select a sale to view
+            if(!jTableVentas.isRowSelected()){
+                DialogsFactory.getSingleton().showErrorOKNoSelectionCallbackDialog(baseJFrame, (JFrame jFrame) -> {
+                    jTableVentas.grabFocus();
+                });
+                return;
+            }
+            
+            //Get selected sale
+            final Sales Sale = (Sales)jTableVentas.getRowSelected();
+            
+            //If the document is not an invoice stop
+            if(!RepositoryFactory.getInstance().getSalessRepository().isInvoiceDocument(Sale)){
+                DialogsFactory.getSingleton().showErrorOKCallbackDialog(baseJFrame, "errors_document_has_to_be_invoice", null);
+                return;
+            }
+            
+            //Get all the ticket sales related
+            final List<Sales> sales = RepositoryFactory.getInstance().getSalessRepository().getAllTicketSales(Sale.getId());
+            
+            //If no one stop
+            if(sales.isEmpty()){
+                DialogsFactory.getSingleton().showErrorOKCallbackDialog(baseJFrame, "errors_records_not_exists", null);
+                return;
+            }
+            
+            final TicketsFacturadosViewController TicketsFacturadosViewController = ViewControlersFactory.getSingleton().getTicketsFacturadosViewController();
+            TicketsFacturadosViewController.init(Sale,sales);
+            TicketsFacturadosViewController.setVisible();
+            
         } catch (Exception ex) {
             LoggerUtility.getSingleton().logError(this.getClass(), ex);
             try {

@@ -21,11 +21,13 @@ import com.era.models.User;
 import com.era.repositories.RepositoryFactory;
 import com.era.utilities.UtilitiesFactory;
 import com.era.views.dialogs.DialogsFactory;
+import com.era.views.utils.JComponentUtils;
 import java.awt.event.FocusEvent;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ButtonGroup;
 import javax.swing.JFrame;
 /**
  *
@@ -35,13 +37,54 @@ public class CobroViewController extends CobroJFrame {
             
     private Sales Sale;
     private List<Partvta> partvtas;
-    private OnFinish OnFinish;
+    private OnFinish OnFinish;    
     private Company Company;
             
     public CobroViewController() {
         super("window_title_cobro");
         
         try{
+            
+            ButtonGroup g = new ButtonGroup();
+            g.add(jRTic);
+            g.add(jRRem);
+            g.add(jRFac);
+
+            ButtonGroup creditOrCashRadioG = new ButtonGroup();
+            creditOrCashRadioG.add(jRadioButtonCredit);
+            creditOrCashRadioG.add(jRadioButtonCash);
+        
+            this.JComponentUtils.onRadioButtonChangeListener(jRadioButtonCredit, new JComponentUtils.OnRadioButtonChange(){
+
+                @Override
+                public void onChecked() {
+                    try {
+                        creditPayment();
+                    } catch (Exception ex) {
+                        LoggerUtility.getSingleton().logError(this.getClass(), ex);
+                        try {
+                            DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+                        } catch (Exception ex1) {
+                            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
+                        }
+                    }
+                }
+
+                @Override
+                public void onUncheked() {
+                    try {
+                        atmomentPayment();
+                    } catch (Exception ex) {
+                        LoggerUtility.getSingleton().logError(this.getClass(), ex);
+                        try {
+                            DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+                        } catch (Exception ex1) {
+                            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
+                        }
+                    }                    
+                }
+                
+            });
             
             this.getRootPane().setDefaultButton(jBCob);
         
@@ -141,8 +184,56 @@ public class CobroViewController extends CobroJFrame {
         //Set the cash
         jTEfeCant.setText(UtilitiesFactory.getSingleton().getNumbersUtility().toMoneyFormat(String.valueOf(Sale.getTotal().doubleValue())));
         jTTot.setText(UtilitiesFactory.getSingleton().getNumbersUtility().toMoneyFormat(String.valueOf(Sale.getTotal().doubleValue())));
-                
+        
+        //If the customer has credit        
+        if(this.Company.hasCredit()){
+            
+            //If the customer has saldo a favor
+            final BigDecimal saldoFavor = RepositoryFactory.getInstance().getCxcRepository().getSaldoFavorFromCustomer(this.Company.getCompanyCode());
+            if(saldoFavor.compareTo(BigDecimal.ZERO)>0){                
+                creditPayment();
+            }
+        }
+        else{
+            jRadioButtonCredit.setEnabled(false);
+        }
+        
         //Calculate totals
+        calculateTotals();
+    }
+    
+    private void creditPayment() throws Exception{
+        
+        //Select radio to credit
+        jRadioButtonCredit.setSelected(true);
+        jRadioButtonCredit.setEnabled(true);
+
+        //Disable at moment payment
+        jTEfeCant.setEnabled(false);
+        jTDebCant.setEnabled(false);
+        jTTarCredCant.setEnabled(false);                
+        jTEfeCant.setText("$0.00");
+        jTDebCant.setText("$0.00");
+        jTTarCredCant.setText("$0.00");        
+        
+        calculateTotals();
+        
+        jTSald.setText("$0.00");
+    }
+    
+    private void atmomentPayment() throws Exception{
+        
+        //Select radio to credit
+        jRadioButtonCash.setSelected(true);
+
+        //Enable at moment payment
+        jTEfeCant.setEnabled(true);
+        jTDebCant.setEnabled(true);
+        jTTarCredCant.setEnabled(true);
+        
+        jTEfeCant.setText(UtilitiesFactory.getSingleton().getNumbersUtility().toMoneyFormat(String.valueOf(Sale.getTotal())));
+        jTSald.setText("$0.00");
+        
         calculateTotals();
     }
     
@@ -197,7 +288,6 @@ public class CobroViewController extends CobroJFrame {
     private void charge() throws Exception {
         
         final BigDecimal sald = new BigDecimal(Double.valueOf(UtilitiesFactory.getSingleton().getNumbersUtility().fromMoneyFormat(jTSald.getText().trim())), MathContext.DECIMAL64);
-        final BigDecimal total = Sale.getTotal();
 
         //If there is pending amount stop
         if(sald.compareTo(BigDecimal.ZERO)!=0){
@@ -222,9 +312,9 @@ public class CobroViewController extends CobroJFrame {
         final Coin Coin = (Coin)RepositoryFactory.getInstance().getCoinsRepository().getNationalCoin();
 
         String serie = "";        
-        DocumentType DocumentType_ = null;
         boolean ticket = false;
         String estatus = "";
+        DocumentType DocumentType_ = null;
         if(jRTic.isSelected()){
 
             //Get the serie
@@ -332,7 +422,7 @@ public class CobroViewController extends CobroJFrame {
                 break;
                 
             case INVOICE:
-                RepositoryFactory.getInstance().getSalessRepository().saveSaleInvoice(Sale, Company_, false, partvtas,BigDecimalTotal,BigDecimalCardDebit,BigDecimalCardCredit);
+                RepositoryFactory.getInstance().getSalessRepository().saveSaleInvoice(Sale, true, Company_, false, partvtas,BigDecimalTotal,BigDecimalCardDebit,BigDecimalCardCredit);
                 break;
     
             case TICKETS:
@@ -355,6 +445,25 @@ public class CobroViewController extends CobroJFrame {
 
 	try{
             
+            if(jRFac.isSelected()){
+
+                //Is the customer is not mostrador
+                if(!Company.isCashCustomer()){
+
+                    //The customer need to have all the fiscal data
+                    if(     Company.getCalle().isEmpty() || 
+                            Company.getCol().isEmpty() || 
+                            Company.getCP().isEmpty() || 
+                            Company.getNoext().isEmpty() || 
+                            Company.getRFC().isEmpty() || 
+                            Company.getCiu().isEmpty() || 
+                            Company.getEstad().isEmpty()){
+                        UtilitiesFactory.getSingleton().getGenericExceptionUtil().generateException("errors_missing_fiscal_info");
+                        return;
+                    }
+                }
+            }
+
             DialogsFactory.getSingleton().showQuestionContinueDialog(baseJFrame, (JFrame jFrame) -> {
                 
                 try {

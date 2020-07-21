@@ -116,7 +116,11 @@ public class NewVtaViewController extends NewVtaJFrame {
             case INVOICE:
                 content = this.props.getProperty("new_invoice_sales");
                 break;
-                
+            
+            case TICKETS:
+                content = this.props.getProperty("new_ticket_sales");
+                break;
+                    
             default:
                 content = this.props.getProperty("new_invoice_sales");
                 break;
@@ -292,6 +296,33 @@ public class NewVtaViewController extends NewVtaJFrame {
                 return;
             }
             
+            switch(DocumentType_){
+                        
+                case INVOICE:
+                    
+                    //Is the customer is not mostrador
+                    if(!NewVtaCustomerInfoDataModel.getCompany().isCashCustomer()){
+
+                        //If the customer wants to ring the sale
+                        if(NewVtaHeaderInfoDataModel.isRing()){
+
+                            //The customer need to have all the fiscal data
+                            if(     NewVtaCustomerInfoDataModel.getCompany().getCalle().isEmpty() || 
+                                    NewVtaCustomerInfoDataModel.getCompany().getCol().isEmpty() || 
+                                    NewVtaCustomerInfoDataModel.getCompany().getCP().isEmpty() || 
+                                    NewVtaCustomerInfoDataModel.getCompany().getNoext().isEmpty() || 
+                                    NewVtaCustomerInfoDataModel.getCompany().getRFC().isEmpty() || 
+                                    NewVtaCustomerInfoDataModel.getCompany().getCiu().isEmpty() || 
+                                    NewVtaCustomerInfoDataModel.getCompany().getEstad().isEmpty()){
+                                UtilitiesFactory.getSingleton().getGenericExceptionUtil().generateException("errors_missing_fiscal_info");
+                                return;
+                            }
+                        }
+                    }
+                    
+                    break;
+            }
+
             DialogsFactory.getSingleton().showQuestionContinueDialog(baseJFrame, (JFrame jFrame) -> {
                 
                 try {
@@ -334,11 +365,11 @@ public class NewVtaViewController extends NewVtaJFrame {
                             break;
                             
                         case INVOICE:
-                            RepositoryFactory.getInstance().getSalessRepository().saveSaleInvoice(Sales, NewVtaCustomerInfoDataModel.getCompany(),NewVtaCustomerInfoDataModel.isUpdateCustomer(), parts,totalCash,BigDecimal.ZERO,BigDecimal.ZERO);
+                            RepositoryFactory.getInstance().getSalessRepository().saveSaleInvoice(Sales, NewVtaHeaderInfoDataModel.isRing(),NewVtaCustomerInfoDataModel.getCompany(),NewVtaCustomerInfoDataModel.isUpdateCustomer(), parts,totalCash,BigDecimal.ZERO,BigDecimal.ZERO);
                             break;
                             
                         default:
-                            RepositoryFactory.getInstance().getSalessRepository().saveSaleInvoice(Sales, NewVtaCustomerInfoDataModel.getCompany(),NewVtaCustomerInfoDataModel.isUpdateCustomer(), parts,totalCash,BigDecimal.ZERO,BigDecimal.ZERO);
+                            RepositoryFactory.getInstance().getSalessRepository().saveSaleInvoice(Sales, NewVtaHeaderInfoDataModel.isRing(), NewVtaCustomerInfoDataModel.getCompany(),NewVtaCustomerInfoDataModel.isUpdateCustomer(), parts,totalCash,BigDecimal.ZERO,BigDecimal.ZERO);
                     }
                     
                     DialogsFactory.getSingleton().showOKOperationCompletedCallbackDialog(baseJFrame, (JFrame jFrame1) -> {
@@ -515,12 +546,13 @@ public class NewVtaViewController extends NewVtaJFrame {
     private void setHeaderInfo(final NewVtaHeaderInfoDataModel NewVtaHeaderInfoDataModel){
         
         final String date = NewVtaHeaderInfoDataModel.getDate()==null?UtilitiesFactory.getSingleton().getDateTimeUtility().getCurrentDate().toString():NewVtaHeaderInfoDataModel.getDate();
+        final String usoCFDI = NewVtaHeaderInfoDataModel.getCUsoCFDI()==null?"":NewVtaHeaderInfoDataModel.getCUsoCFDI().getDescription();
         
         //Create the info text
         final String info = "Fecha: " + date + "\n" +
                             "Forma de pago: " + NewVtaHeaderInfoDataModel.getCPaymentForm().getDescription() + "\n" +
                             "Moneda: " + NewVtaHeaderInfoDataModel.getCoin().getDescription() + "\n" +
-                            "Uso CFDI: " + NewVtaHeaderInfoDataModel.getCUsoCFDI().getDescription() + "\n" +
+                            "Uso CFDI: " + usoCFDI + "\n" +
                             "Vendedor: " + NewVtaHeaderInfoDataModel.getSalesman().getName() + "\n" + 
                             "Serie: " + NewVtaHeaderInfoDataModel.getSerie().getDescription() + "\n" +
                             "Observaciones: " + NewVtaHeaderInfoDataModel.getObervations() + "\n";

@@ -140,15 +140,31 @@ public class FacturarTicketsViewController extends FacturarTicketsJFrame {
                 return;
             }
             
+            //Get the company
+             final Company Company = RepositoryFactory.getInstance().getCompanysRepository().getCustomerByCode(customerCode);
+                    
+            //Is the customer is not mostrador
+            if(!Company.isCashCustomer()){
+
+                //The customer need to have all the fiscal data
+                if(     Company.getCalle().isEmpty() || 
+                        Company.getCol().isEmpty() || 
+                        Company.getCP().isEmpty() || 
+                        Company.getNoext().isEmpty() || 
+                        Company.getRFC().isEmpty() || 
+                        Company.getCiu().isEmpty() || 
+                        Company.getEstad().isEmpty()){
+                    UtilitiesFactory.getSingleton().getGenericExceptionUtil().generateException("errors_missing_fiscal_info");
+                    return;
+                }
+            }
+            
             DialogsFactory.getSingleton().showQuestionContinueDialog(baseJFrame, (JFrame jFrame) -> {
                 
                 try {
                                        
                     //Get observations
                     final String observations = jTxtArObservaciones.getText().trim();
-                    
-                    //Get the company
-                    final Company Company = RepositoryFactory.getInstance().getCompanysRepository().getCustomerByCode(customerCode);
                     
                     //Update the sales
                     RepositoryFactory.getInstance().getSalessRepository().ringTicketSales(Company, sales, observations,Serie.getSer(),MetogoPago.getCode());
