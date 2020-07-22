@@ -269,33 +269,26 @@ public class NewVtaCustomerInfoViewController extends NewVtaCustomerInfoJFrame {
     }
     
     private void showCustomerConditions(final Company Company) throws Exception {
-        
-        //If the user has credit
-        String conditions;
-        final Properties Properties = DialogPropertiesUitlity.getSingleton().getProperties();;
+                
+        //If the user has credit                
         if(Company.hasCredit()){
-            conditions = Properties.getProperty("customer_credit_at_days");                        
-            conditions = conditions.replace("%1",String.valueOf(Company.getDiacred()));
-            conditions = conditions.replace("%2",UtilitiesFactory.getSingleton().getNumbersUtility().toMoneyFormat(String.valueOf(Company.getLimtcred())));
-
             jCConta.setEnabled(true);
             jCConta.setSelected(false);
         }
-        else{                        
-            conditions = Properties.getProperty("pay_at_moment");
+        else{
 
             jCConta.setSelected(true);
             jCConta.setEnabled(false);
-        }                
+        }
         
-        //Get positive sald of the customer
-        final BigDecimal favorSald = RepositoryFactory.getInstance().getCxcRepository().getSaldoFavorFromCustomer(Company.getCompanyCode());
-        
-        //Concatenate the sald
-        conditions = conditions.replace("%3",String.valueOf(favorSald));
+        //Get the conditions
+        final String conditions = RepositoryFactory.getInstance().getCompanysRepository().getCustomerConditions(Company);
         
         //Set the condtions
         jTCond.setText(conditions);
+        
+        //Get positive sald of the customer
+        final BigDecimal favorSald = RepositoryFactory.getInstance().getCxcRepository().getSaldoFavorFromCustomer(Company.getCompanyCode());
         
         //If the customer doesnt have money credit avaible
         if(favorSald.compareTo(Company.getLimtcred())<0){            

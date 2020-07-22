@@ -196,10 +196,10 @@ public class CobroViewController extends CobroJFrame {
         }
         else{
             jRadioButtonCredit.setEnabled(false);
+            
+            //Pat at the moment
+            atmomentPayment();
         }
-        
-        //Calculate totals
-        calculateTotals();
     }
     
     private void creditPayment() throws Exception{
@@ -464,21 +464,7 @@ public class CobroViewController extends CobroJFrame {
                 }
             }
 
-            DialogsFactory.getSingleton().showQuestionContinueDialog(baseJFrame, (JFrame jFrame) -> {
-                
-                try {
-                    
-                    charge();
-                            
-                } catch (Exception ex) {
-                    LoggerUtility.getSingleton().logError(this.getClass(), ex);
-                    try {
-                        DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
-                    } catch (Exception ex1) {
-                        Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
-                    }
-                }
-            });
+            charge();
 	}
 	catch (Exception ex) {
             LoggerUtility.getSingleton().logError(CobroViewController.class, ex);

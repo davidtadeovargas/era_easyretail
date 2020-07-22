@@ -62,6 +62,7 @@ INSERT INTO conceps(code,descrip,estac,sucu,nocaj,falt,fmod) VALUES('DEVPVENTA',
 /*!40000 ALTER TABLE `conceps` ENABLE KEYS */;
 
 /*!40000 ALTER TABLE `confgral` DISABLE KEYS */;
+INSERT INTO confgral(dia,clasif,conf,val,extr,falt,fmod,estac,sucu,nocaj) VALUES(0,'sist','systemintest',1,'',now(),now(),'INICIAL','INICIAL','INICIAL');
 INSERT INTO confgral(clasif,conf,val,falt,fmod,estac,sucu,nocaj) VALUES('prev','prevporusuario',0,now(),now(),'INICIAL','INICIAL','INICIAL');
 INSERT INTO confgral(clasif,conf,val,falt,fmod,estac,sucu,nocaj) VALUES('prev','prevmonac',0,now(),now(),'INICIAL','INICIAL','INICIAL');
 INSERT INTO confgral(clasif,conf,val,falt,fmod,estac,sucu,nocaj) VALUES('prev','prevmodesc',0,now(),now(),'INICIAL','INICIAL','INICIAL');

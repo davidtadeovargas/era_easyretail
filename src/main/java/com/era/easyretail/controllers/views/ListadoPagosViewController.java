@@ -8,6 +8,7 @@ package com.era.easyretail.controllers.views;
 import com.era.views.ListadoPagosJFrame;
 import java.util.List;
 import com.era.logger.LoggerUtility;
+import com.era.models.Sales;
 import com.era.views.dialogs.DialogsFactory;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -16,6 +17,8 @@ import java.util.logging.Logger;
  * @author PC
  */
 public class ListadoPagosViewController extends ListadoPagosJFrame {
+
+    private Sales Sale_;
     
     public ListadoPagosViewController() {
         super("window_title_list_payments");
@@ -71,6 +74,10 @@ public class ListadoPagosViewController extends ListadoPagosJFrame {
             }
         }
     }
+
+    public void setSale_(Sales Sale_) {
+        this.Sale_ = Sale_;
+    }        
     
     @Override
     public void clearFields() throws Exception{            

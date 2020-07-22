@@ -24,9 +24,7 @@ public class AbonosViewController extends AbonosJFrame {
         
         try{
                      
-            jBSal.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jBSalActionPerformed(evt);
-            });
+            
             
         }catch (Exception ex) {
             LoggerUtility.getSingleton().logError(AbonosViewController.class, ex);
@@ -36,21 +34,6 @@ public class AbonosViewController extends AbonosJFrame {
                 Logger.getLogger(AbonosViewController.class.getName()).log(Level.SEVERE, null, ex1);
             }
         }
-    }
-    
-    private void jBSalActionPerformed(java.awt.event.ActionEvent evt) {                                             
-
-	try{            	
-            
-	}
-	catch (Exception ex) {
-            LoggerUtility.getSingleton().logError(AbonosViewController.class, ex);
-            try {
-                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
-            } catch (Exception ex1) {
-                Logger.getLogger(AbonosViewController.class.getName()).log(Level.SEVERE, null, ex1);
-            }
-	}
     }
     
     @Override

@@ -82,6 +82,7 @@ public class ConfGralViewController extends ConfGralJFrame {
             jCLimCredRem.setSelected(RepositoryFactory.getInstance().getConfgralRepository().getSaleOverLimitCreditInRemisions().getVal()==1);
             jCCanRemPto.setSelected(RepositoryFactory.getInstance().getConfgralRepository().getCanCancelOrReturnRemisionsInPointOfSales().getVal()==1);
             jCCanTicPto.setSelected(RepositoryFactory.getInstance().getConfgralRepository().getCanCancelOrReturnTicketsInPointOfSales().getVal()==1);
+            jCTestSystem.setSelected(RepositoryFactory.getInstance().getConfgralRepository().getSistemInTestMode().getVal()==1);            
                         
             //Prevs
             jBPrevMonNacional.setSelected(RepositoryFactory.getInstance().getConfgralRepository().getOnlyNationalCointInPrevComps().getVal()==1);
@@ -344,6 +345,7 @@ public class ConfGralViewController extends ConfGralJFrame {
                     RepositoryFactory.getInstance().getConfgralRepository().setSaleOverLimitCreditInRemisions(jCLimCredRem.isSelected());
                     RepositoryFactory.getInstance().getConfgralRepository().setCanCancelOrReturnRemisionsInPointOfSales(jCCanRemPto.isSelected());
                     RepositoryFactory.getInstance().getConfgralRepository().setCanCancelOrReturnTicketsInPointOfSales(jCCanTicPto.isSelected());
+                    RepositoryFactory.getInstance().getConfgralRepository().setSistemInTestMode(jCTestSystem.isSelected());
                     Serie Serie = (Serie)jComSerFac.getSelectedObject();
                     RepositoryFactory.getInstance().getConfgralRepository().setSerieInvoiceRemain(Serie.getSer());
                     Serie = (Serie)jComSerF.getSelectedObject();
