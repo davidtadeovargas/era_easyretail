@@ -44,7 +44,7 @@ public class DevPVtaViewController extends DevPVtaJFrame {
             this.JComponentUtils.moneyFormat(jTImp);
             this.JComponentUtils.moneyFormat(jTTot);
             
-            //Config partvta table
+            //Config partvta table            
             jTab.addShowColumn(TableHeaderFactory.getSigleton().getPartvtasTableHeader().getROWNUMBER());
             jTab.addShowColumn(TableHeaderFactory.getSigleton().getPartvtasTableHeader().getCANT());
             jTab.addShowColumn(TableHeaderFactory.getSigleton().getPartvtasTableHeader().getCANT_DEV_ORI());

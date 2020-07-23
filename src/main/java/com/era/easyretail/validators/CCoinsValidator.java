@@ -1,8 +1,6 @@
 package com.era.easyretail.validators;
 
 import com.era.easyretail.validators.exceptions.CCoinsValidatorsExceptions;
-import com.era.models.CCoin;
-import com.era.repositories.RepositoryFactory;
 
 public class CCoinsValidator extends IValidate{
 

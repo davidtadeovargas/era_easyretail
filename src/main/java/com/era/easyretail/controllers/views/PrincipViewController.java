@@ -6,8 +6,8 @@
 package com.era.easyretail.controllers.views;
 
 import com.era.datamodels.enums.DocumentType;
+import com.era.easyretail.controllers.views.LoginOtraViewController.OnResult;
 import com.era.easyretail.enums.DBFileConnectionConfigurationType;
-import com.era.easyretail.enums.LoginType;
 import com.era.easyretail.enums.LoginTypeEmpresa;
 import com.era.easyretail.swingworkers.BaseSwingWorker;
 import com.era.easyretail.swingworkers.ISwingWorkerActions;
@@ -1229,9 +1229,38 @@ public class PrincipViewController extends PrincipJFrame {
         ViewControlersFactory.getSingleton().getProvsViewController().setVisible();
     }
     
-    private void jMenItLogearActionPerformed(java.awt.event.ActionEvent evt) {                                             
-        ViewControlersFactory.getSingleton().getLoginOtraViewController().setVisible();
+    private void jMenItLogearActionPerformed(java.awt.event.ActionEvent evt) {
         
+        final LoginOtraViewController LoginOtraViewController = (LoginOtraViewController)ViewControlersFactory.getSingleton().getLoginOtraViewController();
+        LoginOtraViewController.setOnResult(new OnResult(){
+
+            @Override
+            public void onCorrectLogin() {
+                
+                try {
+                 
+                    //Show the correct message login to the user
+                    final OKDialog OKDialog = DialogsFactory.getSingleton().getOKDialog(baseJFrame);
+                    OKDialog.setPropertyText("session_changed");
+                    OKDialog.show();
+                    
+                } catch (Exception ex) {
+                    LoggerUtility.getSingleton().logError(this.getClass(), ex);
+                    try {
+                        DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+                    } catch (Exception ex1) {
+                        Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
+                    }
+                }
+            }
+
+            @Override
+            public void onInvalidLogin() {
+                
+            }
+            
+        });
+        LoginOtraViewController.setVisible();
     }
      
     private void jMenItSalActionPerformed(java.awt.event.ActionEvent evt) {                                          
@@ -1549,13 +1578,42 @@ public class PrincipViewController extends PrincipJFrame {
     
     private void jMenItDeslogActionPerformed(java.awt.event.ActionEvent evt) {                                             
         
-        //Close the current window
-        dispose();
-        
-        //Open the login screen as login        
-        final LoginOtraViewController LoginOtraViewController = ViewControlersFactory.getSingleton().getLoginOtraViewController();
-        LoginOtraViewController.setLoginType(LoginType.DESLOGIN);
-        LoginOtraViewController.setVisible();
+        try {
+         
+            //Close the current window
+            dispose();
+
+            //Open the login screen as login        
+            final LoginOtraViewController LoginOtraViewController = ViewControlersFactory.getSingleton().getLoginOtraViewController();
+            LoginOtraViewController.setOnResult(new OnResult(){
+
+                @Override
+                public void onCorrectLogin() {
+
+                    //Open the principal screen
+                    ViewControlersFactory.getSingleton().getPrincipViewController().setVisible();
+                }
+
+                @Override
+                public void onInvalidLogin() {
+
+                }
+
+            });
+            LoginOtraViewController.setOnExitButton(() -> {
+                System.exit(0);
+            });
+            LoginOtraViewController.deslogUser();
+            LoginOtraViewController.setVisible();
+            
+        } catch (Exception ex) {
+            LoggerUtility.getSingleton().logError(this.getClass(), ex);
+            try {
+                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+            } catch (Exception ex1) {
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
+            }
+        }
     }
     
     private void jMenItCamEmpActionPerformed(java.awt.event.ActionEvent evt) {                                             

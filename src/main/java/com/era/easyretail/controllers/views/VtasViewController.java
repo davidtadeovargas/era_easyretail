@@ -39,7 +39,10 @@ public class VtasViewController extends VtasJFrame {
             this.PostInitComponents = () -> {
                 maximizedWindow();
             };
-            
+                        
+            jMenuItemInvoicesNotRinged.addActionListener((java.awt.event.ActionEvent evt) -> {
+                jMenuItemInvoicesNotRingedActionPerformed(evt);
+            });
             jBBusc.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jBBuscActionPerformed(evt);
             });
@@ -688,7 +691,9 @@ public class VtasViewController extends VtasJFrame {
     private void jBDevPActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            
-            ViewControlersFactory.getSingleton().getDevPVtaPtoViewController().setVisible();
+            final DevPVtaPtoViewController DevPVtaPtoViewController = ViewControlersFactory.getSingleton().getDevPVtaPtoViewController();
+            DevPVtaPtoViewController.setDocumentType_(DocumentType_);
+            DevPVtaPtoViewController.setVisible();
 	}
 	catch (Exception ex) {
             LoggerUtility.getSingleton().logError(VtasViewController.class, ex);
@@ -718,7 +723,9 @@ public class VtasViewController extends VtasJFrame {
     private void jBDevActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{
-            ViewControlersFactory.getSingleton().getDevVtaPtoViewController().setVisible();
+            final DevVtaPtoViewController DevVtaPtoViewController = ViewControlersFactory.getSingleton().getDevVtaPtoViewController();
+            DevVtaPtoViewController.setDocumentType_(DocumentType_);
+            DevVtaPtoViewController.setVisible();
 	}
 	catch (Exception ex) {
             LoggerUtility.getSingleton().logError(VtasViewController.class, ex);
@@ -764,7 +771,9 @@ public class VtasViewController extends VtasJFrame {
 
 	try {
                         
-            ViewControlersFactory.getSingleton().getCanVtasViewController().setVisible();
+            final CanVtasViewController CanVtasViewController = ViewControlersFactory.getSingleton().getCanVtasViewController();
+            CanVtasViewController.setDocumentType_(DocumentType_);
+            CanVtasViewController.setVisible();
             
         } catch (Exception ex) {
             LoggerUtility.getSingleton().logError(this.getClass(), ex);
@@ -879,8 +888,22 @@ public class VtasViewController extends VtasJFrame {
             }
 	}
     }
+        
+    private void jMenuItemInvoicesNotRingedActionPerformed(java.awt.event.ActionEvent evt) {                                             
+        
+        try {
+            ViewControlersFactory.getSingleton().getInvoicesNotRingedViewController().setVisible();
+        } catch (Exception ex) {
+            LoggerUtility.getSingleton().logError(this.getClass(), ex);
+            try {
+                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+            } catch (Exception ex1) {
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
+            }
+        }
+    }
     
-    private void jBBuscActionPerformed(java.awt.event.ActionEvent evt) {                                             
+    private void jBBuscActionPerformed(java.awt.event.ActionEvent evt) {
 
 	try{            	
             

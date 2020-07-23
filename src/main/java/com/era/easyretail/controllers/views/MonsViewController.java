@@ -112,7 +112,7 @@ public class MonsViewController extends MonssJFrame {
         jTCod.setText(Coin.getCode());
         jTDescrip.setText(Coin.getDescription());
         jTSim.setText(Coin.getSimbol());
-        jTClaveSat.setText(Coin.getC_moneda());
+        jTClaveSat.setText(Coin.getCode());
         jCMN.setSelected(Coin.isNational());
     }
     
@@ -307,7 +307,7 @@ public class MonsViewController extends MonssJFrame {
                 Coin.setValue((float)tipCam);
                 Coin.setDescription(description);
                 Coin.setSimbol(simbol);
-                Coin.setC_moneda(satCode);
+                Coin.setCode(satCode);
                 Coin.setNational(mnNational);
 
                 //Save or update into database

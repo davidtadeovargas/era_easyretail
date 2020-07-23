@@ -194,8 +194,7 @@ public class NewVtaHeaderInfoController extends NewVtaHeaderInfoJFrame {
                     final boolean sendEmail = jCMand.isSelected();
                     final boolean showFile = jCMostA.isSelected();
                     final boolean cartaPorte = jCCartaP.isSelected();
-                    final boolean print = jCImp.isSelected();                    
-                    final boolean paid = jRPagad.isSelected();
+                    final boolean print = jCImp.isSelected();
                     
                     //Create the model
                     final NewVtaHeaderInfoDataModel NewVtaHeaderInfoDataModel_ = new NewVtaHeaderInfoDataModel();
@@ -211,8 +210,7 @@ public class NewVtaHeaderInfoController extends NewVtaHeaderInfoJFrame {
                     NewVtaHeaderInfoDataModel_.setSendEmail(sendEmail);
                     NewVtaHeaderInfoDataModel_.setShowFile(showFile);
                     NewVtaHeaderInfoDataModel_.setCartaPorte(cartaPorte);
-                    NewVtaHeaderInfoDataModel_.setPrint(print);
-                    NewVtaHeaderInfoDataModel_.setPaid(paid);
+                    NewVtaHeaderInfoDataModel_.setPrint(print);                    
                     
                     dispose();
                     
@@ -302,13 +300,6 @@ public class NewVtaHeaderInfoController extends NewVtaHeaderInfoJFrame {
         jCMostA.setSelected(NewVtaHeaderInfoDataModel_.isShowFile());
         jCCartaP.setSelected(NewVtaHeaderInfoDataModel_.isCartaPorte());
         jCImp.setSelected(NewVtaHeaderInfoDataModel_.isPrint());
-        
-        if(NewVtaHeaderInfoDataModel_.isPaid()){
-            jRPagad.setSelected(true);
-        }
-        else{
-            jRNoPag.setSelected(true);
-        }
     }
     
     @Override

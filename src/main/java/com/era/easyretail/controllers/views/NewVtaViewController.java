@@ -551,7 +551,7 @@ public class NewVtaViewController extends NewVtaJFrame {
         //Create the info text
         final String info = "Fecha: " + date + "\n" +
                             "Forma de pago: " + NewVtaHeaderInfoDataModel.getCPaymentForm().getDescription() + "\n" +
-                            "Moneda: " + NewVtaHeaderInfoDataModel.getCoin().getDescription() + "\n" +
+                            "Moneda: " + NewVtaHeaderInfoDataModel.getCoin().getDescription() + ", " + NewVtaHeaderInfoDataModel.getCoin().getCode() + "\n" +
                             "Uso CFDI: " + usoCFDI + "\n" +
                             "Vendedor: " + NewVtaHeaderInfoDataModel.getSalesman().getName() + "\n" + 
                             "Serie: " + NewVtaHeaderInfoDataModel.getSerie().getDescription() + "\n" +

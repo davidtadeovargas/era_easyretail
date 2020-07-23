@@ -5,11 +5,11 @@
  */
 package com.era.easyretail.controllers.views;
 
+import com.era.datamodels.enums.DocumentType;
 import com.era.logger.LoggerUtility;
 import com.era.models.Sales;
 import com.era.views.ImprVtasJFrame;
 import com.era.views.dialogs.DialogsFactory;
-import com.era.views.tables.headers.TableHeaderFactory;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
@@ -20,9 +20,11 @@ import javax.swing.JFrame;
  */
 public class ImprVtasViewController extends ImprVtasJFrame{
         
+    private DocumentType DocumentType_;
+    
     public ImprVtasViewController(){
         
-        super("window_title_devs_sales");
+        super("window_title_printing_sales");
         
         try {
             
@@ -40,25 +42,12 @@ public class ImprVtasViewController extends ImprVtasJFrame{
             
             //Configuretable
             this.BaseJTable = jTab;
-            jTab.addShowColumn(TableHeaderFactory.getSigleton().getSalessTableHeader().getSALE_ID());
-            jTab.addShowColumn(TableHeaderFactory.getSigleton().getSalessTableHeader().getCOMPANYCODE());
-            jTab.addShowColumn(TableHeaderFactory.getSigleton().getSalessTableHeader().getRAZON());
-            jTab.addShowColumn(TableHeaderFactory.getSigleton().getSalessTableHeader().getESTATUS());
-            jTab.addShowColumn(TableHeaderFactory.getSigleton().getSalessTableHeader().getEMISIONDATE());
-            jTab.addShowColumn(TableHeaderFactory.getSigleton().getSalessTableHeader().getFACTURADO());
-            jTab.addShowColumn(TableHeaderFactory.getSigleton().getSalessTableHeader().getOBSERVATION());
-            jTab.addShowColumn(TableHeaderFactory.getSigleton().getSalessTableHeader().getPAYMENTFORM());
-            jTab.addShowColumn(TableHeaderFactory.getSigleton().getSalessTableHeader().getSUBTOTAL());
-            jTab.addShowColumn(TableHeaderFactory.getSigleton().getSalessTableHeader().getTAX());
-            jTab.addShowColumn(TableHeaderFactory.getSigleton().getSalessTableHeader().getTOTAL());            
+            jTab.showCommonColumns();
             jTab.setScrollAtStartWhenEnd(true);
             jTab.setJScrollPane(jScrollPane2);
             jTab.setOnPaginationLabelUpdate((String paginationUpdate) -> {
                 jLabelPagination.setText(paginationUpdate);
             });
-            
-            //Load sales
-            jTab.initTableWithPagination();
             
         } catch (Exception ex) {
             LoggerUtility.getSingleton().logError(this.getClass(), ex);
@@ -68,6 +57,15 @@ public class ImprVtasViewController extends ImprVtasJFrame{
                 Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
             }
         }
+    }
+    
+    public void setDocumentType_(DocumentType DocumentType_) throws Exception {
+        
+        this.DocumentType_ = DocumentType_;
+        
+        //Load sales
+        jTab.setDocumentType(DocumentType_);
+        jTab.initTableWithPagination();
     }
     
     private void jBBuscActionPerformed(java.awt.event.ActionEvent evt) {

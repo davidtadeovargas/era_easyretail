@@ -8,7 +8,6 @@ package com.era.easyretail.controllers.views;
 import com.era.datamodels.enums.SearchCommonTypeEnum;
 import com.era.logger.LoggerUtility;
 import com.era.repositories.RepositoryFactory;
-import com.era.utilities.UtilitiesFactory;
 import com.era.views.SearchJFrame;
 import com.era.views.dialogs.DialogsFactory;
 import com.era.views.dialogs.ErrorOKDialog;
@@ -19,7 +18,6 @@ import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.util.List;
-import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
@@ -169,7 +167,7 @@ public class SearchViewController extends SearchJFrame {
                     break;
 
                 case CCOINS:
-                    list = RepositoryManager_.getCCoinsRepository().getAll();
+                    list = RepositoryManager_.getCoinsRepository().getAll();
                     break;
                     
                 case WAREHOUSES:
@@ -332,7 +330,7 @@ public class SearchViewController extends SearchJFrame {
             case CUSTOMERS:
                 jTab.addShowColumn(TableHeaderFactory.getSigleton().getCompanysTableHeader().getCOMPANYCODE());
                 jTab.addShowColumn(TableHeaderFactory.getSigleton().getCompanysTableHeader().getNOM());
-                jTab.addShowColumn(TableHeaderFactory.getSigleton().getCompanysTableHeader().getCO1());
+                jTab.addShowColumn(TableHeaderFactory.getSigleton().getCompanysTableHeader().getRFC());
                 break;
 
             case BASDATS:

@@ -5,7 +5,6 @@
  */
 package com.era.easyretail.controllers.views;
 
-import com.era.easyretail.enums.LoginType;
 import com.era.logger.LoggerUtility;
 import com.era.models.User;
 import com.era.repositories.RepositoryFactory;
@@ -13,12 +12,10 @@ import com.era.utilities.UtilitiesFactory;
 import com.era.views.LoginOtraJFrame;
 import com.era.views.dialogs.DialogsFactory;
 import com.era.views.dialogs.ErrorOKDialog;
-import com.era.views.dialogs.OKDialog;
 import java.awt.event.ActionEvent;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JFrame;
 
 /**
  *
@@ -26,7 +23,8 @@ import javax.swing.JFrame;
  */
 public class LoginOtraViewController extends LoginOtraJFrame {
     
-    private LoginType LoginType;
+    private OnResult OnResult;
+    private OnExitButton OnExitButton;    
     
     public LoginOtraViewController(){
         
@@ -49,7 +47,7 @@ public class LoginOtraViewController extends LoginOtraJFrame {
             jCMostC.addActionListener((ActionEvent e) -> {
                 onShowPasswordClicked(e);
             });
-            
+                        
         }catch (Exception ex) {
             LoggerUtility.getSingleton().logError(LoginOtraViewController.class, ex);
             try {
@@ -60,6 +58,21 @@ public class LoginOtraViewController extends LoginOtraJFrame {
         }
     }
 
+    public void deslogUser() throws Exception {
+        
+        //Deslog the user in system
+        UtilitiesFactory.getSingleton().getSessionUtility().deslogUserSession();
+    }
+    
+    public void setOnExitButton(OnExitButton OnExitButton) {
+        this.OnExitButton = OnExitButton;
+    }    
+    
+    public void setOnResult(OnResult OnResult) {
+        this.OnResult = OnResult;
+    }
+    
+    
     @Override
     public void loadModelInFields(Object ObjectModel) throws  Exception {        
     }
@@ -68,10 +81,6 @@ public class LoginOtraViewController extends LoginOtraJFrame {
     public void clearFields() throws Exception{            
     }
     
-    public void setLoginType(LoginType LoginType) {
-        this.LoginType = LoginType;                
-    }        
-
     private void jBIngActionPerformed(java.awt.event.ActionEvent evt) {                                             
         
         try{
@@ -111,34 +120,30 @@ public class LoginOtraViewController extends LoginOtraJFrame {
                 ErrorOKDialog.setPropertyText("errors_invalid_password");
                 ErrorOKDialog.show();
                 jPContra.grabFocus();
+                
+                //If the user defined response callback
+                if(OnResult!=null){
+                    OnResult.onInvalidLogin();
+                }
+
                 return;
             }                        
             
             //Get the user from database
             final User User = (User) RepositoryFactory.getInstance().getUsersRepository().getByCode(user);                       
+
+            //Deslog the user in system if apply
+            UtilitiesFactory.getSingleton().getSessionUtility().deslogUserSession();
             
+            //Register in the system the user login
+            UtilitiesFactory.getSingleton().getSessionUtility().userInitSession(User);
+            
+            //Close the window
             dispose();
             
-            if(this.LoginType == LoginType.DESLOGIN){
-                
-                //Deslog the user in system
-                UtilitiesFactory.getSingleton().getSessionUtility().deslogUserSession();
-                
-                //Open the principal screen
-                ViewControlersFactory.getSingleton().getPrincipViewController().setVisible();
-            }
-            else{
-                
-                //Register in system de logged user
-                UtilitiesFactory.getSingleton().getSessionUtility().userInitSession(User);
-                
-                //Show the correct message login to the user
-                final OKDialog OKDialog = DialogsFactory.getSingleton().getOKDialog(baseJFrame);
-                OKDialog.setPropertyText("session_changed");
-                OKDialog.setOKDialogInterface((JFrame jFrame) -> {
-                    dispose();
-                });
-                OKDialog.show();
+            //If the user defined response callback
+            if(OnResult!=null){
+                OnResult.onCorrectLogin();
             }
             
         }catch (Exception ex) {
@@ -153,6 +158,15 @@ public class LoginOtraViewController extends LoginOtraJFrame {
     
     private void onShowPasswordClicked(ActionEvent ActionEvent){
         showOrHidePassword();
+    }
+    
+    public interface OnResult{
+        public void onCorrectLogin();
+        public void onInvalidLogin();
+    }
+    
+    public interface OnExitButton{
+        public void onExit();        
     }
     
     private void showOrHidePassword(){
@@ -174,12 +188,13 @@ public class LoginOtraViewController extends LoginOtraJFrame {
     
     private void jBSalActionPerformed(java.awt.event.ActionEvent evt) {
         
-        if(this.LoginType == LoginType.DESLOGIN){
-            System.exit(0);
+        //Close current window
+        this.dispose();
+        
+        //User callback
+        if(OnExitButton!=null){
+            OnExitButton.onExit();
         }
-        else{
-            this.dispose();            
-        }                
     }
     
     @Override

@@ -322,6 +322,7 @@ public class CorrElecsViewController extends CorrElecsJFrame {
         final User User = (User)RepositoryFactory.getInstance().getUsersRepository().getByCode(user);
         if(User==null){
             DialogsFactory.getSingleton().showErrorOKRecordNotExistsCallbackDialog(baseJFrame, (JFrame jFrame) -> {
+                jTEsta.grabFocus();
             });
             return;
         }

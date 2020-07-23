@@ -5,6 +5,7 @@
  */
 package com.era.easyretail.controllers.views;
 
+import com.era.datamodels.enums.DocumentType;
 import com.era.logger.LoggerUtility;
 import com.era.models.Sales;
 import com.era.repositories.RepositoryFactory;
@@ -21,6 +22,8 @@ import javax.swing.JFrame;
  * @author PC
  */
 public class DevPVtaPtoViewController extends DevPVtaPtoJFrame {
+    
+    private DocumentType DocumentType_;
     
     public DevPVtaPtoViewController(){
         super("window_title_devptovta");
@@ -41,25 +44,12 @@ public class DevPVtaPtoViewController extends DevPVtaPtoJFrame {
             
             //Configuretable
             this.BaseJTable = jTab;
-            jTab.addShowColumn(TableHeaderFactory.getSigleton().getSalessTableHeader().getSALE_ID());
-            jTab.addShowColumn(TableHeaderFactory.getSigleton().getSalessTableHeader().getCOMPANYCODE());
-            jTab.addShowColumn(TableHeaderFactory.getSigleton().getSalessTableHeader().getRAZON());
-            jTab.addShowColumn(TableHeaderFactory.getSigleton().getSalessTableHeader().getESTATUS());
-            jTab.addShowColumn(TableHeaderFactory.getSigleton().getSalessTableHeader().getEMISIONDATE());
-            jTab.addShowColumn(TableHeaderFactory.getSigleton().getSalessTableHeader().getFACTURADO());
-            jTab.addShowColumn(TableHeaderFactory.getSigleton().getSalessTableHeader().getOBSERVATION());
-            jTab.addShowColumn(TableHeaderFactory.getSigleton().getSalessTableHeader().getPAYMENTFORM());
-            jTab.addShowColumn(TableHeaderFactory.getSigleton().getSalessTableHeader().getSUBTOTAL());
-            jTab.addShowColumn(TableHeaderFactory.getSigleton().getSalessTableHeader().getTAX());
-            jTab.addShowColumn(TableHeaderFactory.getSigleton().getSalessTableHeader().getTOTAL());            
+            jTab.showCommonColumns();            
             jTab.setScrollAtStartWhenEnd(true);
             jTab.setJScrollPane(jScrollPane2);
             jTab.setOnPaginationLabelUpdate((String paginationUpdate) -> {
                 jLabelPagination.setText(paginationUpdate);
             });
-            
-            //Load sales
-            jTab.initTableWithPagination();
             
         }catch (Exception ex) {
             LoggerUtility.getSingleton().logError(DevPVtaPtoViewController.class, ex);
@@ -69,6 +59,15 @@ public class DevPVtaPtoViewController extends DevPVtaPtoJFrame {
                 Logger.getLogger(DevPVtaPtoViewController.class.getName()).log(Level.SEVERE, null, ex1);
             }
         }
+    }
+    
+    public void setDocumentType_(DocumentType DocumentType_) throws Exception {
+        
+        this.DocumentType_ = DocumentType_;
+        
+        //Load sales
+        jTab.setDocumentType(DocumentType_);
+        jTab.initTableWithPagination();
     }
     
     @Override

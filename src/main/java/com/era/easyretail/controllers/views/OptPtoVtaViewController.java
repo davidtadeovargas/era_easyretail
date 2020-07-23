@@ -5,6 +5,7 @@
  */
 package com.era.easyretail.controllers.views;
 
+import com.era.datamodels.enums.DocumentType;
 import com.era.views.OptPtoVtaJFrame;
 import java.util.List;
 import com.era.logger.LoggerUtility;
@@ -52,6 +53,12 @@ public class OptPtoVtaViewController extends OptPtoVtaJFrame {
             });
             jBDev.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jBDevActionPerformed(evt);
+            });
+            jBChangeLogin.addActionListener((java.awt.event.ActionEvent evt) -> {
+                jBChangeLoginActionPerformed(evt);
+            });
+            jBRingInvoices.addActionListener((java.awt.event.ActionEvent evt) -> {
+                jBRingInvoicesActionPerformed(evt);
             });
             
             alwaysOnTop();
@@ -179,9 +186,35 @@ public class OptPtoVtaViewController extends OptPtoVtaJFrame {
                     if(isCortX){
 
                     }
-                    else{
+                    else{ //Corte Z
 
-                        ViewControlersFactory.getSingleton().getIngreCajViewController().setVisible();
+                        final LoginOtraViewController LoginOtraViewController = ViewControlersFactory.getSingleton().getLoginOtraViewController();
+                        LoginOtraViewController.setOnResult(new LoginOtraViewController.OnResult(){
+
+                            @Override
+                            public void onCorrectLogin() {
+
+                                try {
+
+                                    //Ask for the money for the box
+                                    ViewControlersFactory.getSingleton().getIngreCajViewController().setVisible();
+
+                                } catch (Exception ex) {
+                                    LoggerUtility.getSingleton().logError(this.getClass(), ex);
+                                    try {
+                                        DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+                                    } catch (Exception ex1) {
+                                        Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onInvalidLogin() {
+                            }
+
+                        });
+                        LoginOtraViewController.setVisible();
                     }
                 });
                 
@@ -195,8 +228,25 @@ public class OptPtoVtaViewController extends OptPtoVtaJFrame {
             }
         });                
     }
+        
+    private void jBRingInvoicesActionPerformed(java.awt.event.ActionEvent evt) {
+        
+        try {
+            
+            dispose();
+            
+            ViewControlersFactory.getSingleton().getInvoicesNotRingedViewController().setVisible();
+        } catch (Exception ex) {
+            LoggerUtility.getSingleton().logError(this.getClass(), ex);
+            try {
+                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+            } catch (Exception ex1) {
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
+            }
+        }
+    }
     
-    private void jBCortZActionPerformed(java.awt.event.ActionEvent evt) {                                             
+    private void jBCortZActionPerformed(java.awt.event.ActionEvent evt) {
 
 	try{            	
             
@@ -235,7 +285,9 @@ public class OptPtoVtaViewController extends OptPtoVtaJFrame {
             
             dispose();
             
-            ViewControlersFactory.getSingleton().getImprVtasViewController().setVisible();
+            final ImprVtasViewController ImprVtasViewController = ViewControlersFactory.getSingleton().getImprVtasViewController();
+            ImprVtasViewController.setDocumentType_(DocumentType.SALES);
+            ImprVtasViewController.setVisible();
 	}
 	catch (Exception ex) {
             LoggerUtility.getSingleton().logError(this.getClass(), ex);
@@ -253,7 +305,9 @@ public class OptPtoVtaViewController extends OptPtoVtaJFrame {
             
             dispose();
             
-            ViewControlersFactory.getSingleton().getCanVtasViewController().setVisible();
+            final CanVtasViewController CanVtasViewController = ViewControlersFactory.getSingleton().getCanVtasViewController();
+            CanVtasViewController.setDocumentType_(DocumentType.SALES);
+            CanVtasViewController.setVisible();
 	}
 	catch (Exception ex) {
             LoggerUtility.getSingleton().logError(this.getClass(), ex);
@@ -271,7 +325,9 @@ public class OptPtoVtaViewController extends OptPtoVtaJFrame {
             
             dispose();
             
-            ViewControlersFactory.getSingleton().getVVtasViewController().setVisible();
+            final VVtasViewController VVtasViewController = ViewControlersFactory.getSingleton().getVVtasViewController();
+            VVtasViewController.setDocumentType_(DocumentType.SALES);
+            VVtasViewController.setVisible();
 	}
 	catch (Exception ex) {
             LoggerUtility.getSingleton().logError(this.getClass(), ex);
@@ -296,7 +352,9 @@ public class OptPtoVtaViewController extends OptPtoVtaJFrame {
             dispose();
             
             //Open the window
-            ViewControlersFactory.getSingleton().getDevPVtaPtoViewController().setVisible();
+            final DevPVtaPtoViewController DevPVtaPtoViewController = ViewControlersFactory.getSingleton().getDevPVtaPtoViewController();
+            DevPVtaPtoViewController.setDocumentType_(DocumentType.SALES);
+            DevPVtaPtoViewController.setVisible();
 	}
 	catch (Exception ex) {
             LoggerUtility.getSingleton().logError(this.getClass(), ex);
@@ -308,7 +366,57 @@ public class OptPtoVtaViewController extends OptPtoVtaJFrame {
 	}
     }
     
-    private void jBDevActionPerformed(java.awt.event.ActionEvent evt) {                                             
+    private void jBChangeLoginActionPerformed(java.awt.event.ActionEvent evt) {
+        
+        try {
+            
+            //Close window
+            dispose();
+            
+            final LoginOtraViewController LoginOtraViewController = ViewControlersFactory.getSingleton().getLoginOtraViewController();
+            LoginOtraViewController.setOnResult(new LoginOtraViewController.OnResult(){
+
+                @Override
+                public void onCorrectLogin() {
+                    
+                    try {
+                     
+                        //Get if any pending zorte z
+                        final SalessRepository.CortZXData CortZXData = RepositoryFactory.getInstance().getSalessRepository().getTotalsForCortXZ();
+                        if(!CortZXData.getSales().isEmpty()){
+                            DialogsFactory.getSingleton().showErrorOKCallbackDialog(baseJFrame, "cort_pending_to_make_dont_forget", (JFrame jFrame) -> {
+                            });
+                        }
+                        
+                    } catch (Exception ex) {
+                        LoggerUtility.getSingleton().logError(this.getClass(), ex);
+                        try {
+                            DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+                        } catch (Exception ex1) {
+                            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
+                        }
+                    }
+                }
+
+                @Override
+                public void onInvalidLogin() {
+                    
+                }
+                
+            });
+            LoginOtraViewController.setVisible();
+            
+        } catch (Exception ex) {
+            LoggerUtility.getSingleton().logError(this.getClass(), ex);
+            try {
+                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+            } catch (Exception ex1) {
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
+            }
+        }
+    }
+    
+    private void jBDevActionPerformed(java.awt.event.ActionEvent evt) {
 
 	try{            	
     
@@ -321,7 +429,9 @@ public class OptPtoVtaViewController extends OptPtoVtaJFrame {
             dispose();
             
             //Open the window
-            ViewControlersFactory.getSingleton().getDevVtaPtoViewController().setVisible();
+            final DevVtaPtoViewController DevVtaPtoViewController = ViewControlersFactory.getSingleton().getDevVtaPtoViewController();
+            DevVtaPtoViewController.setDocumentType_(DocumentType.SALES);
+            DevVtaPtoViewController.setVisible();
 	}
 	catch (Exception ex) {
             LoggerUtility.getSingleton().logError(this.getClass(), ex);

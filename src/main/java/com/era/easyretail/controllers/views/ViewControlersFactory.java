@@ -54,6 +54,7 @@ public class ViewControlersFactory {
     private TipsPagsJFrame TipsPagsJFrame;
     private IngreCajViewController IngreCajViewController;
     private ReportsViewController ReportsViewController;
+    private InvoicesNotRingedViewController InvoicesNotRingedViewController;
     private NewVtaProductInfoController NewVtaProductInfoController;
     private SubramosJFrame SubramosJFrame;
     private SeriesJFrame SeriesJFrame;
@@ -698,6 +699,11 @@ public class ViewControlersFactory {
     public DescripGranViewController getDescripGranViewController(){
         DescripGranViewController = new DescripGranViewController();
         return DescripGranViewController;
+    }
+ 
+    public InvoicesNotRingedViewController getInvoicesNotRingedViewController(){
+        InvoicesNotRingedViewController = new InvoicesNotRingedViewController();
+        return InvoicesNotRingedViewController;
     }
     
     @Override
