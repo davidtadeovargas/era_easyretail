@@ -59,6 +59,26 @@ public class DevPVtaViewController extends DevPVtaJFrame {
             
             jTab.addEditableColumn(TableHeaderFactory.getSigleton().getPartvtasTableHeader().getCANT_DEV().getValue());
             
+            //When the editable columnas changes update the model
+            jTab.setIOnEditableColumn((int row, int columnIndex, Object modelObject, Object newObjectValue) -> {
+                
+                //Cast the model
+                Partvta Partvta_ = (Partvta)modelObject;
+                
+                //Get the index of the editable column
+                final int columnIndex_ = jTab.getColumnIndex(TableHeaderFactory.getSigleton().getPartvtasTableHeader().getCANT_DEV().getValue());
+                
+                if(columnIndex_==columnIndex){ //Devs
+                    
+                    //Cast to bigdecimal
+                    final double devs = Double.parseDouble((String)newObjectValue);
+                    final BigDecimal devsBigDecimal = new BigDecimal(devs);
+                    
+                    //Update the model
+                    Partvta_.setToDevs(devsBigDecimal);
+                }
+            });
+            
         }catch (Exception ex) {
             LoggerUtility.getSingleton().logError(DevPVtaViewController.class, ex);
             try {
@@ -101,7 +121,7 @@ public class DevPVtaViewController extends DevPVtaJFrame {
         jTVta.setText(String.valueOf(Sale_.getId()));
         jTNoSer.setText(Sale_.getSerie());
         jTTipDoc.setText(typeDocument);
-        jTEst.setText(Sale_.getEstac());        
+        jTEst.setText(Sale_.getEstatus());
                 
         jTSubTot.setText(UtilitiesFactory.getSingleton().getNumbersUtility().toMoneyFormat(String.valueOf(Sale_.getSubtotal())));
         jTImp.setText(UtilitiesFactory.getSingleton().getNumbersUtility().toMoneyFormat(String.valueOf(Sale_.getTax())));
@@ -132,28 +152,39 @@ public class DevPVtaViewController extends DevPVtaJFrame {
                 return;
             }
             
+            //Flag when there is nothing to return
+            boolean existsToReturn = false;
+            
+            //Flag when there is invalid amounts in return
             boolean stop = false;
             
             //Loop all rows to check if any amount is invalid
-            final List<Partvta> partvtas = (List<Partvta>)jTab.getAllItemsInTable();
-            int row = 0;
+            final List<Partvta> partvtas = (List<Partvta>)jTab.getAllItemsInTable();            
             for(Partvta Partvta_:partvtas){
                                                 
                 final BigDecimal cant = Partvta_.getCant();
                 final BigDecimal devs = Partvta_.getDevs();
                 final BigDecimal availableDevs = cant.subtract(devs);
                 
-                final int columnIndex = jTab.getColumnIndex(TableHeaderFactory.getSigleton().getPartvtasTableHeader().getCANT_DEV().getValue());
+                final BigDecimal wantsToDev = Partvta_.getToDevs()==null?BigDecimal.ZERO:Partvta_.getToDevs();
                 
-                final BigDecimal wantsToDev = new BigDecimal((String)jTab.getValueAt(row, columnIndex));
+                if(wantsToDev.compareTo(BigDecimal.ZERO)>0){
+                    existsToReturn = true;
+                }
                 
                 //If is greater than
                 if(wantsToDev.compareTo(availableDevs)==1){
                     stop = true;
                     break;
-                }
-                
-                Partvta_.setToDevs(wantsToDev);
+                }                                
+            }
+            
+            //If nothing to return so stop
+            if(!existsToReturn){
+                DialogsFactory.getSingleton().showErrorOKCallbackDialog(baseJFrame, "errors_nothing_to_return", (JFrame jFrame) -> {
+                    jTab.grabFocus();
+                });
+                return;
             }
             
             //If any error with de amount of devolutions

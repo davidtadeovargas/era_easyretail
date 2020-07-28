@@ -614,12 +614,11 @@ public class EmpresasViewController extends EmpresasJFrame {
         //Validate that the expedition place exists
         final String expeditionPlace = JTLugarDeExpedicion.getText().trim();
         if(!expeditionPlace.isEmpty()){
-            
             final boolean exists = RepositoryFactory.getInstance().getCCodigoPostalRepository().existsExpeditionPlace(expeditionPlace);
             if(!exists){
-                final ErrorOKDialog ErrorOKDialog = DialogsFactory.getSingleton().getErrorOKDialog(baseJFrame);
-                ErrorOKDialog.setPropertyText("errors_expedition_place_not_exists");
-                ErrorOKDialog.show();
+                DialogsFactory.getSingleton().showErrorOKCallbackDialog(baseJFrame, "errors_expedition_place_not_exists", (JFrame jFrame) -> {
+                    JTLugarDeExpedicion.grabFocus();
+                });
                 return false;
             }
         }

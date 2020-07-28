@@ -425,7 +425,7 @@ public class ProdsViewController extends ProdsJFrame {
             }
             
             //Search all the ocurrences
-            this.jTab.getByLikeEncabezados(search);
+            this.jTab.getByLikeEncabezadosBasic(search);
 	}
 	catch (Exception ex) {
             LoggerUtility.getSingleton().logError(ProdsViewController.class, ex);

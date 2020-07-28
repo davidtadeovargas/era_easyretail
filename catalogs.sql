@@ -247,8 +247,8 @@ VALUES('SYS','MEDIDA GENERICA','INICIAL', 'INICIAL', 'INICIAL',now(),now());
 
 /*!40000 ALTER TABLE `mons` DISABLE KEYS */;
 
-INSERT INTO `mons` (`c_moneda_id`, `c_Moneda`, `Descripcion`, `Decimales`, `Porcentaje_variación`, `Fecha_inicio_de_vigencia`,`falt`,`fmod`,`simb`) VALUES
-(100, 'MXN', 'Peso Mexicano', '2', 500, '2017-08-14 00:00:00', now(),now(),'$');
+INSERT INTO `mons` (`c_moneda_id`, `c_Moneda`, `Descripcion`, `Decimales`, `Porcentaje_variación`, `Fecha_inicio_de_vigencia`,`falt`,`fmod`,`simb`, `mn`) VALUES
+(100, 'MXN', 'Peso Mexicano', '2', 500, '2017-08-14 00:00:00', now(),now(),'$',1);
 
 INSERT INTO `mons` (`c_moneda_id`, `c_Moneda`, `Descripcion`, `Decimales`, `Porcentaje_variación`, `Fecha_inicio_de_vigencia`,`falt`,`fmod`) VALUES
 	(1, 'AED', 'Dirham de EAU', '2', 500, '2017-08-14 00:00:00', now(),now()),

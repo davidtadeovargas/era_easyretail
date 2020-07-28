@@ -170,11 +170,31 @@ public class CompsViewController extends CompsJFrame {
             SearchViewController.setSEARCH_TYPE(SearchCommonTypeEnum.PRODUCTS);
             SearchViewController.setButtonAceptClicked(() -> {
 
-                final String productCode = SearchViewController.getCod();
-                jTProd.setText(productCode);
-                
-                final String description = SearchViewController.getDescrip();
-                jTDescrip.setText(description);
+                try {
+                 
+                    final String productCode = SearchViewController.getCod();
+
+                    //The master kit can not be the same as the selected product
+                    if(kitCode.compareTo(productCode)==0){
+                        DialogsFactory.getSingleton().showErrorOKCallbackDialog(baseJFrame, "errors_master_kit_cannot_be_component", (JFrame jFrame) -> {
+                            jTProd.grabFocus();
+                        });
+                        return;
+                    }
+
+                    jTProd.setText(productCode);
+
+                    final String description = SearchViewController.getDescrip();
+                    jTDescrip.setText(description);
+                    
+                } catch (Exception ex) {
+                    LoggerUtility.getSingleton().logError(this.getClass(), ex);
+                    try {
+                        DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+                    } catch (Exception ex1) {
+                        Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
+                    }
+                }
             });
             SearchViewController.setVisible();
 	}

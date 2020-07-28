@@ -9,6 +9,7 @@ import com.era.datamodels.enums.SearchCommonTypeEnum;
 import com.era.views.FacturarTicketsJFrame;
 import java.util.List;
 import com.era.logger.LoggerUtility;
+import com.era.models.BasDats;
 import com.era.models.Company;
 import com.era.models.MetogoPago;
 import com.era.models.Sales;
@@ -17,6 +18,7 @@ import com.era.repositories.RepositoryFactory;
 import com.era.utilities.UtilitiesFactory;
 import com.era.views.comboboxes.SeriesCombobox;
 import com.era.views.dialogs.DialogsFactory;
+import com.era.views.dialogs.ErrorOKDialog;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -61,6 +63,10 @@ public class FacturarTicketsViewController extends FacturarTicketsJFrame {
             //Init caducity date to today
             jDayChooserFrom.setCalendar(UtilitiesFactory.getSingleton().getDateTimeUtility().getCurrentDateInCalendar());
             jDayChooserUntil.setCalendar(UtilitiesFactory.getSingleton().getDateTimeUtility().getCurrentDateInCalendar());
+            
+            //Load the company CP by default
+            final BasDats BasDats = UtilitiesFactory.getSingleton().getSessionUtility().getBasDats();
+            txtLugarExp.setText(BasDats.getCP());
             
         }catch (Exception ex) {
             LoggerUtility.getSingleton().logError(FacturarTicketsViewController.class, ex);
@@ -114,23 +120,25 @@ public class FacturarTicketsViewController extends FacturarTicketsJFrame {
                 return;
             }
             
-            //If expedition place is not present
+            //Get the expedition place
             final String expeditionPlace = txtLugarExp.getText().trim();
+            
+            //If expedition place is empty stop
             if(expeditionPlace.isEmpty()){
                 DialogsFactory.getSingleton().showOKEmptyFieldCallbackDialog(baseJFrame, (JFrame jFrame) -> {
                     txtLugarExp.grabFocus();
                 });
                 return;
             }
-            
-            //If expedition place doesnt exist
-            /*final boolean exists = RepositoryFactory.getInstance().getCCodigoPostalRepository().existsExpeditionPlace(expeditionPlace);
+                        
+            //Validate that the expedition place exists
+            final boolean exists = RepositoryFactory.getInstance().getCCodigoPostalRepository().existsExpeditionPlace(expeditionPlace);
             if(!exists){
-                DialogsFactory.getSingleton().showErrorOKRecordNotExistsCallbackDialog(baseJFrame, (JFrame jFrame) -> {
+                DialogsFactory.getSingleton().showErrorOKCallbackDialog(baseJFrame, "errors_expedition_place_not_exists", (JFrame jFrame) -> {
                     txtLugarExp.grabFocus();
                 });
                 return;
-            }*/
+            }
             
             //If nothing to process
             if(sales.isEmpty()){

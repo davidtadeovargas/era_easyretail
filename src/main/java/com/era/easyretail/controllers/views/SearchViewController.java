@@ -489,6 +489,9 @@ public class SearchViewController extends SearchJFrame {
                 break;
 
             case EXPEDITION_PLACE:
+                jTab.addShowColumn(TableHeaderFactory.getSigleton().getCCodigoPostalsTableHeader().getC_CODIGO_POSTAL());
+                jTab.addShowColumn(TableHeaderFactory.getSigleton().getCCodigoPostalsTableHeader().getC_ESTADO());
+                jTab.addShowColumn(TableHeaderFactory.getSigleton().getCCodigoPostalsTableHeader().getC_LOCALIDAD());
                 break;
 
             case COUNTRIES:

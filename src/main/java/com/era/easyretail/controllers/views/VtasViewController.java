@@ -152,7 +152,7 @@ public class VtasViewController extends VtasJFrame {
             jTab2.addShowColumn(TableHeaderFactory.getSigleton().getPartvtasTableHeader().getLIST());
             
             //Show the columns
-            jTableVentas.showCommonColumns();
+            jTableVentas.showCommonColumnsWithRingedInformation();
             
             //Event when row is selected
             jTableVentas.setITableRowSelected((ListSelectionEvent lse, Object Object) -> {
