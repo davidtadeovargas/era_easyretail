@@ -5,11 +5,11 @@
  */
 package com.era.easyretail.controllers.views;
 
-import com.era.datamodels.enums.DocumentType;
 import com.era.easyretail.controllers.views.ClavMastViewController.OnResult;
 import com.era.logger.LoggerUtility;
 import com.era.models.Sales;
 import com.era.repositories.RepositoryFactory;
+import com.era.repositories.datamodels.DocumentTypeFilter;
 import com.era.views.CanVtasJFrame;
 import com.era.views.dialogs.DialogsFactory;
 import java.util.List;
@@ -23,7 +23,7 @@ import javax.swing.JFrame;
  */
 public class CanVtasViewController extends CanVtasJFrame {
     
-    private DocumentType DocumentType_;
+    private DocumentTypeFilter DocumentTypeFilter;
     
     public CanVtasViewController() {
         super("window_title_cancel_sales");
@@ -60,15 +60,14 @@ public class CanVtasViewController extends CanVtasJFrame {
             }
         }
     }
-    
-    public void setDocumentType_(DocumentType DocumentType_) throws Exception {
-        
-        this.DocumentType_ = DocumentType_;
+
+    public void setDocumentTypeFilter(DocumentTypeFilter DocumentTypeFilter) throws Exception {
+        this.DocumentTypeFilter = DocumentTypeFilter;
         
         //Load sales
-        jTab.setDocumentType(DocumentType_);
+        jTab.setDocumentTypeFilter(DocumentTypeFilter);
         jTab.initTableWithPagination();
-    }
+    }        
     
     private void jBMosTActionPerformed(java.awt.event.ActionEvent evt) {
     

@@ -5,13 +5,12 @@
  */
 package com.era.easyretail.controllers.views;
 
-import com.era.datamodels.enums.DocumentType;
 import com.era.logger.LoggerUtility;
 import com.era.models.Sales;
 import com.era.repositories.RepositoryFactory;
+import com.era.repositories.datamodels.DocumentTypeFilter;
 import com.era.views.DevPVtaPtoJFrame;
 import com.era.views.dialogs.DialogsFactory;
-import com.era.views.tables.headers.TableHeaderFactory;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,7 +22,7 @@ import javax.swing.JFrame;
  */
 public class DevPVtaPtoViewController extends DevPVtaPtoJFrame {
     
-    private DocumentType DocumentType_;
+    private DocumentTypeFilter DocumentTypeFilter;
     
     public DevPVtaPtoViewController(){
         super("window_title_devptovta");
@@ -60,15 +59,14 @@ public class DevPVtaPtoViewController extends DevPVtaPtoJFrame {
             }
         }
     }
-    
-    public void setDocumentType_(DocumentType DocumentType_) throws Exception {
+
+    public void setDocumentTypeFilter(DocumentTypeFilter DocumentTypeFilter) throws Exception {
+        this.DocumentTypeFilter = DocumentTypeFilter;
         
-        this.DocumentType_ = DocumentType_;
-        
-        //Load sales
-        jTab.setDocumentType(DocumentType_);
+        jTab.setDocumentTypeFilter(DocumentTypeFilter);
         jTab.initTableWithPagination();
     }
+        
     
     @Override
     public void loadModelInFields(Object ObjectModel) throws  Exception {        

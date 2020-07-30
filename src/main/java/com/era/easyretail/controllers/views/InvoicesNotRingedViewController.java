@@ -5,10 +5,10 @@
  */
 package com.era.easyretail.controllers.views;
 
-import com.era.datamodels.enums.DocumentType;
 import com.era.logger.LoggerUtility;
 import com.era.models.Sales;
 import com.era.repositories.RepositoryFactory;
+import com.era.repositories.datamodels.DocumentTypeFilter;
 import com.era.views.InvoicesNotRingedVtasJFrame;
 import com.era.views.dialogs.DialogsFactory;
 import java.util.Date;
@@ -22,7 +22,8 @@ import javax.swing.JFrame;
  */
 public class InvoicesNotRingedViewController extends InvoicesNotRingedVtasJFrame{
         
-    private DocumentType DocumentType_ = DocumentType.INVOICE_NOT_RINGED_CONFIRMED;
+    private DocumentTypeFilter DocumentTypeFilter_ = DocumentTypeFilter.INVOICE_NOT_RINGED_CONFIRMED;
+        
     
     public InvoicesNotRingedViewController(){
         
@@ -52,7 +53,7 @@ public class InvoicesNotRingedViewController extends InvoicesNotRingedVtasJFrame
             });
             
             //Load sales
-            jTab.setDocumentType(DocumentType_);
+            jTab.setDocumentTypeFilter(DocumentTypeFilter_);
             jTab.initTableWithPagination();
 
         } catch (Exception ex) {

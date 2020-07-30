@@ -5,7 +5,6 @@
  */
 package com.era.easyretail.controllers.views;
 
-import com.era.datamodels.enums.DocumentType;
 import com.era.views.OptPtoVtaJFrame;
 import java.util.List;
 import com.era.logger.LoggerUtility;
@@ -13,6 +12,7 @@ import com.era.models.Cortszx;
 import com.era.repositories.CortszxsRepository;
 import com.era.repositories.RepositoryFactory;
 import com.era.repositories.SalessRepository;
+import com.era.repositories.datamodels.DocumentTypeFilter;
 import com.era.views.dialogs.DialogsFactory;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -286,7 +286,7 @@ public class OptPtoVtaViewController extends OptPtoVtaJFrame {
             dispose();
             
             final ImprVtasViewController ImprVtasViewController = ViewControlersFactory.getSingleton().getImprVtasViewController();
-            ImprVtasViewController.setDocumentType_(DocumentType.SALES);
+            ImprVtasViewController.setDocumentTypeFilter(DocumentTypeFilter.ALL_SALES);
             ImprVtasViewController.setVisible();
 	}
 	catch (Exception ex) {
@@ -306,7 +306,7 @@ public class OptPtoVtaViewController extends OptPtoVtaJFrame {
             dispose();
             
             final CanVtasViewController CanVtasViewController = ViewControlersFactory.getSingleton().getCanVtasViewController();
-            CanVtasViewController.setDocumentType_(DocumentType.SALES);
+            CanVtasViewController.setDocumentTypeFilter(DocumentTypeFilter.ALL_SALES);
             CanVtasViewController.setVisible();
 	}
 	catch (Exception ex) {
@@ -326,7 +326,7 @@ public class OptPtoVtaViewController extends OptPtoVtaJFrame {
             dispose();
             
             final VVtasViewController VVtasViewController = ViewControlersFactory.getSingleton().getVVtasViewController();
-            VVtasViewController.setDocumentType_(DocumentType.SALES);
+            VVtasViewController.setDocumentTypeFilter(DocumentTypeFilter.ALL_SALES);
             VVtasViewController.setVisible();
 	}
 	catch (Exception ex) {
@@ -353,7 +353,7 @@ public class OptPtoVtaViewController extends OptPtoVtaJFrame {
             
             //Open the window
             final DevPVtaPtoViewController DevPVtaPtoViewController = ViewControlersFactory.getSingleton().getDevPVtaPtoViewController();
-            DevPVtaPtoViewController.setDocumentType_(DocumentType.SALES);
+            DevPVtaPtoViewController.setDocumentTypeFilter(DocumentTypeFilter.ALL_SALES);
             DevPVtaPtoViewController.setVisible();
 	}
 	catch (Exception ex) {
@@ -430,7 +430,7 @@ public class OptPtoVtaViewController extends OptPtoVtaJFrame {
             
             //Open the window
             final DevVtaPtoViewController DevVtaPtoViewController = ViewControlersFactory.getSingleton().getDevVtaPtoViewController();
-            DevVtaPtoViewController.setDocumentType_(DocumentType.SALES);
+            DevVtaPtoViewController.setDocumentTypeFilter(DocumentTypeFilter.ALL_SALES);
             DevVtaPtoViewController.setVisible();
 	}
 	catch (Exception ex) {

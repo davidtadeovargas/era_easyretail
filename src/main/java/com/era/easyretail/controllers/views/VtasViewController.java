@@ -12,6 +12,7 @@ import com.era.models.DocumentOrigin;
 import com.era.models.Partvta;
 import com.era.models.Sales;
 import com.era.repositories.RepositoryFactory;
+import com.era.repositories.datamodels.DocumentTypeFilter;
 import com.era.utilities.UtilitiesFactory;
 import com.era.views.VtasJFrame;
 import com.era.views.dialogs.DialogsFactory;
@@ -263,22 +264,22 @@ public class VtasViewController extends VtasJFrame {
         switch(DocumentType){
             
             case REMISION:
-                jTableVentas.setDocumentType(DocumentType.REMISION);
+                jTableVentas.setDocumentTypeFilter(DocumentTypeFilter.JUST_REM);
                 type = this.props.getProperty("remisions");
                 break;
                 
             case INVOICE:
-                jTableVentas.setDocumentType(DocumentType.INVOICE);
+                jTableVentas.setDocumentTypeFilter(DocumentTypeFilter.JUST_INVOICES);
                 type = this.props.getProperty("invoices");
                 break;
                 
             case SALES:
-                jTableVentas.setDocumentType(DocumentType.SALES);
+                jTableVentas.setDocumentTypeFilter(DocumentTypeFilter.ALL_SALES);
                 type = this.props.getProperty("sales");
                 break;
                 
             case TICKETS:
-                jTableVentas.setDocumentType(DocumentType.TICKETS);
+                jTableVentas.setDocumentTypeFilter(DocumentTypeFilter.JUST_TICKET);
                 type = this.props.getProperty("tickets");
                 
                 jMenuItemGralNew.setEnabled(false);
@@ -288,7 +289,7 @@ public class VtasViewController extends VtasJFrame {
                 break;
                 
             case NOTC:
-                jTableVentas.setDocumentType(DocumentType.NOTC);
+                jTableVentas.setDocumentTypeFilter(DocumentTypeFilter.JUST_NOTCS);
                 type = this.props.getProperty("tickets");
                 break;
         }
@@ -692,7 +693,28 @@ public class VtasViewController extends VtasJFrame {
 
 	try{            
             final DevPVtaPtoViewController DevPVtaPtoViewController = ViewControlersFactory.getSingleton().getDevPVtaPtoViewController();
-            DevPVtaPtoViewController.setDocumentType_(DocumentType_);
+            switch(DocumentType_){
+            
+                case REMISION:
+                    DevPVtaPtoViewController.setDocumentTypeFilter(DocumentTypeFilter.JUST_REM);                    
+                    break;
+
+                case INVOICE:
+                    DevPVtaPtoViewController.setDocumentTypeFilter(DocumentTypeFilter.JUST_INVOICES);                    
+                    break;
+
+                case SALES:
+                    DevPVtaPtoViewController.setDocumentTypeFilter(DocumentTypeFilter.ALL_SALES);                    
+                    break;
+
+                case TICKETS:
+                    DevPVtaPtoViewController.setDocumentTypeFilter(DocumentTypeFilter.JUST_TICKET);
+                    break;
+
+                case NOTC:
+                    DevPVtaPtoViewController.setDocumentTypeFilter(DocumentTypeFilter.JUST_NOTCS);
+                    break;
+            }
             DevPVtaPtoViewController.setVisible();
 	}
 	catch (Exception ex) {
@@ -724,7 +746,28 @@ public class VtasViewController extends VtasJFrame {
 
 	try{
             final DevVtaPtoViewController DevVtaPtoViewController = ViewControlersFactory.getSingleton().getDevVtaPtoViewController();
-            DevVtaPtoViewController.setDocumentType_(DocumentType_);
+            switch(DocumentType_){
+            
+                case REMISION:
+                    DevVtaPtoViewController.setDocumentTypeFilter(DocumentTypeFilter.JUST_REM);                    
+                    break;
+
+                case INVOICE:
+                    DevVtaPtoViewController.setDocumentTypeFilter(DocumentTypeFilter.JUST_INVOICES);                    
+                    break;
+
+                case SALES:
+                    DevVtaPtoViewController.setDocumentTypeFilter(DocumentTypeFilter.ALL_SALES);                    
+                    break;
+
+                case TICKETS:
+                    DevVtaPtoViewController.setDocumentTypeFilter(DocumentTypeFilter.JUST_TICKET);
+                    break;
+
+                case NOTC:
+                    DevVtaPtoViewController.setDocumentTypeFilter(DocumentTypeFilter.JUST_NOTCS);
+                    break;
+            }
             DevVtaPtoViewController.setVisible();
 	}
 	catch (Exception ex) {
@@ -772,7 +815,28 @@ public class VtasViewController extends VtasJFrame {
 	try {
                         
             final CanVtasViewController CanVtasViewController = ViewControlersFactory.getSingleton().getCanVtasViewController();
-            CanVtasViewController.setDocumentType_(DocumentType_);
+            switch(DocumentType_){
+            
+                case REMISION:
+                    CanVtasViewController.setDocumentTypeFilter(DocumentTypeFilter.JUST_REM);                    
+                    break;
+
+                case INVOICE:
+                    CanVtasViewController.setDocumentTypeFilter(DocumentTypeFilter.JUST_INVOICES);                    
+                    break;
+
+                case SALES:
+                    CanVtasViewController.setDocumentTypeFilter(DocumentTypeFilter.ALL_SALES);                    
+                    break;
+
+                case TICKETS:
+                    CanVtasViewController.setDocumentTypeFilter(DocumentTypeFilter.JUST_TICKET);
+                    break;
+
+                case NOTC:
+                    CanVtasViewController.setDocumentTypeFilter(DocumentTypeFilter.JUST_NOTCS);
+                    break;
+            }
             CanVtasViewController.setVisible();
             
         } catch (Exception ex) {

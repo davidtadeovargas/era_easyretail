@@ -5,11 +5,11 @@
  */
 package com.era.easyretail.controllers.views;
 
-import com.era.datamodels.enums.DocumentType;
 import com.era.views.VVtasJFrame;
 import java.util.List;
 import com.era.logger.LoggerUtility;
 import com.era.models.Sales;
+import com.era.repositories.datamodels.DocumentTypeFilter;
 import com.era.views.dialogs.DialogsFactory;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -20,7 +20,7 @@ import javax.swing.JFrame;
  */
 public class VVtasViewController extends VVtasJFrame {
     
-    private DocumentType DocumentType_;
+    private DocumentTypeFilter DocumentTypeFilter;
     
     public VVtasViewController() {
         super("window_title_vervtas");
@@ -57,16 +57,15 @@ public class VVtasViewController extends VVtasJFrame {
             }
         }
     }
-    
-    public void setDocumentType_(DocumentType DocumentType_) throws Exception {
-        
-        this.DocumentType_ = DocumentType_;
+
+    public void setDocumentTypeFilter(DocumentTypeFilter DocumentTypeFilter) throws Exception {
+        this.DocumentTypeFilter = DocumentTypeFilter;
         
         //Load sales
-        jTab.setDocumentType(DocumentType_);
+        jTab.setDocumentTypeFilter(DocumentTypeFilter);
         jTab.initTableWithPagination();
     }
-    
+        
     @Override
     public void clearFields() throws Exception{
     }
