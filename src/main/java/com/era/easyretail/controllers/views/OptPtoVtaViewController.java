@@ -236,6 +236,7 @@ public class OptPtoVtaViewController extends OptPtoVtaJFrame {
             dispose();
             
             ViewControlersFactory.getSingleton().getInvoicesNotRingedViewController().setVisible();
+            
         } catch (Exception ex) {
             LoggerUtility.getSingleton().logError(this.getClass(), ex);
             try {
@@ -306,7 +307,7 @@ public class OptPtoVtaViewController extends OptPtoVtaJFrame {
             dispose();
             
             final CanVtasViewController CanVtasViewController = ViewControlersFactory.getSingleton().getCanVtasViewController();
-            CanVtasViewController.setDocumentTypeFilter(DocumentTypeFilter.ALL_SALES);
+            CanVtasViewController.setDocumentTypeFilter(DocumentTypeFilter.ALL_SALES_CO);
             CanVtasViewController.setVisible();
 	}
 	catch (Exception ex) {
@@ -353,7 +354,7 @@ public class OptPtoVtaViewController extends OptPtoVtaJFrame {
             
             //Open the window
             final DevPVtaPtoViewController DevPVtaPtoViewController = ViewControlersFactory.getSingleton().getDevPVtaPtoViewController();
-            DevPVtaPtoViewController.setDocumentTypeFilter(DocumentTypeFilter.ALL_SALES);
+            DevPVtaPtoViewController.setDocumentTypeFilter(DocumentTypeFilter.ALL_SALES_CO_DEVP);
             DevPVtaPtoViewController.setVisible();
 	}
 	catch (Exception ex) {
@@ -430,7 +431,7 @@ public class OptPtoVtaViewController extends OptPtoVtaJFrame {
             
             //Open the window
             final DevVtaPtoViewController DevVtaPtoViewController = ViewControlersFactory.getSingleton().getDevVtaPtoViewController();
-            DevVtaPtoViewController.setDocumentTypeFilter(DocumentTypeFilter.ALL_SALES);
+            DevVtaPtoViewController.setDocumentTypeFilter(DocumentTypeFilter.ALL_SALES_CO);
             DevVtaPtoViewController.setVisible();
 	}
 	catch (Exception ex) {

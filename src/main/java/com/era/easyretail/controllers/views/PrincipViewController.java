@@ -1441,7 +1441,7 @@ public class PrincipViewController extends PrincipJFrame {
     }
     
     private void jMVProdActionPerformed(java.awt.event.ActionEvent evt) {
-        ViewControlersFactory.getSingleton().getProdsViewController().setVisible();
+        ViewControlersFactory.getSingleton().getProductsListViewController().setVisible();
     }
     
     private void jMenItProdsBajMinActionPerformed(java.awt.event.ActionEvent evt) {                                                  
@@ -1931,7 +1931,7 @@ public class PrincipViewController extends PrincipJFrame {
     }
     
     private void jBProdsActionPerformed(java.awt.event.ActionEvent evt) {                                        
-        ViewControlersFactory.getSingleton().getProdsViewController().setVisible();
+        ViewControlersFactory.getSingleton().getProductsListViewController().setVisible();
     }
     
     private void jBCotsActionPerformed(java.awt.event.ActionEvent evt) {

@@ -35,6 +35,8 @@ public class SearchViewController extends SearchJFrame {
     private String descrip;
     private String others;
     
+    private String extraCode;
+    
     private ButtonAceptClicked ButtonAceptClicked;        
     
     
@@ -47,6 +49,7 @@ public class SearchViewController extends SearchJFrame {
     private boolean canceled;
     
     private SearchCommonTypeEnum SearchCommonTypeEnum;
+    
     
     
     
@@ -88,7 +91,11 @@ public class SearchViewController extends SearchJFrame {
         this.BaseJTable = jTab;
                 
     }
-    
+
+    public void setExtraCode(String extraCode) {
+        this.extraCode = extraCode;
+    }
+        
     @Override
     public void loadModelInFields(Object ObjectModel) throws  Exception {        
     }
@@ -285,6 +292,10 @@ public class SearchViewController extends SearchJFrame {
                 case FISCAL_REGIMEN:
                    list = RepositoryManager_.getCRegimenFiscalRepository().getAll();
                    break;
+                    
+                case PRODUCTO_PRICE_LIST:
+                    list = RepositoryManager_.getProductsRepository().getPriceListsFromProductToListModel(extraCode);
+                    break;
             }
             
             initTable(list);
@@ -338,7 +349,13 @@ public class SearchViewController extends SearchJFrame {
                 jTab.addShowColumn(TableHeaderFactory.getSigleton().getBasDatssTableHeader().getNOM());
                 jTab.addShowColumn(TableHeaderFactory.getSigleton().getBasDatssTableHeader().getBD());                
                 break;
-
+            
+            case PRODUCTO_PRICE_LIST:
+                jTab.addShowColumn(TableHeaderFactory.getSigleton().getProductPriceListTableHeader().getLIST());
+                jTab.addShowColumn(TableHeaderFactory.getSigleton().getProductPriceListTableHeader().getCODE());                
+                jTab.addShowColumn(TableHeaderFactory.getSigleton().getProductPriceListTableHeader().getPRICE());
+                break;
+                
             case PRODUCTS_FOR_SALE:
             case PRODUCTS:
                 jTab.addShowColumn(TableHeaderFactory.getSigleton().getProductsTableHeader().getCODE());

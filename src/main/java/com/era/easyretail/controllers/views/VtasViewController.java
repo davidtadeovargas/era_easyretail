@@ -7,7 +7,6 @@ package com.era.easyretail.controllers.views;
 
 import com.era.datamodels.enums.DocumentType;
 import com.era.logger.LoggerUtility;
-import com.era.models.Company;
 import com.era.models.DocumentOrigin;
 import com.era.models.Partvta;
 import com.era.models.Sales;
@@ -17,7 +16,6 @@ import com.era.utilities.UtilitiesFactory;
 import com.era.views.VtasJFrame;
 import com.era.views.dialogs.DialogsFactory;
 import com.era.views.tables.headers.TableHeaderFactory;
-import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -257,6 +255,11 @@ public class VtasViewController extends VtasJFrame {
 
     public void setDocumentType(DocumentType DocumentType) throws Exception {
         
+        //Enable menus
+        jMenuItemGralNew.setEnabled(true);
+        jMenuDocuSAT.setEnabled(true);
+        jMenuItemGralSend.setEnabled(true);
+
         this.DocumentType_ = DocumentType;
         
         String type = "";
@@ -432,59 +435,8 @@ public class VtasViewController extends VtasJFrame {
     
     private void jButtonTimbrarActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
-	try{            	
-    
-            //First select a sale to view
-            if(!jTableVentas.isRowSelected()){
-                DialogsFactory.getSingleton().showErrorOKNoSelectionCallbackDialog(baseJFrame, (JFrame jFrame) -> {
-                    jTableVentas.grabFocus();
-                });
-                return;
-            }
-            
-            //Get selected sale
-            final Sales Sale = (Sales)jTableVentas.getRowSelected();
-            
-            //If the sale is not an invoice stop
-            if(!RepositoryFactory.getInstance().getSalessRepository().isInvoiceDocument(Sale)){
-                DialogsFactory.getSingleton().showErrorOKCallbackDialog(baseJFrame, "errors_document_has_to_be_invoice", null);
-                return;
-            }
-            
-            //If the invoice is already ringed stopd
-            if(Sale.isInvoiced()){
-                DialogsFactory.getSingleton().showErrorOKCallbackDialog(baseJFrame, "errors_document_already_ringed", null);
-                return;
-            }
-            
-            //If the sale is not in ideal estate stop
-            if(!RepositoryFactory.getInstance().getSalessRepository().isConfirmed(Sale)){
-                DialogsFactory.getSingleton().showErrorOKCallbackDialog(baseJFrame, "errors_sale_is_not_confirmed", null);
-                return;
-            }
-            
-            DialogsFactory.getSingleton().showQuestionContinueDialog(baseJFrame, (JFrame jFrame) -> {
-                
-                try {
-                    
-                    //Get the customer from db
-                    final Company Company = RepositoryFactory.getInstance().getCompanysRepository().getCustomerByCode(Sale.getCompanyCode());
-                    
-                    //Ring the sale
-                    RepositoryFactory.getInstance().getSalessRepository().actualizaVentaTimbrado(Sale.getId(), String.valueOf(new Date().getTime()), String.valueOf(new Date().getTime()), String.valueOf(new Date().getTime()), Company.getExpeditionPlace(), Company.getFiscalRegimen(), String.valueOf(new Date().getTime()), String.valueOf(new Date().getTime()), String.valueOf(new Date().getTime()));
-                    
-                    DialogsFactory.getSingleton().showOKOperationCompletedCallbackDialog(jFrame, (JFrame jFrame1) -> {
-                    });
-                    
-                } catch (Exception ex) {
-                    LoggerUtility.getSingleton().logError(this.getClass(), ex);
-                    try {
-                        DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
-                    } catch (Exception ex1) {
-                        Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
-                    }
-                }
-            });
+	try{
+            ViewControlersFactory.getSingleton().getInvoicesNotRingedViewController().setVisible();
 	}
 	catch (Exception ex) {
             LoggerUtility.getSingleton().logError(VtasViewController.class, ex);
@@ -696,23 +648,23 @@ public class VtasViewController extends VtasJFrame {
             switch(DocumentType_){
             
                 case REMISION:
-                    DevPVtaPtoViewController.setDocumentTypeFilter(DocumentTypeFilter.JUST_REM);                    
+                    DevPVtaPtoViewController.setDocumentTypeFilter(DocumentTypeFilter.JUST_REM_CO_DEVP);
                     break;
 
                 case INVOICE:
-                    DevPVtaPtoViewController.setDocumentTypeFilter(DocumentTypeFilter.JUST_INVOICES);                    
+                    DevPVtaPtoViewController.setDocumentTypeFilter(DocumentTypeFilter.JUST_INVOICES_CO_DEVP);
                     break;
 
                 case SALES:
-                    DevPVtaPtoViewController.setDocumentTypeFilter(DocumentTypeFilter.ALL_SALES);                    
+                    DevPVtaPtoViewController.setDocumentTypeFilter(DocumentTypeFilter.ALL_SALES_CO_DEVP);
                     break;
 
                 case TICKETS:
-                    DevPVtaPtoViewController.setDocumentTypeFilter(DocumentTypeFilter.JUST_TICKET);
+                    DevPVtaPtoViewController.setDocumentTypeFilter(DocumentTypeFilter.JUST_TICKET_CO_DEVP);
                     break;
 
                 case NOTC:
-                    DevPVtaPtoViewController.setDocumentTypeFilter(DocumentTypeFilter.JUST_NOTCS);
+                    DevPVtaPtoViewController.setDocumentTypeFilter(DocumentTypeFilter.JUST_NOTCS_CO_DEVP);
                     break;
             }
             DevPVtaPtoViewController.setVisible();
@@ -749,23 +701,23 @@ public class VtasViewController extends VtasJFrame {
             switch(DocumentType_){
             
                 case REMISION:
-                    DevVtaPtoViewController.setDocumentTypeFilter(DocumentTypeFilter.JUST_REM);                    
+                    DevVtaPtoViewController.setDocumentTypeFilter(DocumentTypeFilter.JUST_REM_CO);
                     break;
 
                 case INVOICE:
-                    DevVtaPtoViewController.setDocumentTypeFilter(DocumentTypeFilter.JUST_INVOICES);                    
+                    DevVtaPtoViewController.setDocumentTypeFilter(DocumentTypeFilter.JUST_INVOICES_CO);
                     break;
 
                 case SALES:
-                    DevVtaPtoViewController.setDocumentTypeFilter(DocumentTypeFilter.ALL_SALES);                    
+                    DevVtaPtoViewController.setDocumentTypeFilter(DocumentTypeFilter.ALL_SALES_CO);
                     break;
 
                 case TICKETS:
-                    DevVtaPtoViewController.setDocumentTypeFilter(DocumentTypeFilter.JUST_TICKET);
+                    DevVtaPtoViewController.setDocumentTypeFilter(DocumentTypeFilter.JUST_TICKET_CO);
                     break;
 
                 case NOTC:
-                    DevVtaPtoViewController.setDocumentTypeFilter(DocumentTypeFilter.JUST_NOTCS);
+                    DevVtaPtoViewController.setDocumentTypeFilter(DocumentTypeFilter.JUST_NOTCS_CO);
                     break;
             }
             DevVtaPtoViewController.setVisible();
@@ -818,23 +770,23 @@ public class VtasViewController extends VtasJFrame {
             switch(DocumentType_){
             
                 case REMISION:
-                    CanVtasViewController.setDocumentTypeFilter(DocumentTypeFilter.JUST_REM);                    
+                    CanVtasViewController.setDocumentTypeFilter(DocumentTypeFilter.JUST_REM_CO);                    
                     break;
 
                 case INVOICE:
-                    CanVtasViewController.setDocumentTypeFilter(DocumentTypeFilter.JUST_INVOICES);                    
+                    CanVtasViewController.setDocumentTypeFilter(DocumentTypeFilter.JUST_INVOICES_CO);
                     break;
 
                 case SALES:
-                    CanVtasViewController.setDocumentTypeFilter(DocumentTypeFilter.ALL_SALES);                    
+                    CanVtasViewController.setDocumentTypeFilter(DocumentTypeFilter.ALL_SALES_CO);
                     break;
 
                 case TICKETS:
-                    CanVtasViewController.setDocumentTypeFilter(DocumentTypeFilter.JUST_TICKET);
+                    CanVtasViewController.setDocumentTypeFilter(DocumentTypeFilter.JUST_TICKET_CO);
                     break;
 
                 case NOTC:
-                    CanVtasViewController.setDocumentTypeFilter(DocumentTypeFilter.JUST_NOTCS);
+                    CanVtasViewController.setDocumentTypeFilter(DocumentTypeFilter.JUST_NOTCS_CO);
                     break;
             }
             CanVtasViewController.setVisible();

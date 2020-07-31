@@ -26,13 +26,11 @@ import com.era.utilities.filechooser.ImageFileChooserUtility;
 import com.era.views.ProdsJFrame;
 import com.era.views.dialogs.DialogsFactory;
 import com.era.views.dialogs.ErrorOKDialog;
-import com.era.views.tables.headers.TableHeaderFactory;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
-import javax.swing.event.ListSelectionEvent;
 
 /**
  *
@@ -43,6 +41,8 @@ public class ProdsViewController extends ProdsJFrame {
     private List<ImpuesXProduct> taxesGlobal = new ArrayList<>();
     private List<Kits> kits;
     private LPrecsDatamodel LPrecsDatamodel;
+    
+    private Product ProductGlobal;
             
     public ProdsViewController() {
         super("window_title_prods");
@@ -51,35 +51,17 @@ public class ProdsViewController extends ProdsJFrame {
             lprecsButton.addActionListener((java.awt.event.ActionEvent evt) -> {
                 lprecsButtonActionPerformed(evt);
             });
-            jBMosT.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jBMosTActionPerformed(evt);
-            });
             jBGuar.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jBGuarActionPerformed(evt);
             });
-            jBNew.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jBNewActionPerformed(evt);
-            });
-            jBDel.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jBDelActionPerformed(evt);
-            });
             jBLim1.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jBLim1ActionPerformed(evt);
-            });
-            jBLim.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jBLimActionPerformed(evt);
-            });
-            jBSal.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jBSalActionPerformed(evt);
             });
             jBClaveSat.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jBClaveSatActionPerformed(evt);
             });            
             jBBusc2.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jBBusc2ActionPerformed(evt);
-            });
-            jBBusc.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jBBuscActionPerformed(evt);
             });
             button_impuestos.addActionListener((java.awt.event.ActionEvent evt) -> {
                 button_impuestosActionPerformed(evt);
@@ -111,48 +93,8 @@ public class ProdsViewController extends ProdsJFrame {
             
             this.JComponentUtils.onKeyTypedToMayus(jTProd);
             
-            //Disable the save button
-            jBGuar.setEnabled(false);
-                
             //Connect the image
             this.initImageControls(jLImg, jPanImg);
-            
-            //Init table
-            this.BaseJTable = jTab;
-            jTab.addShowColumn(TableHeaderFactory.getSigleton().getProductsTableHeader().getROWNUMBER());
-            jTab.addShowColumn(TableHeaderFactory.getSigleton().getProductsTableHeader().getCODE());
-            jTab.addShowColumn(TableHeaderFactory.getSigleton().getProductsTableHeader().getDESCRIPTION());
-            jTab.setITableRowSelected((ListSelectionEvent lse, Object Object) -> {
-                
-                try{
-                    
-                    //Cast the model
-                    final Product Product = (Product)Object;
-
-                    //Enable the save button
-                    jBGuar.setEnabled(true);
-
-                    clearFields();
-                    
-                    //Load all the values in fields
-                    loadModelInFields(Product);
-                    
-                    LPrecsDatamodel = null;
-                    
-                    kits = null;
-                    
-                }catch (Exception ex) {
-                    LoggerUtility.getSingleton().logError(ProdsViewController.class, ex);
-                    try {
-                        DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
-                    } catch (Exception ex1) {
-                        Logger.getLogger(ProdsViewController.class.getName()).log(Level.SEVERE, null, ex1);
-                    }
-                }
-            });
-            
-            //Load all the table items with pagination
-            this.jTab.initTableWithPagination();
             
             //Load all the comboboxes
             jComLin.loadItems();
@@ -171,6 +113,12 @@ public class ProdsViewController extends ProdsJFrame {
         }
     }
 
+    public void setProduct_(Product Product_) throws Exception {
+        this.ProductGlobal = Product_;
+        
+        loadModelInFields(Product_);
+    }
+       
     @Override
     public void loadModelInFields(Object ObjectModel) throws  Exception {
         
@@ -178,8 +126,7 @@ public class ProdsViewController extends ProdsJFrame {
         final Product Product_ = (Product)ObjectModel;
         
         //Fill all the fields
-        jTProd.setText(Product_.getCode());
-        jTProd.setEnabled(false);
+        jTProd.setText(Product_.getCode());        
         jTADescrip.setText(Product_.getDescription());
         jTExist.setText(String.valueOf(Product_.getExistence()));
         jTAInfor.setText(Product_.getInformation());
@@ -284,7 +231,7 @@ public class ProdsViewController extends ProdsJFrame {
         try{
             
             //First select a product or set a profuct code
-            if(!jTab.isRowSelected() && jTProd.getText().trim().isEmpty()){
+            if(ProductGlobal==null && jTProd.getText().trim().isEmpty()){
                 DialogsFactory.getSingleton().showErrorOKNoSelectionCallbackDialog(baseJFrame, (JFrame jFrame) -> {
                     jTProd.grabFocus();
                 });
@@ -293,9 +240,8 @@ public class ProdsViewController extends ProdsJFrame {
             
             //Get the producto code
             String productCode;
-            if(jTab.isRowSelected()){
-                Product Product_ = (Product)jTab.getRowSelected();
-                productCode = Product_.getCode();
+            if(ProductGlobal!=null){
+                productCode = ProductGlobal.getCode();
             }
             else {
                 productCode = jTProd.getText().trim();
@@ -412,48 +358,6 @@ public class ProdsViewController extends ProdsJFrame {
 	}
     }
         
-    private void jBBuscActionPerformed(java.awt.event.ActionEvent evt) {
-
-	try{            	
-            
-            //Get the value to search
-            final String search = jTBusc.getText().trim();
-            
-            //If nothing to search so return
-            if(search.isEmpty()){
-                return;
-            }
-            
-            //Search all the ocurrences
-            this.jTab.getByLikeEncabezadosBasic(search);
-	}
-	catch (Exception ex) {
-            LoggerUtility.getSingleton().logError(ProdsViewController.class, ex);
-            try {
-                    DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
-            } catch (Exception ex1) {
-                    Logger.getLogger(ProdsViewController.class.getName()).log(Level.SEVERE, null, ex1);
-            }
-	}
-    }
-        
-    private void jBMosTActionPerformed(java.awt.event.ActionEvent evt) {
-
-	try{            	
-            
-            //Load all the users
-            this.jTab.loadAllItemsInTable();
-	}
-	catch (Exception ex) {
-            LoggerUtility.getSingleton().logError(ProdsViewController.class, ex);
-            try {
-                    DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
-            } catch (Exception ex1) {
-                    Logger.getLogger(ProdsViewController.class.getName()).log(Level.SEVERE, null, ex1);
-            }
-	}
-    }
-    
     private void saveOrUpdate(final boolean save) throws Exception {
         
         //Get primary values
@@ -623,11 +527,9 @@ public class ProdsViewController extends ProdsJFrame {
                 //Save the product and taxes of the product
                 RepositoryFactory.getInstance().getProductsRepository().addOrUpdateProduct(Product, taxesGlobal, kits);
 
-                //Reload the table                
-                jTab.loadAllItemsInTable();
-                    
                 //Announce the user of success
                 DialogsFactory.getSingleton().showOKOperationCompletedCallbackDialog(jFrame, (JFrame jFrame1) -> {
+                    dispose();
                 });
 
             }catch (Exception ex) {
@@ -643,23 +545,14 @@ public class ProdsViewController extends ProdsJFrame {
     
     private void jBGuarActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
-	try{            	
-            saveOrUpdate(false);
-	}
-	catch (Exception ex) {
-            LoggerUtility.getSingleton().logError(ProdsViewController.class, ex);
-            try {
-                    DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
-            } catch (Exception ex1) {
-                    Logger.getLogger(ProdsViewController.class.getName()).log(Level.SEVERE, null, ex1);
-            }
-	}
-    }
-    
-    private void jBNewActionPerformed(java.awt.event.ActionEvent evt) {                                             
-
 	try{
-            saveOrUpdate(true);
+            
+            if(ProductGlobal==null){
+                saveOrUpdate(true);
+            }
+            else{
+                saveOrUpdate(false);
+            }
 	}
 	catch (Exception ex) {
             LoggerUtility.getSingleton().logError(ProdsViewController.class, ex);
@@ -669,58 +562,7 @@ public class ProdsViewController extends ProdsJFrame {
                     Logger.getLogger(ProdsViewController.class.getName()).log(Level.SEVERE, null, ex1);
             }
 	}
-    }
-    
-    private void jBDelActionPerformed(java.awt.event.ActionEvent evt) {                                             
-
-	try{            	
-                                    
-            //Select first
-            if(!jTab.isRowSelected()){
-                
-                DialogsFactory.getSingleton().showErrorOKNoSelectionCallbackDialog(baseJFrame, (JFrame jFrame) -> {
-                    jTProd.grabFocus();
-                });
-                return;
-            }
-            
-            //Get the product code
-            final Product Product_ = (Product)jTab.getRowSelected();
-            final String productCode = Product_.getCode();
-            
-            //Question if continue
-            DialogsFactory.getSingleton().showQuestionContinueDialog(baseJFrame, (JFrame jFrame) -> {
-                
-                try{
-                    
-                    //Delete the product from the database
-                    RepositoryFactory.getInstance().getProductsRepository().deleteProductByCode(productCode);
-                    
-                    //Reload the table
-                    jTab.loadAllItemsInTable();
-                    
-                    //Annoucne the user of the success
-                    DialogsFactory.getSingleton().showOKOperationCompletedCallbackDialog(jFrame, null);                    
-                    
-                }catch (Exception ex) {
-                    LoggerUtility.getSingleton().logError(ProdsViewController.class, ex);
-                    try {
-                            DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
-                    } catch (Exception ex1) {
-                            Logger.getLogger(ProdsViewController.class.getName()).log(Level.SEVERE, null, ex1);
-                    }
-                }
-            });
-	}
-	catch (Exception ex) {
-            LoggerUtility.getSingleton().logError(ProdsViewController.class, ex);
-            try {
-                    DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
-            } catch (Exception ex1) {
-                    Logger.getLogger(ProdsViewController.class.getName()).log(Level.SEVERE, null, ex1);
-            }
-	}
-    }
+    }        
     
     private void jBLim1ActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
@@ -738,53 +580,12 @@ public class ProdsViewController extends ProdsJFrame {
 	}
     }
     
-    private void jBLimActionPerformed(java.awt.event.ActionEvent evt) {                                             
-
-	try{            	
-            this.clearFields();
-            
-            //Enable the save button
-            jBGuar.setEnabled(false);
-            
-            jTab.clearSelection();
-            
-            //Enable product code field
-            jTProd.setEnabled(true);
-	}
-	catch (Exception ex) {
-            LoggerUtility.getSingleton().logError(ProdsViewController.class, ex);
-            try {
-                    DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
-            } catch (Exception ex1) {
-                    Logger.getLogger(ProdsViewController.class.getName()).log(Level.SEVERE, null, ex1);
-            }
-	}
-    }
-    
-    private void jBSalActionPerformed(java.awt.event.ActionEvent evt) {                                             
-
-	try{            	
-            
-            DialogsFactory.getSingleton().showQuestionContinueDialog(baseJFrame, (JFrame jFrame) -> {
-                dispose();
-            });
-	}
-	catch (Exception ex) {
-            LoggerUtility.getSingleton().logError(ProdsViewController.class, ex);
-            try {
-                    DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
-            } catch (Exception ex1) {
-                    Logger.getLogger(ProdsViewController.class.getName()).log(Level.SEVERE, null, ex1);
-            }
-	}
-    }
-    
     private void button_impuestosActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	
             
             //First select a product or set a profuct code
-            if(!jTab.isRowSelected() && jTProd.getText().trim().isEmpty()){
+            if(ProductGlobal==null && jTProd.getText().trim().isEmpty()){
                 DialogsFactory.getSingleton().showErrorOKNoSelectionCallbackDialog(baseJFrame, (JFrame jFrame) -> {
                     jTProd.grabFocus();
                 });
@@ -793,9 +594,8 @@ public class ProdsViewController extends ProdsJFrame {
             
             //Get the producto code
             String productCode;
-            if(jTab.isRowSelected()){
-                Product Product_ = (Product)jTab.getRowSelected();
-                productCode = Product_.getCode();
+            if(ProductGlobal!=null){
+                productCode = ProductGlobal.getCode();
             }
             else {
                 productCode = jTProd.getText().trim();
@@ -839,7 +639,7 @@ public class ProdsViewController extends ProdsJFrame {
 	try{            	
             
             //First select a product or set a profuct code
-            if(!jTab.isRowSelected() && jTProd.getText().trim().isEmpty()){
+            if(ProductGlobal==null && jTProd.getText().trim().isEmpty()){
                 DialogsFactory.getSingleton().showErrorOKNoSelectionCallbackDialog(baseJFrame, (JFrame jFrame) -> {
                     jTProd.grabFocus();
                 });
@@ -848,9 +648,8 @@ public class ProdsViewController extends ProdsJFrame {
             
             //Get the producto code
             String productCode;
-            if(jTab.isRowSelected()){
-                Product Product_ = (Product)jTab.getRowSelected();
-                productCode = Product_.getCode();
+            if(ProductGlobal!=null){
+                productCode = ProductGlobal.getCode();
             }
             else {
                 productCode = jTProd.getText().trim();
@@ -909,7 +708,7 @@ public class ProdsViewController extends ProdsJFrame {
 	try{            	
             
             //First select a product or set a profuct code
-            if(!jTab.isRowSelected() && jTProd.getText().trim().isEmpty()){
+            if(ProductGlobal==null && jTProd.getText().trim().isEmpty()){
                 DialogsFactory.getSingleton().showErrorOKNoSelectionCallbackDialog(baseJFrame, (JFrame jFrame) -> {
                     jTProd.grabFocus();
                 });
@@ -918,9 +717,8 @@ public class ProdsViewController extends ProdsJFrame {
             
             //Get the producto code
             String productCode;
-            if(jTab.isRowSelected()){
-                Product Product_ = (Product)jTab.getRowSelected();
-                productCode = Product_.getCode();
+            if(ProductGlobal!=null){
+                productCode = ProductGlobal.getCode();
             }
             else {
                 productCode = jTProd.getText().trim();
@@ -974,7 +772,7 @@ public class ProdsViewController extends ProdsJFrame {
 	try{            	
             
             //First select a product or set a profuct code
-            if(!jTab.isRowSelected() && jTProd.getText().trim().isEmpty()){
+            if(ProductGlobal==null && jTProd.getText().trim().isEmpty()){
                 DialogsFactory.getSingleton().showErrorOKNoSelectionCallbackDialog(baseJFrame, (JFrame jFrame) -> {
                     jTProd.grabFocus();
                 });
@@ -983,9 +781,8 @@ public class ProdsViewController extends ProdsJFrame {
             
             //Get the producto code
             String productCode;
-            if(jTab.isRowSelected()){
-                Product Product_ = (Product)jTab.getRowSelected();
-                productCode = Product_.getCode();
+            if(ProductGlobal!=null){
+                productCode = ProductGlobal.getCode();
             }
             else {
                 productCode = jTProd.getText().trim();
@@ -1023,7 +820,7 @@ public class ProdsViewController extends ProdsJFrame {
 	try{
             
             //First select a product or set a profuct code
-            if(!jTab.isRowSelected() && jTProd.getText().trim().isEmpty()){
+            if(ProductGlobal==null && jTProd.getText().trim().isEmpty()){
                 DialogsFactory.getSingleton().showErrorOKNoSelectionCallbackDialog(baseJFrame, (JFrame jFrame) -> {
                     jTProd.grabFocus();
                 });
@@ -1032,9 +829,8 @@ public class ProdsViewController extends ProdsJFrame {
             
             //Get the producto code
             String productCode;
-            if(jTab.isRowSelected()){
-                Product Product_ = (Product)jTab.getRowSelected();
-                productCode = Product_.getCode();
+            if(ProductGlobal!=null){
+                productCode = ProductGlobal.getCode();
             }
             else {
                 productCode = jTProd.getText().trim();
@@ -1071,7 +867,7 @@ public class ProdsViewController extends ProdsJFrame {
 	try{            	
             
             //First select a product or set a profuct code
-            if(!jTab.isRowSelected() && jTProd.getText().trim().isEmpty()){
+            if(ProductGlobal==null && jTProd.getText().trim().isEmpty()){
                 DialogsFactory.getSingleton().showErrorOKNoSelectionCallbackDialog(baseJFrame, (JFrame jFrame) -> {
                     jTProd.grabFocus();
                 });
@@ -1080,9 +876,8 @@ public class ProdsViewController extends ProdsJFrame {
             
             //Get the producto code
             String productCode;
-            if(jTab.isRowSelected()){
-                Product Product_ = (Product)jTab.getRowSelected();
-                productCode = Product_.getCode();
+            if(ProductGlobal!=null){
+                productCode = ProductGlobal.getCode();
             }
             else {
                 productCode = jTProd.getText().trim();
@@ -1140,7 +935,7 @@ public class ProdsViewController extends ProdsJFrame {
 	try{            	
             
             //First select a product or set a profuct code
-            if(!jTab.isRowSelected() && jTProd.getText().trim().isEmpty()){
+            if(ProductGlobal==null && jTProd.getText().trim().isEmpty()){
                 DialogsFactory.getSingleton().showErrorOKNoSelectionCallbackDialog(baseJFrame, (JFrame jFrame) -> {
                     jTProd.grabFocus();
                 });
@@ -1149,9 +944,8 @@ public class ProdsViewController extends ProdsJFrame {
             
             //Get the producto code
             String productCode;
-            if(jTab.isRowSelected()){
-                Product Product_ = (Product)jTab.getRowSelected();
-                productCode = Product_.getCode();
+            if(ProductGlobal==null){
+                productCode = ProductGlobal.getCode();
             }
             else {
                 productCode = jTProd.getText().trim();
@@ -1199,7 +993,7 @@ public class ProdsViewController extends ProdsJFrame {
 	try{            	
             
             //First select a product or set a profuct code
-            if(!jTab.isRowSelected() && jTProd.getText().trim().isEmpty()){
+            if(ProductGlobal==null && jTProd.getText().trim().isEmpty()){
                 DialogsFactory.getSingleton().showErrorOKNoSelectionCallbackDialog(baseJFrame, (JFrame jFrame) -> {
                     jTProd.grabFocus();
                 });
@@ -1208,9 +1002,8 @@ public class ProdsViewController extends ProdsJFrame {
             
             //Get the producto code
             String productCode;
-            if(jTab.isRowSelected()){
-                Product Product_ = (Product)jTab.getRowSelected();
-                productCode = Product_.getCode();
+            if(ProductGlobal!=null){
+                productCode = ProductGlobal.getCode();
             }
             else {
                 productCode = jTProd.getText().trim();
@@ -1258,7 +1051,7 @@ public class ProdsViewController extends ProdsJFrame {
 	try{            
             
             //First select a product or set a profuct code
-            if(!jTab.isRowSelected() && jTProd.getText().trim().isEmpty()){
+            if(ProductGlobal==null && jTProd.getText().trim().isEmpty()){
                 DialogsFactory.getSingleton().showErrorOKNoSelectionCallbackDialog(baseJFrame, (JFrame jFrame) -> {
                     jTProd.grabFocus();
                 });
@@ -1267,9 +1060,8 @@ public class ProdsViewController extends ProdsJFrame {
             
             //Get the producto code
             String productCode;
-            if(jTab.isRowSelected()){
-                Product Product_ = (Product)jTab.getRowSelected();
-                productCode = Product_.getCode();
+            if(ProductGlobal!=null){
+                productCode = ProductGlobal.getCode();
             }
             else {
                 productCode = jTProd.getText().trim();

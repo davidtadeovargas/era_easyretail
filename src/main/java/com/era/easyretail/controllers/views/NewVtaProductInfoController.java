@@ -41,6 +41,9 @@ public class NewVtaProductInfoController extends NewVtaProductInfoJFrame {
             jBSal.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jBSalActionPerformed(evt);
             });
+            jBList.addActionListener((java.awt.event.ActionEvent evt) -> {
+                jBListActionPerformed(evt);
+            });            
             jBProd.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jBProdActionPerformed(evt);
             });
@@ -343,6 +346,50 @@ public class NewVtaProductInfoController extends NewVtaProductInfoJFrame {
 
                     //Fill data in components
                     loadModelInFields(Product);
+                    
+                } catch (Exception ex) {
+                    LoggerUtility.getSingleton().logError(this.getClass(), ex);
+                    try {
+                        DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+                    } catch (Exception ex1) {
+                        Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
+                    }
+                }
+            });
+            SearchViewController.setVisible();
+            
+        } catch (Exception ex) {
+            LoggerUtility.getSingleton().logError(this.getClass(), ex);
+            try {
+                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+            } catch (Exception ex1) {
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
+            }
+        }
+    }
+    
+    
+    private void jBListActionPerformed(java.awt.event.ActionEvent evt) {
+        
+        try {
+            
+            //First select a product
+            if(Product==null){
+                DialogsFactory.getSingleton().showOKEmptyFieldCallbackDialog(baseJFrame, (JFrame jFrame) -> {
+                    jTextFieldProducto.grabFocus();
+                });
+                return;
+            }
+            
+            final SearchViewController SearchViewController = new SearchViewController();
+            SearchViewController.setSEARCH_TYPE(SearchCommonTypeEnum.PRODUCTO_PRICE_LIST);
+            SearchViewController.setExtraCode(Product.getCode());
+            SearchViewController.setButtonAceptClicked(() -> {
+
+                try {
+                 
+                    final String pricelist = SearchViewController.getCod();
+                    jTList.setText(pricelist);
                     
                 } catch (Exception ex) {
                     LoggerUtility.getSingleton().logError(this.getClass(), ex);
