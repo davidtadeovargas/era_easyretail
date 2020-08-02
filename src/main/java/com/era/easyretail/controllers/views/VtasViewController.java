@@ -567,7 +567,7 @@ public class VtasViewController extends VtasJFrame {
             }
             NewVtaViewController.setSale(Sale);
             NewVtaViewController.setReadOnly(true);
-            NewVtaViewController.setVisible();            
+            NewVtaViewController.setVisible();
 	}
 	catch (Exception ex) {
             LoggerUtility.getSingleton().logError(VtasViewController.class, ex);
@@ -611,10 +611,15 @@ public class VtasViewController extends VtasJFrame {
     
     private void jBNewActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
-	try{            	
+	try{
             final NewVtaViewController NewVtaViewController_ = ViewControlersFactory.getSingleton().getNewVtaViewController();
-            NewVtaViewController_.setDocumentType(DocumentType_);
-            NewVtaViewController_.setVisible();            
+            if(DocumentType_==DocumentType.SALES){
+                NewVtaViewController_.setDocumentType(DocumentType.INVOICE);
+            }
+            else{
+                NewVtaViewController_.setDocumentType(DocumentType_);
+            }            
+            NewVtaViewController_.setVisible();
 	}
 	catch (Exception ex) {
             LoggerUtility.getSingleton().logError(VtasViewController.class, ex);

@@ -318,6 +318,12 @@ public class NewVtaViewController extends NewVtaJFrame {
                                 return;
                             }
                         }
+                        
+                        //If the user did not select to send the document 
+                        if(!NewVtaHeaderInfoDataModel.isSendEmail()){
+                            DialogsFactory.getSingleton().showOKCallbackDialog(baseJFrame, "the_document_will_not_be_sent_by_email", (JFrame jFrame) -> {                                
+                            });                            
+                        }
                     }
                     
                     break;

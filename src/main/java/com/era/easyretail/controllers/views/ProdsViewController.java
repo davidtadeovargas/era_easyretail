@@ -113,10 +113,11 @@ public class ProdsViewController extends ProdsJFrame {
         }
     }
 
-    public void setProduct_(Product Product_) throws Exception {
-        this.ProductGlobal = Product_;
+    public void setProduct_(final String productCode) throws Exception {
         
-        loadModelInFields(Product_);
+        this.ProductGlobal = (Product)RepositoryFactory.getInstance().getProductsRepository().getByCode(productCode);
+        
+        loadModelInFields(this.ProductGlobal);
     }
        
     @Override
@@ -143,7 +144,7 @@ public class ProdsViewController extends ProdsJFrame {
         }        
         final Meds Meds = (Meds)RepositoryFactory.getInstance().getMedssRepository().getByCode(Product_.getCodeMeasure());
         if(Meds!=null){
-            jComMeds.selectObject(Meds);
+            jComMeds.selectByObject(Meds);
         }            
         final Unid Unid = (Unid)RepositoryFactory.getInstance().getUnidsRepository().getByCode(Product_.getUnit());
         if(Unid!=null){
@@ -450,6 +451,8 @@ public class ProdsViewController extends ProdsJFrame {
                 final boolean isPediment = jCPed.isSelected();
                 final boolean isKit = jCComp.isSelected();
                 final Line Line = (Line)jComLin.getSelectedObject();
+                final Meds Med = (Meds)jComMeds.getSelectedObject();
+                final Unid Unid = (Unid)jComUni.getSelectedObject();
                 String lineCode;
                 if(Line!=null){
                     lineCode = Line.getCode();
@@ -486,6 +489,8 @@ public class ProdsViewController extends ProdsJFrame {
                 Product.setLotPediment(isPediment);
                 Product.setCompound(isKit);
                 Product.setCodeLine(lineCode);
+                Product.setCodeMeasure(Med.getCode());
+                Product.setUnit(Unid.getCode());
 
                 //If any modification in price lists
                 if(LPrecsDatamodel != null){

@@ -141,16 +141,13 @@ public class ClientsViewController extends ClientsJFrame {
                 return;
             }
             
-            //Validate that the customer doesnt have any sale related
-                        
-            
             //Question if continue
             DialogsFactory.getSingleton().showQuestionContinueDialog(baseJFrame, (JFrame jFrame) -> {
                 
                 try{
                     
                     //Delete the customer
-                    RepositoryFactory.getInstance().getCompanysRepository().delete(Company);
+                    RepositoryFactory.getInstance().getCompanysRepository().deleteByCodemp(Company.getCompanyCode());
                     
                     //Reload the table
                     BaseJTable.loadAllItemsInTable();

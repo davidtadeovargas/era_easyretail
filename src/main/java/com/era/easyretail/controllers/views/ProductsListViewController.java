@@ -182,7 +182,7 @@ public class ProductsListViewController extends ProductsListJFrame {
                         
             //Show product window
             final ProdsViewController ProdsViewController = ViewControlersFactory.getSingleton().getProdsViewController();
-            ProdsViewController.setProduct_(Product_);
+            ProdsViewController.setProduct_(Product_.getCode());
             ProdsViewController.setVisible();
             
 	}

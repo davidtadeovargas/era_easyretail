@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
-import javax.swing.JOptionPane;
 
 /**
  *
@@ -34,6 +33,8 @@ public class SearchViewController extends SearchJFrame {
     private String cod;
     private String descrip;
     private String others;
+    
+    private String search = "";
     
     private String extraCode;
     
@@ -74,6 +75,9 @@ public class SearchViewController extends SearchJFrame {
         jBCarg.addActionListener((ActionEvent e) -> {
             aceptButtonClicked(e);
         });
+        jBtnSearch.addActionListener((ActionEvent e) -> {
+            jBtnSearchClicked(e);
+        });        
         
         java.net.URL imgURL = getClass().getResource("/imgs/loading.gif");
         if (imgURL != null) {
@@ -128,185 +132,27 @@ public class SearchViewController extends SearchJFrame {
         this.canceled = true;
         dispose();
     }
-    
+
     @Override
-    public void setVisible() {
+    public void setVisible() {        
         
-        search();
-        super.setVisible();                 
+        try {
+         
+            initTable();
+            
+        } catch (Exception ex) {
+            LoggerUtility.getSingleton().logError(this.getClass(), ex);
+            try {
+                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+            } catch (Exception ex1) {
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
+            }
+        }
+        
+        super.setVisible(); //To change body of generated methods, choose Tools | Templates.
     }
     
-    public void search(){                
-                
-        try{
-                        
-            final RepositoryFactory RepositoryManager_ = RepositoryFactory.getInstance();            
-            long count;
-                    
-            switch(SearchCommonTypeEnum){
-                
-                case CUSTOMERS:
-                    list = RepositoryManager_.getCompanysRepository().getAll();
-                    break;
-                    
-                case BASDATS:
-                    list = RepositoryManager_.getBasDatssRepository().getAll();
-                    break;
-
-                case USERS:
-                    list = RepositoryManager_.getUsersRepository().getAll();
-                    break;
-
-                case KITS:
-                    list = RepositoryManager_.getKitssRepository().getAll();
-                    break;
-
-                case CONCEPTS:
-                    list = RepositoryManager_.getConcepssRepository().getAll();
-                    break;
-
-                case PAYMENT_TYPES:
-                    list = RepositoryManager_.getPaymentFormsRepository().getAll();
-                    break;
-
-                case COINS:
-                    list = RepositoryManager_.getCoinsRepository().getAll();
-                    break;
-
-                case CCOINS:
-                    list = RepositoryManager_.getCoinsRepository().getAll();
-                    break;
-                    
-                case WAREHOUSES:
-                    list = RepositoryManager_.getWarehousesRepository().getAll();
-                    break;
-
-                case CLASSIFICATIONS:
-                    list = RepositoryManager_.getClasificacionsRepository().getAll();
-                    break;
-
-                case SUPPLIERS_CLASIFICATION:
-                    list = RepositoryManager_.getSuppliersRepository().getAll();
-                    break;
-
-                case ANAQS:
-                    list = RepositoryManager_.getAnaqssRepository().getAll();
-                    break;
-
-                case GENERAL_PLACES:
-                    list = RepositoryManager_.getLugssRepository().getAll();
-                    break;
-
-                case BRANDS:
-                    list = RepositoryManager_.getMarcssRepository().getAll();
-                    break;
-
-                case LINES:
-                    list = RepositoryManager_.getLinesRepository().getAll();
-                    break;
-
-                case TAXES:
-                    list = RepositoryManager_.getTaxesRepository().getAll();
-                    break;
-
-                case UNIDS:
-                    list = RepositoryManager_.getUnidsRepository().getAll();
-                    break;
-
-                case PESOS:
-                    list = RepositoryManager_.getPessRepository().getAll();
-                    break;
-                
-                case MEASURES:
-                    list = RepositoryManager_.getMedssRepository().getAll();
-                    break;
-
-                case FABRICANTES:
-                    list = RepositoryManager_.getFabssRepository().getAll();
-                    break;
-
-                case SALES_MAN:
-                    list = RepositoryManager_.getUsersRepository().getAllVends();
-                    break;
-
-                case MODELS:
-                    list = RepositoryManager_.getModelsRepository().getAll();
-                    break;
-
-                case ALL_COMPUESTS_PRODUCTS: // AND prods.COMPUE = 0
-                    list = RepositoryManager_.getProductsRepository().getAllCompuests();
-                    break;
-
-                case TYPES:
-                    list = RepositoryManager_.getTipssRepository().getAll();
-                    break;
-
-                case ZONES:
-                    list = RepositoryManager_.getZonasRepository().getAll();
-                    break;
-
-                case GIROS:
-                    list = RepositoryManager_.getGirosRepository().getAll();
-                    break;
-
-                case PRODDS_SERIE:
-                    list = RepositoryManager_.getProductsRepository().getAllProdsWithSerie();
-                    break;
-
-                case PRODS_NOT_SERIE:
-                    list = RepositoryManager_.getProductsRepository().getAllProdsNotSerie();
-                    break;
-
-                case RUBROS:
-                    list = RepositoryManager_.getRubrsRepository().getAll();
-                    break;
-
-                case CREDIT_NOTES:
-                    list = RepositoryManager_.getSalessRepository().getAllNotsCred();
-                    break;
-
-                case PAYMENT_CONCEPTS:
-                    list = RepositoryManager_.getConceppagsRepository().getAll();
-                    break;
-
-                case BANKS:
-                    list = RepositoryManager_.getBancosRepository().getAll();
-                    break;
-
-                case SUCURSALS:
-                    list = RepositoryManager_.getSucursalsRepository().getAll();
-                    break;
-
-                case RESPONSABLES:
-                    list = RepositoryManager_.getSucursalsRepository().getAll();
-                    break;
-
-                case CUSTOMERS_SERIE:
-                    list = RepositoryManager_.getSeriesRepository().getAllSerieEMP();
-                    break;
-
-                case SECTORS:
-                   list = RepositoryManager_.getSectoressRepository().getAll();
-                   break;
-                   
-                case FISCAL_REGIMEN:
-                   list = RepositoryManager_.getCRegimenFiscalRepository().getAll();
-                   break;
-                    
-                case PRODUCTO_PRICE_LIST:
-                    list = RepositoryManager_.getProductsRepository().getPriceListsFromProductToListModel(extraCode);
-                    break;
-            }
-            
-            initTable(list);
-            
-        }catch(Exception e){
-            LoggerUtility.getSingleton().logError(SearchViewController.class, e);
-            JOptionPane.showMessageDialog(null, e.getMessage(), "Empresa", JOptionPane.ERROR_MESSAGE, null);
-        }
-    }
-
-    private void initTable(final List<?> items) throws Exception {
+    private void initTable() throws Exception {
                 
         jTab.setSearchCommonTypeEnum(SearchCommonTypeEnum);        
         jTab.setJTableDoubleClic((int selectedRow) -> {
@@ -320,20 +166,6 @@ public class SearchViewController extends SearchJFrame {
             jBCarg.doClick();
         });
         this.BaseJTable = jTab;
-        
-        //Determine if pagination or not
-        boolean usePagination = false;
-        switch(SearchCommonTypeEnum){
-            case CPS:
-            case COUNTRIES:
-            case EXPEDITION_PLACE:
-            case CLAVES_PROD_SAT:
-            case PRODUCTS:
-            case PRODUCTS_FOR_SALE:
-            case SUPPLIERS:                
-                usePagination = true;
-                break;
-        }
         
         //Init the columns table
         switch(SearchCommonTypeEnum){
@@ -376,7 +208,8 @@ public class SearchViewController extends SearchJFrame {
                 jTab.addShowColumn(TableHeaderFactory.getSigleton().getCClaveprodservsTableHeader().getENDVIGENCYDATE());
                 break;
                 
-           case USERS:
+            case SALES_MAN:
+            case USERS:
                 jTab.addShowColumn(TableHeaderFactory.getSigleton().getUsersTableHeader().getCODE());
                 jTab.addShowColumn(TableHeaderFactory.getSigleton().getUsersTableHeader().getNAME());
                 jTab.addShowColumn(TableHeaderFactory.getSigleton().getUsersTableHeader().getEMAIL());
@@ -443,12 +276,6 @@ public class SearchViewController extends SearchJFrame {
                 break;
 
             case FABRICANTES:
-                break;
-
-            case SALES_MAN:
-                jTab.addShowColumn(TableHeaderFactory.getSigleton().getUsersTableHeader().getCODE());
-                jTab.addShowColumn(TableHeaderFactory.getSigleton().getUsersTableHeader().getNAME());
-                jTab.addShowColumn(TableHeaderFactory.getSigleton().getUsersTableHeader().getEMAIL());
                 break;
 
             case MODELS:
@@ -524,49 +351,210 @@ public class SearchViewController extends SearchJFrame {
                break;
         }
         
-        //Load based on pagination or normal
-        if(usePagination){
-         
-            switch(SearchCommonTypeEnum){
+        //Assign the repository
+        switch(SearchCommonTypeEnum){
 
-                case CPS:
-                    this.jTab.setRepository(RepositoryFactory.getInstance().getCCodigoPostalRepository());
-                    break;
+            case CUSTOMERS:
+                jTab.setRepository(RepositoryFactory.getInstance().getCompanysRepository());
+                break;
 
-                case COUNTRIES:
-                    this.jTab.setRepository(RepositoryFactory.getInstance().getCCountriesRepository());
-                    break;
+            case BASDATS:
+                jTab.setRepository(RepositoryFactory.getInstance().getBasDatssRepository());
+                break;
 
-                case EXPEDITION_PLACE:
-                    this.jTab.setRepository(RepositoryFactory.getInstance().getCCodigoPostalRepository());
-                    break;
+            case PRODUCTO_PRICE_LIST:
+            case PRODUCTS_FOR_SALE:
+            case PRODUCTS:
+                jTab.setRepository(RepositoryFactory.getInstance().getProductsRepository());
+                break;
 
-                case CLAVES_PROD_SAT:
-                    this.jTab.setRepository(RepositoryFactory.getInstance().getCClaveprodservsRepository());
-                    break;
+            case SUPPLIERS:
+                this.jTab.setRepository(RepositoryFactory.getInstance().getSuppliersRepository());
+                break;
 
-                case SUPPLIERS:
-                    this.jTab.setRepository(RepositoryFactory.getInstance().getSuppliersRepository());
-                    break;
-                
-                case PRODUCTS_FOR_SALE:
-                case PRODUCTS:
-                    this.jTab.setRepository(RepositoryFactory.getInstance().getProductsRepository());
-                    break;
+            case CLAVES_PROD_SAT:
+                this.jTab.setRepository(RepositoryFactory.getInstance().getCClaveprodservsRepository());
+                break;
 
-            }
-                                    
+           case SALES_MAN:
+           case USERS:
+               this.jTab.setRepository(RepositoryFactory.getInstance().getUsersRepository());
+                break;
+
+           case KITS:
+                break;
+
+           case CONCEPTS:
+                break;
+
+           case PAYMENT_TYPES:
+                break;
+
+           case COINS:
+                break;
+
+           case CCOINS:
+                this.jTab.setRepository(RepositoryFactory.getInstance().getCoinsRepository());
+                break;
+
+           case WAREHOUSES:
+                this.jTab.setRepository(RepositoryFactory.getInstance().getWarehousesRepository());
+                break;
+
+           case CLASSIFICATIONS:
+                break;
+
+           case SUPPLIERS_CLASIFICATION:
+                break;
+
+            case ANAQS:
+                break;
+
+            case GENERAL_PLACES:
+                break;
+
+            case BRANDS:
+                break;
+
+            case LINES:
+                break;
+
+            case TAXES:
+                break;
+
+            case UNIDS:
+                break;
+
+            case PESOS:
+                break;
+
+            case MEASURES:
+                break;
+
+            case FABRICANTES:
+                break;
+
+            case MODELS:
+                break;
+
+            case ALL_COMPUESTS_PRODUCTS: // AND prods.COMPUE = 0
+                break;
+
+            case TYPES:
+                break;
+
+            case ZONES:
+                break;
+
+            case GIROS:
+                break;
+
+            case PRODDS_SERIE:
+                break;
+
+            case PRODS_NOT_SERIE:
+                break;
+
+            case RUBROS:
+                break;
+
+            case CREDIT_NOTES:
+                break;
+
+            case PAYMENT_CONCEPTS:
+                break;
+
+            case BANKS:
+                break;
+
+            case SUCURSALS:
+                break;
+
+            case RESPONSABLES:
+                break;
+
+            case CUSTOMERS_SERIE:
+                break;
+
+            case CPS:
+                this.jTab.setRepository(RepositoryFactory.getInstance().getCCodigoPostalRepository());
+                break;
+
+            case EXPEDITION_PLACE:
+                this.jTab.setRepository(RepositoryFactory.getInstance().getCCodigoPostalRepository());
+                break;
+
+            case COUNTRIES:
+                this.jTab.setRepository(RepositoryFactory.getInstance().getCCountriesRepository());
+                break;
+
+            case SECTORS:
+               break;
+
+            case FISCAL_REGIMEN:
+               break;
+        }
+        
+        if(isPagination()){
+            
             this.jTab.setOnPaginationLabelUpdate((String paginationUpdate) -> {
                 labelPaginacion.setVisible(true);
                 labelPaginacion.setText(paginationUpdate);
             });
-            this.jTab.initTableWithPagination();
-        }
-        else{
-            this.loadAllItemsInTable();
         }
         
+        this.load();
+                        
         this.pack();
+    }
+    
+    private void load() throws Exception {
+    
+        if(isPagination()){
+            this.jTab.initTableWithPaginationSearchFilter(search);
+        }
+        else{
+            jTab.initTableBySearchFilter(search);
+        }
+    }
+    
+    private boolean isPagination(){
+        
+        boolean usePagination = false;
+        
+        //Determine if pagination or not        
+        switch(SearchCommonTypeEnum){
+            case CPS:
+            case COUNTRIES:
+            case EXPEDITION_PLACE:
+            case CLAVES_PROD_SAT:
+            case PRODUCTS:
+            case PRODUCTS_FOR_SALE:
+            case SUPPLIERS:
+                usePagination = true;
+                break;
+        }
+        
+        return usePagination;
+    }
+    
+    private void jBtnSearchClicked(ActionEvent ActionEvent){
+    
+        try {
+            
+            //Get text to search
+            search = jTextFieldSearch.getText();
+            
+            load();
+            
+        } catch (Exception ex) {
+            LoggerUtility.getSingleton().logError(this.getClass(), ex);
+            try {
+                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+            } catch (Exception ex1) {
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
+            }
+        }
     }
     
     private void aceptButtonClicked(ActionEvent ActionEvent){
