@@ -697,7 +697,6 @@ public class EmpresasViewController extends EmpresasJFrame {
         Company.setRutkey(JTRutaKey.getText().replace("\\", "\\\\"));
         Company.setPasscer(JTPasswordCertificado.getText());
         Company.setCP(JTCP.getText());
-        //Company.setp(JTPlantilla.getText());
         Company.setRutap(JTRutaAplicacion.getText().replace("\\", "\\\\"));
         
         if(CertificatesDataModel!=null){
@@ -713,6 +712,9 @@ public class EmpresasViewController extends EmpresasJFrame {
             RepositoryFactory.getInstance().getBasDatssRepository().save(Company);
         }
 
+        //Sincronize the session objetc
+        UtilitiesFactory.getSingleton().getSessionUtility().setBasDats(Company);
+        
         return true;
     }
     
@@ -1524,7 +1526,7 @@ public class EmpresasViewController extends EmpresasJFrame {
         
         final String certPath = Company.getRutcer()==null?"":Company.getRutcer().replace("\\\\", "\\");
         final String certKeyPath = Company.getRutkey()==null?"":Company.getRutkey().replace("\\\\", "\\");
-        final String appPath = Company.getRutap()==null?UtilitiesFactory.getSingleton().getFilesUtility().getCurrentWorkingDir():Company.getRutkey().replace("\\\\", "\\");
+        final String appPath = Company.getRutap()==null?UtilitiesFactory.getSingleton().getFilesUtility().getCurrentWorkingDir():Company.getRutap().replace("\\\\", "\\");
         
         JTRutaCertificado.setText(certPath);
         JTRutaKey.setText(certKeyPath);

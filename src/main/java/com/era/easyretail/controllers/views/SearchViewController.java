@@ -8,6 +8,7 @@ package com.era.easyretail.controllers.views;
 import com.era.datamodels.enums.SearchCommonTypeEnum;
 import com.era.logger.LoggerUtility;
 import com.era.repositories.RepositoryFactory;
+import com.era.repositories.models.ProductPriceListModel;
 import com.era.views.SearchJFrame;
 import com.era.views.dialogs.DialogsFactory;
 import com.era.views.dialogs.ErrorOKDialog;
@@ -79,17 +80,6 @@ public class SearchViewController extends SearchJFrame {
             jBtnSearchClicked(e);
         });        
         
-        java.net.URL imgURL = getClass().getResource("/imgs/loading.gif");
-        if (imgURL != null) {
-            ImageIcon imageIcon = new ImageIcon(imgURL, "");
-            imageIcon = scaleImage(imageIcon,100,100);            
-            labelLoading.setIcon(imageIcon);
-        } else {
-            System.err.println("Couldn't find file: ");
-        }
-        labelLoading.setPreferredSize(new Dimension(70,50));
-        labelLoading.setVisible(false);
-                
         jTab = new SearchCommonJTable();
         
         this.BaseJTable = jTab;
@@ -136,6 +126,8 @@ public class SearchViewController extends SearchJFrame {
     @Override
     public void setVisible() {        
         
+        super.setVisible(); //To change body of generated methods, choose Tools | Templates.
+        
         try {
          
             initTable();
@@ -148,8 +140,6 @@ public class SearchViewController extends SearchJFrame {
                 Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
             }
         }
-        
-        super.setVisible(); //To change body of generated methods, choose Tools | Templates.
     }
     
     private void initTable() throws Exception {
@@ -511,16 +501,87 @@ public class SearchViewController extends SearchJFrame {
     private void load() throws Exception {
     
         if(isPagination()){
+            
+            this.jTab.resetPaginationText();
+            this.labelPaginacion.setText(this.jTab.getPaginationText());
             this.jTab.initTableWithPaginationSearchFilter(search);
         }
-        else{
+        else if(isNormal()){
             jTab.initTableBySearchFilter(search);
         }
+        else if(isPriceList()){
+            final List<ProductPriceListModel> items = RepositoryFactory.getInstance().getProductsRepository().getPriceListsFromProductToListModel(extraCode);
+            jTab.initTable(items);
+        }
+    }
+    
+    private boolean isNormal(){
+        
+        boolean value = false;
+        
+        //Determine if pagination or not
+        switch(SearchCommonTypeEnum){
+            case CUSTOMERS:
+            case BASDATS:            
+            case SALES_MAN:
+            case USERS:
+            case KITS:
+            case CONCEPTS:
+            case PAYMENT_TYPES:
+            case COINS:
+            case CCOINS:
+            case WAREHOUSES:
+            case CLASSIFICATIONS:
+            case SUPPLIERS_CLASIFICATION:
+            case ANAQS:
+            case GENERAL_PLACES:
+            case BRANDS:
+            case LINES:
+            case TAXES:
+            case UNIDS:
+            case PESOS:
+            case MEASURES:
+            case FABRICANTES:
+            case MODELS:
+            case ALL_COMPUESTS_PRODUCTS:
+            case TYPES:
+            case ZONES:
+            case GIROS:
+            case PRODDS_SERIE:
+            case PRODS_NOT_SERIE:
+            case RUBROS:
+            case CREDIT_NOTES:
+            case PAYMENT_CONCEPTS:
+            case BANKS:
+            case SUCURSALS:
+            case RESPONSABLES:
+            case CUSTOMERS_SERIE:
+            case SECTORS:
+            case FISCAL_REGIMEN:
+                value = true;
+                break;
+        }
+        
+        return value;
+    }
+    
+    private boolean isPriceList(){
+        
+        boolean value = false;
+        
+        //Determine if pagination or not
+        switch(SearchCommonTypeEnum){
+            case PRODUCTO_PRICE_LIST:                
+                value = true;
+                break;
+        }
+        
+        return value;
     }
     
     private boolean isPagination(){
         
-        boolean usePagination = false;
+        boolean value = false;
         
         //Determine if pagination or not        
         switch(SearchCommonTypeEnum){
@@ -531,11 +592,11 @@ public class SearchViewController extends SearchJFrame {
             case PRODUCTS:
             case PRODUCTS_FOR_SALE:
             case SUPPLIERS:
-                usePagination = true;
+                value = true;
                 break;
         }
         
-        return usePagination;
+        return value;
     }
     
     private void jBtnSearchClicked(ActionEvent ActionEvent){
@@ -543,7 +604,7 @@ public class SearchViewController extends SearchJFrame {
         try {
             
             //Get text to search
-            search = jTextFieldSearch.getText();
+            search = jTextFieldSearch.getText();                        
             
             load();
             
