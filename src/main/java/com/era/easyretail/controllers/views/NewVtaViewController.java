@@ -525,10 +525,15 @@ public class NewVtaViewController extends NewVtaJFrame {
     private void jBHeaderActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	
+            
             final NewVtaHeaderInfoController NewVtaHeaderInfoController = ViewControlersFactory.getSingleton().getNewVtaHeaderInfoController();
             if(NewVtaHeaderInfoDataModel!=null){
                 NewVtaHeaderInfoController.setNewVtaHeaderInfoDataModel(NewVtaHeaderInfoDataModel);
             }
+            else{
+                final CUsoCFDI CUsoCFDI = (CUsoCFDI)RepositoryFactory.getInstance().getCUsoCFDIsRepository().getByCode(NewVtaCustomerInfoDataModel.getCompany().getUsocfdi());
+                NewVtaHeaderInfoController.setCUsoCFDI(CUsoCFDI);
+            }            
             NewVtaHeaderInfoController.setOnResult((NewVtaHeaderInfoDataModel NewVtaHeaderInfoDataModel_) -> {
                 
                 this.NewVtaHeaderInfoDataModel = NewVtaHeaderInfoDataModel_;

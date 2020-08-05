@@ -7,6 +7,7 @@ package com.era.easyretail.controllers.views;
 
 import com.era.datamodels.NewVtaHeaderInfoDataModel;
 import com.era.datamodels.enums.DocumentType;
+import com.era.datamodels.enums.SearchCommonTypeEnum;
 import com.era.logger.LoggerUtility;
 import com.era.models.CPaymentForm;
 import com.era.models.CUsoCFDI;
@@ -32,7 +33,7 @@ public class NewVtaHeaderInfoController extends NewVtaHeaderInfoJFrame {
     
     private NewVtaHeaderInfoDataModel NewVtaHeaderInfoDataModel;
     private OnResult OnResult;
-    private DocumentType DocumentType_;
+    private DocumentType DocumentType_;    
     
     public NewVtaHeaderInfoController() {
         super("window_title_new_vta_info_header");
@@ -44,7 +45,10 @@ public class NewVtaHeaderInfoController extends NewVtaHeaderInfoJFrame {
             });
             jBAcept.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jBAceptActionPerformed(evt);
-            });            
+            });
+            jButton1.addActionListener((java.awt.event.ActionEvent evt) -> {
+                jButton1ActionPerformed(evt);
+            });
             
             jComboBoxSerie.grabFocus();
             
@@ -73,6 +77,12 @@ public class NewVtaHeaderInfoController extends NewVtaHeaderInfoJFrame {
             final CUsoCFDI CUsoCFDI = (CUsoCFDI)RepositoryFactory.getInstance().getCUsoCFDIsRepository().getFirst();            
             jUsoCFDI.selectByObject(CUsoCFDI);
             
+            //Set the current date
+            JTFecha.setText(UtilitiesFactory.getSingleton().getDateTimeUtility().getCurrentDateWithoutHour());
+                        
+            //Set the expedition place from the company
+            txtLugarExped.setText(UtilitiesFactory.getSingleton().getSessionUtility().getBasDats().getLugexp());
+            
         }catch (Exception ex) {
             LoggerUtility.getSingleton().logError(NewVtaHeaderInfoController.class, ex);
             try {
@@ -84,6 +94,14 @@ public class NewVtaHeaderInfoController extends NewVtaHeaderInfoJFrame {
         
     }
 
+    public void setCUsoCFDI(CUsoCFDI CUsoCFDI) throws Exception {
+        
+        //Select in the combo
+        if(CUsoCFDI!=null){
+            jUsoCFDI.selectByObject(CUsoCFDI);
+        }        
+    }
+    
     public void setDocumentType_(DocumentType DocumentType_) throws Exception {
         this.DocumentType_ = DocumentType_;
                 
@@ -115,6 +133,29 @@ public class NewVtaHeaderInfoController extends NewVtaHeaderInfoJFrame {
     public void setOnResult(OnResult OnResult) {
         this.OnResult = OnResult;
     }        
+    
+    
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
+
+        try {
+            
+            final SearchViewController SearchViewController = new SearchViewController();
+            SearchViewController.setSEARCH_TYPE(SearchCommonTypeEnum.EXPEDITION_PLACE);
+            SearchViewController.setButtonAceptClicked(() -> {
+                final String fiscalRegimen = SearchViewController.getCod();                
+                txtLugarExped.setText(fiscalRegimen);
+            });
+            SearchViewController.setVisible();
+            
+        } catch (Exception ex) {
+            LoggerUtility.getSingleton().logError(this.getClass(), ex);
+            try {
+                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+            } catch (Exception ex1) {
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
+            }
+        }
+    }
     
     private void jBAceptActionPerformed(java.awt.event.ActionEvent evt) {
         
@@ -189,12 +230,13 @@ public class NewVtaHeaderInfoController extends NewVtaHeaderInfoJFrame {
                     
                     //Get other fields
                     final String account = jTCta.getText().trim();
+                    final String expeditionPlace = txtLugarExped.getText().trim();
                     final String observations = jTAObserv.getText().trim();
                     final boolean ring = jCheckboxTimbrar.isSelected();
                     final boolean sendEmail = jCMand.isSelected();
                     final boolean showFile = jCMostA.isSelected();
                     final boolean cartaPorte = jCCartaP.isSelected();
-                    final boolean print = jCImp.isSelected();
+                    final boolean print = jCImp.isSelected();                    
                     
                     //Create the model
                     final NewVtaHeaderInfoDataModel NewVtaHeaderInfoDataModel_ = new NewVtaHeaderInfoDataModel();
@@ -210,7 +252,8 @@ public class NewVtaHeaderInfoController extends NewVtaHeaderInfoJFrame {
                     NewVtaHeaderInfoDataModel_.setSendEmail(sendEmail);
                     NewVtaHeaderInfoDataModel_.setShowFile(showFile);
                     NewVtaHeaderInfoDataModel_.setCartaPorte(cartaPorte);
-                    NewVtaHeaderInfoDataModel_.setPrint(print);                    
+                    NewVtaHeaderInfoDataModel_.setPrint(print);
+                    NewVtaHeaderInfoDataModel_.setExpeditionPlace(expeditionPlace);
                     
                     dispose();
                     
@@ -300,6 +343,8 @@ public class NewVtaHeaderInfoController extends NewVtaHeaderInfoJFrame {
         jCMostA.setSelected(NewVtaHeaderInfoDataModel_.isShowFile());
         jCCartaP.setSelected(NewVtaHeaderInfoDataModel_.isCartaPorte());
         jCImp.setSelected(NewVtaHeaderInfoDataModel_.isPrint());
+        
+        txtLugarExped.setText(NewVtaHeaderInfoDataModel_.getExpeditionPlace());
     }
     
     @Override
