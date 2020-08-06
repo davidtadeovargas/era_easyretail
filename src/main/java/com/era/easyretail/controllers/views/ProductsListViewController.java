@@ -6,6 +6,7 @@
 package com.era.easyretail.controllers.views;
 
 import com.era.logger.LoggerUtility;
+import com.era.models.Kits;
 import com.era.models.Product;
 import com.era.repositories.RepositoryFactory;
 import com.era.views.ProductsListJFrame;
@@ -130,6 +131,19 @@ public class ProductsListViewController extends ProductsListJFrame {
             
             //Get the selected model
             final Product Product = (Product)jTab.getRowSelected();
+            
+            //If the producto is a kit
+            if(Product.getCompound()){
+                
+                //Get all the components from the kit
+                final List<Kits> components = RepositoryFactory.getInstance().getKitssRepository().getComponentsByKit(Product.getCode());
+                
+                //If the kit has components                
+                if(!components.isEmpty()){
+                    DialogsFactory.getSingleton().showOKCallbackDialog(baseJFrame, "kit_with_components_and_will_be_deleted", (JFrame jFrame) -> {
+                    });
+                }
+            }
             
             //Question if continue
             DialogsFactory.getSingleton().showQuestionContinueDialog(baseJFrame, (JFrame jFrame) -> {

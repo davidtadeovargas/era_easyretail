@@ -26,7 +26,6 @@ import com.era.utilities.filechooser.ImageFileChooserUtility;
 import com.era.views.ProdsJFrame;
 import com.era.views.dialogs.DialogsFactory;
 import com.era.views.dialogs.ErrorOKDialog;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -38,7 +37,7 @@ import javax.swing.JFrame;
  */
 public class ProdsViewController extends ProdsJFrame {
     
-    private List<ImpuesXProduct> taxesGlobal = new ArrayList<>();
+    private List<ImpuesXProduct> taxesGlobal;
     private List<Kits> kits;
     private LPrecsDatamodel LPrecsDatamodel;
     
@@ -205,7 +204,7 @@ public class ProdsViewController extends ProdsJFrame {
         jTNom.setText("");
         jTClaveSat.setText("");
         
-        taxesGlobal = new ArrayList<>(); 
+        taxesGlobal = null; 
         
         hideImage();
         
@@ -617,8 +616,10 @@ public class ProdsViewController extends ProdsJFrame {
                 return;
             }
             
-            //Get all the product taxes
-            taxesGlobal = RepositoryFactory.getInstance().getImpuesXProductRepository().getAllByProd(productCode);
+            //Get all the product taxes            
+            if(taxesGlobal==null){
+                taxesGlobal = RepositoryFactory.getInstance().getImpuesXProductRepository().getAllByProd(productCode);
+            }
                 
             //Show the taxes producto window
             final Impuestos_X_productos_nuevoViewController Impuestos_X_productos_nuevoViewController = ViewControlersFactory.getSingleton().getImpuestos_X_productos_nuevoViewController();
