@@ -531,8 +531,7 @@ public class NewVtaViewController extends NewVtaJFrame {
                 NewVtaHeaderInfoController.setNewVtaHeaderInfoDataModel(NewVtaHeaderInfoDataModel);
             }
             else{
-                final CUsoCFDI CUsoCFDI = (CUsoCFDI)RepositoryFactory.getInstance().getCUsoCFDIsRepository().getByCode(NewVtaCustomerInfoDataModel.getCompany().getUsocfdi());
-                NewVtaHeaderInfoController.setCUsoCFDI(CUsoCFDI);
+                NewVtaHeaderInfoController.setCompany(NewVtaCustomerInfoDataModel.getCompany());
             }            
             NewVtaHeaderInfoController.setOnResult((NewVtaHeaderInfoDataModel NewVtaHeaderInfoDataModel_) -> {
                 
