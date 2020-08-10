@@ -6,6 +6,9 @@
 package com.era.easyretail.controllers.views;
 
 import com.era.datamodels.enums.DocumentType;
+import com.era.easyretail.era_jasperreports.ReportsManager;
+import com.era.easyretail.era_jasperreports.models.GenerateProperties;
+import com.era.easyretail.era_jasperreports.models.TicketReportModel;
 import com.era.easyretail.exceptions.InternalUnexpectedErrorException;
 import com.era.views.CobroJFrame;
 import java.util.List;
@@ -434,10 +437,44 @@ public class CobroViewController extends CobroJFrame {
                 break;
         }
 
+        //Get import in words
+        final String importInWords = UtilitiesFactory.getSingleton().getNumbersUtility().convertNumberToStringRepresentation(String.valueOf(Sale.getTotal()), Sale.getSerie(), Sale.getCoinCode(), true, true);
+        
+        //Crete the report model
+        TicketReportModel TicketReportModel = new TicketReportModel();
+        TicketReportModel.setCity(Company_.getCiu());
+        TicketReportModel.setCoin(Sale.getCoinCode());
+        TicketReportModel.setColony(Company_.getCol());
+        TicketReportModel.setCompanyName(Company_.getNom());
+        TicketReportModel.setConsecutive(Sale.getReferenceNumber());
+        TicketReportModel.setCountry(Company_.getPai());
+        TicketReportModel.setDocumentDate(Sale.getDeliverDate().toString());
+        TicketReportModel.setEstate(Company_.getEstad());
+        TicketReportModel.setExternalNumber(Company_.getNoext());
+        TicketReportModel.setImportWords(importInWords);
+        TicketReportModel.setInternalNumber(observations);
+        TicketReportModel.setPhone(serie);
+        TicketReportModel.setPostalCode(estatus);
+        TicketReportModel.setRFC(serie);
+        TicketReportModel.setSaleID(serie);        
+        TicketReportModel.setStreet(serie);
+        TicketReportModel.setSubtotal(estatus);
+        TicketReportModel.setTax(estatus);
+        TicketReportModel.setTotal(estatus);
+        TicketReportModel.setWebPage(serie);
+        
+        //Create the report properties
+        final GenerateProperties GenerateProperties = new GenerateProperties();
+        GenerateProperties.setObjectModel(TicketReportModel);
+        GenerateProperties.setPrint(true);
+        
+        //Print te report
+        ReportsManager.getSingleton().getTicketReportGenerator().generate(GenerateProperties);
+        
         if(OnFinish!=null){
             OnFinish.onFinish();
         }
-
+                
         dispose();
     }
     

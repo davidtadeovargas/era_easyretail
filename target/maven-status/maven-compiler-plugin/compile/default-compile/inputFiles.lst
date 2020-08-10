@@ -125,7 +125,6 @@ C:\Users\DavidTadeo.....Progr\Documents\Carpeta de trabajo\easy-retail-campanita
 C:\Users\DavidTadeo.....Progr\Documents\Carpeta de trabajo\easy-retail-campanita\era_easyretail\src\main\java\com\era\easyretail\validators\exceptions\CxcsValidatorsExceptions.java
 C:\Users\DavidTadeo.....Progr\Documents\Carpeta de trabajo\easy-retail-campanita\era_easyretail\src\main\java\com\era\easyretail\validators\MaxminconfsValidator.java
 C:\Users\DavidTadeo.....Progr\Documents\Carpeta de trabajo\easy-retail-campanita\era_easyretail\src\main\java\com\era\easyretail\validators\exceptions\UsersValidatorsExceptions.java
-C:\Users\DavidTadeo.....Progr\Documents\Carpeta de trabajo\easy-retail-campanita\era_easyretail\src\main\java\com\era\easyretail\enums\LoginType.java
 C:\Users\DavidTadeo.....Progr\Documents\Carpeta de trabajo\easy-retail-campanita\era_easyretail\src\main\java\com\era\easyretail\validators\exceptions\PartcomprsTmpsValidatorsExceptions.java
 C:\Users\DavidTadeo.....Progr\Documents\Carpeta de trabajo\easy-retail-campanita\era_easyretail\src\main\java\com\era\easyretail\validators\MarcprodsValidator.java
 C:\Users\DavidTadeo.....Progr\Documents\Carpeta de trabajo\easy-retail-campanita\era_easyretail\src\main\java\com\era\easyretail\validators\OrdssValidator.java
@@ -203,6 +202,7 @@ C:\Users\DavidTadeo.....Progr\Documents\Carpeta de trabajo\easy-retail-campanita
 C:\Users\DavidTadeo.....Progr\Documents\Carpeta de trabajo\easy-retail-campanita\era_easyretail\src\main\java\com\era\easyretail\validators\exceptions\LogsValidatorsExceptions.java
 C:\Users\DavidTadeo.....Progr\Documents\Carpeta de trabajo\easy-retail-campanita\era_easyretail\src\main\java\com\era\easyretail\validators\ModificaImpuestossValidator.java
 C:\Users\DavidTadeo.....Progr\Documents\Carpeta de trabajo\easy-retail-campanita\era_easyretail\src\main\java\com\era\easyretail\validators\ZonasValidator.java
+C:\Users\DavidTadeo.....Progr\Documents\Carpeta de trabajo\easy-retail-campanita\era_easyretail\src\main\java\com\era\easyretail\controllers\views\InvoicesNotRingedViewController.java
 C:\Users\DavidTadeo.....Progr\Documents\Carpeta de trabajo\easy-retail-campanita\era_easyretail\src\main\java\com\era\easyretail\controllers\views\PremiumViewController.java
 C:\Users\DavidTadeo.....Progr\Documents\Carpeta de trabajo\easy-retail-campanita\era_easyretail\src\main\java\com\era\easyretail\validators\TerprodcompasValidator.java
 C:\Users\DavidTadeo.....Progr\Documents\Carpeta de trabajo\easy-retail-campanita\era_easyretail\src\main\java\com\era\easyretail\validators\exceptions\CPaymentFormsValidatorsExceptions.java
@@ -284,6 +284,7 @@ C:\Users\DavidTadeo.....Progr\Documents\Carpeta de trabajo\easy-retail-campanita
 C:\Users\DavidTadeo.....Progr\Documents\Carpeta de trabajo\easy-retail-campanita\era_easyretail\src\main\java\com\era\easyretail\validators\exceptions\CoinsValidatorsExceptions.java
 C:\Users\DavidTadeo.....Progr\Documents\Carpeta de trabajo\easy-retail-campanita\era_easyretail\src\main\java\com\era\easyretail\controllers\views\SearchViewController.java
 C:\Users\DavidTadeo.....Progr\Documents\Carpeta de trabajo\easy-retail-campanita\era_easyretail\src\main\java\com\era\easyretail\validators\TermarcamodelosValidator.java
+C:\Users\DavidTadeo.....Progr\Documents\Carpeta de trabajo\easy-retail-campanita\era_easyretail\src\main\java\com\era\easyretail\controllers\views\ProductsListViewController.java
 C:\Users\DavidTadeo.....Progr\Documents\Carpeta de trabajo\easy-retail-campanita\era_easyretail\src\main\java\com\era\easyretail\validators\exceptions\DomentclisValidatorsExceptions.java
 C:\Users\DavidTadeo.....Progr\Documents\Carpeta de trabajo\easy-retail-campanita\era_easyretail\src\main\java\com\era\easyretail\controllers\views\Impuestos_X_partidaViewController.java
 C:\Users\DavidTadeo.....Progr\Documents\Carpeta de trabajo\easy-retail-campanita\era_easyretail\src\main\java\com\era\easyretail\premium\IYesPremium.java
