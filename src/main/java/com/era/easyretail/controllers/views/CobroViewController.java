@@ -7,6 +7,7 @@ package com.era.easyretail.controllers.views;
 
 import com.era.datamodels.enums.DocumentType;
 import com.era.easyretail.era_jasperreports.ReportsManager;
+import com.era.easyretail.era_jasperreports.TicketReportGenerator;
 import com.era.easyretail.era_jasperreports.models.GenerateProperties;
 import com.era.easyretail.era_jasperreports.models.TicketReportModel;
 import com.era.easyretail.exceptions.InternalUnexpectedErrorException;
@@ -299,6 +300,11 @@ public class CobroViewController extends CobroJFrame {
             });
             return;
         }
+        
+        //If there is not ticket printer configured show message to the user
+        if(!UtilitiesFactory.getSingleton().getPrintersUtility().userTicketPrinterExists()){
+            DialogsFactory.getSingleton().showOKDialog(baseJFrame, "printer_ticket_not_configured");
+        }
 
         //Determine the type of document operation to validate pre actualization
         if(jRTic.isSelected()){
@@ -466,10 +472,22 @@ public class CobroViewController extends CobroJFrame {
         //Create the report properties
         final GenerateProperties GenerateProperties = new GenerateProperties();
         GenerateProperties.setObjectModel(TicketReportModel);
-        GenerateProperties.setPrint(true);
+        if(UtilitiesFactory.getSingleton().getPrintersUtility().userTicketPrinterExists()){
+            GenerateProperties.setPrint(true);
+        }        
+        GenerateProperties.setExportToPDF(true);
+        GenerateProperties.setPdfExportPath(UtilitiesFactory.getSingleton().getImagesUtility().getTicketsPath());
+        GenerateProperties.setPdfFileName(String.valueOf(Sale.getId()));
         
-        //Print te report
-        ReportsManager.getSingleton().getTicketReportGenerator().generate(GenerateProperties);
+        //Change the tickets printer
+        if(UtilitiesFactory.getSingleton().getPrintersUtility().userTicketPrinterExists()){
+            UtilitiesFactory.getSingleton().getPrintersUtility().changeDefaultUserTicketPrinter();
+        }
+        
+        //Generate te report
+        final TicketReportGenerator TicketReportGenerator = ReportsManager.getSingleton().getTicketReportGenerator();
+        TicketReportGenerator.setBaseReport(TicketReportModel);
+        TicketReportGenerator.generate(GenerateProperties);
         
         if(OnFinish!=null){
             OnFinish.onFinish();

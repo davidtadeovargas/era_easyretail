@@ -49,24 +49,41 @@ public class ImpresViewController extends ImpresJFrame {
             this.jTab.addShowColumn(TableHeaderFactory.getSigleton().getUsersTableHeader().getCORT());
             this.jTab.setITableRowSelected((ListSelectionEvent lse, Object Object) -> {
                 
-                //Cast model
-                final User User = (User)Object;
-                
-                //Select
-                final String ticketPrinter = User.getTicketPrinter();
-                final String invoicePrinter = User.getTicketPrinter();
-                
-                //Clear selection
-                jComImpTick.clearSelection();
-                jComImpFact.clearSelection();
-                
-                //Select the correct item
-                jComImpTick.setSelectedItem(ticketPrinter);
-                jComImpFact.setSelectedItem(invoicePrinter);
+                try {
+                 
+                    //Cast model
+                    final User User = (User)Object;
+
+                    //Get selected printers
+                    final String ticketPrinter = User.getTicketPrinter();
+                    final String invoicePrinter = User.getInvoicePrinter();
+
+                    //Get objects
+                    final PrinterDataModel PrinterDataModelTik = new PrinterDataModel();
+                    PrinterDataModelTik.setName(ticketPrinter);
+                    final PrinterDataModel PrinterDataModelInvoice = new PrinterDataModel();
+                    PrinterDataModelInvoice.setName(invoicePrinter);
+
+                    //Clear selection
+                    jComImpTick.clearSelection();
+                    jComImpFact.clearSelection();
+
+                    //Select the correct item
+                    jComImpTick.selectByObject(PrinterDataModelTik);
+                    jComImpFact.selectByObject(PrinterDataModelInvoice);
+                    
+                } catch (Exception ex) {
+                    LoggerUtility.getSingleton().logError(this.getClass(), ex);
+                    try {
+                        DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+                    } catch (Exception ex1) {
+                        Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
+                    }
+                }
             });
                     
             
-            //Load the items in table            
+            //Load the items in table
             this.jTab.loadAllItemsInTable();
             
             jBProbTick.addActionListener((java.awt.event.ActionEvent evt) -> {
@@ -160,7 +177,8 @@ public class ImpresViewController extends ImpresJFrame {
             final User User = (User)jTab.getRowSelected();
             
             //Get the ticket printer
-            final String selectedTicketPrinter  = jComImpTick.getSelectedItem().toString();
+            final PrinterDataModel PrinterDataModelTick = (PrinterDataModel)jComImpTick.getSelectedObject();
+            final String selectedTicketPrinter = PrinterDataModelTick.getName();
 
             //Can not be empty
             if(selectedTicketPrinter.isEmpty()){
@@ -171,10 +189,11 @@ public class ImpresViewController extends ImpresJFrame {
             }
             
             //Get the invoice printer
-            final String selectedInvoicePrinter = jComImpFact.getSelectedItem().toString();
+            final PrinterDataModel PrinterDataModelInvoice = (PrinterDataModel)jComImpFact.getSelectedObject();
+            final String selectedInvoicePrinter = PrinterDataModelInvoice.getName();
 
             //Can not be empty
-            if(selectedTicketPrinter.isEmpty()){
+            if(selectedInvoicePrinter.isEmpty()){
                 DialogsFactory.getSingleton().showOKEmptyFieldCallbackDialog(baseJFrame, (JFrame jFrame) -> {
                     jComImpFact.grabFocus();
                 });
@@ -196,7 +215,7 @@ public class ImpresViewController extends ImpresJFrame {
                     RepositoryFactory.getInstance().getUsersRepository().updatePrinters(User.getCode(), selectedTicketPrinter, selectedInvoicePrinter, ticket52, printerWithCort);
                     
                     //Reload the table
-                    jTab.reloadTable();
+                    this.jTab.loadAllItemsInTable();
 
                     DialogsFactory.getSingleton().showOKOperationCompletedCallbackDialog(jFrame, (JFrame jFrame1) -> {
                     });
