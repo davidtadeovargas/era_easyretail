@@ -271,6 +271,9 @@ public class LoginLocalViewController extends LoginLicenseJFrame {
             BasDats.setNoint(CompanyTest.getNoint());
             BasDats.setCol(CompanyTest.getCol());
             BasDats.setCiu(CompanyTest.getCiu());
+            BasDats.setTel(CompanyTest.getTel());
+            BasDats.setCorr(CompanyTest.getCorr());            
+            BasDats.setPagweb(CompanyTest.getPagweb());                    
             BasDats.setEstad(CompanyTest.getEstad());
             BasDats.setCP(CompanyTest.getCP());
             BasDats.setPai(CompanyTest.getPai());

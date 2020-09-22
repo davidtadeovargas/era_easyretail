@@ -1535,7 +1535,7 @@ public class EmpresasViewController extends EmpresasJFrame {
         JTPlantilla.setText("");
         
         //Get company logo image path
-        final String companyLogoPath = UtilitiesFactory.getSingleton().getImagesUtility().getCompanyLogoImagePath(Company.getCodemp());        
+        final String companyLogoPath = UtilitiesFactory.getSingleton().getImagesUtility().getCompanyLogoImagePath();
                 
         //Load icon
         if(UtilitiesFactory.getSingleton().getFilesUtility().fileExists(companyLogoPath)){

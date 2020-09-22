@@ -6,6 +6,9 @@
 package com.era.easyretail.controllers.views;
 
 import com.era.datamodels.PrinterDataModel;
+import com.era.easyretail.era_jasperreports.ReportsManager;
+import com.era.easyretail.era_jasperreports.TestReportGenerator;
+import com.era.easyretail.era_jasperreports.models.GenerateProperties;
 import com.era.logger.LoggerUtility;
 import com.era.models.User;
 import com.era.repositories.RepositoryFactory;
@@ -71,6 +74,9 @@ public class ImpresViewController extends ImpresJFrame {
                     //Select the correct item
                     jComImpTick.selectByObject(PrinterDataModelTik);
                     jComImpFact.selectByObject(PrinterDataModelInvoice);
+                    
+                    jC52m.setSelected(User.isM52());
+                    jCCort.setSelected(User.isCort());
                     
                 } catch (Exception ex) {
                     LoggerUtility.getSingleton().logError(this.getClass(), ex);
@@ -213,6 +219,11 @@ public class ImpresViewController extends ImpresJFrame {
 
                     //Update the printer for the user
                     RepositoryFactory.getInstance().getUsersRepository().updatePrinters(User.getCode(), selectedTicketPrinter, selectedInvoicePrinter, ticket52, printerWithCort);
+
+                    //Update the session model
+                    User.setTicketPrinter(selectedTicketPrinter);
+                    User.setInvoicePrinter(selectedInvoicePrinter);
+                    UtilitiesFactory.getSingleton().getSessionUtility().userInitSession(User);
                     
                     //Reload the table
                     this.jTab.loadAllItemsInTable();
@@ -248,32 +259,15 @@ public class ImpresViewController extends ImpresJFrame {
         //Change the default printer
         UtilitiesFactory.getSingleton().getPrintersUtility().changeDefaultPrinter(printerName);
 
-        //Print the report
-        /*                
-            JasperReport    jas;
-            try
-            {
-                jas = JasperCompileManager.compileReport(getClass().getResourceAsStream("/jasreport/rptPrue.jrxml"));               
-            }
-            catch(JRException expnJASR)
-            {    
-                //Procesa el error y regresa
-                Star.iErrProc(this.getClass().getName() + " " + expnJASR.getMessage(), Star.sErrJASR, expnJASR.getStackTrace(), con);                                                       
-                return;                                                                
-            }            
-
-            JasperPrint pri;
-            try
-            {
-                pri = JasperFillManager.fillReport(jas, null, con);            
-            }
-            catch(JRException expnJASR)
-            {
-                //Procesa el error y regresa
-                Star.iErrProc(this.getClass().getName() + " " + expnJASR.getMessage(), Star.sErrJASR, expnJASR.getStackTrace(), con);                                                       
-                return;                                                                
-            }
-        */
+        //Create the report properties
+        final GenerateProperties GenerateProperties = new GenerateProperties();
+        if(UtilitiesFactory.getSingleton().getPrintersUtility().userTicketPrinterExists()){
+            GenerateProperties.setPrint(true);
+        }
+        
+        //Generate te report
+        final TestReportGenerator testReportGenerator = ReportsManager.getSingleton().getTestReportGenerator();
+        testReportGenerator.generate(GenerateProperties);
 
         //Restore the default printer
         UtilitiesFactory.getSingleton().getPrintersUtility().changeDefaultPrinter(currentPrinter);

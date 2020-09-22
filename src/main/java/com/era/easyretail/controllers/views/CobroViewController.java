@@ -458,16 +458,23 @@ public class CobroViewController extends CobroJFrame {
         TicketReportModel.setEstate(Company_.getEstad());
         TicketReportModel.setExternalNumber(Company_.getNoext());
         TicketReportModel.setImportWords(importInWords);
-        TicketReportModel.setInternalNumber(observations);
-        TicketReportModel.setPhone(serie);
-        TicketReportModel.setPostalCode(estatus);
-        TicketReportModel.setRFC(serie);
-        TicketReportModel.setSaleID(serie);        
-        TicketReportModel.setStreet(serie);
-        TicketReportModel.setSubtotal(estatus);
-        TicketReportModel.setTax(estatus);
-        TicketReportModel.setTotal(estatus);
-        TicketReportModel.setWebPage(serie);
+        TicketReportModel.setInternalNumber(Company_.getNoint());
+        TicketReportModel.setPhone(Company_.getTel());
+        TicketReportModel.setPostalCode(Company_.getCP());
+        TicketReportModel.setRFC(Company_.getRFC());
+        TicketReportModel.setSaleID(String.valueOf(Sale.getId()));        
+        TicketReportModel.setStreet(Company_.getCalle());        
+                
+        final String subtotalFormat = UtilitiesFactory.getSingleton().getNumbersUtility().toMoneyFormat(String.valueOf(Sale.getSubtotal().doubleValue()));
+        final String taxesFormat = UtilitiesFactory.getSingleton().getNumbersUtility().toMoneyFormat(String.valueOf(Sale.getTax().doubleValue()));
+        final String disccountFormat = UtilitiesFactory.getSingleton().getNumbersUtility().toMoneyFormat(String.valueOf(Sale.getTotalDisccount().doubleValue()));
+        final String totalFormat = UtilitiesFactory.getSingleton().getNumbersUtility().toMoneyFormat(String.valueOf(Sale.getTotal().doubleValue()));        
+                
+        TicketReportModel.setSubtotal(subtotalFormat);
+        TicketReportModel.setTax(taxesFormat);
+        TicketReportModel.setDisccount(disccountFormat);
+        TicketReportModel.setTotal(totalFormat);
+        TicketReportModel.setWebPage(Company_.getPags());
         
         //Create the report properties
         final GenerateProperties GenerateProperties = new GenerateProperties();
@@ -486,6 +493,7 @@ public class CobroViewController extends CobroJFrame {
         
         //Generate te report
         final TicketReportGenerator TicketReportGenerator = ReportsManager.getSingleton().getTicketReportGenerator();
+        TicketReportGenerator.setLocalCompanyParams(true);
         TicketReportGenerator.setBaseReport(TicketReportModel);
         TicketReportGenerator.generate(GenerateProperties);
         
