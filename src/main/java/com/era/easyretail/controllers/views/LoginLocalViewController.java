@@ -268,6 +268,8 @@ public class LoginLocalViewController extends LoginLicenseJFrame {
             BasDats.setRFC(CompanyTest.getRFC());
             BasDats.setCalle(CompanyTest.getCalle());
             BasDats.setNoext(CompanyTest.getNoext());
+            BasDats.setMetcost("peps");
+            BasDats.setRutap(System.getProperty("user.dir"));                
             BasDats.setNoint(CompanyTest.getNoint());
             BasDats.setCol(CompanyTest.getCol());
             BasDats.setCiu(CompanyTest.getCiu());
@@ -307,10 +309,6 @@ public class LoginLocalViewController extends LoginLicenseJFrame {
         
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Finished");                
         
-        CompanyTest.setMetcost("peps");
-        CompanyTest.setRutap(System.getProperty("user.dir"));        
-        CompanyTest.setTest(true);
-        
         //Create new database, populate schemes and load initial catalogs
         HibernateUtil.getSingleton().createNewLocalDatabase(CompanyTest.getBd());
         
@@ -324,9 +322,6 @@ public class LoginLocalViewController extends LoginLicenseJFrame {
         
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Hibernate: Adding test company");
         
-        //Save the company in database
-        RepositoryFactory.getInstance().getCompanysRepository().save(CompanyTest);       
-
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Hibernate: Test company added");
 
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Saving test product 1 into database");

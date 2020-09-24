@@ -286,7 +286,7 @@ public class CxcViewController extends CxcJFrame {
 	try{
             
             //If nothing selected yet
-            if(jTabCXC.isRowSelected()){
+            if(!jTabCXC.isRowSelected()){
                 DialogsFactory.getSingleton().showErrorOKNoSelectionCallbackDialog(baseJFrame, (JFrame jFrame) -> {
                     jTabCXC.requestFocus();
                 });

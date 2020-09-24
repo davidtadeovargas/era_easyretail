@@ -10,6 +10,7 @@ import com.era.views.FacturarTicketsJFrame;
 import java.util.List;
 import com.era.logger.LoggerUtility;
 import com.era.models.BasDats;
+import com.era.models.CCodigopostal;
 import com.era.models.Company;
 import com.era.models.MetogoPago;
 import com.era.models.Sales;
@@ -18,7 +19,6 @@ import com.era.repositories.RepositoryFactory;
 import com.era.utilities.UtilitiesFactory;
 import com.era.views.comboboxes.SeriesCombobox;
 import com.era.views.dialogs.DialogsFactory;
-import com.era.views.dialogs.ErrorOKDialog;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -58,6 +58,13 @@ public class FacturarTicketsViewController extends FacturarTicketsJFrame {
             //Load all the combos items
             jComSerie.setType(SeriesCombobox.Type.FAC);
             jComSerie.loadItems();
+            
+            jComMetodoPago.setChangeSelectionListener((Object ObjectModel) -> {
+                
+                final MetogoPago MetogoPago = (MetogoPago)ObjectModel;
+                
+                formaPagoDescrip.setText(MetogoPago.getDescription());
+            });
             jComMetodoPago.loadItems();
             
             //Init caducity date to today
@@ -67,6 +74,8 @@ public class FacturarTicketsViewController extends FacturarTicketsJFrame {
             //Load the company CP by default
             final BasDats BasDats = UtilitiesFactory.getSingleton().getSessionUtility().getBasDats();
             txtLugarExp.setText(BasDats.getCP());
+            final CCodigopostal CCodigopostal = RepositoryFactory.getInstance().getCCodigoPostalRepository().getByPostalCode(BasDats.getCP());
+            lugarExpedicionDescrip.setText(CCodigopostal.getEstate());
             
         }catch (Exception ex) {
             LoggerUtility.getSingleton().logError(FacturarTicketsViewController.class, ex);
@@ -102,7 +111,7 @@ public class FacturarTicketsViewController extends FacturarTicketsJFrame {
             final Serie Serie = (Serie)jComSerie.getSelectedObject();
                     
             //If serie is not selected            
-            if(Serie.getSer().isEmpty()){
+            if(Serie.getSer()==null ||Serie.getSer().isEmpty()){
                 DialogsFactory.getSingleton().showErrorOKNoSelectionCallbackDialog(baseJFrame, (JFrame jFrame) -> {
                     jComSerie.grabFocus();
                 });
@@ -211,8 +220,12 @@ public class FacturarTicketsViewController extends FacturarTicketsJFrame {
             final SearchViewController SearchViewController = new SearchViewController();
             SearchViewController.setSEARCH_TYPE(SearchCommonTypeEnum.EXPEDITION_PLACE);
             SearchViewController.setButtonAceptClicked(() -> {
+                
                 final String expeditionPlace = SearchViewController.getCod();                
                 txtLugarExp.setText(expeditionPlace);
+                
+                final String descrip = SearchViewController.getDescrip();
+                lugarExpedicionDescrip.setText(descrip);
             });
             SearchViewController.setVisible();
 	}

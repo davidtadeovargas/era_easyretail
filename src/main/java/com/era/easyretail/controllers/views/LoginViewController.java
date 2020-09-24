@@ -313,8 +313,8 @@ public class LoginViewController extends LoginJFrame {
             UtilitiesFactory.getSingleton().getSessionUtility().userInitSession(User);
 
             //Save session data for the system
-            final BasDats BasDats = RepositoryFactory.getInstance().getBasDatssRepository().getByDBName(companyCode);            
-            UtilitiesFactory.getSingleton().getSessionUtility().setBasDats(BasDats);                        
+            final BasDats BasDats = RepositoryFactory.getInstance().getBasDatssRepository().getByDBName(companyCode);
+            UtilitiesFactory.getSingleton().getSessionUtility().setBasDats(BasDats);
 
             dispose();
             
