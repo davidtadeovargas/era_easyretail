@@ -331,13 +331,16 @@ public class SearchViewController extends SearchJFrame {
             case COUNTRIES:
                 jTab.addShowColumn(TableHeaderFactory.getSigleton().getCCountriesTableHeader().getC_PAIS());
                 jTab.addShowColumn(TableHeaderFactory.getSigleton().getCCountriesTableHeader().getDESCRIPTION());
-                jTab.addShowColumn(TableHeaderFactory.getSigleton().getCCountriesTableHeader().getAGRUPACIONES());                
+                jTab.addShowColumn(TableHeaderFactory.getSigleton().getCCountriesTableHeader().getAGRUPACIONES());
                 break;                   
 
             case SECTORS:               
                break;
 
-            case FISCAL_REGIMEN:               
+            case FISCAL_REGIMEN:
+                jTab.addShowColumn(TableHeaderFactory.getSigleton().getCRegimenFiscalTableHeader().getc_RegimenFiscal());
+                jTab.addShowColumn(TableHeaderFactory.getSigleton().getCRegimenFiscalTableHeader().getDESCRIPTION());
+                jTab.addShowColumn(TableHeaderFactory.getSigleton().getCRegimenFiscalTableHeader().getFecha_de_inicio_de_vigencia());
                break;
         }
         
@@ -482,6 +485,7 @@ public class SearchViewController extends SearchJFrame {
                break;
 
             case FISCAL_REGIMEN:
+                this.jTab.setRepository(RepositoryFactory.getInstance().getCRegimenFiscalRepository());
                break;
         }
         

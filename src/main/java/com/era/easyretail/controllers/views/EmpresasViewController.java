@@ -218,8 +218,12 @@ public class EmpresasViewController extends EmpresasJFrame {
             final SearchViewController SearchViewController = new SearchViewController();
             SearchViewController.setSEARCH_TYPE(SearchCommonTypeEnum.EXPEDITION_PLACE);
             SearchViewController.setButtonAceptClicked(() -> {
-                final String fiscalRegimen = SearchViewController.getCod();                
+                
+                final String fiscalRegimen = SearchViewController.getCod();
                 JTLugarDeExpedicion.setText(fiscalRegimen);
+                
+                final String descrip = SearchViewController.getDescrip();
+                expeditionPlaceDescrip.setText(descrip);
             });
             SearchViewController.setVisible();
         }
@@ -244,8 +248,12 @@ public class EmpresasViewController extends EmpresasJFrame {
             final SearchViewController SearchViewController = new SearchViewController();
             SearchViewController.setSEARCH_TYPE(SearchCommonTypeEnum.FISCAL_REGIMEN);
             SearchViewController.setButtonAceptClicked(() -> {
+                
                 final String fiscalRegimen = SearchViewController.getCod();                
                 JTRegimenFiscal.setText(fiscalRegimen);
+                
+                final String descrip = SearchViewController.getDescrip();
+                fiscalRegimenDescrip.setText(descrip);
             });
             SearchViewController.setVisible();
         }
@@ -1501,73 +1509,97 @@ public class EmpresasViewController extends EmpresasJFrame {
     
     public final synchronized void vCargaComponentes(BasDats Company)
     {
-        JTIdEmpresa.setText(String.valueOf(Company.getId()));
-        JTCodigoEmpresa.setText(Company.getCodemp());
-        JTEmpresa.setText(Company.getNom());
-        JTBaseDeDatos.setText(Company.getBd());
-        JTTelefono.setText(Company.getTel());
-        JTExtTel.setText("");
-        JTCalle.setText(Company.getCalle());
-        JTCP.setText(Company.getCP());
-        JTNoExt.setText(Company.getNoext());
-        JTNoInt.setText(Company.getNoint());
-        JTColonia.setText(Company.getCol());
-        JTCiudad.setText(Company.getCiu());
-        JTEstado.setText(Company.getEstad());
-        JTPais.setText(Company.getPai());
-        JTRFC.setText(Company.getRFC());
-        JTCorreoElectronico.setText(Company.getCorr());
-        JTSitioWeb.setText(Company.getPagweb());
-        JTLugarDeExpedicion.setText(Company.getLugexp());
-        JTRegimenFiscal.setText(Company.getRegfisc());
-        
-        JTFechaAlta.setText(Company.getFalt().toString());
-        JTFechaModificacion.setText(Company.getFalt().toString());
-        
-        final String certPath = Company.getRutcer()==null?"":Company.getRutcer().replace("\\\\", "\\");
-        final String certKeyPath = Company.getRutkey()==null?"":Company.getRutkey().replace("\\\\", "\\");
-        final String appPath = Company.getRutap()==null?UtilitiesFactory.getSingleton().getFilesUtility().getCurrentWorkingDir():Company.getRutap().replace("\\\\", "\\");
-        
-        JTRutaCertificado.setText(certPath);
-        JTRutaKey.setText(certKeyPath);
-        JTPasswordCertificado.setText(Company.getPasscer());
-        JTRutaAplicacion.setText(appPath);
-        JTPlantilla.setText("");
-        
-        //Get company logo image path
-        final String companyLogoPath = UtilitiesFactory.getSingleton().getImagesUtility().getCompanyLogoImagePath();
-                
-        //Load icon
-        if(UtilitiesFactory.getSingleton().getFilesUtility().fileExists(companyLogoPath)){
+        try {
+         
+            JTIdEmpresa.setText(String.valueOf(Company.getId()));
+            JTCodigoEmpresa.setText(Company.getCodemp());
+            JTEmpresa.setText(Company.getNom());
+            JTBaseDeDatos.setText(Company.getBd());
+            JTTelefono.setText(Company.getTel());
+            JTExtTel.setText("");
+            JTCalle.setText(Company.getCalle());
+            JTCP.setText(Company.getCP());
+            JTNoExt.setText(Company.getNoext());
+            JTNoInt.setText(Company.getNoint());
+            JTColonia.setText(Company.getCol());
+            JTCiudad.setText(Company.getCiu());
+            JTEstado.setText(Company.getEstad());
+            JTPais.setText(Company.getPai());
+            JTRFC.setText(Company.getRFC());
+            JTCorreoElectronico.setText(Company.getCorr());
+            JTSitioWeb.setText(Company.getPagweb());
+            JTLugarDeExpedicion.setText(Company.getLugexp());
             
-            //Show image
-            showImage(companyLogoPath);
-        }        
-        
-        /*Selecciona el método de costeo que sea de la empresa*/
-        switch (Company.getMetcost()) {
-            case "metcost":
-                bgMetodoCosteo.setSelected(JRBPEPS.getModel(), true);
-                break;
-            case "ueps":
-                bgMetodoCosteo.setSelected(JRBUEPS.getModel(), true);
-                break;
-            case "ultcost":
-                bgMetodoCosteo.setSelected(JRBUltCost.getModel(), true);
-                break;
-            case "prom":
-                bgMetodoCosteo.setSelected(JRBPromedio.getModel(), true);
-                break;
-        }
-        
-        final String regimenFiscal = Company.getRegfisc()==null?"F":Company.getRegfisc();
-        switch (regimenFiscal) {
-            case "M":
-                bgTipoContribuyente.setSelected(JRBMoral.getModel(), true);
-                break;        
-            case "F":
-                bgTipoContribuyente.setSelected(JRBFisica.getModel(), true);
-                break;
+            final CCodigopostal CCodigopostal = RepositoryFactory.getInstance().getCCodigoPostalRepository().getByPostalCode(Company.getLugexp());
+            
+            if(CCodigopostal!=null){
+                expeditionPlaceDescrip.setText(CCodigopostal.getEstate());
+            }
+            
+            JTRegimenFiscal.setText(Company.getRegfisc());
+
+            final CRegimenfiscal CRegimenfiscal = RepositoryFactory.getInstance().getCRegimenFiscalRepository().getRegimenByCode(Company.getRegfisc());
+            
+            if(CRegimenfiscal!=null){
+                fiscalRegimenDescrip.setText(CRegimenfiscal.getDescription());
+            }            
+
+            JTFechaAlta.setText(Company.getFalt().toString());
+            JTFechaModificacion.setText(Company.getFalt().toString());
+
+            final String certPath = Company.getRutcer()==null?"":Company.getRutcer().replace("\\\\", "\\");
+            final String certKeyPath = Company.getRutkey()==null?"":Company.getRutkey().replace("\\\\", "\\");
+            final String appPath = Company.getRutap()==null?UtilitiesFactory.getSingleton().getFilesUtility().getCurrentWorkingDir():Company.getRutap().replace("\\\\", "\\");
+
+            JTRutaCertificado.setText(certPath);
+            JTRutaKey.setText(certKeyPath);
+            JTPasswordCertificado.setText(Company.getPasscer());
+            JTRutaAplicacion.setText(appPath);
+            JTPlantilla.setText("");
+
+            //Get company logo image path
+            final String companyLogoPath = UtilitiesFactory.getSingleton().getImagesUtility().getCompanyLogoImagePath();
+
+            //Load icon
+            if(UtilitiesFactory.getSingleton().getFilesUtility().fileExists(companyLogoPath)){
+
+                //Show image
+                showImage(companyLogoPath);
+            }        
+
+            /*Selecciona el método de costeo que sea de la empresa*/
+            switch (Company.getMetcost()) {
+                case "metcost":
+                    bgMetodoCosteo.setSelected(JRBPEPS.getModel(), true);
+                    break;
+                case "ueps":
+                    bgMetodoCosteo.setSelected(JRBUEPS.getModel(), true);
+                    break;
+                case "ultcost":
+                    bgMetodoCosteo.setSelected(JRBUltCost.getModel(), true);
+                    break;
+                case "prom":
+                    bgMetodoCosteo.setSelected(JRBPromedio.getModel(), true);
+                    break;
+            }
+
+            final String regimenFiscal = Company.getRegfisc()==null?"F":Company.getRegfisc();
+            switch (regimenFiscal) {
+                case "M":
+                    bgTipoContribuyente.setSelected(JRBMoral.getModel(), true);
+                    break;        
+                case "F":
+                    bgTipoContribuyente.setSelected(JRBFisica.getModel(), true);
+                    break;
+            }
+            
+        } catch (Exception ex) {
+            LoggerUtility.getSingleton().logError(this.getClass(), ex);
+            try {
+                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+            } catch (Exception ex1) {
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
+            }
         }
     }
 
