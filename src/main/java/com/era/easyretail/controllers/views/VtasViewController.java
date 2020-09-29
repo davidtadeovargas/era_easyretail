@@ -132,9 +132,6 @@ public class VtasViewController extends VtasJFrame {
             jMenuItemExit.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jBSalActionPerformed(evt);
             });
-            jMenuItemGralOpen.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jButtonAbrirActionPerformed(evt);
-            });
             /*jBAbrNotCred.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jBAbrNotCredActionPerformed(evt);
             });*/
@@ -185,7 +182,7 @@ public class VtasViewController extends VtasJFrame {
                         UtilitiesFactory.getSingleton().getGenericExceptionUtil().generateException("");
                         return;
                     }
-                    jLabelTypeSale.setText(type);
+                    jLabelTipDoc.setText(type);
                             
                 } catch (Exception ex) {
                     LoggerUtility.getSingleton().logError(this.getClass(), ex);
@@ -199,7 +196,7 @@ public class VtasViewController extends VtasJFrame {
             
             //Load all the sales
             jTableVentas.setScrollAtStartWhenEnd(true);
-            jTableVentas.setJScrollPane(jScrollPane3);
+            //jTableVentas.setJScrollPane(jScrollPane3);
             jTableVentas.setOnPaginationLabelUpdate((String paginationUpdate) -> {
                 jLabelPagination.setText(paginationUpdate);
             });
@@ -314,21 +311,6 @@ public class VtasViewController extends VtasJFrame {
     }
     
     private void jBAbrNotCredActionPerformed(java.awt.event.ActionEvent evt) {                                             
-
-	try{            	
-            
-	}
-	catch (Exception ex) {
-            LoggerUtility.getSingleton().logError(VtasViewController.class, ex);
-            try {
-                DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
-            } catch (Exception ex1) {
-                Logger.getLogger(VtasViewController.class.getName()).log(Level.SEVERE, null, ex1);
-            }
-	}
-    }
-    
-    private void jButtonAbrirActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	
             

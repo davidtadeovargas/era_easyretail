@@ -6,8 +6,10 @@
 package com.era.easyretail.controllers.views;
 
 import com.era.datamodels.enums.DocumentType;
+import com.era.easyretail.era_jasperreports.FacReportGenerator;
 import com.era.easyretail.era_jasperreports.ReportsManager;
 import com.era.easyretail.era_jasperreports.TicketReportGenerator;
+import com.era.easyretail.era_jasperreports.models.FacReportModel;
 import com.era.easyretail.era_jasperreports.models.GenerateProperties;
 import com.era.easyretail.era_jasperreports.models.TicketReportModel;
 import com.era.easyretail.exceptions.InternalUnexpectedErrorException;
@@ -446,56 +448,118 @@ public class CobroViewController extends CobroJFrame {
         //Get import in words
         final String importInWords = UtilitiesFactory.getSingleton().getNumbersUtility().convertNumberToStringRepresentation(String.valueOf(Sale.getTotal()), Sale.getSerie(), Sale.getCoinCode(), true, true);
         
-        //Crete the report model
-        TicketReportModel TicketReportModel = new TicketReportModel();
-        TicketReportModel.setCity(Company_.getCiu());
-        TicketReportModel.setCoin(Sale.getCoinCode());
-        TicketReportModel.setColony(Company_.getCol());
-        TicketReportModel.setCompanyName(Company_.getNom());
-        TicketReportModel.setConsecutive(Sale.getReferenceNumber());
-        TicketReportModel.setCountry(Company_.getPai());
-        TicketReportModel.setDocumentDate(Sale.getDeliverDate().toString());
-        TicketReportModel.setEstate(Company_.getEstad());
-        TicketReportModel.setExternalNumber(Company_.getNoext());
-        TicketReportModel.setImportWords(importInWords);
-        TicketReportModel.setInternalNumber(Company_.getNoint());
-        TicketReportModel.setPhone(Company_.getTel());
-        TicketReportModel.setPostalCode(Company_.getCP());
-        TicketReportModel.setRFC(Company_.getRFC());
-        TicketReportModel.setSaleID(String.valueOf(Sale.getId()));        
-        TicketReportModel.setStreet(Company_.getCalle());        
-                
         final String subtotalFormat = UtilitiesFactory.getSingleton().getNumbersUtility().toMoneyFormat(String.valueOf(Sale.getSubtotal().doubleValue()));
         final String taxesFormat = UtilitiesFactory.getSingleton().getNumbersUtility().toMoneyFormat(String.valueOf(Sale.getTax().doubleValue()));
         final String disccountFormat = UtilitiesFactory.getSingleton().getNumbersUtility().toMoneyFormat(String.valueOf(Sale.getTotalDisccount().doubleValue()));
         final String totalFormat = UtilitiesFactory.getSingleton().getNumbersUtility().toMoneyFormat(String.valueOf(Sale.getTotal().doubleValue()));        
+        
+        GenerateProperties GenerateProperties = new GenerateProperties();
+        
+        switch(DocumentType_){
+            
+            case REMISION:
+                break;
                 
-        TicketReportModel.setSubtotal(subtotalFormat);
-        TicketReportModel.setTax(taxesFormat);
-        TicketReportModel.setDisccount(disccountFormat);
-        TicketReportModel.setTotal(totalFormat);
-        TicketReportModel.setWebPage(Company_.getPags());
-        
-        //Create the report properties
-        final GenerateProperties GenerateProperties = new GenerateProperties();
-        GenerateProperties.setObjectModel(TicketReportModel);
-        if(UtilitiesFactory.getSingleton().getPrintersUtility().userTicketPrinterExists()){
-            GenerateProperties.setPrint(true);
-        }        
-        GenerateProperties.setExportToPDF(true);
-        GenerateProperties.setPdfExportPath(UtilitiesFactory.getSingleton().getImagesUtility().getTicketsPath());
-        GenerateProperties.setPdfFileName(String.valueOf(Sale.getId()));
-        
-        //Change the tickets printer
-        if(UtilitiesFactory.getSingleton().getPrintersUtility().userTicketPrinterExists()){
-            UtilitiesFactory.getSingleton().getPrintersUtility().changeDefaultUserTicketPrinter();
+            case INVOICE:
+                
+                //Crete the report model
+                final FacReportModel FacReportModel = new FacReportModel();
+                FacReportModel.setCiu(Company_.getCiu());
+                FacReportModel.setMon(Sale.getCoinCode());
+                FacReportModel.setCol(Company_.getCol());
+                FacReportModel.setNomemp(Company_.getNom());
+                FacReportModel.setVta(String.valueOf(Sale.getId()));        
+                FacReportModel.setPai(Company_.getPai());
+                FacReportModel.setFdoc(Sale.getDeliverDate().toString());
+                FacReportModel.setEstad(Company_.getEstad());
+                FacReportModel.setNoext(Company_.getNoext());
+                FacReportModel.setImportWords(importInWords);
+                FacReportModel.setNoint(Company_.getNoint());
+                FacReportModel.setTel(Company_.getTel());
+                FacReportModel.setCp(Company_.getCP());
+                FacReportModel.setRfc(Company_.getRFC());                
+                FacReportModel.setCall(Company_.getCalle());
+
+                FacReportModel.setSubtotal(subtotalFormat);
+                FacReportModel.setImpue(taxesFormat);
+                FacReportModel.setDescu(disccountFormat);
+                FacReportModel.setTot(totalFormat);
+                FacReportModel.setWebPage(Company_.getPags());
+
+                //Create the report properties                
+                GenerateProperties.setObjectModel(FacReportModel);
+                if(UtilitiesFactory.getSingleton().getPrintersUtility().userTicketPrinterExists()){
+                    GenerateProperties.setPrint(true);
+                }        
+                GenerateProperties.setExportToPDF(true);
+                GenerateProperties.setPdfExportPath(UtilitiesFactory.getSingleton().getImagesUtility().getInvoicesPath());
+                GenerateProperties.setPdfFileName(String.valueOf(Sale.getId()));
+
+                //Change the tickets printer
+                if(UtilitiesFactory.getSingleton().getPrintersUtility().userTicketPrinterExists()){
+                    UtilitiesFactory.getSingleton().getPrintersUtility().changeDefaultUserTicketPrinter();
+                }
+
+                //Generate te report
+                final FacReportGenerator FacReportGenerator = ReportsManager.getSingleton().getFacReportGenerator();
+                FacReportGenerator.setLocalCompanyParams(true);
+                FacReportGenerator.setBaseReport(FacReportModel);
+                FacReportGenerator.generate(GenerateProperties);
+                
+                break;
+    
+            case TICKETS:
+                
+                //Crete the report model
+                final TicketReportModel TicketReportModel = new TicketReportModel();
+                TicketReportModel.setCity(Company_.getCiu());
+                TicketReportModel.setCoin(Sale.getCoinCode());
+                TicketReportModel.setColony(Company_.getCol());
+                TicketReportModel.setCompanyName(Company_.getNom());
+                TicketReportModel.setConsecutive(Sale.getReferenceNumber());
+                TicketReportModel.setCountry(Company_.getPai());
+                TicketReportModel.setDocumentDate(Sale.getDeliverDate().toString());
+                TicketReportModel.setEstate(Company_.getEstad());
+                TicketReportModel.setExternalNumber(Company_.getNoext());
+                TicketReportModel.setImportWords(importInWords);
+                TicketReportModel.setInternalNumber(Company_.getNoint());
+                TicketReportModel.setPhone(Company_.getTel());
+                TicketReportModel.setPostalCode(Company_.getCP());
+                TicketReportModel.setRFC(Company_.getRFC());
+                TicketReportModel.setSaleID(String.valueOf(Sale.getId()));        
+                TicketReportModel.setStreet(Company_.getCalle());
+
+                TicketReportModel.setSubtotal(subtotalFormat);
+                TicketReportModel.setTax(taxesFormat);
+                TicketReportModel.setDisccount(disccountFormat);
+                TicketReportModel.setTotal(totalFormat);
+                TicketReportModel.setWebPage(Company_.getPags());
+
+                //Create the report properties
+                GenerateProperties.setObjectModel(TicketReportModel);
+                if(UtilitiesFactory.getSingleton().getPrintersUtility().userTicketPrinterExists()){
+                    GenerateProperties.setPrint(true);
+                }        
+                GenerateProperties.setExportToPDF(true);
+                GenerateProperties.setPdfExportPath(UtilitiesFactory.getSingleton().getImagesUtility().getTicketsPath());
+                GenerateProperties.setPdfFileName(String.valueOf(Sale.getId()));
+
+                //Change the tickets printer
+                if(UtilitiesFactory.getSingleton().getPrintersUtility().userTicketPrinterExists()){
+                    UtilitiesFactory.getSingleton().getPrintersUtility().changeDefaultUserTicketPrinter();
+                }
+
+                //Generate te report
+                final TicketReportGenerator TicketReportGenerator = ReportsManager.getSingleton().getTicketReportGenerator();
+                TicketReportGenerator.setLocalCompanyParams(true);
+                TicketReportGenerator.setBaseReport(TicketReportModel);
+                TicketReportGenerator.generate(GenerateProperties);
+                
+                break;
+            
+            case NOTC:
+                break;
         }
-        
-        //Generate te report
-        final TicketReportGenerator TicketReportGenerator = ReportsManager.getSingleton().getTicketReportGenerator();
-        TicketReportGenerator.setLocalCompanyParams(true);
-        TicketReportGenerator.setBaseReport(TicketReportModel);
-        TicketReportGenerator.generate(GenerateProperties);
         
         if(OnFinish!=null){
             OnFinish.onFinish();
