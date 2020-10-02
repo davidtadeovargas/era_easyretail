@@ -11,8 +11,8 @@ import java.util.List;
 import com.era.logger.LoggerUtility;
 import com.era.models.BasDats;
 import com.era.models.CCodigopostal;
+import com.era.models.CPaymentForm;
 import com.era.models.Company;
-import com.era.models.MetogoPago;
 import com.era.models.Sales;
 import com.era.models.Serie;
 import com.era.repositories.RepositoryFactory;
@@ -61,9 +61,9 @@ public class FacturarTicketsViewController extends FacturarTicketsJFrame {
             
             jComMetodoPago.setChangeSelectionListener((Object ObjectModel) -> {
                 
-                final MetogoPago MetogoPago = (MetogoPago)ObjectModel;
+                final CPaymentForm CPaymentForm = (CPaymentForm)ObjectModel;
                 
-                formaPagoDescrip.setText(MetogoPago.getDescription());
+                formaPagoDescrip.setText(CPaymentForm.getDescription());
             });
             jComMetodoPago.loadItems();
             
@@ -119,10 +119,10 @@ public class FacturarTicketsViewController extends FacturarTicketsJFrame {
             }
             
             //Get the payment method
-            final MetogoPago MetogoPago = (MetogoPago)jComMetodoPago.getSelectedObject();
+            final CPaymentForm CPaymentForm = (CPaymentForm)jComMetodoPago.getSelectedObject();
                     
             //If payment method is not selected
-            if(MetogoPago.getCode().isEmpty()){
+            if(CPaymentForm.getC_FormaPago().isEmpty()){
                 DialogsFactory.getSingleton().showErrorOKNoSelectionCallbackDialog(baseJFrame, (JFrame jFrame) -> {
                     jComMetodoPago.grabFocus();
                 });
@@ -184,7 +184,7 @@ public class FacturarTicketsViewController extends FacturarTicketsJFrame {
                     final String observations = jTxtArObservaciones.getText().trim();
                     
                     //Update the sales
-                    RepositoryFactory.getInstance().getSalessRepository().ringTicketSales(Company, sales, observations,Serie.getSer(),MetogoPago.getCode());
+                    RepositoryFactory.getInstance().getSalessRepository().ringTicketSales(Company, sales, observations,Serie.getSer(),CPaymentForm.getC_FormaPago());
                     
                     //Ring the document
                     
