@@ -427,7 +427,11 @@ public class CobroViewController extends CobroJFrame {
         switch(DocumentType_){
             
             case REMISION:
+                
                 RepositoryFactory.getInstance().getSalessRepository().saveSaleRemision(Sale, Company, false, partvtas,BigDecimalTotal,BigDecimalCardDebit,BigDecimalCardCredit);
+                
+                ReportManager.getSingleton().generateRemPDF(Sale, Company_, BasDatsLocal);
+                
                 break;
                 
             case INVOICE:

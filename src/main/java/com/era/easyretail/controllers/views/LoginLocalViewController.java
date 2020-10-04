@@ -279,6 +279,8 @@ public class LoginLocalViewController extends LoginLicenseJFrame {
             BasDats.setEstad(CompanyTest.getEstad());
             BasDats.setCP(CompanyTest.getCP());
             BasDats.setPai(CompanyTest.getPai());
+            BasDats.setLugexp(CompanyTest.getLugexp());
+            BasDats.setRegfisc(CompanyTest.getRegfisc());
             BasDats.setTest(true);
 
             //Save in the basdats record

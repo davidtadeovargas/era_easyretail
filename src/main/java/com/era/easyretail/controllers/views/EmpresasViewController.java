@@ -254,6 +254,7 @@ public class EmpresasViewController extends EmpresasJFrame {
                 
                 final String descrip = SearchViewController.getDescrip();
                 fiscalRegimenDescrip.setText(descrip);
+                fiscalRegimenDescrip.setCaretPosition(0);
             });
             SearchViewController.setVisible();
         }
@@ -274,6 +275,8 @@ public class EmpresasViewController extends EmpresasJFrame {
     private void buttonDeleteImageClicked(ActionEvent e){
      
         hideImage();
+        
+        logoPath = null;
     }
     
     private void buttonLoadIconClicked(ActionEvent e){
@@ -668,13 +671,15 @@ public class EmpresasViewController extends EmpresasJFrame {
             }
         } 
         
-        final String companyCode = JTCodigoEmpresa.getText().trim();
-        
         //If logo to update so
         if(logoPath!=null){
             
             //Save the company logo
-            UtilitiesFactory.getSingleton().getImagesUtility().saveCompanyLogoImage(companyCode, logoPath);
+            UtilitiesFactory.getSingleton().getImagesUtility().saveCompanyLogoImage(logoPath);
+        }
+        else{
+            //Remove the company logo
+            UtilitiesFactory.getSingleton().getImagesUtility().removeCompanyLogoImage();
         }
         
         boolean update = true;

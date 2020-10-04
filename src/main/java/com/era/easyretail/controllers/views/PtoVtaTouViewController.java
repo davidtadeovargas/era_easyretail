@@ -512,18 +512,31 @@ public class PtoVtaTouViewController extends PtoVtaTouJFrame {
             SearchViewController.setSEARCH_TYPE(SearchCommonTypeEnum.PRODUCTS);
             SearchViewController.setButtonAceptClicked(() -> {
 
-                //Set product code
-                productCode = SearchViewController.getCod();
-                jTProd.setText(productCode);                                
-    
-                //Set product descriptión
-                productDescription = SearchViewController.getDescrip();
-                
-                //Get the product imageicon
-                final String imagePath = UtilitiesFactory.getSingleton().getImagesUtility().getProductImagePath(productCode);
-                
-                //Show the control
-                showImage(imagePath);
+                try {
+                                     
+                    //Get the product code
+                    productCode = SearchViewController.getCod();                    
+
+                    //Set product code
+                    jTProd.setText(productCode);
+                    
+                    //Set product descriptión
+                    productDescription = SearchViewController.getDescrip();
+
+                    //Get the product imageicon
+                    final String imagePath = UtilitiesFactory.getSingleton().getImagesUtility().getProductImagePath(productCode);
+
+                    //Show the control
+                    showImage(imagePath);
+                    
+                } catch (Exception ex) {
+                    LoggerUtility.getSingleton().logError(this.getClass(), ex);
+                    try {
+                        DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+                    } catch (Exception ex1) {
+                        Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
+                    }
+                }
             });
             SearchViewController.setVisible();
 	}
