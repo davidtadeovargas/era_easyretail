@@ -6,7 +6,9 @@
 package com.era.easyretail.controllers.views;
 
 import com.era.easyretail.controllers.views.ClavMastViewController.OnResult;
+import com.era.easyretail.era_jasperreports.ReportManager;
 import com.era.logger.LoggerUtility;
+import com.era.models.Company;
 import com.era.models.Sales;
 import com.era.repositories.RepositoryFactory;
 import com.era.repositories.datamodels.DocumentTypeFilter;
@@ -218,6 +220,12 @@ public class CanVtasViewController extends CanVtasJFrame {
         //Cancel the sale
         RepositoryFactory.getInstance().getSalessRepository().cancelSale(saleID, razon);
 
+        final Sales Sale = RepositoryFactory.getInstance().getSalessRepository().getByVenta(saleID);
+        
+        final Company Company = RepositoryFactory.getInstance().getCompanysRepository().getCustomerByCode(Sale.getCompanyCode());
+        
+        ReportManager.getSingleton().generateCancelSalePDF(Sale, Company, true);
+        
         //Reload the table
         jTab.initTableWithPagination();
 

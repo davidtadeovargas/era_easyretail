@@ -187,9 +187,6 @@ public class PrincipViewController extends PrincipJFrame {
             jMDelLog.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jMDelLogActionPerformed(evt);
             });
-            reportsMenu.addActionListener((java.awt.event.ActionEvent evt) -> {
-                jMEstacsActionPerformed(evt);
-            });
             jMLogProd.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jMLogProdActionPerformed(evt);
             });
@@ -371,6 +368,9 @@ public class PrincipViewController extends PrincipJFrame {
 
                                         //Update the warehouse existences
                                         RepositoryFactory.getInstance().getExistalmasRepository().updateExistences(warehouseCode, productCode, existence);
+                                        
+                                        //Update the general existence
+                                        RepositoryFactory.getInstance().getProductsRepository().updateGeneralExistence(productCode, (float)existence);
 
                                     }catch (Exception ex) {
                                         LoggerUtility.getSingleton().logError(PrincipViewController.class, ex);
