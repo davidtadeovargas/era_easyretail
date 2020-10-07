@@ -140,7 +140,7 @@ public class NewVtaCustomerInfoViewController extends NewVtaCustomerInfoJFrame {
         
         try {
             
-            //Search warehouse
+            //Search
             final SearchViewController SearchViewController = new SearchViewController();
             SearchViewController.setSEARCH_TYPE(SearchCommonTypeEnum.CUSTOMERS);
             SearchViewController.setButtonAceptClicked(() -> {
