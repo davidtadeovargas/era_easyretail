@@ -104,13 +104,14 @@ public class CatalBancosViewController extends CatalBancosJFrame {
 
 	try{            	
     
-            final Banco Banco = (Banco)bancoTable.getRowSelected();
-            if(Banco==null){
+            if(!bancoTable.isRowSelected()){
                 DialogsFactory.getSingleton().showErrorOKNoSelectionCallbackDialog(baseJFrame, (JFrame jFrame) -> {
                     bancoTable.grabFocus();
                 });
                 return;
             }
+            
+            final Banco Banco = (Banco)bancoTable.getRowSelected();            
             
             DialogsFactory.getSingleton().showQuestionContinueDialog(baseJFrame, (JFrame jFrame) -> {
                 

@@ -17,6 +17,7 @@ import com.era.repositories.utils.SatusDocuments;
 import com.era.utilities.UtilitiesFactory;
 import com.era.views.dialogs.DialogsFactory;
 import com.era.views.utils.JComponentUtils;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.logging.Level;
@@ -296,13 +297,19 @@ public class CxcViewController extends CxcJFrame {
             //Get selected row
             final Cxc Cxc = (Cxc)jTabCXC.getRowSelected();
             
-            //Get the related sale
-            final Sales Sale = (Sales)RepositoryFactory.getInstance().getSalessRepository().getByID(Cxc.getId_venta());            
+            //Determine the pending of payment
+            final BigDecimal totalPaid = RepositoryFactory.getInstance().getPaymentsRepository().getTotalPaidForDocument(Cxc.getNoser(),Cxc.getNorefer());
+            final BigDecimal pendingToPay = Cxc.getCarg().subtract(totalPaid==null?BigDecimal.ZERO:totalPaid);
+            if(pendingToPay.compareTo(BigDecimal.ZERO)==0){
+                DialogsFactory.getSingleton().showOKCallbackDialog(baseJFrame, "document_already_paid", (JFrame jFrame) -> { 
+                });
+                return;
+            }
             
             //Open the window to make payments to the sale
-            final ListadoPagosViewController ListadoPagosViewController = ViewControlersFactory.getSingleton().getListadoPagosViewController();
-            ListadoPagosViewController.setSale_(Sale);
-            ListadoPagosViewController.setVisible();
+            final FormPagoViewController FormPagoViewController = ViewControlersFactory.getSingleton().getFormPagoViewController();
+            FormPagoViewController.setCxc(Cxc);
+            FormPagoViewController.setVisible();
 	}
 	catch (Exception ex) {
             LoggerUtility.getSingleton().logError(CxcViewController.class, ex);

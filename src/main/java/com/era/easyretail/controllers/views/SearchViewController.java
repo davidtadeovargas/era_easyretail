@@ -165,7 +165,19 @@ public class SearchViewController extends SearchJFrame {
                 jTab.addShowColumn(TableHeaderFactory.getSigleton().getCompanysTableHeader().getNOM());
                 jTab.addShowColumn(TableHeaderFactory.getSigleton().getCompanysTableHeader().getRFC());
                 break;
-
+            
+            case BANCOS:
+                jTab.addShowColumn(TableHeaderFactory.getSigleton().getBancosTableHeader().getCUENTABANCO());
+                jTab.addShowColumn(TableHeaderFactory.getSigleton().getBancosTableHeader().getDESCRIP());
+                jTab.addShowColumn(TableHeaderFactory.getSigleton().getBancosTableHeader().getBANCO());
+                break;
+                
+            case PAYMENT_METHOD:
+                jTab.addShowColumn(TableHeaderFactory.getSigleton().getCPaymentMethodsTableHeader().getCODE());
+                jTab.addShowColumn(TableHeaderFactory.getSigleton().getCPaymentMethodsTableHeader().getDESCRIPTION());
+                jTab.addShowColumn(TableHeaderFactory.getSigleton().getCPaymentMethodsTableHeader().getFECHA_INICIO_DE_VIGENCIA());
+                break;
+                
             case BASDATS:
                 jTab.addShowColumn(TableHeaderFactory.getSigleton().getBasDatssTableHeader().getCODEMP());
                 jTab.addShowColumn(TableHeaderFactory.getSigleton().getBasDatssTableHeader().getNOM());
@@ -350,7 +362,15 @@ public class SearchViewController extends SearchJFrame {
             case CUSTOMERS:
                 jTab.setRepository(RepositoryFactory.getInstance().getCompanysRepository());
                 break;
-
+            
+            case BANCOS:
+                jTab.setRepository(RepositoryFactory.getInstance().getBancosRepository());
+                break;
+                
+            case PAYMENT_METHOD:
+                jTab.setRepository(RepositoryFactory.getInstance().getCPaymentFormsRepository());
+                break;
+                
             case BASDATS:
                 jTab.setRepository(RepositoryFactory.getInstance().getBasDatssRepository());
                 break;
@@ -505,6 +525,7 @@ public class SearchViewController extends SearchJFrame {
     private void load() throws Exception {
     
         if(isPagination()){
+
             
             this.jTab.resetPaginationText();
             this.labelPaginacion.setText(this.jTab.getPaginationText());
@@ -530,11 +551,13 @@ public class SearchViewController extends SearchJFrame {
             case SALES_MAN:
             case USERS:
             case KITS:
+            case PAYMENT_METHOD:
             case CONCEPTS:
             case PAYMENT_TYPES:
             case COINS:
             case CCOINS:
             case WAREHOUSES:
+            case BANCOS:
             case CLASSIFICATIONS:
             case SUPPLIERS_CLASIFICATION:
             case ANAQS:

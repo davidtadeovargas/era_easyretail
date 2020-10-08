@@ -82,6 +82,7 @@ public class ViewControlersFactory {
     private ClientsJFrame ClientsJFrame;
     private CatalogoMonedaJFrame CatalogoMonedaJFrame;
     private CatalBancosJFrame CatalBancosJFrame;
+    private FormPagoViewController FormPagoViewController;
     private AlmasJFrame AlmasJFrame;
     private GeneralLogsViewController GeneralLogsViewController;
     private VerCtaContViewController VerCtaContViewController;
@@ -692,6 +693,11 @@ public class ViewControlersFactory {
         return NewVtaHeaderInfoController;
     }
  
+    public FormPagoViewController getFormPagoViewController(){
+        FormPagoViewController = new FormPagoViewController();
+        return FormPagoViewController;
+    }
+    
     public NewVtaProductInfoController getNewVtaProductInfoController(){
         NewVtaProductInfoController = new NewVtaProductInfoController();
         return NewVtaProductInfoController;

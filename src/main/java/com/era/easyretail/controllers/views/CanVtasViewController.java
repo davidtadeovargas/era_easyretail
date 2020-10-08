@@ -9,6 +9,7 @@ import com.era.easyretail.controllers.views.ClavMastViewController.OnResult;
 import com.era.easyretail.era_jasperreports.ReportManager;
 import com.era.logger.LoggerUtility;
 import com.era.models.Company;
+import com.era.models.Cxc;
 import com.era.models.Sales;
 import com.era.repositories.RepositoryFactory;
 import com.era.repositories.datamodels.DocumentTypeFilter;
@@ -127,13 +128,16 @@ public class CanVtasViewController extends CanVtasJFrame {
             //Get the selected sale
             final Sales Sale = (Sales)jTab.getRowSelected();
                     
-            //If the sale is already canceled stop
-            if(RepositoryFactory.getInstance().getSalessRepository().isCanceled(Sale) || RepositoryFactory.getInstance().getSalessRepository().isDev(Sale) || RepositoryFactory.getInstance().getSalessRepository().isParcialDev(Sale)){
-                DialogsFactory.getSingleton().showErrorSaleNotContinueByEstatusOKDialog(baseJFrame, (JFrame jFrame) -> {
+            //Check if the sale has any payment registered
+            //final Cxc Cxc = (Cxc)RepositoryFactory.getInstance().getCxcRepository().getCXC(Sale.getReferenceNumber(), Sale.getSerie(), Sale.getId(), Sale.getCompanyCode());
+            
+            //If the document has registered payments stop
+            /*if(Cxc!=null){
+                DialogsFactory.getSingleton().showErrorOKCallbackDialog(baseJFrame, "errors_sales_document_has_payments", (JFrame jFrame) -> {
                     jTab.grabFocus();
-                });
-                return; 
-            }
+                });                
+                return;
+            }*/
             
             //Type first a razon
             final String razon = jTMot.getText().trim();

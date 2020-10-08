@@ -180,7 +180,8 @@ public class ListadoPagosViewController extends ListadoPagosJFrame {
     private void jBAbonActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{            	
-            
+            final FormPagoViewController FormPagoViewController = ViewControlersFactory.getSingleton().getFormPagoViewController();
+            FormPagoViewController.setVisible();
 	}
 	catch (Exception ex) {
             LoggerUtility.getSingleton().logError(ListadoPagosViewController.class, ex);
