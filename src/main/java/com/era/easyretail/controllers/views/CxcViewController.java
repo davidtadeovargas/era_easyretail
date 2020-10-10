@@ -11,7 +11,6 @@ import java.util.List;
 import com.era.logger.LoggerUtility;
 import com.era.models.Company;
 import com.era.models.Cxc;
-import com.era.models.Sales;
 import com.era.repositories.RepositoryFactory;
 import com.era.repositories.utils.SatusDocuments;
 import com.era.utilities.UtilitiesFactory;
@@ -269,8 +268,22 @@ public class CxcViewController extends CxcJFrame {
     
     private void jBVerAActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
-	try{            	
+	try{
             
+            //If nothing selected yet
+            if(!jTabCXC.isRowSelected()){
+                DialogsFactory.getSingleton().showErrorOKNoSelectionCallbackDialog(baseJFrame, (JFrame jFrame) -> {
+                    jTabCXC.requestFocus();
+                });
+                return;
+            }
+            
+            //Get selected row
+            final Cxc Cxc = (Cxc)jTabCXC.getRowSelected();
+            
+            final AbonosViewController AbonosViewController = ViewControlersFactory.getSingleton().getAbonosViewController();
+            AbonosViewController.setCxc(Cxc);
+            AbonosViewController.setVisible();
 	}
 	catch (Exception ex) {
             LoggerUtility.getSingleton().logError(CxcViewController.class, ex);

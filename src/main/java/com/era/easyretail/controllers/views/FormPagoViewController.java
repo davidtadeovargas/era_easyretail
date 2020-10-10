@@ -6,6 +6,7 @@
 package com.era.easyretail.controllers.views;
 
 import com.era.datamodels.enums.SearchCommonTypeEnum;
+import com.era.easyretail.era_jasperreports.ReportManager;
 import com.era.views.FormPagoJFrame;
 import java.util.List;
 import com.era.logger.LoggerUtility;
@@ -36,6 +37,8 @@ public class FormPagoViewController extends FormPagoJFrame {
             
             JComponentUtils.moneyFormat(jForImporte);
                      
+            jForImporte.grabFocus();
+            
             jBAbon.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jBAbonActionPerformed(evt);
             });
@@ -95,14 +98,14 @@ public class FormPagoViewController extends FormPagoJFrame {
     }
     
     @Override
-    public void loadModelInFields(Object ObjectModel) throws  Exception {        
+    public void loadModelInFields(Object ObjectModel) throws  Exception {
     }
     
     @Override
     public void clearFields() throws Exception{            
     }
     
-    private void jBAbonActionPerformed(java.awt.event.ActionEvent evt) {                                             
+    private void jBAbonActionPerformed(java.awt.event.ActionEvent evt) {
 
 	try{            	
     
@@ -127,7 +130,8 @@ public class FormPagoViewController extends FormPagoJFrame {
                 try {
                     
                     final String comment = jTComentario.getText().trim();
-                    final String bankAccount = jTBanco.getText().trim();                    
+                    final String bankAccount = jTBanco.getText().trim();
+                    final boolean timbrada = jCTimbrar.isSelected();
                     
                     final Payment Payment = new Payment();
                     Payment.setCodigoClienteProveedor(Cxc.getEmpre());
@@ -138,9 +142,23 @@ public class FormPagoViewController extends FormPagoJFrame {
                     Payment.setFormapago(paymentForm);
                     Payment.setImporte(totalAbonBigDecimal);
                     Payment.setSerie(Cxc.getNoser());
+                    Payment.setTimbrada(timbrada);
                     
                     //Save the payment
                     RepositoryFactory.getInstance().getPaymentsRepository().save(Cxc,Payment);
+                    
+                    final boolean showTicket = jCImprimir.isSelected();
+                    
+                    if(showTicket){
+                        
+                        final Company Company = RepositoryFactory.getInstance().getCompanysRepository().getCustomerByCode(Payment.getCodigoClienteProveedor());
+                        
+                        //Get the pending to pay
+                        final BigDecimal totalPaid = RepositoryFactory.getInstance().getPaymentsRepository().getTotalPaidForDocument(Cxc.getNoser(),Cxc.getNorefer());
+                        pendingToPay = Cxc.getCarg().subtract(totalPaid==null?BigDecimal.ZERO:totalPaid);
+                        
+                        ReportManager.getSingleton().generateTicketPagoPDF(Payment, Company, pendingToPay,totalPaid);
+                    }
                     
                     DialogsFactory.getSingleton().showOKOperationCompletedCallbackDialog(jFrame, (JFrame jFrame1) -> {
                         dispose();

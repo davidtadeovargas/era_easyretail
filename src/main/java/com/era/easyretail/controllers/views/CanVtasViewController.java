@@ -9,7 +9,6 @@ import com.era.easyretail.controllers.views.ClavMastViewController.OnResult;
 import com.era.easyretail.era_jasperreports.ReportManager;
 import com.era.logger.LoggerUtility;
 import com.era.models.Company;
-import com.era.models.Cxc;
 import com.era.models.Sales;
 import com.era.repositories.RepositoryFactory;
 import com.era.repositories.datamodels.DocumentTypeFilter;
