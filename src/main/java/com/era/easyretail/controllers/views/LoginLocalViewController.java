@@ -18,6 +18,7 @@ import com.era.models.BasDats;
 import com.era.models.Company;
 import com.era.models.Product;
 import com.era.models.Supplier;
+import com.era.models.User;
 import com.era.repositories.RepositoryFactory;
 import com.era.repositories.utils.HibernateUtil;
 import com.era.utilities.UtilitiesFactory;
@@ -269,19 +270,22 @@ public class LoginLocalViewController extends LoginLicenseJFrame {
             BasDats.setCalle(CompanyTest.getCalle());
             BasDats.setNoext(CompanyTest.getNoext());
             BasDats.setMetcost("peps");
-            BasDats.setRutap(System.getProperty("user.dir"));                
+            BasDats.setRutap(System.getProperty("user.dir"));
             BasDats.setNoint(CompanyTest.getNoint());
             BasDats.setCol(CompanyTest.getCol());
             BasDats.setCiu(CompanyTest.getCiu());
             BasDats.setTel(CompanyTest.getTel());
-            BasDats.setCorr(CompanyTest.getCorr());            
-            BasDats.setPagweb(CompanyTest.getPagweb());                    
+            BasDats.setCorr(CompanyTest.getCorr());
+            BasDats.setPagweb(CompanyTest.getPagweb());
             BasDats.setEstad(CompanyTest.getEstad());
             BasDats.setCP(CompanyTest.getCP());
             BasDats.setPai(CompanyTest.getPai());
             BasDats.setLugexp(CompanyTest.getLugexp());
             BasDats.setRegfisc(CompanyTest.getRegfisc());
             BasDats.setTest(true);
+            BasDats.setRutcer(System.getProperty("user.dir") + "/CSD_Pruebas_CFDI_LAN7008173R5.cer");
+            BasDats.setRutkey(System.getProperty("user.dir") + "/CSD_Pruebas_CFDI_LAN7008173R5.key");
+            BasDats.setPasscer("12345678a");
 
             //Save in the basdats record
             RepositoryFactory.getInstance().getBasDatssRepository().save(BasDats);
@@ -492,6 +496,14 @@ public class LoginLocalViewController extends LoginLicenseJFrame {
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Finished");
         
         LoggerUtility.getSingleton().logInfo(LoginLicenseJFrame.class, "Licenciamiento: Showing next window");
+        
+        //Asign the printer to all the users
+        final List<User> users = (List<User>)RepositoryFactory.getInstance().getUsersRepository().getAll();
+        for(User User:users){
+            User.setTicketPrinter(UtilitiesFactory.getSingleton().getPrintersUtility().getFirstFromAllPrinters().getName());
+            User.setInvoicePrinter(UtilitiesFactory.getSingleton().getPrintersUtility().getFirstFromAllPrinters().getName());
+            RepositoryFactory.getInstance().getUsersRepository().updateUser(User);
+        }
         
         //Close current window
         dispose();

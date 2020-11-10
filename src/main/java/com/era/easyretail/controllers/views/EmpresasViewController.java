@@ -1366,6 +1366,8 @@ public class EmpresasViewController extends EmpresasJFrame {
         final String certificatePath = JTRutaCertificado.getText().trim();
         final String keyPath = JTRutaKey.getText().trim();
         
+        System.out.println("Working Directory = " + System.getProperty("user.dir"));
+        
         /*Si no existe el archivo cer entonces*/            
         if(!UtilitiesFactory.getSingleton().getFilesUtility().fileExists(certificatePath))
         {
@@ -1405,11 +1407,11 @@ public class EmpresasViewController extends EmpresasJFrame {
         final String certificatePassword = JTPasswordCertificado.getText().trim();
 
         //Vaidate the certificate
-        final boolean validCertificate = UtilitiesFactory.getSingleton().getCertificatesUtility().validateCertificate(certificatePath, keyPath, certificatePassword);
-        if(!validCertificate){
+        final String error = UtilitiesFactory.getSingleton().getCertificatesUtility().validateCertificate(certificatePath, keyPath, certificatePassword);
+        if(error!=null){
 
             final OKDialog OKDialog = DialogsFactory.getSingleton().getOKDialog(baseJFrame);
-            OKDialog.setPropertyText("basdats_frame_msg8");
+            OKDialog.setPropertyText(error);
             OKDialog.show();
             return false;
         }
