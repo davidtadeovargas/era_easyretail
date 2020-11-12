@@ -47,15 +47,87 @@ public class CobroViewController extends CobroJFrame {
         
         try{
             
-            ButtonGroup g = new ButtonGroup();
+            final ButtonGroup g = new ButtonGroup();
             g.add(jRTic);
             g.add(jRRem);
             g.add(jRFac);
 
-            ButtonGroup creditOrCashRadioG = new ButtonGroup();
+            final ButtonGroup creditOrCashRadioG = new ButtonGroup();
             creditOrCashRadioG.add(jRadioButtonCredit);
             creditOrCashRadioG.add(jRadioButtonCash);
         
+            //When the user selects ticket it can not be in credit
+            this.JComponentUtils.onRadioButtonChangeListener(jRTic, new JComponentUtils.OnRadioButtonChange(){
+                
+                @Override
+                public void onChecked() {
+                    try {
+                        atmomentPayment();
+                    } catch (Exception ex) {
+                        LoggerUtility.getSingleton().logError(this.getClass(), ex);
+                        try {
+                            DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+                        } catch (Exception ex1) {
+                            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
+                        }
+                    }
+                }
+                
+                @Override
+                public void onUncheked() {
+                    
+                }
+            });
+            
+            //When the user selects remision it can not be in credit
+            this.JComponentUtils.onRadioButtonChangeListener(jRRem, new JComponentUtils.OnRadioButtonChange(){
+                
+                @Override
+                public void onChecked() {
+                    try {
+                        atmomentPayment();
+                    } catch (Exception ex) {
+                        LoggerUtility.getSingleton().logError(this.getClass(), ex);
+                        try {
+                            DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+                        } catch (Exception ex1) {
+                            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
+                        }
+                    }
+                }
+                
+                @Override
+                public void onUncheked() {
+                    
+                }
+            });
+            
+            //When the user selects invoice it can be in credit
+            this.JComponentUtils.onRadioButtonChangeListener(jRFac, new JComponentUtils.OnRadioButtonChange(){
+                
+                @Override
+                public void onChecked() {
+                    try {
+                        
+                        //Validate if the sale is in credit
+                        validateIfSaleInCredit();
+        
+                    } catch (Exception ex) {
+                        LoggerUtility.getSingleton().logError(this.getClass(), ex);
+                        try {
+                            DialogsFactory.getSingleton().getExceptionDialog(baseJFrame, ex).show();
+                        } catch (Exception ex1) {
+                            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex1);
+                        }
+                    }
+                }
+                
+                @Override
+                public void onUncheked() {
+                    
+                }
+            });
+            
             this.JComponentUtils.onRadioButtonChangeListener(jRadioButtonCredit, new JComponentUtils.OnRadioButtonChange(){
 
                 @Override
@@ -187,20 +259,30 @@ public class CobroViewController extends CobroJFrame {
         jTEfeCant.setText(UtilitiesFactory.getSingleton().getNumbersUtility().toMoneyFormat(String.valueOf(Sale.getTotal().doubleValue())));
         jTTot.setText(UtilitiesFactory.getSingleton().getNumbersUtility().toMoneyFormat(String.valueOf(Sale.getTotal().doubleValue())));
         
-        //If the customer has credit        
+        //Validate if the sale is in credit
+        validateIfSaleInCredit();
+    }
+    
+    private void validateIfSaleInCredit() throws Exception {
+        
+        //If the customer has credit
         if(this.Company.hasCredit()){
             
             //If the customer has saldo a favor
             final BigDecimal saldoFavor = RepositoryFactory.getInstance().getCxcRepository().getSaldoFavorFromCustomer(this.Company.getCompanyCode());
-            if(saldoFavor.compareTo(BigDecimal.ZERO)>0){                
-                creditPayment();
+            if(saldoFavor.compareTo(BigDecimal.ZERO)>0){
+                
+                //The amount should be enought
+                if(saldoFavor.compareTo(Sale.getTotal())>0){
+                    creditPayment();
+                }
+                else{
+                    jRadioButtonCredit.setEnabled(false);
+
+                    //Pat at the moment
+                    atmomentPayment();
+                }
             }
-        }
-        else{
-            jRadioButtonCredit.setEnabled(false);
-            
-            //Pat at the moment
-            atmomentPayment();
         }
     }
     
@@ -210,6 +292,8 @@ public class CobroViewController extends CobroJFrame {
         jRadioButtonCredit.setSelected(true);
         jRadioButtonCredit.setEnabled(true);
 
+        jRFac.setSelected(true);
+        
         //Disable at moment payment
         jTEfeCant.setEnabled(false);
         jTDebCant.setEnabled(false);
@@ -448,10 +532,6 @@ public class CobroViewController extends CobroJFrame {
                 
                 ReportManager.getSingleton().generateTicketPDF(Sale, Company_, BasDatsLocal);
                 
-                break;
-            
-            case NOTC:
-                RepositoryFactory.getInstance().getSalessRepository().saveSaleNotc(Sale, Company_, false, partvtas,BigDecimalTotal,BigDecimalCardDebit,BigDecimalCardCredit);
                 break;
         }
                 

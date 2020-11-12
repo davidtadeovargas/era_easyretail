@@ -24,6 +24,7 @@ import com.era.repositories.RepositoryFactory;
 import com.era.utilities.UtilitiesFactory;
 import com.era.views.dialogs.DialogsFactory;
 import com.era.views.tables.headers.TableHeaderFactory;
+import com.era.views.utils.JComponentUtils.WindowClosingEvent;
 import java.awt.event.MouseEvent;
 import java.math.BigDecimal;
 import java.math.MathContext;
@@ -49,6 +50,7 @@ public class PtoVtaTouViewController extends PtoVtaTouJFrame {
     private boolean showMessageWithNoExistencesInSalespoint;
     private boolean newCustomersOnPointOfSales;    
     
+    private CobroViewController CobroViewController;
     
     public PtoVtaTouViewController() {
         super("window_title_ptovta");
@@ -97,6 +99,29 @@ public class PtoVtaTouViewController extends PtoVtaTouJFrame {
             jBSincronizar.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jBSincronizarActionPerformed(evt);
             });
+            
+            CobroViewController = ViewControlersFactory.getSingleton().getCobroViewController();
+            
+            //When escape key is pressed close the dispose
+            this.JComponentUtils.setDisposeInEscapeEvent(this.baseJFrame,true);
+            
+            //Intercept when the user wants to close the window
+            this.JComponentUtils.interceptWindowClosingEvent(() -> {
+                
+                if(CobroViewController!=null){
+                    CobroViewController.dispose();
+                }
+                
+                dispose();
+            });
+            
+            //When the user clics in ESC key to exit close the cobro window in case it is open            
+            this.JComponentUtils.setEscapeEvent(() -> {
+                if(CobroViewController!=null){
+                    CobroViewController.dispose();
+                }
+            });
+            
             this.addMouseListenerClicked(jLabel1, (MouseEvent evt) -> {
                 
                 try {
@@ -854,7 +879,7 @@ public class PtoVtaTouViewController extends PtoVtaTouJFrame {
             Sales.setTotal(Totals.getTotal());
             
             //Open screen to make the payment
-            final CobroViewController CobroViewController = ViewControlersFactory.getSingleton().getCobroViewController();
+            CobroViewController = ViewControlersFactory.getSingleton().getCobroViewController();
             CobroViewController.clearFields();
             CobroViewController.init(Sales, Company,items);
             CobroViewController.setOnFinish(() -> {
@@ -942,6 +967,12 @@ public class PtoVtaTouViewController extends PtoVtaTouJFrame {
     private void changeCustomer(final String customerCode, final String customerName) throws Exception {
                                 
         newSale();
+        
+        //Get customer credit conditions
+        final String conditions = RepositoryFactory.getInstance().getCompanysRepository().getCustomerConditions(Company);
+                
+        //Set the text conditions
+        jLabelCred.setText(conditions);
         
         jTCli.setText(customerCode);        
         jTNomb.setText(customerName);

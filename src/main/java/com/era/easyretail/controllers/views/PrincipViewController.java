@@ -73,7 +73,7 @@ public class PrincipViewController extends PrincipJFrame {
             jBReporteCaja.setEnabled(true);
             
             //Override default functionality
-            JComponentUtils.setDisposeInEscapeEvent(false);            
+            JComponentUtils.setDisposeInEscapeEvent(this.baseJFrame,false);
             
             final ImageIcon ImageIcon = UtilitiesFactory.getSingleton().getIconsUtility().getImageIconFromImage("ban.png");                
             jLImg.setIcon(ImageIcon);
@@ -2498,8 +2498,7 @@ public class PrincipViewController extends PrincipJFrame {
         ViewControlersFactory.getSingleton().getPedidosViewController().setVisible();
     }
     
-    private void jButtonPedidos1ActionPerformed(java.awt.event.ActionEvent evt) {                                                
-        ViewControlersFactory.getSingleton().getListadoPagosViewController().setVisible();
+    private void jButtonPedidos1ActionPerformed(java.awt.event.ActionEvent evt) {
     }
     
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {

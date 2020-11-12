@@ -74,8 +74,7 @@ public class ViewControlersFactory {
     private CorrElecsViewController CorrElecsViewController;
     private LotPedCatJFrame LotPedCatJFrame;
     private Impuestos_X_productos_nuevoJFrame Impuestos_X_productos_nuevoJFrame;
-    private ImpsJFrame ImpsJFrame;
-    private ListadoPagosViewController ListadoPagosViewController;
+    private ImpsJFrame ImpsJFrame;    
     private CuentasContablesJFrame CuentasContablesJFrame;
     private ConceptosPagoJFrame ConceptosPagoJFrame;
     private CompsJFrame CompsJFrame;
@@ -602,11 +601,6 @@ public class ViewControlersFactory {
     public LoginViewController getLoginViewController(){
         LoginViewController = new LoginViewController();
         return LoginViewController;
-    }
-    
-    public ListadoPagosViewController getListadoPagosViewController(){
-        ListadoPagosViewController = new ListadoPagosViewController();
-        return ListadoPagosViewController;
     }
     
     public ActivosViewController getActivosViewController(){

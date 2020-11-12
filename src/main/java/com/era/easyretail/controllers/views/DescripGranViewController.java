@@ -25,7 +25,7 @@ public class DescripGranViewController extends DescripGranJFrame {
                               
             jTAInfo.grabFocus();
             
-            this.JComponentUtils.setDisposeInEscapeEvent(true);
+            this.JComponentUtils.setDisposeInEscapeEvent(this.baseJFrame,true);
             
         }catch (Exception ex) {
             LoggerUtility.getSingleton().logError(DescripGranViewController.class, ex);
