@@ -259,6 +259,9 @@ public class CobroViewController extends CobroJFrame {
         jTEfeCant.setText(UtilitiesFactory.getSingleton().getNumbersUtility().toMoneyFormat(String.valueOf(Sale.getTotal().doubleValue())));
         jTTot.setText(UtilitiesFactory.getSingleton().getNumbersUtility().toMoneyFormat(String.valueOf(Sale.getTotal().doubleValue())));
         
+        final String conditions = RepositoryFactory.getInstance().getCompanysRepository().getCustomerConditions(Company);
+        jLabelCred.setText(conditions);
+        
         //Validate if the sale is in credit
         validateIfSaleInCredit();
     }

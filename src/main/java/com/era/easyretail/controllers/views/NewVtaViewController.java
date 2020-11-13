@@ -14,11 +14,11 @@ import com.era.views.NewVtaJFrame;
 import java.util.List;
 import com.era.logger.LoggerUtility;
 import com.era.models.CPaymentForm;
+import com.era.models.CPaymentMethod;
 import com.era.models.CUsoCFDI;
 import com.era.models.Coin;
 import com.era.models.Company;
 import com.era.models.Kits;
-import com.era.models.MetogoPago;
 import com.era.models.Partvta;
 import com.era.models.Sales;
 import com.era.models.Serie;
@@ -221,7 +221,7 @@ public class NewVtaViewController extends NewVtaJFrame {
         final CPaymentForm CPaymentForm = (CPaymentForm)RepositoryFactory.getInstance().getPaymentFormsRepository().getByCode(Sale_.getPaymentForm());
         final CUsoCFDI CUsoCFDI = (CUsoCFDI)RepositoryFactory.getInstance().getCUsoCFDIsRepository().getByCode(Sale_.getUsocfdi());
         final Coin Coin = (Coin)RepositoryFactory.getInstance().getCoinsRepository().getByCode(Sale_.getCoinCode());
-        final MetogoPago MetogoPago = (MetogoPago)RepositoryFactory.getInstance().getMetogoPagosRepository().getByCode(Sale_.getPaymentMethod());        
+        final CPaymentMethod CPaymentMethod = (CPaymentMethod)RepositoryFactory.getInstance().getCPaymentMethodsRepository().getByCode(Sale_.getPaymentMethod());                
         final User User = (User)RepositoryFactory.getInstance().getUsersRepository().getByCode(Sale_.getSalesMan());
         
         //Create the header model
@@ -230,7 +230,7 @@ public class NewVtaViewController extends NewVtaJFrame {
         NewVtaHeaderInfoDataModel_.setCPaymentForm(CPaymentForm);
         NewVtaHeaderInfoDataModel_.setCUsoCFDI(CUsoCFDI);
         NewVtaHeaderInfoDataModel_.setCoin(Coin);
-        NewVtaHeaderInfoDataModel_.setMetogoPago(MetogoPago);
+        NewVtaHeaderInfoDataModel_.setMetogoPago(CPaymentMethod);
         NewVtaHeaderInfoDataModel_.setAccount(Sale_.getAccount());
         NewVtaHeaderInfoDataModel_.setObervations(Sale_.getObservation());
         NewVtaHeaderInfoDataModel_.setSalesman(User);
@@ -560,7 +560,7 @@ public class NewVtaViewController extends NewVtaJFrame {
         
         //Create the info text
         final String info = "Fecha: " + date + "\n" +
-                            "Forma de pago: " + NewVtaHeaderInfoDataModel.getCPaymentForm().getDescription() + "\n" +
+                            "Forma de pago: " + NewVtaHeaderInfoDataModel.getMetogoPago().getDescription() + "\n" +
                             "Moneda: " + NewVtaHeaderInfoDataModel.getCoin().getDescription() + ", " + NewVtaHeaderInfoDataModel.getCoin().getCode() + "\n" +
                             "Uso CFDI: " + usoCFDI + "\n" +
                             "Vendedor: " + NewVtaHeaderInfoDataModel.getSalesman().getName() + "\n" + 

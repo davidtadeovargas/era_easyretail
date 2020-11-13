@@ -24,7 +24,6 @@ import com.era.repositories.RepositoryFactory;
 import com.era.utilities.UtilitiesFactory;
 import com.era.views.dialogs.DialogsFactory;
 import com.era.views.tables.headers.TableHeaderFactory;
-import com.era.views.utils.JComponentUtils.WindowClosingEvent;
 import java.awt.event.MouseEvent;
 import java.math.BigDecimal;
 import java.math.MathContext;
@@ -919,7 +918,7 @@ public class PtoVtaTouViewController extends PtoVtaTouJFrame {
             SearchViewController.setButtonAceptClicked(() -> {
 
                 try {
-                 
+                    
                     final String customerCode = SearchViewController.getCod();
                     final String customerName = SearchViewController.getDescrip();
                     
@@ -969,7 +968,8 @@ public class PtoVtaTouViewController extends PtoVtaTouJFrame {
         newSale();
         
         //Get customer credit conditions
-        final String conditions = RepositoryFactory.getInstance().getCompanysRepository().getCustomerConditions(Company);
+        final Company Company_ = RepositoryFactory.getInstance().getCompanysRepository().getCustomerByCode(customerCode);
+        final String conditions = RepositoryFactory.getInstance().getCompanysRepository().getCustomerConditions(Company_);
                 
         //Set the text conditions
         jLabelCred.setText(conditions);

@@ -10,10 +10,10 @@ import com.era.datamodels.enums.DocumentType;
 import com.era.logger.LoggerUtility;
 import com.era.models.BasDats;
 import com.era.models.CPaymentForm;
+import com.era.models.CPaymentMethod;
 import com.era.models.CUsoCFDI;
 import com.era.models.Coin;
 import com.era.models.Company;
-import com.era.models.MetogoPago;
 import com.era.models.Serie;
 import com.era.models.User;
 import com.era.repositories.RepositoryFactory;
@@ -54,7 +54,7 @@ public class NewVtaHeaderInfoController extends NewVtaHeaderInfoJFrame {
             jComboboxMonedas.loadItems();
             jComboBoxFormaPago.loadItems();
             jUsoCFDI.loadItems();
-            jComboBoxMetodoPago.loadItems();                        
+            jComboBoxMetodoPago.loadItems();
             
             jUsoCFDI.setChangeSelectionListener((Object ObjectModel) -> {
                 
@@ -75,8 +75,10 @@ public class NewVtaHeaderInfoController extends NewVtaHeaderInfoJFrame {
             jComboboxMonedas.selectByObject(Coin);
             
             //Select the first payment method
-            final MetogoPago MetodoPago = (MetogoPago)RepositoryFactory.getInstance().getMetogoPagosRepository().getFirst();
-            jComboBoxMetodoPago.selectByObject(MetodoPago);
+            final CPaymentMethod CPaymentMethod = (CPaymentMethod)RepositoryFactory.getInstance().getCPaymentMethodsRepository().getFirst();
+            if(CPaymentMethod!=null){
+                jComboBoxMetodoPago.selectByObject(CPaymentMethod);
+            }
             
             //Select cash option
             final CPaymentForm CPaymentForm = RepositoryFactory.getInstance().getPaymentFormsRepository().getByCash();            
@@ -170,8 +172,8 @@ public class NewVtaHeaderInfoController extends NewVtaHeaderInfoJFrame {
             }
                         
             //First select
-            final MetogoPago MetogoPago = (MetogoPago)jComboBoxMetodoPago.getSelectedObject();
-            if(MetogoPago.getDescription()==null){
+            final CPaymentMethod CPaymentMethod = (CPaymentMethod)jComboBoxMetodoPago.getSelectedObject();
+            if(CPaymentMethod.getDescription()==null){
                 DialogsFactory.getSingleton().showErrorOKNoSelectionCallbackDialog(baseJFrame, (JFrame jFrame) -> {
                     jComboBoxMetodoPago.grabFocus();
                 });
@@ -239,14 +241,16 @@ public class NewVtaHeaderInfoController extends NewVtaHeaderInfoJFrame {
                     final boolean cartaPorte = jCCartaP.isSelected();
                     final boolean print = jCImp.isSelected();                    
                     
+                    final CPaymentMethod CPaymentMethod_ = (CPaymentMethod)jComboBoxMetodoPago.getSelectedObject();
+                    
                     //Create the model
                     final NewVtaHeaderInfoDataModel NewVtaHeaderInfoDataModel_ = new NewVtaHeaderInfoDataModel();
                     NewVtaHeaderInfoDataModel_.setSerie(Serie);
-                    NewVtaHeaderInfoDataModel_.setCPaymentForm(CPaymentForm);
+                    NewVtaHeaderInfoDataModel_.setMetogoPago(CPaymentMethod_);
                     NewVtaHeaderInfoDataModel_.setCUsoCFDI(CUsoCFDI);
                     NewVtaHeaderInfoDataModel_.setCoin(Coin);
-                    NewVtaHeaderInfoDataModel_.setMetogoPago(MetogoPago);
                     NewVtaHeaderInfoDataModel_.setSalesman(User);
+                    NewVtaHeaderInfoDataModel_.setCPaymentForm(CPaymentForm);
                     NewVtaHeaderInfoDataModel_.setAccount(account);
                     NewVtaHeaderInfoDataModel_.setObervations(observations);
                     NewVtaHeaderInfoDataModel_.setRing(ring);

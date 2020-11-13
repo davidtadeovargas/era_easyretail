@@ -11,6 +11,7 @@ import java.util.List;
 import com.era.logger.LoggerUtility;
 import com.era.models.Company;
 import com.era.models.Cxc;
+import com.era.models.Sales;
 import com.era.repositories.RepositoryFactory;
 import com.era.repositories.utils.SatusDocuments;
 import com.era.utilities.UtilitiesFactory;
@@ -315,6 +316,14 @@ public class CxcViewController extends CxcJFrame {
             final BigDecimal pendingToPay = Cxc.getCarg().subtract(totalPaid==null?BigDecimal.ZERO:totalPaid);
             if(pendingToPay.compareTo(BigDecimal.ZERO)==0){
                 DialogsFactory.getSingleton().showOKCallbackDialog(baseJFrame, "document_already_paid", (JFrame jFrame) -> { 
+                });
+                return;
+            }
+            
+            //If the document is not ringed stop
+            final Sales Sale = RepositoryFactory.getInstance().getSalessRepository().getByVenta(Cxc.getId_venta());
+            if(!Sale.isInvoiced()){
+                DialogsFactory.getSingleton().showOKCallbackDialog(baseJFrame, "errors_document_not_ringed", (JFrame jFrame) -> {
                 });
                 return;
             }
