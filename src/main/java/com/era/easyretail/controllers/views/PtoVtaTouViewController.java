@@ -705,6 +705,7 @@ public class PtoVtaTouViewController extends PtoVtaTouJFrame {
             Partvta.setMon(Coin.getCode());
             Partvta.setCant(new BigDecimal(qty, MathContext.DECIMAL64));
             Partvta.setDescrip(Product.getDescription());
+            Partvta.setKeySAT(Product.getKeySAT());
             Partvta.setEskit(Product.getCompound());
             Partvta.setList(1);
             Partvta.setPre(new BigDecimal(priceList, MathContext.DECIMAL64));
@@ -835,6 +836,21 @@ public class PtoVtaTouViewController extends PtoVtaTouJFrame {
                     jTCli.grabFocus();
                 });
                 return;
+            }
+            
+            //If the customer is of credit the amount can not be greater than the available amout
+            if(Company.hasCredit()){
+
+                //If the customer has saldo a favor
+                final BigDecimal saldoFavor = RepositoryFactory.getInstance().getCxcRepository().getSaldoFavorFromCustomer(Company.getCompanyCode());
+                if(saldoFavor.compareTo(BigDecimal.ZERO)>0){
+
+                    //The amount should be enought
+                    if(saldoFavor.compareTo(Totals.getTotal())<0){
+                        DialogsFactory.getSingleton().showErrorOKDialog(baseJFrame, "errors_not_enough_credit");
+                        return;
+                    }
+                }
             }
             
             //Get all table items

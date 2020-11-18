@@ -63,6 +63,9 @@ public class CobroViewController extends CobroJFrame {
                 public void onChecked() {
                     try {
                         atmomentPayment();
+                        
+                        jRadioButtonCredit.setEnabled(false);
+                        
                     } catch (Exception ex) {
                         LoggerUtility.getSingleton().logError(this.getClass(), ex);
                         try {
@@ -86,6 +89,9 @@ public class CobroViewController extends CobroJFrame {
                 public void onChecked() {
                     try {
                         atmomentPayment();
+                        
+                        jRadioButtonCredit.setEnabled(false);
+                        
                     } catch (Exception ex) {
                         LoggerUtility.getSingleton().logError(this.getClass(), ex);
                         try {
@@ -111,6 +117,11 @@ public class CobroViewController extends CobroJFrame {
                         
                         //Validate if the sale is in credit
                         validateIfSaleInCredit();
+                        
+                        //If is CLIENTE MOSTRADOR it doesnt let credit
+                        if(Company.isCashCustomer()){
+                            jRadioButtonCredit.setEnabled(false);
+                        }
         
                     } catch (Exception ex) {
                         LoggerUtility.getSingleton().logError(this.getClass(), ex);
@@ -287,6 +298,9 @@ public class CobroViewController extends CobroJFrame {
                 }
             }
         }
+        else{
+            jRadioButtonCredit.setEnabled(false);
+        }
     }
     
     private void creditPayment() throws Exception{
@@ -313,7 +327,7 @@ public class CobroViewController extends CobroJFrame {
     private void atmomentPayment() throws Exception{
         
         //Select radio to credit
-        jRadioButtonCash.setSelected(true);
+        jRadioButtonCash.setSelected(true);        
 
         //Enable at moment payment
         jTEfeCant.setEnabled(true);
@@ -504,12 +518,15 @@ public class CobroViewController extends CobroJFrame {
         Sale.setEstatus(estatus);
         Sale.setObservation(observations);
         Sale.setSalesPoint(true);
+        Sale.setUsocfdi("G01");
 
         final BigDecimal BigDecimalTotal = new BigDecimal(UtilitiesFactory.getSingleton().getNumbersUtility().fromMoneyFormat(jTEfeCant.getText().trim()));
         final BigDecimal BigDecimalCardDebit = new BigDecimal(UtilitiesFactory.getSingleton().getNumbersUtility().fromMoneyFormat(jTDebCant.getText().trim()));
         final BigDecimal BigDecimalCardCredit = new BigDecimal(UtilitiesFactory.getSingleton().getNumbersUtility().fromMoneyFormat(jTTarCredCant.getText().trim()));
         
         final BasDats BasDatsLocal = UtilitiesFactory.getSingleton().getSessionUtility().getBasDats();
+        
+        Sale.setExpeditionPlace(BasDatsLocal.getLugexp());
         
         switch(DocumentType_){
             
@@ -548,7 +565,7 @@ public class CobroViewController extends CobroJFrame {
     private void jBCobActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
 	try{
-            
+                        
             if(jRFac.isSelected()){
 
                 //Is the customer is not mostrador

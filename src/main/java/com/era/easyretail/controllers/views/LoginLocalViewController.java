@@ -283,8 +283,8 @@ public class LoginLocalViewController extends LoginLicenseJFrame {
             BasDats.setLugexp(CompanyTest.getLugexp());
             BasDats.setRegfisc(CompanyTest.getRegfisc());
             BasDats.setTest(true);
-            BasDats.setRutcer(System.getProperty("user.dir") + "/CSD_Pruebas_CFDI_LAN7008173R5.cer");
-            BasDats.setRutkey(System.getProperty("user.dir") + "/CSD_Pruebas_CFDI_LAN7008173R5.key");
+            BasDats.setRutcer(System.getProperty("user.dir") + "/CSD_Pruebas.cer");
+            BasDats.setRutkey(System.getProperty("user.dir") + "/CSD_Pruebas.key");
             BasDats.setPasscer("12345678a");
 
             //Save in the basdats record
