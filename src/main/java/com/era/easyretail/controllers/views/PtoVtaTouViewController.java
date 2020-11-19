@@ -56,6 +56,8 @@ public class PtoVtaTouViewController extends PtoVtaTouJFrame {
         
         try{
                      
+            maximizedWindow();
+                    
             jBNewVta.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jBNewVtaActionPerformed(evt);
             });
