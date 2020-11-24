@@ -57,7 +57,9 @@ public class PtoVtaTouViewController extends PtoVtaTouJFrame {
         try{
                      
             maximizedWindow();
-                    
+            
+            this.setAutoRequestFocus(false);
+            
             jBNewVta.addActionListener((java.awt.event.ActionEvent evt) -> {
                 jBNewVtaActionPerformed(evt);
             });
@@ -709,7 +711,7 @@ public class PtoVtaTouViewController extends PtoVtaTouJFrame {
             Partvta.setDescrip(Product.getDescription());
             Partvta.setKeySAT(Product.getKeySAT());
             Partvta.setEskit(Product.getCompound());
-            Partvta.setList(1);
+                Partvta.setList(1);
             Partvta.setPre(new BigDecimal(priceList, MathContext.DECIMAL64));
             Partvta.setTipcam(new BigDecimal(Coin.getValue(), MathContext.DECIMAL64));
             Partvta.setUnid(Unid.getCode());

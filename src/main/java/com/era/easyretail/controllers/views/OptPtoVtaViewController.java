@@ -107,6 +107,7 @@ public class OptPtoVtaViewController extends OptPtoVtaJFrame {
         final SalessRepository.CortZXData CortZXData = RepositoryFactory.getInstance().getSalessRepository().getTotalsForCortXZ();
         if(CortZXData.getSales().isEmpty()){
             DialogsFactory.getSingleton().showErrorOKCallbackDialog(baseJFrame, "errors_not_available_cort", (JFrame jFrame) -> {
+                this.setAlwaysOnTop(true);
             });
             return;
         }
